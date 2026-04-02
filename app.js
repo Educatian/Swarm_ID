@@ -422,6 +422,16 @@ function serializeLearnerRunForSupabase(runRecord, caseId = state.activeCaseId, 
   };
 }
 
+function getAuthDisplayName() {
+  const email = state.auth.sessionEmail || "";
+  const local = email.split("@")[0] || "Instructor";
+  return local
+    .split(/[._-]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
 async function refreshRemotePlatformContext(preferredCaseId = "") {
   if (!isSupabaseSessionActive()) return;
   const context = await fetchSupabaseContext(state.auth.userId);
@@ -461,6 +471,93 @@ async function syncLearnerRunToSupabase(runRecord, caseId = state.activeCaseId, 
   if (data?.id) {
     runRecord.id = data.id;
   }
+}
+
+async function createInstitutionInSupabase(name) {
+  const client = initializeSupabase();
+  if (!client) throw new Error("Login is not ready yet.");
+  const institutionName = String(name || "").trim();
+  if (!institutionName) throw new Error("Add an institution name first.");
+
+  const { data: institution, error: institutionError } = await client
+    .from("institutions")
+    .insert({ name: institutionName, settings: {} })
+    .select("*")
+    .single();
+  if (institutionError) throw institutionError;
+
+  const starterCode = "NEW-100";
+  const { data: course, error: courseError } = await client
+    .from("courses")
+    .insert({
+      institution_id: institution.id,
+      code: starterCode,
+      name: "New Course",
+      join_code: buildJoinCode(starterCode),
+      settings: {},
+    })
+    .select("*")
+    .single();
+  if (courseError) throw courseError;
+
+  const { error: membershipError } = await client.from("course_memberships").insert({
+    user_id: state.auth.userId,
+    institution_id: institution.id,
+    course_id: course.id,
+    role: "admin",
+    display_name: getAuthDisplayName(),
+    title: "Instructor",
+    is_primary: true,
+    status: "active",
+  });
+  if (membershipError) throw membershipError;
+
+  await refreshRemotePlatformContext();
+  state.activeInstitutionId = institution.id;
+  state.activeCourseId = course.id;
+  state.activeCaseId = "";
+}
+
+async function createCourseInSupabase(name, code) {
+  const client = initializeSupabase();
+  const institution = getActiveInstitution();
+  if (!client) throw new Error("Login is not ready yet.");
+  if (!institution) throw new Error("Create or select an institution first.");
+  const courseName = String(name || "").trim();
+  const courseCode = String(code || "").trim();
+  if (!courseName || !courseCode) {
+    throw new Error("Add a course name and code first.");
+  }
+
+  const { data: course, error: courseError } = await client
+    .from("courses")
+    .insert({
+      institution_id: institution.id,
+      code: courseCode,
+      name: courseName,
+      join_code: buildJoinCode(courseCode || courseName),
+      settings: {},
+    })
+    .select("*")
+    .single();
+  if (courseError) throw courseError;
+
+  const { error: membershipError } = await client.from("course_memberships").insert({
+    user_id: state.auth.userId,
+    institution_id: institution.id,
+    course_id: course.id,
+    role: "admin",
+    display_name: getAuthDisplayName(),
+    title: "Instructor",
+    is_primary: true,
+    status: "active",
+  });
+  if (membershipError) throw membershipError;
+
+  await refreshRemotePlatformContext();
+  state.activeInstitutionId = institution.id;
+  state.activeCourseId = course.id;
+  state.activeCaseId = "";
 }
 
 async function fetchSupabaseContext(userId) {
