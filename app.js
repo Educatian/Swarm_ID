@@ -149,12 +149,21 @@ const state = {
     remoteRole: "",
     message: "Waiting for Supabase configuration.",
   },
+  ai: {
+    provider: "gemini",
+    configured: false,
+    model: "gemini-2.5-flash",
+    busy: false,
+    status: "Gemini will use the app endpoint when available, or fall back to local logic.",
+    lastError: "",
+  },
 };
 
 const STORAGE_KEY = "swarm-id-platform-v2";
 const SESSION_STORAGE_KEY = "swarm-id-session-v1";
 const TUTORIAL_STORAGE_KEY = "swarm-id-tutorial-v1";
 const DEFAULT_SUPABASE_CONFIG = window.SUPABASE_CONFIG || { url: "", anonKey: "" };
+const DEFAULT_GEMINI_CONFIG = window.GEMINI_CONFIG || { apiKey: "", model: "gemini-2.5-flash" };
 const tutorialState = {
   active: false,
   stepIndex: 0,
@@ -1425,6 +1434,359 @@ function deriveMetricsFromText(text) {
     accessibility: clamp(40 + keywordCounts.accessibility * 9, 28, 96),
   };
 }
+
+function getGeminiConfig() {
+  return {
+    apiKey: String(window.GEMINI_CONFIG?.apiKey || DEFAULT_GEMINI_CONFIG.apiKey || "").trim(),
+    model:
+      String(window.GEMINI_CONFIG?.model || DEFAULT_GEMINI_CONFIG.model || "gemini-2.5-flash").trim() ||
+      "gemini-2.5-flash",
+  };
+}
+
+function isGeminiConfigured() {
+  return Boolean(getGeminiConfig().apiKey);
+}
+
+function extractJsonCandidate(text) {
+  const direct = String(text || "").trim();
+  if (!direct) return "";
+  if (direct.startsWith("{") || direct.startsWith("[")) return direct;
+  const fencedMatch = direct.match(/```json\s*([\s\S]*?)```/i) || direct.match(/```\s*([\s\S]*?)```/i);
+  if (fencedMatch?.[1]) return fencedMatch[1].trim();
+  const firstBrace = direct.indexOf("{");
+  const lastBrace = direct.lastIndexOf("}");
+  if (firstBrace >= 0 && lastBrace > firstBrace) {
+    return direct.slice(firstBrace, lastBrace + 1).trim();
+  }
+  return direct;
+}
+
+function normalizeStringList(value, fallback = []) {
+  const items = asArray(value)
+    .map((item) => String(item || "").trim())
+    .filter(Boolean);
+  return items.length ? items : fallback;
+}
+
+function normalizeStakeholderKey(value, fallback = "teacher") {
+  const candidate = String(value || "").trim().toLowerCase();
+  if (stakeholders[candidate]) return candidate;
+  return inferStakeholderFromText(candidate, fallback);
+}
+
+function normalizeEvidenceList(value, fallback = []) {
+  const items = asArray(value)
+    .map((item, index) => {
+      const evidence = asObject(item);
+      const body = String(evidence.body || "").trim();
+      if (!body) return null;
+      return {
+        stakeholder: normalizeStakeholderKey(
+          evidence.stakeholder,
+          ["teacher", "student", "administrator", "it", "accessibility"][index % 5]
+        ),
+        title: String(evidence.title || `Evidence ${index + 1}`).trim(),
+        body,
+      };
+    })
+    .filter(Boolean);
+  return items.length ? items : fallback;
+}
+
+function normalizeSimpleCardList(value, fallback = []) {
+  const items = asArray(value)
+    .map((item) => {
+      const entry = asObject(item);
+      const title = String(entry.title || "").trim();
+      const body = String(entry.body || "").trim();
+      if (!title || !body) return null;
+      return { title, body };
+    })
+    .filter(Boolean);
+  return items.length ? items : fallback;
+}
+
+function normalizeValueCardList(value, fallback = []) {
+  const items = asArray(value)
+    .map((item) => {
+      const entry = asObject(item);
+      const label = String(entry.label || entry.title || "").trim();
+      const valueText = String(entry.value || entry.body || "").trim();
+      const note = String(entry.note || "").trim();
+      if (!label || !valueText) return null;
+      return note ? { label, value: valueText, note } : { label, value: valueText };
+    })
+    .filter(Boolean);
+  return items.length ? items : fallback;
+}
+
+function normalizeStakeholderProfiles(value, fallback = {}) {
+  const next = {};
+  Object.keys(stakeholders).forEach((key) => {
+    const source = asObject(asObject(value)[key]);
+    const candidate = {};
+    ["label", "summary", "status", "icon"].forEach((field) => {
+      const text = String(source[field] || "").trim();
+      if (text) candidate[field] = text;
+    });
+    if (Object.keys(candidate).length) {
+      next[key] = candidate;
+    }
+  });
+  return Object.keys(next).length ? next : fallback;
+}
+
+function normalizeUiCopy(value, fallback = {}) {
+  const candidate = {};
+  Object.entries(asObject(value)).forEach(([key, item]) => {
+    const text = String(item || "").trim();
+    if (text) candidate[key] = text;
+  });
+  return Object.keys(candidate).length ? candidate : fallback;
+}
+
+function mergeStructuredCase(baseCase, aiDraft) {
+  const next = asObject(aiDraft);
+  const merged = {
+    ...baseCase,
+    summary: String(next.summary || baseCase.summary || "").trim() || baseCase.summary,
+    prompt: String(next.prompt || baseCase.prompt || "").trim() || baseCase.prompt,
+    learningGoals: normalizeStringList(next.learningGoals, baseCase.learningGoals).slice(0, 6),
+    constraints: normalizeStringList(next.constraints, baseCase.constraints).slice(0, 8),
+    evidence: normalizeEvidenceList(next.evidence, baseCase.evidence).slice(0, 6),
+    stakeholderProfiles: normalizeStakeholderProfiles(next.stakeholderProfiles, baseCase.stakeholderProfiles),
+    matrixInsights: normalizeSimpleCardList(next.matrixInsights, baseCase.matrixInsights).slice(0, 6),
+    sandboxFeed: normalizeValueCardList(next.sandboxFeed, baseCase.sandboxFeed).slice(0, 6),
+    reflectionPrompts: normalizeStringList(next.reflectionPrompts, baseCase.reflectionPrompts).slice(0, 6),
+    networkMeta: normalizeValueCardList(next.networkMeta, baseCase.networkMeta).slice(0, 6),
+    uiCopy: normalizeUiCopy(next.uiCopy, baseCase.uiCopy),
+  };
+
+  if (String(next.caseSubtitle || "").trim()) {
+    merged.uiCopy = {
+      ...merged.uiCopy,
+      caseSubtitle: String(next.caseSubtitle).trim(),
+    };
+  }
+
+  return merged;
+}
+
+function setAiStatus(message, { busy = state.ai.busy, error = "" } = {}) {
+  const config = getGeminiConfig();
+  state.ai.configured = Boolean(config.apiKey);
+  state.ai.model = config.model;
+  state.ai.busy = busy;
+  state.ai.lastError = error;
+  state.ai.status =
+    message ||
+    (state.ai.configured
+      ? `Gemini ready on ${config.model}.`
+      : "Gemini will use the app endpoint when available, or fall back to local logic.");
+}
+
+function getGeminiResponseText(payload) {
+  return asArray(payload?.candidates)
+    .flatMap((candidate) => asArray(candidate?.content?.parts))
+    .map((part) => String(part?.text || "").trim())
+    .filter(Boolean)
+    .join("\n")
+    .trim();
+}
+
+async function requestGeminiContent({
+  systemInstruction = "",
+  prompt,
+  responseMimeType = "text/plain",
+  temperature = 0.7,
+}) {
+  const { apiKey, model } = getGeminiConfig();
+  const payload = {
+    systemInstruction,
+    prompt,
+    responseMimeType,
+    temperature,
+    model,
+  };
+  const response = apiKey
+    ? await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey,
+        },
+        body: JSON.stringify({
+          ...(systemInstruction
+            ? {
+                system_instruction: {
+                  parts: [{ text: systemInstruction }],
+                },
+              }
+            : {}),
+          contents: [
+            {
+              parts: [{ text: prompt }],
+            },
+          ],
+          generationConfig: {
+            temperature,
+            responseMimeType,
+          },
+        }),
+      })
+    : await fetch("/api/gemini", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+  if (!response.ok) {
+    const detail = await response.text().catch(() => "");
+    throw new Error(`Gemini request failed (${response.status}). ${detail}`.trim());
+  }
+
+  const result = await response.json();
+  const text = apiKey ? getGeminiResponseText(result) : String(result?.text || "").trim();
+  if (!text) {
+    throw new Error("Gemini returned an empty response.");
+  }
+  return text;
+}
+
+async function requestGeminiJson(options) {
+  const raw = await requestGeminiContent({
+    ...options,
+    responseMimeType: "application/json",
+    temperature: options.temperature ?? 0.4,
+  });
+  return JSON.parse(extractJsonCandidate(raw));
+}
+
+async function structureCaseFromDocumentWithAi(input) {
+  const baseCase = structuredCaseFromDocument(input);
+
+  setAiStatus(`Structuring this case with ${getGeminiConfig().model}…`, { busy: true });
+  try {
+    const draft = await requestGeminiJson({
+      systemInstruction:
+        "You structure instructional design documents into concise JSON for a learning network app. Return only valid JSON.",
+      prompt: [
+        "Create a compact case structure from the uploaded document.",
+        "Return JSON with these keys only:",
+        "summary, prompt, learningGoals, constraints, evidence, stakeholderProfiles, matrixInsights, sandboxFeed, reflectionPrompts, networkMeta, uiCopy, caseSubtitle",
+        "Rules:",
+        "- learningGoals: 3 to 5 short strings",
+        "- constraints: 3 to 6 short strings",
+        "- evidence: up to 4 objects with stakeholder, title, body",
+        "- stakeholderProfiles: optional object keyed by teacher, administrator, student, it, accessibility with summary/status",
+        "- matrixInsights: up to 4 objects with title and body",
+        "- sandboxFeed: up to 4 objects with label, value, optional note",
+        "- reflectionPrompts: 3 short prompts",
+        "- networkMeta: up to 3 objects with label and value",
+        "- uiCopy: optional object with short copy strings",
+        "- caseSubtitle: one short sentence",
+        "",
+        `Title: ${input.title}`,
+        `Publish to learners: ${input.publish ? "yes" : "no"}`,
+        "Document:",
+        input.text,
+      ].join("\n"),
+    });
+    setAiStatus(`${getGeminiConfig().model} structured the case.`, { busy: false });
+    return mergeStructuredCase(baseCase, draft);
+  } catch (error) {
+    console.error(error);
+    setAiStatus(`Gemini fallback active. ${error.message}`, { busy: false, error: error.message });
+    return baseCase;
+  }
+}
+
+async function generateAgendaExpansionsWithAi(agendaNode, activeCase = getActiveCaseRecord()) {
+  const fallback = generateAgendaExpansions(agendaNode, activeCase);
+
+  const settings = getCaseBoardSettings(activeCase);
+  setAiStatus(`Expanding learner agenda with ${getGeminiConfig().model}…`, { busy: true });
+  try {
+    const payload = await requestGeminiJson({
+      systemInstruction:
+        "You expand learner agenda nodes into concise related issue nodes for a D3 network. Return only valid JSON.",
+      prompt: [
+        "Return JSON with one key: items.",
+        `items must be an array of up to ${settings.maxAiExpansionsPerNode} objects.`,
+        "Each object must have: title, body, stakeholder.",
+        "Allowed stakeholders: teacher, administrator, student, it, accessibility.",
+        "Keep each body to one or two sentences.",
+        "",
+        `Case summary: ${activeCase?.summary || ""}`,
+        `Case constraints: ${normalizeStringList(activeCase?.constraints).join(" | ")}`,
+        `Agenda title: ${agendaNode.title}`,
+        `Agenda body: ${agendaNode.body}`,
+        `Current lens: ${state.activeStakeholder}`,
+      ].join("\n"),
+    });
+
+    const items = asArray(payload?.items)
+      .map((item, index) => {
+        const entry = asObject(item);
+        const title = String(entry.title || "").trim();
+        const body = String(entry.body || "").trim();
+        if (!title || !body) return null;
+        return {
+          id: `ai-${slugify(agendaNode.title)}-${Date.now().toString(36)}-${index + 1}`,
+          title,
+          body,
+          stakeholder: normalizeStakeholderKey(entry.stakeholder, agendaNode.stakeholder || state.activeStakeholder),
+          sourceAgendaId: agendaNode.id,
+          createdAt: "Now",
+        };
+      })
+      .filter(Boolean)
+      .slice(0, settings.maxAiExpansionsPerNode);
+
+    setAiStatus(`${getGeminiConfig().model} expanded the learner agenda.`, { busy: false });
+    return items.length ? items : fallback;
+  } catch (error) {
+    console.error(error);
+    setAiStatus(`Gemini fallback active. ${error.message}`, { busy: false, error: error.message });
+    return fallback;
+  }
+}
+
+async function generateAgentReplyWithAi(stakeholderKey, question) {
+  const fallback = generateAgentReply(stakeholderKey);
+
+  const stakeholder = getCaseStakeholderMeta(stakeholderKey);
+  const activeCase = getActiveCaseRecord();
+  setAiStatus(`Responding with ${getGeminiConfig().model}…`, { busy: true });
+  try {
+    const response = await requestGeminiContent({
+      systemInstruction:
+        "You are an instructional design analysis assistant. Answer from one stakeholder lens in plain language, with no bullets and no markdown.",
+      prompt: [
+        `Stakeholder lens: ${stakeholder.label}`,
+        `Stakeholder summary: ${stakeholder.summary}`,
+        `Case title: ${activeCase?.title || "Untitled case"}`,
+        `Case summary: ${activeCase?.summary || ""}`,
+        `Constraints: ${normalizeStringList(activeCase?.constraints).join(" | ")}`,
+        `Question: ${question}`,
+        "Answer in 2 or 3 concise sentences. Mention one design tension and one practical next check.",
+      ].join("\n"),
+      responseMimeType: "text/plain",
+      temperature: 0.6,
+    });
+    setAiStatus(`${getGeminiConfig().model} answered from the ${stakeholder.label.toLowerCase()} lens.`, { busy: false });
+    return response;
+  } catch (error) {
+    console.error(error);
+    setAiStatus(`Gemini fallback active. ${error.message}`, { busy: false, error: error.message });
+    return fallback;
+  }
+}
+
+setAiStatus();
 
 function structuredCaseFromDocument({ title, text, publish = true }) {
   const cleanText = text.trim();
@@ -2800,7 +3162,7 @@ function renderSidebar() {
   dom.sidebarTension.textContent = tensionLevel(scores.conflict);
   dom.sidebarTensionFill.style.width = `${scores.conflict}%`;
   dom.healthFill.style.width = `${scores.alignment}%`;
-  dom.healthCopy.textContent =
+  const baseHealthCopy =
     state.activeRole === "admin"
       ? activeCase
         ? activeCase.published
@@ -2810,6 +3172,7 @@ function renderSidebar() {
       : activeCase
         ? `${activeLearner?.name || "This learner"} is exploring the selected case in private notes.`
         : "Choose a published case to unlock the rest of the page.";
+  dom.healthCopy.textContent = state.ai.busy ? `${baseHealthCopy} ${state.ai.status}` : baseHealthCopy;
 }
 
 function satelliteCountForNode(node) {
@@ -4329,7 +4692,7 @@ function generateAgendaExpansions(agendaNode, activeCase = getActiveCaseRecord()
   });
 }
 
-function addAgendaNode(title, body = "") {
+async function addAgendaNode(title, body = "") {
   const activeRun = getActiveLearnerRun();
   if (!activeRun) {
     throw new Error("Select a published case before adding an agenda node.");
@@ -4352,7 +4715,7 @@ function addAgendaNode(title, body = "") {
     stakeholder: inferStakeholderFromText(`${cleanTitle} ${cleanBody}`, state.activeStakeholder),
     createdAt: "Now",
   };
-  const expansions = generateAgendaExpansions(agendaNode);
+  const expansions = await generateAgendaExpansionsWithAi(agendaNode);
 
   updateActiveLearnerRunRecord((run) => {
     run.agendaNodes = [agendaNode, ...asArray(run.agendaNodes)].slice(0, boardSettings.maxLearnerNodes);
@@ -4659,11 +5022,11 @@ function generateAgentReply(stakeholderKey) {
   );
 }
 
-function handleAsk(question) {
+async function handleAsk(question) {
   const clean = question.trim();
   if (!clean) return;
   state.chat.push({ role: "user", stakeholder: state.activeStakeholder, body: clean });
-  const response = generateAgentReply(state.activeStakeholder);
+  const response = await generateAgentReplyWithAi(state.activeStakeholder, clean);
   state.chat.push({ role: "agent", stakeholder: state.activeStakeholder, body: response });
   pushEvidence(state.activeStakeholder, `${stakeholders[state.activeStakeholder].label} response`, response);
   state.timeline.push(`Swarm dialogue expanded through the ${stakeholders[state.activeStakeholder].label.toLowerCase()} lens.`);
@@ -4762,11 +5125,11 @@ function addCourse(name, code) {
   persistPlatformState();
 }
 
-function uploadStructuredDocument(title, text, publishMode) {
+async function uploadStructuredDocument(title, text, publishMode) {
   const course = getActiveCourse();
   if (!course) return;
   const publish = publishMode === "published";
-  const nextCase = structuredCaseFromDocument({ title, text, publish });
+  const nextCase = await structureCaseFromDocumentWithAi({ title, text, publish });
   const nextDocument = {
     id: `doc-${slugify(title)}-${Date.now().toString(36)}`,
     title,
@@ -4903,7 +5266,7 @@ document.addEventListener("click", (event) => {
   }
 });
 
-document.addEventListener("submit", (event) => {
+document.addEventListener("submit", async (event) => {
   if (event.target.id === "landing-login-form") {
     event.preventDefault();
     const email = dom.landingLoginEmail.value.trim();
@@ -4954,14 +5317,20 @@ document.addEventListener("submit", (event) => {
   if (event.target.id === "upload-document-form") {
     event.preventDefault();
     const form = new FormData(event.target);
-    uploadStructuredDocument(
-      String(form.get("documentTitle")).trim(),
-      String(form.get("documentText")).trim(),
-      String(form.get("publishMode"))
-    );
-    event.target.reset();
-    regenerateGraph("admin upload structured");
-    renderAll();
+    try {
+      await uploadStructuredDocument(
+        String(form.get("documentTitle")).trim(),
+        String(form.get("documentText")).trim(),
+        String(form.get("publishMode"))
+      );
+      event.target.reset();
+      regenerateGraph("admin upload structured");
+      renderAll();
+    } catch (error) {
+      state.auth.message = error.message || "The document could not be structured.";
+      renderLandingLogin();
+    }
+    return;
   }
 
   if (event.target.id === "board-settings-form") {
@@ -4984,13 +5353,14 @@ document.addEventListener("submit", (event) => {
     event.preventDefault();
     const form = new FormData(event.target);
     try {
-      addAgendaNode(String(form.get("agendaTitle")).trim(), String(form.get("agendaBody")).trim());
+      await addAgendaNode(String(form.get("agendaTitle")).trim(), String(form.get("agendaBody")).trim());
       event.target.reset();
       renderAll();
     } catch (error) {
       state.auth.message = error.message || "Agenda node could not be added.";
       renderLandingLogin();
     }
+    return;
   }
 
   if (event.target.id === "annotation-form") {
@@ -5031,15 +5401,27 @@ document.addEventListener("submit", (event) => {
 document.getElementById("visualizer-form").addEventListener("submit", (event) => {
   event.preventDefault();
   const input = document.getElementById("visualizer-input");
-  handleAsk(input.value);
-  input.value = "";
+  handleAsk(input.value)
+    .then(() => {
+      input.value = "";
+    })
+    .catch((error) => {
+      state.auth.message = error.message || "The question could not be processed.";
+      renderLandingLogin();
+    });
 });
 
 document.getElementById("chat-form").addEventListener("submit", (event) => {
   event.preventDefault();
   const input = document.getElementById("chat-input");
-  handleAsk(input.value);
-  input.value = "";
+  handleAsk(input.value)
+    .then(() => {
+      input.value = "";
+    })
+    .catch((error) => {
+      state.auth.message = error.message || "The question could not be processed.";
+      renderLandingLogin();
+    });
 });
 
 Object.entries(dom.metricInputs).forEach(([key, input]) => {

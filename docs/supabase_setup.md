@@ -6,6 +6,8 @@
 4. Insert matching rows into `profiles`, `institutions`, `courses`, and `course_memberships`.
 5. Put a shareable `join_code` on each course if students should be able to join by code.
 6. Add `cases`, `documents`, and optional `learner_runs` for each course.
+7. If you want live AI generation in local browser testing, put a Gemini key in `gemini-config.js`.
+8. If you want live AI generation on Vercel, add `GEMINI_API_KEY` to the project environment variables. The app will call `/api/gemini` when no browser-side key is present.
 
 The landing page then authenticates with email/password, reads the logged-in user's active course memberships, and opens the linked instructor or student workspace automatically.
 
@@ -22,3 +24,10 @@ For student notes, store node or link annotations in `learner_runs.annotations`.
 If you want to persist a class-level synthesized graph instead of computing it on the fly, write snapshots into `cohort_graph_snapshots`.
 
 Optional case-level text can now come from the database too. Put values into `cases.stakeholder_profiles`, `cases.matrix_insights`, `cases.sandbox_feed`, `cases.reflection_prompts`, `cases.network_meta`, and `cases.ui_copy` if you want the visible copy blocks to render from incoming data instead of the built-in fallback text.
+
+When `gemini-config.js` is present, the app uses Gemini for:
+- uploaded document to structured case conversion
+- learner agenda node to related issue expansion
+- stakeholder question responses
+
+If Gemini is not configured or a request fails, the app falls back to the built-in local generation logic.
