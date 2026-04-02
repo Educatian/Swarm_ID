@@ -660,8 +660,30 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./supabase-config.js"></script>
-  <script src="./gemini-config.js"></script>
-  <script src="./app.js"></script>
+  <script>
+    (function loadAppWithOptionalGeminiConfig() {
+      const loadApp = () => {
+        const appScript = document.createElement("script");
+        appScript.src = "./app.js";
+        document.body.appendChild(appScript);
+      };
+
+      const isLocal =
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1";
+
+      if (!isLocal) {
+        loadApp();
+        return;
+      }
+
+      const geminiScript = document.createElement("script");
+      geminiScript.src = "./gemini-config.js";
+      geminiScript.onload = loadApp;
+      geminiScript.onerror = loadApp;
+      document.body.appendChild(geminiScript);
+    })();
+  </script>
 </body>
 </html>
 

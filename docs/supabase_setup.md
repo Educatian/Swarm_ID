@@ -9,6 +9,10 @@
 7. If you want live AI generation in local browser testing, put a Gemini key in `gemini-config.js`.
 8. If you want live AI generation on Vercel, add `GEMINI_API_KEY` to the project environment variables. The app will call `/api/gemini` when no browser-side key is present.
 
+If you want one root admin to create the first institution and course from inside the app, create that Auth user as `admin@swarm.io` and apply the root-admin insert policies from [supabase_schema.sql](C:\Users\jewoo\Desktop\Swarm_ID\docs\supabase_schema.sql). That account can bootstrap institutions, courses, and its own memberships before any regular course memberships exist.
+
+The app now also upserts the signed-in user's `profiles` row automatically on login. Apply the `profiles` insert/update policies from [supabase_schema.sql](C:\Users\jewoo\Desktop\Swarm_ID\docs\supabase_schema.sql) so first-time accounts can complete that step without manual SQL.
+
 If instructors should create or publish cases from the app UI, make sure the insert/update policies from [supabase_schema.sql](C:\Users\jewoo\Desktop\Swarm_ID\docs\supabase_schema.sql) are applied for `cases` and `documents`. Without those policies, the app can read course data but cannot save new cases back to Supabase.
 
 If students should add agenda nodes, annotations, and learner-side reflections from the app UI, also apply the `learner_runs` insert/update policies from [supabase_schema.sql](C:\Users\jewoo\Desktop\Swarm_ID\docs\supabase_schema.sql). Without those policies, learner activity will stay local and disappear when the remote course data reloads.

@@ -120,11 +120,32 @@ on public.profiles
 for select
 using (auth.uid() = id);
 
+drop policy if exists "users can insert own profile" on public.profiles;
+drop policy if exists "users can update own profile" on public.profiles;
+
+create policy "users can insert own profile"
+on public.profiles
+for insert
+with check (
+  auth.uid() = id
+);
+
+create policy "users can update own profile"
+on public.profiles
+for update
+using (
+  auth.uid() = id
+)
+with check (
+  auth.uid() = id
+);
+
 create policy "members can read institutions"
 on public.institutions
 for select
 using (
-  exists (
+  (auth.jwt() ->> 'email') = 'admin@swarm.io'
+  or exists (
     select 1
     from public.course_memberships m
     where m.institution_id = institutions.id
@@ -137,7 +158,8 @@ create policy "members can read courses"
 on public.courses
 for select
 using (
-  exists (
+  (auth.jwt() ->> 'email') = 'admin@swarm.io'
+  or exists (
     select 1
     from public.course_memberships m
     where m.course_id = courses.id
@@ -147,12 +169,36 @@ using (
 );
 
 drop policy if exists "members can read same-course memberships" on public.course_memberships;
+drop policy if exists "platform admin can create institutions" on public.institutions;
+drop policy if exists "platform admin can create courses" on public.courses;
+drop policy if exists "platform admin can create memberships" on public.course_memberships;
 
 create policy "users can read own memberships"
 on public.course_memberships
 for select
 using (
   user_id = auth.uid()
+);
+
+create policy "platform admin can create institutions"
+on public.institutions
+for insert
+with check (
+  (auth.jwt() ->> 'email') = 'admin@swarm.io'
+);
+
+create policy "platform admin can create courses"
+on public.courses
+for insert
+with check (
+  (auth.jwt() ->> 'email') = 'admin@swarm.io'
+);
+
+create policy "platform admin can create memberships"
+on public.course_memberships
+for insert
+with check (
+  (auth.jwt() ->> 'email') = 'admin@swarm.io'
 );
 
 create policy "students can read published cases and instructors can read all cases"

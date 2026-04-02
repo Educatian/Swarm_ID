@@ -124,6 +124,7 @@ const state = {
 const STORAGE_KEY = "swarm-id-platform-v2";
 const SESSION_STORAGE_KEY = "swarm-id-session-v1";
 const TUTORIAL_STORAGE_KEY = "swarm-id-tutorial-v1";
+const PLATFORM_ADMIN_EMAIL = "admin@swarm.io";
 const DEFAULT_SUPABASE_CONFIG = window.SUPABASE_CONFIG || { url: "", anonKey: "" };
 const DEFAULT_GEMINI_CONFIG = window.GEMINI_CONFIG || { apiKey: "", model: "gemini-2.5-flash" };
 const tutorialState = {
@@ -432,6 +433,10 @@ function getAuthDisplayName() {
     .join(" ");
 }
 
+function isPlatformAdminAccount(email = state.auth.sessionEmail) {
+  return String(email || "").trim().toLowerCase() === PLATFORM_ADMIN_EMAIL;
+}
+
 async function refreshRemotePlatformContext(preferredCaseId = "") {
   if (!isSupabaseSessionActive()) return;
   const context = await fetchSupabaseContext(state.auth.userId);
@@ -443,6 +448,20 @@ async function refreshRemotePlatformContext(preferredCaseId = "") {
     state.activeCaseId = preferredCaseId;
     syncActiveCaseState();
   }
+}
+
+async function ensureSupabaseProfile(user = { id: state.auth.userId, email: state.auth.sessionEmail }) {
+  const client = initializeSupabase();
+  if (!client || !user?.id) return;
+  const fallbackName = getAuthDisplayName() || String(user.email || "").split("@")[0] || "User";
+  const { error } = await client.from("profiles").upsert(
+    {
+      id: user.id,
+      full_name: fallbackName,
+    },
+    { onConflict: "id" }
+  );
+  if (error) throw error;
 }
 
 async function syncCaseToSupabase(caseRecord, courseId = getActiveCourse()?.id) {
@@ -478,6 +497,7 @@ async function createInstitutionInSupabase(name) {
   if (!client) throw new Error("Login is not ready yet.");
   const institutionName = String(name || "").trim();
   if (!institutionName) throw new Error("Add an institution name first.");
+  await ensureSupabaseProfile();
 
   const { data: institution, error: institutionError } = await client
     .from("institutions")
@@ -523,6 +543,7 @@ async function createCourseInSupabase(name, code) {
   const institution = getActiveInstitution();
   if (!client) throw new Error("Login is not ready yet.");
   if (!institution) throw new Error("Create or select an institution first.");
+  await ensureSupabaseProfile();
   const courseName = String(name || "").trim();
   const courseCode = String(code || "").trim();
   if (!courseName || !courseCode) {
@@ -641,7 +662,7 @@ async function fetchSupabaseContext(userId) {
 
 function applyRemoteSessionContext({ profile, primaryMembership, platform }, sessionUser) {
   state.platform = platform;
-  state.activeRole = primaryMembership?.role || state.activeRole || "user";
+  state.activeRole = primaryMembership?.role || (isPlatformAdminAccount(sessionUser?.email) ? "admin" : state.activeRole || "user");
   state.activeInstitutionId = primaryMembership?.institution_id || "";
   state.activeCourseId = primaryMembership?.course_id || "";
   state.activeInstructorId = primaryMembership?.role === "admin" ? primaryMembership.user_id : "";
@@ -680,6 +701,7 @@ async function signInWithSupabase(email, password) {
   if (!sessionUser) {
     throw new Error("No profile was found for this account.");
   }
+  await ensureSupabaseProfile(sessionUser);
   const context = await fetchSupabaseContext(sessionUser.id);
   applyRemoteSessionContext(context, sessionUser);
   return context;
@@ -2661,24 +2683,50 @@ function renderPipelineConsole() {
   const activeRun = state.activeRole === "user" ? getActiveLearnerRun() : null;
 
   if (state.activeRole === "admin") {
+    const canManageCourses = isPlatformAdminAccount();
     dom.pipelineConsole.innerHTML = `
       ${pipelineStatusMarkup(activeCase)}
+      ${
+        canManageCourses
+          ? `
+            <article class="pipeline-card">
+              <strong>Course setup</strong>
+              <div class="pipeline-form-row two-up">
+                <form class="pipeline-form" id="add-institution-form">
+                  <input name="institutionName" type="text" placeholder="Institution name..." required>
+                  <button class="toolbar-button" type="submit">Add institution</button>
+                </form>
+                <form class="pipeline-form" id="add-course-form">
+                  <input name="courseName" type="text" placeholder="Course name..." required>
+                  <input name="courseCode" type="text" placeholder="Course code..." required>
+                  <button class="toolbar-button" type="submit">Add course</button>
+                </form>
+              </div>
+            </article>
+          `
+          : ""
+      }
       <article class="pipeline-card">
         <strong>New case</strong>
-        <p></p>
-        <form class="pipeline-form" id="upload-document-form">
-          <div class="pipeline-form-row two-up">
-            <input name="documentTitle" type="text" placeholder="Title..." autocomplete="off" required>
-            <select name="publishMode">
-              <option value="published">Publish to learners</option>
-              <option value="draft">Keep as draft</option>
-            </select>
-          </div>
-          <textarea name="documentText" placeholder="Paste the brief..." autocomplete="off" required></textarea>
-          <div class="pipeline-actions">
-            <button class="toolbar-button toolbar-button-primary" type="submit">Create case</button>
-          </div>
-        </form>
+        ${
+          course
+            ? `
+              <form class="pipeline-form" id="upload-document-form">
+                <div class="pipeline-form-row two-up">
+                  <input name="documentTitle" type="text" placeholder="Title..." autocomplete="off" required>
+                  <select name="publishMode">
+                    <option value="published">Publish to learners</option>
+                    <option value="draft">Keep as draft</option>
+                  </select>
+                </div>
+                <textarea name="documentText" placeholder="Paste the brief..." autocomplete="off" required></textarea>
+                <div class="pipeline-actions">
+                  <button class="toolbar-button toolbar-button-primary" type="submit">Create case</button>
+                </div>
+              </form>
+            `
+            : `<div class="empty-note">${canManageCourses ? "Create a course first." : "No course assigned."}</div>`
+        }
       </article>
       ${
         activeCase
@@ -4854,7 +4902,12 @@ function applyScenario(name) {
   renderAll();
 }
 
-function addInstitution(name) {
+async function addInstitution(name) {
+  if (isSupabaseSessionActive() && isPlatformAdminAccount()) {
+    await createInstitutionInSupabase(name);
+    persistSessionState();
+    return;
+  }
   const institutionId = `inst-${slugify(name)}-${Date.now().toString(36)}`;
   const courseId = `course-${Date.now().toString(36)}`;
   state.platform.institutions.push({
@@ -4877,11 +4930,19 @@ function addInstitution(name) {
   state.activeCourseId = getInstitutionById(institutionId).courses[0].id;
   state.activeCaseId = "";
   persistPlatformState();
+  persistSessionState();
 }
 
-function addCourse(name, code) {
+async function addCourse(name, code) {
+  if (isSupabaseSessionActive() && isPlatformAdminAccount()) {
+    await createCourseInSupabase(name, code);
+    persistSessionState();
+    return;
+  }
   const institution = getActiveInstitution();
-  if (!institution) return;
+  if (!institution) {
+    throw new Error("Create or select an institution first.");
+  }
   const courseId = `course-${slugify(code || name)}-${Date.now().toString(36)}`;
   institution.courses.push(
     createEmptyCourseTemplate({
@@ -4894,11 +4955,14 @@ function addCourse(name, code) {
   state.activeCourseId = courseId;
   state.activeCaseId = "";
   persistPlatformState();
+  persistSessionState();
 }
 
 async function uploadStructuredDocument(title, text, publishMode) {
   const course = getActiveCourse();
-  if (!course) return;
+  if (!course) {
+    throw new Error("Create or select a course first.");
+  }
   const publish = publishMode === "published";
   const nextCase = await structureCaseFromDocumentWithAi({ title, text, publish });
   const nextDocument = {
@@ -5101,17 +5165,31 @@ document.addEventListener("submit", async (event) => {
   if (event.target.id === "add-institution-form") {
     event.preventDefault();
     const form = new FormData(event.target);
-    addInstitution(String(form.get("institutionName")).trim());
-    event.target.reset();
-    renderAll();
+    try {
+      await addInstitution(String(form.get("institutionName")).trim());
+      event.target.reset();
+      renderLandingLogin();
+      renderAll();
+    } catch (error) {
+      state.auth.message = error.message || "Institution could not be created.";
+      renderLandingLogin();
+    }
+    return;
   }
 
   if (event.target.id === "add-course-form") {
     event.preventDefault();
     const form = new FormData(event.target);
-    addCourse(String(form.get("courseName")).trim(), String(form.get("courseCode")).trim());
-    event.target.reset();
-    renderAll();
+    try {
+      await addCourse(String(form.get("courseName")).trim(), String(form.get("courseCode")).trim());
+      event.target.reset();
+      renderLandingLogin();
+      renderAll();
+    } catch (error) {
+      state.auth.message = error.message || "Course could not be created.";
+      renderLandingLogin();
+    }
+    return;
   }
 
   if (event.target.id === "upload-document-form") {
