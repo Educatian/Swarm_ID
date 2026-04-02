@@ -109,7 +109,7 @@ const state = {
     sessionEmail: "",
     userId: "",
     remoteRole: "",
-    message: "Waiting for Supabase configuration.",
+    message: "",
   },
   ai: {
     provider: "gemini",
@@ -362,7 +362,7 @@ function buildRemotePlatform({
 async function fetchSupabaseContext(userId) {
   const client = initializeSupabase();
   if (!client) {
-    throw new Error("Supabase is not configured.");
+    throw new Error("Login is not ready yet.");
   }
 
   const profileQuery = client.from("profiles").select("*").eq("id", userId).maybeSingle();
@@ -453,8 +453,8 @@ function applyRemoteSessionContext({ profile, primaryMembership, platform }, ses
     remoteRole: primaryMembership.role,
     message:
       profile?.full_name || profile?.name
-        ? `${profile.full_name || profile.name} connected through Supabase.`
-        : "Supabase session connected.",
+        ? `${profile.full_name || profile.name}`
+        : "Signed in",
   };
   ensureActiveSelections();
   syncActiveCaseState();
@@ -464,17 +464,17 @@ function applyRemoteSessionContext({ profile, primaryMembership, platform }, ses
 async function signInWithSupabase(email, password) {
   const client = initializeSupabase();
   if (!client) {
-    throw new Error("Supabase is not configured. Add your project URL and anon key first.");
+    throw new Error("Login is not ready yet.");
   }
   state.auth.loading = true;
-  state.auth.message = "Signing in with Supabaseâ€¦";
+  state.auth.message = "Signing in...";
   renderLandingLogin();
 
   const { data, error } = await client.auth.signInWithPassword({ email, password });
   if (error) throw error;
   const sessionUser = data?.user;
   if (!sessionUser) {
-    throw new Error("The account signed in, but no user profile was returned.");
+    throw new Error("No profile was found for this account.");
   }
   const context = await fetchSupabaseContext(sessionUser.id);
   applyRemoteSessionContext(context, sessionUser);
@@ -493,7 +493,7 @@ async function restoreSupabaseSession() {
     applyRemoteSessionContext(context, sessionData.session.user);
     return true;
   } catch (error) {
-    state.auth.message = error.message || "Supabase session restore failed.";
+    state.auth.message = error.message || "Session restore failed.";
     return false;
   }
 }
@@ -733,7 +733,7 @@ function initializeSupabase() {
   if (!state.auth.configured) {
     state.auth.source = "none";
     if (!state.auth.loading) {
-      state.auth.message = "Supabase URL and anon key are not configured yet.";
+      state.auth.message = "";
     }
     return null;
   }
@@ -749,7 +749,7 @@ function initializeSupabase() {
   }
   state.auth.ready = true;
   if (!state.auth.loading && !state.auth.userId && state.auth.source !== "supabase") {
-    state.auth.message = "Supabase is configured. Sign in with your email and password.";
+    state.auth.message = "";
   }
   return supabaseClient;
 }
@@ -1480,12 +1480,12 @@ function syncActiveCaseState() {
     state.evidence = [];
     state.decisions = [];
     state.chat = [];
-    state.timeline = ["No published case is active for this course yet."];
-    dom.caseTitle.textContent = state.activeRole === "admin" ? "No instructor case selected" : "No published case selected";
+    state.timeline = [];
+    dom.caseTitle.textContent = "No case selected";
     dom.caseSubtitle.textContent =
       state.activeRole === "admin"
-        ? "Create a case by uploading a course brief, then publish it when students should see it."
-        : "Choose a published case from the course library once your instructor releases one.";
+        ? "Create or select a case."
+        : "Choose a published case.";
     return;
   }
 
@@ -2409,8 +2409,8 @@ function pipelineStatusMarkup(activeCase) {
   if (!activeCase) {
     return `<div class="empty-note">${
       state.activeRole === "admin"
-        ? "No case is selected yet. Paste a course brief below to create one, or choose an existing case from the list."
-        : "No published case is available yet. Once your instructor releases one, it will appear here."
+        ? "No case"
+        : "No case"
     }</div>`;
   }
 
@@ -2442,17 +2442,17 @@ function renderPipelineConsole() {
     dom.pipelineConsole.innerHTML = `
       ${pipelineStatusMarkup(activeCase)}
       <article class="pipeline-card">
-        <strong>Create a case</strong>
-        <p>Paste a syllabus, assignment prompt, policy note, or design brief. The app will turn it into one structured case.</p>
+        <strong>New case</strong>
+        <p></p>
         <form class="pipeline-form" id="upload-document-form">
           <div class="pipeline-form-row two-up">
-            <input name="documentTitle" type="text" placeholder="Document titleâ€¦" autocomplete="off" required>
+            <input name="documentTitle" type="text" placeholder="Title..." autocomplete="off" required>
             <select name="publishMode">
               <option value="published">Publish to learners</option>
               <option value="draft">Keep as draft</option>
             </select>
           </div>
-          <textarea name="documentText" placeholder="Paste the course brief hereâ€¦" autocomplete="off" required></textarea>
+          <textarea name="documentText" placeholder="Paste the brief..." autocomplete="off" required></textarea>
           <div class="pipeline-actions">
             <button class="toolbar-button toolbar-button-primary" type="submit">Create case</button>
           </div>
@@ -2463,9 +2463,9 @@ function renderPipelineConsole() {
           ? `
             <article class="pipeline-card">
               <strong>Board settings</strong>
-              <p>Decide what students can add, how long the board stays open, and how the map should be laid out.</p>
+              <p></p>
               <form class="pipeline-form" id="board-settings-form">
-                <textarea name="agendaPrompt" placeholder="Prompt students with the main design questionâ€¦" autocomplete="off">${getCaseBoardSettings(activeCase).agendaPrompt || ""}</textarea>
+                <textarea name="agendaPrompt" placeholder="Main question..." autocomplete="off">${getCaseBoardSettings(activeCase).agendaPrompt || ""}</textarea>
                 <div class="pipeline-form-row two-up">
                   <label class="mini-control">
                     <span>Due date</span>
@@ -2532,7 +2532,7 @@ function renderPipelineConsole() {
                   `
                   )
                   .join("")
-              : '<div class="empty-note">No cases yet. Create the first case from a course document.</div>'
+              : '<div class="empty-note">No cases yet.</div>'
           }
         </div>
       </article>
@@ -2608,7 +2608,7 @@ function renderPipelineConsole() {
                   `
                   )
                   .join("")
-              : '<div class="empty-note">No cases yet. Upload a document to create the first structured case.</div>'
+              : '<div class="empty-note">No cases yet.</div>'
           }
         </div>
       </article>
@@ -2634,7 +2634,7 @@ function renderPipelineConsole() {
                   `
                   )
                   .join("")
-              : '<div class="empty-note">Uploaded documents will appear here once an admin structures a new case.</div>'
+              : '<div class="empty-note">No documents yet.</div>'
           }
         </div>
       </article>
@@ -2645,8 +2645,8 @@ function renderPipelineConsole() {
   dom.pipelineConsole.innerHTML = `
     ${pipelineStatusMarkup(activeCase)}
     <article class="pipeline-card">
-      <strong>Your private copy</strong>
-      <p>Your questions and notes stay in your own copy. They do not change the instructor's shared case.</p>
+      <strong>Your copy</strong>
+      <p></p>
       ${
         activeLearner
           ? `
@@ -2685,21 +2685,21 @@ function renderPipelineConsole() {
                 `
                 )
                 .join("")
-            : '<div class="empty-note">No learner-visible cases have been published for this course yet.</div>'
+            : '<div class="empty-note">No cases</div>'
         }
       </div>
     </article>
     <article class="pipeline-card">
-      <strong>Add your idea</strong>
-      <p>Add one question or concern. The AI will add related issues to the case map.</p>
+      <strong>Add a node</strong>
+      <p></p>
       <form class="pipeline-form" id="agenda-node-form">
-        <input name="agendaTitle" type="text" placeholder="Example: Keep teacher feedback visibleâ€¦" autocomplete="off" required>
+        <input name="agendaTitle" type="text" placeholder="Title..." autocomplete="off" required>
         <textarea name="agendaBody" placeholder="Why does this matter for your redesign?" autocomplete="off"></textarea>
         <div class="pipeline-actions">
           <button class="toolbar-button toolbar-button-primary" type="submit">Add to Map</button>
         </div>
       </form>
-      <p class="context-note">${getCaseBoardSettings(activeCase).agendaPrompt || "Add one question or concern to begin."}</p>
+      <p class="context-note">${getCaseBoardSettings(activeCase).agendaPrompt || "Add a node."}</p>
       <div class="case-list">
         ${
           asArray(activeRun?.agendaNodes).length
@@ -2717,12 +2717,12 @@ function renderPipelineConsole() {
                 `
                 )
                 .join("")
-            : '<div class="empty-note">No ideas yet. Add one concern to expand the case map.</div>'
+            : '<div class="empty-note">No nodes</div>'
         }
       </div>
     </article>
     <article class="pipeline-card">
-      <strong>AI-added related issues</strong>
+      <strong>AI additions</strong>
       <div class="document-list">
         ${
           asArray(activeRun?.aiGeneratedNodes).length
@@ -2740,16 +2740,16 @@ function renderPipelineConsole() {
                 `
                 )
                 .join("")
-            : '<div class="empty-note">AI-generated related issues will appear here after you add an agenda node.</div>'
+            : '<div class="empty-note">No additions</div>'
         }
       </div>
     </article>
     <article class="pipeline-card">
-      <strong>Class view summary</strong>
+      <strong>Class view</strong>
       <p>${
         getCaseBoardSettings(activeCase).sharingMode === "private"
-          ? "The instructor set this board to private, so class view is currently off."
-          : "Class view groups repeated student ideas and shared notes into one combined map."
+          ? "Off"
+          : "Shared patterns"
       }</p>
       <div class="card-meta">
         <span>${buildCohortIssueEntries(activeCase).length} shared clusters</span>
@@ -3518,29 +3518,29 @@ function syncGraphLoop() {
 function renderStakeholderFocus() {
   const activeCase = getCaseById(state.activeCaseId, getActiveCourse());
   if (!activeCase) {
-    dom.activeStakeholderPill.textContent = "No case selected";
-    dom.activeStakeholderStatus.textContent = "Choose a case first";
-    dom.lensName.textContent = "What happens next";
+    dom.activeStakeholderPill.textContent = "No case";
+    dom.activeStakeholderStatus.textContent = "Pick a case";
+    dom.lensName.textContent = "Selected lens";
     dom.lensSummary.textContent =
       state.activeRole === "admin"
-        ? "Create a case, then the app will show which people and constraints are pushing against the design."
-        : "Choose a published case, then the app will show which people and constraints matter most.";
-    dom.lensStatus.textContent = state.activeRole === "admin" ? "Create a case" : "Choose a case";
+        ? "Start with a case."
+        : "Pick a case.";
+    dom.lensStatus.textContent = state.activeRole === "admin" ? "Start" : "Pick";
     dom.lensScore.textContent = "--";
     dom.orbitTitle.textContent = "Case preview";
     dom.orbitIcon.textContent = "hub";
-    dom.orbitSummary.textContent = "The perspective panel will update after a case is loaded.";
-    dom.chatBadge.textContent = "Waiting for a case";
+    dom.orbitSummary.textContent = "The panel updates when a case is open.";
+    dom.chatBadge.textContent = "No case";
     dom.topTensions.innerHTML = `
       <article class="tension-item">
-        <strong>Start with one case</strong>
-        <p>${state.activeRole === "admin" ? "Paste a course brief to generate a case." : "Select one published case from the course."}</p>
+        <strong>Start here</strong>
+        <p>${state.activeRole === "admin" ? "Create a case." : "Pick a case."}</p>
       </article>
     `;
     dom.evidenceStrip.innerHTML = `
       <article class="evidence-item">
-        <strong>Evidence will appear here</strong>
-        <p>Once a case is loaded, this panel will show the strongest supporting notes.</p>
+        <strong>No evidence</strong>
+        <p>Open a case.</p>
       </article>
     `;
     dom.stakeholderPills.innerHTML = "";
@@ -3558,8 +3558,8 @@ function renderStakeholderFocus() {
     }
     dom.perspectiveConflicts.innerHTML = `
       <article class="conflict-card">
-        <strong>No perspective loaded yet</strong>
-        <p>Pick a case first, then compare teacher, student, administrator, IT, and accessibility views.</p>
+        <strong>No lens</strong>
+        <p>Open a case.</p>
       </article>
     `;
     return;
@@ -3669,7 +3669,7 @@ function renderChat() {
         .join("")
     : `
       <article class="chat-message agent">
-        <div>${getCaseUiCopy().emptyChatMessage || "No dialogue has been generated for this stakeholder yet. Ask a question to start the thread."}</div>
+        <div>${getCaseUiCopy().emptyChatMessage || "No dialogue yet."}</div>
         <small>${getCaseStakeholderMeta(state.activeStakeholder).label}</small>
       </article>
     `;
@@ -3716,7 +3716,7 @@ function renderMatrix() {
           `
         )
         .join("")
-    : emptyNoteMarkup("No trade-off insights have been generated for this case yet.");
+    : emptyNoteMarkup("No insights");
 
   dom.decisionLog.innerHTML = state.decisions.length
     ? state.decisions
@@ -3730,7 +3730,7 @@ function renderMatrix() {
           `
         )
         .join("")
-    : emptyNoteMarkup("No decision history has been recorded for this case yet.");
+    : emptyNoteMarkup("No history");
 }
 
 function renderSandbox() {
@@ -3775,7 +3775,7 @@ function renderSandbox() {
           `
         )
         .join("")
-    : emptyNoteMarkup("No simulation notes have been generated for this case yet.");
+    : emptyNoteMarkup("No notes");
 }
 
 function renderReport() {
@@ -3788,7 +3788,7 @@ function renderReport() {
   const reportTensions = state.evidence.slice(-3).reverse();
   const reportRecommendations = state.chat.filter((item) => item.role === "agent").slice(-2).reverse();
 
-  dom.reportSummary.textContent = summary || "No summary has been generated for this case yet.";
+  dom.reportSummary.textContent = summary || "No summary";
 
   dom.reportTensions.innerHTML = reportTensions.length
     ? reportTensions
@@ -3801,7 +3801,7 @@ function renderReport() {
           `
         )
         .join("")
-    : emptyNoteMarkup("No priority tensions have been saved yet.");
+    : emptyNoteMarkup("No tensions");
 
   dom.reportRecommendations.innerHTML = reportRecommendations.length
     ? reportRecommendations
@@ -3814,7 +3814,7 @@ function renderReport() {
           `
         )
         .join("")
-    : emptyNoteMarkup("No redesign recommendations have been generated yet.");
+    : emptyNoteMarkup("No recommendations");
 
   dom.reportEvidence.innerHTML = state.evidence.length
     ? state.evidence
@@ -3829,7 +3829,7 @@ function renderReport() {
           `
         )
         .join("")
-    : emptyNoteMarkup("No evidence notes have been added yet.");
+    : emptyNoteMarkup("No evidence");
 
   const rubric = activeCase
     ? [
@@ -3853,7 +3853,7 @@ function renderReport() {
           `
         )
         .join("")
-    : emptyNoteMarkup("Scores appear after a case is loaded.");
+    : emptyNoteMarkup("No scores");
 
   dom.reflectionBadge.textContent =
     state.activeRole === "admin"
@@ -3863,7 +3863,7 @@ function renderReport() {
   const reflectionPrompts = asArray(activeCase?.reflectionPrompts);
   dom.reflectionPrompts.innerHTML = reflectionPrompts.length
     ? reflectionPrompts.map((item) => `<article class="prompt-item">${item}</article>`).join("")
-    : emptyNoteMarkup("No reflection prompts have been generated for this case yet.");
+    : emptyNoteMarkup("No prompts");
 
   dom.reflectionFeed.innerHTML = state.timeline.length
     ? state.timeline
@@ -3876,11 +3876,7 @@ function renderReport() {
           `
         )
         .join("")
-    : emptyNoteMarkup(
-        state.activeRole === "admin"
-          ? "Recent case activity will appear here after the first case actions are saved."
-          : `${activeLearner?.name || "This student"} has not saved any reflections yet.`
-      );
+    : emptyNoteMarkup("No activity");
 }
 
 function renderAll() {
@@ -3888,9 +3884,6 @@ function renderAll() {
     dom.visualizerInput.placeholder = "Ask what conflict matters most in this case...";
   }
   const chatInput = document.getElementById("chat-input");
-  if (chatInput) {
-    chatInput.placeholder = "Ask what this person would worry about...";
-  }
   syncActiveCaseState();
   ensureGraphCurrent();
   dom.visualizerLayout?.classList.toggle("is-focused", hasActiveCase());
@@ -3922,16 +3915,16 @@ function renderLandingLogin() {
   dom.landingLoginPassword.disabled = state.auth.loading;
   dom.landingJoinName.disabled = state.auth.loading;
   dom.landingJoinCode.disabled = state.auth.loading;
-  dom.landingAuthStatus.textContent = state.auth.loading ? "Checking sign-in..." : state.auth.message;
+  dom.landingAuthStatus.textContent = state.auth.loading ? "Checking..." : state.auth.message;
   dom.landingLoginHelper.textContent =
     state.auth.source === "supabase" && activeInstitution && activeCourse
-      ? `Signed in as ${activeIdentity?.name || state.auth.sessionEmail}. ${activeInstitution.name} - ${activeCourse.code} ${activeCourse.name} was detected automatically.`
+      ? `${activeInstitution.name} - ${activeCourse.code} ${activeCourse.name}`
       : configured
-        ? "Sign in with your Supabase account. The app will detect your school, course, and role automatically."
-        : "Supabase is not configured yet. Add project keys in supabase-config.js.";
+        ? ""
+        : "";
   dom.landingJoinHelper.textContent = configured
-    ? "Enter the join code your instructor shared to open the published board for your course."
-    : "Join by code becomes available after Supabase and course data are configured.";
+    ? "Enter your code."
+    : "";
   normalizeRenderedCopy();
 }
 function normalizeRenderedCopy() {
@@ -4811,7 +4804,7 @@ document.addEventListener("submit", async (event) => {
       })
       .catch((error) => {
         state.auth.loading = false;
-        state.auth.message = error.message || "Supabase sign-in failed.";
+        state.auth.message = error.message || "Sign-in failed.";
         renderLandingLogin();
       });
     return;
@@ -5057,8 +5050,8 @@ dom.returnToLanding?.addEventListener("click", async () => {
     sessionEmail: "",
     remoteRole: "",
     message: state.auth.configured
-      ? "Signed out. Sign in again to detect your institution and course."
-      : "Supabase is not configured yet.",
+      ? "Signed out."
+      : "",
   };
   returnToLanding();
 });
