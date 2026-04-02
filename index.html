@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Tension Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="background-layer"></div>
+  <section class="landing-shell" id="landing-shell">
+    <header class="landing-header">
+      <div class="landing-brand">
+        <div class="brand-mark">
+          <span class="material-symbols-outlined">hub</span>
+        </div>
+        <div>
+          <p class="landing-brand-kicker">Instructional design systems lab</p>
+          <h1>Design Tension Studio</h1>
+        </div>
+      </div>
+      <div class="landing-header-actions">
+        <button class="toolbar-button toolbar-button-primary" id="landing-enter-button" type="button">Sign In</button>
+      </div>
+    </header>
+
+    <section class="landing-hero">
+      <div class="landing-copy">
+        <p class="landing-kicker">AI + Human Network Visualization</p>
+        <h2>Turn design tension into a living network.</h2>
+        <p class="landing-body">Human judgment, institutional friction, and AI reasoning in one responsive field.</p>
+        <div class="landing-signal-row">
+          <span>Teacher load</span>
+          <span>Student agency</span>
+          <span>Governance</span>
+          <span>Accessibility</span>
+        </div>
+        <div class="landing-actions-secondary">
+          <button class="toolbar-button toolbar-button-quiet" id="landing-skip-testing" type="button">Skip for Testing</button>
+        </div>
+
+        <article class="landing-login-card" id="landing-login-card">
+          <div class="landing-login-head">
+            <p class="landing-kicker">Sign In</p>
+            <strong>Sign in with Supabase and load the linked institution and course automatically.</strong>
+          </div>
+          <form class="landing-login-form" id="landing-login-form">
+            <div class="landing-login-grid auth-grid">
+              <label class="mini-control">
+                <span>Email</span>
+                <input id="landing-login-email" name="email" type="email" placeholder="you@school.edu" autocomplete="username" spellcheck="false" required>
+              </label>
+              <label class="mini-control">
+                <span>Password</span>
+                <input id="landing-login-password" name="password" type="password" placeholder="Password" autocomplete="current-password" required>
+              </label>
+            </div>
+            <div class="landing-login-row">
+              <button class="toolbar-button toolbar-button-primary" id="landing-login-submit" type="submit">Sign In</button>
+              <button class="toolbar-button toolbar-button-quiet" id="landing-demo-submit" type="button">Use Demo Data</button>
+            </div>
+            <p class="landing-login-helper" id="landing-login-helper">After sign-in, the app finds your school, course, and role automatically.</p>
+            <p class="landing-auth-status" id="landing-auth-status" aria-live="polite">Waiting for Supabase configuration.</p>
+          </form>
+
+          <form class="landing-join-form" id="landing-join-form">
+            <div class="landing-login-head">
+              <p class="landing-kicker">Student join</p>
+              <strong>Enter the course join code your instructor shared.</strong>
+            </div>
+            <div class="landing-login-grid auth-grid">
+              <label class="mini-control">
+                <span>Your name</span>
+                <input id="landing-join-name" name="joinName" type="text" placeholder="Student name…" autocomplete="name">
+              </label>
+              <label class="mini-control">
+                <span>Join code</span>
+                <input id="landing-join-code" name="joinCode" type="text" placeholder="IDT640-OPEN…" autocomplete="off" autocapitalize="characters" spellcheck="false">
+              </label>
+            </div>
+            <div class="landing-login-row">
+              <button class="toolbar-button" id="landing-join-submit" type="submit">Join with Code</button>
+            </div>
+            <p class="landing-join-helper" id="landing-join-helper">For local testing, this creates or reuses a student profile and opens the published case.</p>
+          </form>
+        </article>
+      </div>
+
+      <div class="landing-visual" id="landing-network-anchor">
+        <div class="landing-orb landing-orb-a"></div>
+        <div class="landing-orb landing-orb-b"></div>
+        <div class="landing-orb landing-orb-c"></div>
+        <svg class="landing-network" id="landing-network" aria-label="AI human network visualization"></svg>
+        <div class="landing-annotation landing-annotation-left">
+          <p class="landing-annotation-label">Human</p>
+          <strong>Teachers, students, critique, workload</strong>
+        </div>
+        <div class="landing-annotation landing-annotation-right">
+          <p class="landing-annotation-label">System</p>
+          <strong>Policy, platform, evidence, scale</strong>
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+  <div class="app-shell is-hidden" id="app-shell">
+    <aside class="sidebar">
+      <div class="brand-block">
+        <div class="brand-mark">
+          <span class="material-symbols-outlined">hub</span>
+        </div>
+        <div>
+          <h1>Design Tension Studio</h1>
+          <p>Instructional design systems lab</p>
+        </div>
+      </div>
+
+      <div class="case-summary panel-soft">
+        <p class="eyebrow" id="case-summary-label">Selected Case</p>
+        <label class="mini-control compact-control" id="sidebar-case-control">
+          <span id="sidebar-case-label">Case</span>
+          <select id="sidebar-case-select"></select>
+        </label>
+        <h2 id="case-title">No active case</h2>
+        <p class="case-subtitle" id="case-subtitle">Waiting for course data.</p>
+        <div class="meter-label">
+          <span id="sidebar-tension-label">Case tension</span>
+          <strong id="sidebar-tension">High</strong>
+        </div>
+        <div class="meter">
+          <div class="meter-fill meter-fill-danger" id="sidebar-tension-fill"></div>
+        </div>
+      </div>
+
+      <nav class="primary-nav" aria-label="Primary">
+        <button class="nav-item is-active" data-view="visualizer">
+          <span class="material-symbols-outlined">hub</span>
+          <span>Network</span>
+        </button>
+        <button class="nav-item" data-view="perspectives">
+          <span class="material-symbols-outlined">visibility</span>
+          <span>Perspectives</span>
+        </button>
+        <button class="nav-item" data-view="matrix">
+          <span class="material-symbols-outlined">leaderboard</span>
+          <span>Trade-offs</span>
+        </button>
+        <button class="nav-item" data-view="sandbox">
+          <span class="material-symbols-outlined">science</span>
+          <span>Sandbox</span>
+        </button>
+        <button class="nav-item" data-view="report">
+          <span class="material-symbols-outlined">note_stack</span>
+          <span>Report</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="panel-soft health-panel">
+          <div class="health-header">
+            <span>Current status</span>
+            <span class="status-dot"></span>
+          </div>
+          <div class="meter">
+            <div class="meter-fill meter-fill-ok" id="health-fill"></div>
+          </div>
+          <p id="health-copy">Parallel reasoning stable. Node density within optimal band.</p>
+        </div>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Current Course</p>
+          <h2 id="view-title">Case Setup</h2>
+        </div>
+
+        <div class="topbar-side">
+          <div class="platform-switcher">
+            <label class="mini-control" id="role-control">
+              <span>Workspace</span>
+              <select id="role-select">
+                <option value="admin">Instructor</option>
+                <option value="user">Student</option>
+              </select>
+            </label>
+            <label class="mini-control">
+              <span>Institution</span>
+              <select id="institution-select"></select>
+            </label>
+            <label class="mini-control">
+              <span>Course</span>
+              <select id="course-select"></select>
+            </label>
+            <label class="mini-control" id="case-control">
+              <span id="case-control-label">Case</span>
+              <select id="case-select"></select>
+            </label>
+            <label class="mini-control" id="learner-control">
+              <span>Student</span>
+              <select id="learner-select"></select>
+            </label>
+          </div>
+
+          <div class="toolbar-actions">
+            <span class="topbar-identity" id="session-identity-label">Instructor</span>
+            <button class="toolbar-button toolbar-button-quiet" id="start-tutorial" type="button">Show Tutorial</button>
+            <button class="toolbar-button" id="return-to-landing">Switch Account</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-content" id="main-content">
+        <section class="view is-active" data-view-panel="visualizer">
+          <div class="visualizer-layout" id="visualizer-layout">
+            <section class="panel intake-panel">
+              <div class="section-header">
+                <div>
+                  <p class="eyebrow">Start here</p>
+                  <h3 id="intake-title">Create or Choose a Case</h3>
+                </div>
+                <span class="badge badge-primary" id="intake-badge">Instructor</span>
+              </div>
+
+              <div class="workflow-guide" id="workflow-guide"></div>
+              <div class="platform-context" id="platform-context"></div>
+              <div class="pipeline-console" id="pipeline-console"></div>
+            </section>
+
+            <section class="panel canvas-panel">
+              <div class="canvas-header">
+                <div>
+                  <p class="eyebrow">System topology</p>
+                  <h3>Proposal network</h3>
+                </div>
+                <div class="canvas-stats">
+                  <label class="mini-control mini-control-inline" id="map-layer-control">
+                    <span>Map layer</span>
+                    <select id="map-layer-select">
+                      <option value="base">Base map</option>
+                      <option value="personal">My view</option>
+                      <option value="cohort">Class view</option>
+                    </select>
+                  </label>
+                  <span id="active-stakeholder-pill" class="badge badge-secondary">Teacher focus</span>
+                  <span class="badge badge-neutral" id="active-stakeholder-status">Needs attention</span>
+                </div>
+              </div>
+
+              <div class="network-stage" id="network-stage">
+                <svg class="network-svg" id="network-svg" aria-label="Live case issue map"></svg>
+                <div class="network-tooltip" id="network-tooltip" hidden>
+                  <p class="network-tooltip-kicker" id="network-tooltip-kicker">Issue</p>
+                  <strong id="network-tooltip-title">Node title</strong>
+                  <p class="network-tooltip-body" id="network-tooltip-body">Node explanation</p>
+                </div>
+                <div class="network-empty-preview" id="network-empty-preview" hidden>
+                  <p class="eyebrow">Example view</p>
+                  <strong>This is where the case map appears.</strong>
+                  <p>Once a case is selected, the map will show people, constraints, and the main tensions around the design.</p>
+                  <div class="network-empty-preview-row">
+                    <span class="preview-token">Teacher load</span>
+                    <span class="preview-token">Student agency</span>
+                    <span class="preview-token">Accessibility</span>
+                  </div>
+                </div>
+                <div class="stage-overlay stage-overlay-top">
+                  <p class="eyebrow" id="stage-note-kicker">D3 force graph</p>
+                  <strong id="stage-note-title">Live swarm topology</strong>
+                  <span id="stage-note-body">Hover a node to inspect an issue. Click a stakeholder node to shift the active lens.</span>
+                </div>
+                <div class="stage-overlay stage-overlay-bottom">
+                  <div class="legend-item">
+                    <span class="legend-swatch legend-swatch-primary"></span>
+                    <span>Instructional signals</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-swatch legend-swatch-danger"></span>
+                    <span>Constraint friction</span>
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-swatch legend-swatch-ok"></span>
+                    <span>Aligned evidence</span>
+                  </div>
+                </div>
+              </div>
+
+              <form class="composer" id="visualizer-form">
+                <label class="composer-input">
+                  <span class="material-symbols-outlined">psychology</span>
+                  <input id="visualizer-input" name="visualizerQuestion" type="text" placeholder="Ask what conflict matters most in this case…" autocomplete="off">
+                </label>
+                <button class="toolbar-button toolbar-button-primary" type="submit">Ask a Question</button>
+              </form>
+
+              <div class="network-meta-grid" id="network-meta-grid"></div>
+            </section>
+
+            <aside class="panel insight-panel">
+              <div class="section-header">
+                <div>
+                  <p class="eyebrow">Selected lens</p>
+                  <h3 id="lens-name">Teacher</h3>
+                </div>
+                <span class="badge badge-danger" id="lens-status">Needs attention</span>
+              </div>
+
+              <div class="lens-summary-block">
+                <p id="lens-summary"></p>
+              </div>
+
+              <div class="lens-pill-row token-row" id="stakeholder-pills"></div>
+
+              <div class="subsection">
+                <div class="subsection-head">
+                  <h4>Top tensions</h4>
+                  <span id="lens-score" class="numeric-pill">78</span>
+                </div>
+                <div id="top-tensions" class="tension-list"></div>
+              </div>
+
+              <div class="subsection">
+                <div class="subsection-head">
+                  <h4>Evidence queue</h4>
+                  <span class="badge badge-neutral">Live</span>
+                </div>
+                <div id="evidence-strip" class="evidence-list"></div>
+              </div>
+
+              <div class="subsection">
+                <div class="subsection-head">
+                  <h4>Selected node</h4>
+                  <span class="badge badge-neutral" id="selected-node-kicker">Hover or click</span>
+                </div>
+                <div class="selected-node-card">
+                  <strong id="selected-node-title">No node selected</strong>
+                  <p id="selected-node-copy">Hover or click a node in the network to inspect it here.</p>
+                </div>
+                <form class="quick-note-form" id="quick-annotation-form">
+                  <div class="pipeline-form-row two-up">
+                    <label class="mini-control">
+                      <span>Note type</span>
+                      <select name="noteType">
+                        <option value="note">Note</option>
+                        <option value="question">Question</option>
+                        <option value="concern">Concern</option>
+                      </select>
+                    </label>
+                    <label class="mini-control">
+                      <span>Share</span>
+                      <select name="visibility">
+                        <option value="private">Only me</option>
+                        <option value="cohort">Class view</option>
+                      </select>
+                    </label>
+                  </div>
+                  <textarea id="quick-annotation-body" name="annotationBody" rows="4" placeholder="Add a note to the selected node..." autocomplete="off"></textarea>
+                  <button class="toolbar-button toolbar-button-primary" id="quick-annotation-submit" type="submit">Save note</button>
+                </form>
+              </div>
+
+              <div class="subsection">
+                <div class="subsection-head">
+                  <h4>Swarm activity</h4>
+                  <span id="graph-cycle" class="numeric-pill">0</span>
+                </div>
+                <div id="graph-events" class="evidence-list"></div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="perspectives">
+          <div class="lens-layout">
+            <section class="panel card-column">
+              <div class="section-header">
+                <div>
+                  <p class="eyebrow">People in the case</p>
+                  <h3>Key concerns</h3>
+                </div>
+                <div class="token-row compact" id="perspective-stakeholder-pills"></div>
+              </div>
+              <div id="perspective-conflicts" class="conflict-card-list"></div>
+            </section>
+
+            <section class="panel orbit-panel">
+              <div class="section-header">
+                <div>
+                  <p class="eyebrow">Current focus</p>
+                  <h3 id="orbit-title">Teacher orbit</h3>
+                </div>
+              </div>
+              <div class="orbit-visual">
+                <div class="orbit-ring orbit-ring-large"></div>
+                <div class="orbit-ring orbit-ring-small"></div>
+                <div class="orbit-core">
+                  <span class="material-symbols-outlined" id="orbit-icon">school</span>
+                </div>
+                <div class="orbit-label" id="orbit-summary">High instructional load and facilitation burden.</div>
+                <div class="orbit-satellite orbit-satellite-a">LMS</div>
+                <div class="orbit-satellite orbit-satellite-b">Peer review</div>
+                <div class="orbit-satellite orbit-satellite-c">Assessment</div>
+              </div>
+            </section>
+
+            <aside class="panel chat-panel">
+              <div class="section-header">
+                <div>
+                  <p class="eyebrow">Questions</p>
+                  <h3>Ask about this perspective</h3>
+                </div>
+                <span class="badge badge-primary" id="chat-badge">Teacher online</span>
+              </div>
+              <div id="chat-thread" class="chat-thread"></div>
+              <form class="chat-composer" id="chat-form">
+                <textarea id="chat-input" name="perspectiveQuestion" rows="4" placeholder="Ask what this person would worry about…" autocomplete="off"></textarea>
+                <div class="chat-actions">
+                  <button class="toolbar-button" type="button" data-prompt="Suggest mitigation">Suggest a fix</button>
+                  <button class="toolbar-button" type="button" data-prompt="Extract tension points">Find the main concern</button>
+                  <button class="toolbar-button toolbar-button-primary" type="submit">Ask This Perspective</button>
+                </div>
+              </form>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="matrix">
+          <div class="matrix-layout">
+            <section class="panel matrix-panel">
+              <div class="section-header">
+                <div>
+                  <p class="eyebrow">Trade-offs</p>
+                  <h3>What changes together</h3>
+                </div>
+                <span class="badge badge-primary" id="matrix-state">Balanced</span>
+              </div>
+
+              <div class="matrix-main">
+                <div class="radar-shell">
+                  <svg id="radar-chart" viewBox="0 0 240 240" aria-label="Trade-off radar chart">
+                    <polygon class="radar-grid" points="120,24 200,80 170,190 70,190 40,80"></polygon>
+                    <polygon class="radar-grid inner" points="120,52 172,88 155,164 85,164 68,88"></polygon>
+                    <polygon class="radar-fill" id="radar-fill" points=""></polygon>
+                    <circle class="radar-dot" id="radar-dot-0" r="4"></circle>
+                    <circle class="radar-dot" id="radar-dot-1" r="4"></circle>
+                    <circle class="radar-dot" id="radar-dot-2" r="4"></circle>
+                    <circle class="radar-dot" id="radar-dot-3" r="4"></circle>
+                    <circle class="radar-dot" id="radar-dot-4" r="4"></circle>
+                  </svg>
+                  <div class="radar-label radar-label-top">Personalization</div>
+                  <div class="radar-label radar-label-right">Privacy</div>
+                  <div class="radar-label radar-label-bottom-right">Accessibility</div>
+                  <div class="radar-label radar-label-bottom-left">Feasibility</div>
+                  <div class="radar-label radar-label-left">Teacher Load</div>
+                </div>
+
+                <div class="metric-bars" id="metric-bars"></div>
+              </div>
+
+              <div class="matrix-insights" id="matrix-insights"></div>
+            </section>
+
+            <aside class="panel decision-panel">
+              <div class="section-header">
+                <div>
+                  <p class="eyebrow">Change history</p>
+                  <h3>Decision log</h3>
+                </div>
+                <span class="badge badge-neutral">Saved</span>
+              </div>
+              <div id="decision-log" class="decision-log"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="sandbox">
+          <div class="sandbox-layout">
+            <section class="panel control-panel">
+              <div class="section-header">
+                <div>
+                  <p class="eyebrow">Test changes</p>
+                  <h3>Adjust the case</h3>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <div class="toggle-row">
+                  <div>
+                    <h4>Autonomous iteration</h4>
+                    <p>Allow the system to suggest redesign moves before instructor review.</p>
+                  </div>
+                  <label class="switch">
+                    <input id="autonomy-toggle" type="checkbox" checked>
+                    <span class="switch-slider"></span>
+                  </label>
+                </div>
+
+                <div class="slider-group">
+                  <label for="personalization-range">Personalization depth <span id="personalization-value">82</span></label>
+                  <input id="personalization-range" type="range" min="10" max="100" value="82">
+                </div>
+
+                <div class="slider-group">
+                  <label for="teacher-load-range">Teacher load <span id="teacher-load-value">68</span></label>
+                  <input id="teacher-load-range" type="range" min="10" max="100" value="68">
+                </div>
+
+                <div class="slider-group">
+                  <label for="privacy-range">Privacy resilience <span id="privacy-value">64</span></label>
+                  <input id="privacy-range" type="range" min="10" max="100" value="64">
+                </div>
+
+                <div class="slider-group">
+                  <label for="accessibility-range">Accessibility coverage <span id="accessibility-value">58</span></label>
+                  <input id="accessibility-range" type="range" min="10" max="100" value="58">
+                </div>
+              </div>
+
+              <div class="scenario-group">
+                <p class="label">Stress scenarios</p>
+                <div class="scenario-buttons">
+                  <button class="scenario-button" type="button" data-scenario="budget">50% budget cut</button>
+                  <button class="scenario-button" type="button" data-scenario="accessibility">Accessibility audit</button>
+                  <button class="scenario-button" type="button" data-scenario="workload">Union workload complaint</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel reaction-panel">
+              <div class="section-header">
+                <div>
+                  <p class="eyebrow">System response</p>
+                  <h3>What changes after the adjustment</h3>
+                </div>
+                <span class="badge badge-ok" id="simulation-state">Stable</span>
+              </div>
+
+              <div class="reaction-grid">
+                <div class="metric-card metric-card-large">
+                  <span class="material-symbols-outlined">hub</span>
+                  <strong id="cohesion-score">81%</strong>
+                  <p>Alignment cohesion</p>
+                </div>
+                <div class="metric-card">
+                  <span class="material-symbols-outlined">psychology</span>
+                  <strong id="cognitive-load">High</strong>
+                  <p>Cognitive load</p>
+                </div>
+                <div class="metric-card">
+                  <span class="material-symbols-outlined">speed</span>
+                  <strong id="inference-lag">14ms</strong>
+                  <p>Response time</p>
+                </div>
+              </div>
+
+              <div class="reaction-feed" id="reaction-feed"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="report">
+          <div class="report-layout">
+            <section class="panel memo-panel">
+              <div class="section-header">
+                <div>
+                  <p class="eyebrow">Case report</p>
+                  <h3>Draft the summary</h3>
+                </div>
+                <button class="toolbar-button toolbar-button-primary" id="regenerate-memo">Refresh summary</button>
+              </div>
+
+              <div class="memo-section">
+                <p class="label">Executive summary</p>
+                <p id="report-summary"></p>
+              </div>
+
+              <div class="memo-section">
+                <p class="label">Priority tensions</p>
+                <div id="report-tensions" class="memo-list"></div>
+              </div>
+
+              <div class="memo-section">
+                <p class="label">Recommended redesign moves</p>
+                <div id="report-recommendations" class="memo-list"></div>
+              </div>
+
+              <div class="memo-section">
+                <p class="label">Evidence trace</p>
+                <div id="report-evidence" class="memo-list"></div>
+              </div>
+            </section>
+
+            <aside class="panel reflection-panel">
+              <div class="section-header">
+                <div>
+                  <p class="eyebrow">Reflection</p>
+                  <h3>Feedback and reflection</h3>
+                </div>
+                <span class="badge badge-neutral" id="reflection-badge">Instructor View</span>
+              </div>
+
+              <div class="rubric-list" id="rubric-list"></div>
+
+              <div class="reflection-block">
+                <p class="label">Reflection prompts</p>
+                <div id="reflection-prompts" class="prompt-list"></div>
+              </div>
+
+              <div class="reflection-block">
+                <p class="label">Recent dialogue</p>
+                <div id="reflection-feed" class="reflection-feed"></div>
+              </div>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <nav class="mobile-dock" aria-label="Mobile views">
+    <button class="dock-item is-active" data-view="visualizer">
+      <span class="material-symbols-outlined">hub</span>
+      <span>Map</span>
+    </button>
+    <button class="dock-item" data-view="perspectives">
+      <span class="material-symbols-outlined">visibility</span>
+      <span>People</span>
+    </button>
+    <button class="dock-item" data-view="matrix">
+      <span class="material-symbols-outlined">leaderboard</span>
+      <span>Trade-offs</span>
+    </button>
+    <button class="dock-item" data-view="sandbox">
+      <span class="material-symbols-outlined">science</span>
+      <span>Test</span>
+    </button>
+    <button class="dock-item" data-view="report">
+      <span class="material-symbols-outlined">note_stack</span>
+      <span>Report</span>
+    </button>
+  </nav>
+
+  <div class="tour-overlay is-hidden" id="tour-overlay" aria-hidden="true">
+    <div class="tour-scrim"></div>
+    <div class="tour-card" id="tour-card" role="dialog" aria-modal="true" aria-labelledby="tour-title">
+      <p class="eyebrow" id="tour-step-label">Step 1 of 5</p>
+      <h3 id="tour-title">Welcome</h3>
+      <p id="tour-body">This short walkthrough shows where to start.</p>
+      <div class="tour-actions">
+        <button class="toolbar-button toolbar-button-quiet" id="tour-skip" type="button">Skip</button>
+        <button class="toolbar-button" id="tour-back" type="button">Back</button>
+        <button class="toolbar-button toolbar-button-primary" id="tour-next" type="button">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./supabase-config.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

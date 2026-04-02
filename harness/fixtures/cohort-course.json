@@ -1,0 +1,46 @@
+{
+  "learnerRuns": [
+    {
+      "caseId": "case-ai-personalized-learning-pathways-fixture",
+      "learnerId": "learner-maya",
+      "agendaNodes": [
+        {
+          "id": "agenda-maya-1",
+          "title": "Keep teacher feedback visible",
+          "body": "Students should still understand where teacher judgment enters the loop.",
+          "stakeholder": "teacher"
+        }
+      ],
+      "annotations": [
+        {
+          "targetId": "proposal",
+          "targetLabel": "Design proposal",
+          "noteType": "concern",
+          "visibility": "cohort",
+          "body": "The proposal needs a clearer explanation path for students."
+        }
+      ]
+    },
+    {
+      "caseId": "case-ai-personalized-learning-pathways-fixture",
+      "learnerId": "learner-adrian",
+      "agendaNodes": [
+        {
+          "id": "agenda-adrian-1",
+          "title": "Keep teacher feedback visible",
+          "body": "If AI routes too much too early, the instructor disappears from the redesign logic.",
+          "stakeholder": "teacher"
+        }
+      ],
+      "annotations": [
+        {
+          "targetId": "proposal",
+          "targetLabel": "Design proposal",
+          "noteType": "concern",
+          "visibility": "cohort",
+          "body": "The proposal needs a clearer explanation path for students."
+        }
+      ]
+    }
+  ]
+}

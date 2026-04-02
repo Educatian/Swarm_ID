@@ -1,0 +1,19 @@
+.DS_Store
+Thumbs.db
+
+.static-server.log
+.static-server.err.log
+.swarm-server.log
+.swarm-server.err.log
+.swarm-server-9187.log
+.swarm-server-9187.err.log
+.codex-dev.log
+.codex-dev.err.log
+
+node_modules/
+.vercel/
+
+stitch/
+stitch (1).zip
+
+supabase-config.local.js

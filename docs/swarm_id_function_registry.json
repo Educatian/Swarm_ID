@@ -1,0 +1,157 @@
+{
+  "appName": "Swarm ID",
+  "version": "0.1.0",
+  "purpose": "A swarm-intelligence instructional design studio for surfacing stakeholder tensions, trade-offs, and redesign rationale.",
+  "modules": [
+    {
+      "id": "workspace_management",
+      "label": "Workspace Management",
+      "functions": [
+        "createWorkspace",
+        "joinWorkspace",
+        "inviteMember",
+        "setRolePermissions",
+        "archiveWorkspace"
+      ]
+    },
+    {
+      "id": "assignment_setup",
+      "label": "Assignment Setup",
+      "functions": [
+        "createAssignment",
+        "updateAssignment",
+        "attachLearningObjectives",
+        "attachRubric",
+        "setRequiredPerspectives",
+        "duplicateAssignmentTemplate"
+      ]
+    },
+    {
+      "id": "design_case_authoring",
+      "label": "Design Case Authoring",
+      "functions": [
+        "createDesignCase",
+        "updateDesignCase",
+        "saveDraft",
+        "submitCase",
+        "createRedesignIteration"
+      ]
+    },
+    {
+      "id": "brief_parsing",
+      "label": "Brief Parsing",
+      "functions": [
+        "parseDesignBrief",
+        "extractEntitiesFromBrief",
+        "normalizeDesignInput",
+        "detectMissingFields",
+        "generateStructuredSummary"
+      ]
+    },
+    {
+      "id": "agent_library",
+      "label": "Perspective Agent Library",
+      "functions": [
+        "listPerspectiveAgents",
+        "searchPerspectiveAgents",
+        "createPerspectiveAgent",
+        "enablePerspectiveAgent",
+        "saveAgentPreset"
+      ]
+    },
+    {
+      "id": "swarm_engine",
+      "label": "Swarm Engine",
+      "functions": [
+        "createPerspectiveSet",
+        "buildAgentPrompt",
+        "buildConstraintContext",
+        "launchSwarmRun",
+        "runParallelAgentRound",
+        "generateAgentResponse"
+      ]
+    },
+    {
+      "id": "tension_analysis",
+      "label": "Tension Analysis",
+      "functions": [
+        "extractTensionCandidates",
+        "detectCrossAgentConflict",
+        "mergeDuplicateTensions",
+        "clusterTensions",
+        "rankTensions",
+        "scoreTensionImportance"
+      ]
+    },
+    {
+      "id": "evidence_and_rationale",
+      "label": "Evidence and Rationale",
+      "functions": [
+        "saveEvidenceNote",
+        "linkEvidenceToTension",
+        "markEvidenceConfidence",
+        "buildRationaleChain",
+        "traceDecisionCoverage"
+      ]
+    },
+    {
+      "id": "redesign_workflow",
+      "label": "Redesign Workflow",
+      "functions": [
+        "generateRedesignOptions",
+        "compareIterations",
+        "annotateChanges",
+        "acceptRecommendation",
+        "rejectRecommendation"
+      ]
+    },
+    {
+      "id": "review_and_assessment",
+      "label": "Review and Assessment",
+      "functions": [
+        "addInlineComment",
+        "requestLensSpecificFeedback",
+        "scoreReasoningQuality",
+        "generateReflectionPrompts",
+        "generateCaseSummary"
+      ]
+    },
+    {
+      "id": "analytics",
+      "label": "Analytics",
+      "functions": [
+        "listCasesForAssignment",
+        "listSwarmRunsForCase",
+        "generateInstructorDashboard",
+        "compareTeamPatterns",
+        "trackIterationDepth"
+      ]
+    },
+    {
+      "id": "export_and_governance",
+      "label": "Export and Governance",
+      "functions": [
+        "exportCasePacket",
+        "exportTensionSummary",
+        "auditAIUsage",
+        "flagEthicsConcern",
+        "flagAccessibilityConcern"
+      ]
+    }
+  ],
+  "mvpFunctions": [
+    "createAssignment",
+    "createDesignCase",
+    "updateDesignCase",
+    "parseDesignBrief",
+    "launchSwarmRun",
+    "generateAgentResponse",
+    "clusterTensions",
+    "rankTensions",
+    "saveEvidenceNote",
+    "createRedesignIteration",
+    "compareIterations",
+    "scoreReasoningQuality",
+    "generateCaseSummary"
+  ]
+}
