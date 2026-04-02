@@ -381,7 +381,11 @@ async function fetchSupabaseContext(userId) {
   if (profileError) throw profileError;
   if (membershipError) throw membershipError;
   if (!memberships || memberships.length === 0) {
-    throw new Error("No active course membership was found for this account.");
+    return {
+      profile: profile || null,
+      primaryMembership: null,
+      platform: normalizePlatformState({ institutions: [] }),
+    };
   }
 
   const primaryMembership =
@@ -436,11 +440,11 @@ async function fetchSupabaseContext(userId) {
 
 function applyRemoteSessionContext({ profile, primaryMembership, platform }, sessionUser) {
   state.platform = platform;
-  state.activeRole = primaryMembership.role;
-  state.activeInstitutionId = primaryMembership.institution_id;
-  state.activeCourseId = primaryMembership.course_id;
-  state.activeInstructorId = primaryMembership.role === "admin" ? primaryMembership.user_id : state.activeInstructorId;
-  state.activeLearnerId = primaryMembership.role === "user" ? primaryMembership.user_id : state.activeLearnerId;
+  state.activeRole = primaryMembership?.role || state.activeRole || "user";
+  state.activeInstitutionId = primaryMembership?.institution_id || "";
+  state.activeCourseId = primaryMembership?.course_id || "";
+  state.activeInstructorId = primaryMembership?.role === "admin" ? primaryMembership.user_id : "";
+  state.activeLearnerId = primaryMembership?.role === "user" ? primaryMembership.user_id : "";
   state.activeCaseId = "";
   state.auth = {
     ...state.auth,
@@ -450,11 +454,10 @@ function applyRemoteSessionContext({ profile, primaryMembership, platform }, ses
     loading: false,
     userId: sessionUser.id,
     sessionEmail: sessionUser.email || "",
-    remoteRole: primaryMembership.role,
-    message:
-      profile?.full_name || profile?.name
-        ? `${profile.full_name || profile.name}`
-        : "Signed in",
+    remoteRole: primaryMembership?.role || "",
+    message: primaryMembership
+      ? profile?.full_name || profile?.name || "Signed in"
+      : "Signed in",
   };
   ensureActiveSelections();
   syncActiveCaseState();
@@ -3919,6 +3922,8 @@ function renderLandingLogin() {
   dom.landingLoginHelper.textContent =
     state.auth.source === "supabase" && activeInstitution && activeCourse
       ? `${activeInstitution.name} - ${activeCourse.code} ${activeCourse.name}`
+      : state.auth.source === "supabase"
+        ? "No course linked yet."
       : configured
         ? ""
         : "";
