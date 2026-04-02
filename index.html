@@ -40,10 +40,6 @@
           <span>Governance</span>
           <span>Accessibility</span>
         </div>
-        <div class="landing-actions-secondary">
-          <button class="toolbar-button toolbar-button-quiet" id="landing-skip-testing" type="button">Skip for Testing</button>
-        </div>
-
         <article class="landing-login-card" id="landing-login-card">
           <div class="landing-login-head">
             <p class="landing-kicker">Sign In</p>
@@ -62,7 +58,6 @@
             </div>
             <div class="landing-login-row">
               <button class="toolbar-button toolbar-button-primary" id="landing-login-submit" type="submit">Sign In</button>
-              <button class="toolbar-button toolbar-button-quiet" id="landing-demo-submit" type="button">Use Demo Data</button>
             </div>
             <p class="landing-login-helper" id="landing-login-helper">After sign-in, the app finds your school, course, and role automatically.</p>
             <p class="landing-auth-status" id="landing-auth-status" aria-live="polite">Waiting for Supabase configuration.</p>
@@ -76,17 +71,17 @@
             <div class="landing-login-grid auth-grid">
               <label class="mini-control">
                 <span>Your name</span>
-                <input id="landing-join-name" name="joinName" type="text" placeholder="Student name…" autocomplete="name">
+                <input id="landing-join-name" name="joinName" type="text" placeholder="Student name" autocomplete="name">
               </label>
               <label class="mini-control">
                 <span>Join code</span>
-                <input id="landing-join-code" name="joinCode" type="text" placeholder="IDT640-OPEN…" autocomplete="off" autocapitalize="characters" spellcheck="false">
+                <input id="landing-join-code" name="joinCode" type="text" placeholder="Course join code" autocomplete="off" autocapitalize="characters" spellcheck="false">
               </label>
             </div>
             <div class="landing-login-row">
               <button class="toolbar-button" id="landing-join-submit" type="submit">Join with Code</button>
             </div>
-            <p class="landing-join-helper" id="landing-join-helper">For local testing, this creates or reuses a student profile and opens the published case.</p>
+            <p class="landing-join-helper" id="landing-join-helper">Enter the join code your instructor shared to open the published board for your course.</p>
           </form>
         </article>
       </div>
@@ -295,7 +290,7 @@
               <form class="composer" id="visualizer-form">
                 <label class="composer-input">
                   <span class="material-symbols-outlined">psychology</span>
-                  <input id="visualizer-input" name="visualizerQuestion" type="text" placeholder="Ask what conflict matters most in this case…" autocomplete="off">
+                  <input id="visualizer-input" name="visualizerQuestion" type="text" placeholder="Ask what conflict matters most in this caseâ€¦" autocomplete="off">
                 </label>
                 <button class="toolbar-button toolbar-button-primary" type="submit">Ask a Question</button>
               </form>
@@ -420,7 +415,7 @@
               </div>
               <div id="chat-thread" class="chat-thread"></div>
               <form class="chat-composer" id="chat-form">
-                <textarea id="chat-input" name="perspectiveQuestion" rows="4" placeholder="Ask what this person would worry about…" autocomplete="off"></textarea>
+                <textarea id="chat-input" name="perspectiveQuestion" rows="4" placeholder="Ask what this person would worry aboutâ€¦" autocomplete="off"></textarea>
                 <div class="chat-actions">
                   <button class="toolbar-button" type="button" data-prompt="Suggest mitigation">Suggest a fix</button>
                   <button class="toolbar-button" type="button" data-prompt="Extract tension points">Find the main concern</button>
@@ -668,3 +663,4 @@
   <script src="./app.js"></script>
 </body>
 </html>
+

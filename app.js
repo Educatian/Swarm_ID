@@ -59,75 +59,37 @@ const stakeholders = {
   },
 };
 
+const emptyMetrics = {
+  personalization: 0,
+  teacherLoad: 0,
+  privacy: 0,
+  accessibility: 0,
+};
+
+const legacyDemoIds = new Set([
+  "inst-northstar",
+  "course-id-studio",
+  "case-personalized-pathways",
+  "instructor-rivera",
+  "learner-maya-cho",
+]);
+
 const state = {
   activeView: "visualizer",
   activeStakeholder: "teacher",
   activeMapLayer: "base",
   activeRole: "admin",
-  activeInstitutionId: "inst-northstar",
-  activeCourseId: "course-id-studio",
-  activeCaseId: "case-personalized-pathways",
-  activeInstructorId: "instructor-rivera",
-  activeLearnerId: "learner-maya-cho",
-  metrics: {
-    personalization: 82,
-    teacherLoad: 68,
-    privacy: 64,
-    accessibility: 58,
-  },
+  activeInstitutionId: "",
+  activeCourseId: "",
+  activeCaseId: "",
+  activeInstructorId: "",
+  activeLearnerId: "",
+  metrics: { ...emptyMetrics },
   autonomousIteration: true,
-  evidence: [
-    {
-      stakeholder: "teacher",
-      title: "Teacher bandwidth warning",
-      body: "The current orchestration shifts too much moderation work to faculty during peer feedback cycles.",
-    },
-    {
-      stakeholder: "accessibility",
-      title: "Accessibility audit flag",
-      body: "Multimodal feedback is promising, but screen-reader pacing and alt-text quality are not yet guaranteed.",
-    },
-    {
-      stakeholder: "student",
-      title: "Agency concern",
-      body: "Students value tailored feedback, but they still want to know why the system is routing them toward a redesign option.",
-    },
-  ],
-  decisions: [
-    {
-      stamp: "Today 14:20",
-      title: "Teacher review remains in the loop",
-      body: "Autonomous iteration can suggest redesign moves, but release gating stays with the instructor to protect pedagogical judgment.",
-    },
-    {
-      stamp: "Today 12:40",
-      title: "Accessibility evidence elevated",
-      body: "The evidence board now requires at least one accessibility note before the case can move to redesign review.",
-    },
-    {
-      stamp: "Today 09:10",
-      title: "Privacy threshold tightened",
-      body: "Telemetry fields were reduced to scenario-level summaries instead of raw behavioral logs.",
-    },
-  ],
-  chat: [
-    {
-      role: "user",
-      stakeholder: "teacher",
-      body: "How does the current design affect the quality of qualitative feedback?",
-    },
-    {
-      role: "agent",
-      stakeholder: "teacher",
-      body:
-        "It creates a tension: faster triage is helpful, but if teacher load stays high, the qualitative comments that remain can become generic and detached from the learner's revision path.",
-    },
-  ],
-  timeline: [
-    "Case parsed into stakeholders, goals, and constraints.",
-    "The case map highlighted workload, agency, privacy, and accessibility tensions.",
-    "Current focus: rebalance personalization depth without increasing teacher overload.",
-  ],
+  evidence: [],
+  decisions: [],
+  chat: [],
+  timeline: [],
   graph: {
     iteration: 0,
     auto: true,
@@ -140,7 +102,7 @@ const state = {
     institutions: [],
   },
   auth: {
-    source: "demo",
+    source: "none",
     ready: false,
     loading: false,
     configured: false,
@@ -171,134 +133,28 @@ const tutorialState = {
   target: null,
   seenByRole: {},
 };
-const demoLearnerProfiles = [
-  { seed: "maya-cho", name: "Maya Cho", focus: "Feedback equity", section: "Studio A" },
-  { seed: "adrian-bell", name: "Adrian Bell", focus: "Teacher workload", section: "Studio B" },
-  { seed: "sofia-rahman", name: "Sofia Rahman", focus: "Governance review", section: "Studio A" },
-];
-const demoInstructorProfiles = [
-  { seed: "rivera", name: "Prof. Elena Rivera", title: "Lead instructor" },
-  { seed: "kim", name: "Prof. Daniel Kim", title: "Section instructor" },
-];
-
-function buildDemoInstructors(course) {
-  return demoInstructorProfiles.map((profile) => ({
-    id: `instructor-${profile.seed}-${course.id}`,
-    name: profile.name,
-    title: profile.title,
-    courseId: course.id,
-  }));
-}
-
-function buildDemoLearners(course) {
-  return demoLearnerProfiles.map((profile) => ({
-    id: `learner-${profile.seed}`,
-    name: profile.name,
-    focus: profile.focus,
-    section: profile.section,
-    courseId: course.id,
-  }));
-}
-
-function buildLearnerRunFromCase(caseRecord, learner, variationIndex = 0) {
-  const adjustment = [
-    { personalization: -6, teacherLoad: 4, privacy: 3, accessibility: 6 },
-    { personalization: 4, teacherLoad: -2, privacy: -3, accessibility: 1 },
-    { personalization: -2, teacherLoad: 3, privacy: 5, accessibility: -1 },
-  ][variationIndex % 3];
-
-  const metrics = {
-    personalization: clamp(caseRecord.metrics.personalization + adjustment.personalization, 20, 98),
-    teacherLoad: clamp(caseRecord.metrics.teacherLoad + adjustment.teacherLoad, 20, 98),
-    privacy: clamp(caseRecord.metrics.privacy + adjustment.privacy, 20, 98),
-    accessibility: clamp(caseRecord.metrics.accessibility + adjustment.accessibility, 20, 98),
-  };
-
+function createLearnerRunScaffold(caseRecord, learner) {
   return {
     id: `run-${caseRecord.id}-${learner.id}`,
     caseId: caseRecord.id,
     learnerId: learner.id,
     learnerName: learner.name,
     learnerFocus: learner.focus,
-    status: variationIndex === 0 ? "Reflection in progress" : "Evidence comparison active",
-    metrics,
-    evidence: [
-      ...safeClone(caseRecord.evidence.slice(0, 2)),
-      {
-        stakeholder: "student",
-        title: `${learner.name} note`,
-        body: `${learner.name} is tracking ${learner.focus.toLowerCase()} while comparing the published instructor case against their own redesign reasoning.`,
-      },
-    ],
-    decisions: [
-      ...safeClone(caseRecord.decisions.slice(0, 1)),
-      {
-        stamp: "Demo",
-        title: `${learner.name} reflection checkpoint`,
-        body: `The learner run preserves the instructor-authored case while letting ${learner.name} build a separate evidence trail and memo draft.`,
-      },
-    ],
-    chat: [
-      ...safeClone(caseRecord.chat.slice(0, 2)),
-      {
-        role: "user",
-        stakeholder: "student",
-        body: `Which trade-off matters most for ${learner.focus.toLowerCase()} in this case?`,
-      },
-      {
-        role: "agent",
-        stakeholder: "student",
-        body: `The current run suggests starting with ${learner.focus.toLowerCase()} and then checking how that choice redistributes teacher load, accessibility coverage, and governance risk.`,
-      },
-    ],
-    timeline: [
-      ...safeClone(caseRecord.timeline.slice(0, 2)),
-      `${learner.name} opened a private learner run from the published instructor case.`,
-      `${learner.name} is collecting evidence before writing a redesign memo.`,
-    ],
-    agendaNodes: variationIndex === 0
-      ? [
-          {
-            id: `agenda-${caseRecord.id}-${learner.id}-1`,
-            title: `${learner.focus} agenda`,
-            body: `${learner.name} wants to test how ${learner.focus.toLowerCase()} changes the redesign choice.`,
-            stakeholder: inferStakeholderFromText(learner.focus, "student"),
-            createdAt: "Demo",
-          },
-        ]
-      : [],
-    aiGeneratedNodes: variationIndex === 0
-      ? [
-          {
-            id: `ai-${caseRecord.id}-${learner.id}-1`,
-            title: "Related teacher capacity check",
-            body: "If the redesign goes deeper on personalization, teacher review load may rise unless approval moments are reduced.",
-            stakeholder: "teacher",
-            sourceAgendaId: `agenda-${caseRecord.id}-${learner.id}-1`,
-            createdAt: "Demo",
-          },
-        ]
-      : [],
-    annotations: variationIndex === 0
-      ? [
-          {
-            id: `annotation-${caseRecord.id}-${learner.id}-1`,
-            targetId: "proposal",
-            targetLabel: "Design proposal",
-            targetType: "node",
-            noteType: "concern",
-            visibility: "cohort",
-            body: `${learner.name} wants the overall case rationale to stay visible while personalization increases.`,
-            createdAt: "Demo",
-          },
-        ]
-      : [],
+    status: "Private workspace started",
+    metrics: { ...caseRecord.metrics },
+    evidence: [],
+    decisions: [],
+    chat: [],
+    timeline: [`${learner.name} opened a private workspace from the published instructor case.`],
+    agendaNodes: [],
+    aiGeneratedNodes: [],
+    annotations: [],
   };
 }
 
 function normalizeCourseData(course) {
   const nextCourse = course;
-  nextCourse.joinCode = nextCourse.joinCode || `${(nextCourse.code || "COURSE").replace(/[^A-Za-z0-9]/g, "").toUpperCase()}-OPEN`;
+  nextCourse.joinCode = nextCourse.joinCode || "";
   nextCourse.documents = Array.isArray(nextCourse.documents) ? nextCourse.documents : [];
   nextCourse.cases = (Array.isArray(nextCourse.cases) ? nextCourse.cases : []).map((item) => ({
     ...item,
@@ -307,14 +163,14 @@ function normalizeCourseData(course) {
   nextCourse.instructors =
     Array.isArray(nextCourse.instructors) && nextCourse.instructors.length
       ? nextCourse.instructors
-      : buildDemoInstructors(nextCourse);
+      : [];
   nextCourse.publishedCaseIds = Array.isArray(nextCourse.publishedCaseIds)
     ? nextCourse.publishedCaseIds
     : nextCourse.cases.filter((item) => item.published).map((item) => item.id);
   nextCourse.learners =
     Array.isArray(nextCourse.learners) && nextCourse.learners.length
       ? nextCourse.learners
-      : buildDemoLearners(nextCourse);
+      : [];
   nextCourse.learnerRuns = (Array.isArray(nextCourse.learnerRuns) ? nextCourse.learnerRuns : []).map((run) => ({
     ...run,
     agendaNodes: asArray(run.agendaNodes),
@@ -322,28 +178,30 @@ function normalizeCourseData(course) {
     annotations: asArray(run.annotations),
   }));
 
-  nextCourse.publishedCaseIds.forEach((caseId) => {
-    const caseRecord = nextCourse.cases.find((item) => item.id === caseId && item.published);
-    if (!caseRecord) return;
-    nextCourse.learners.slice(0, 2).forEach((learner, index) => {
-      const existingRun = nextCourse.learnerRuns.find(
-        (run) => run.caseId === caseRecord.id && run.learnerId === learner.id
-      );
-      if (!existingRun) {
-        nextCourse.learnerRuns.push(buildLearnerRunFromCase(caseRecord, learner, index));
-      }
-    });
-  });
-
   return nextCourse;
 }
 
 function normalizePlatformState(platform) {
   const nextPlatform = safeClone(platform);
-  nextPlatform.institutions = (nextPlatform.institutions || []).map((institution) => ({
-    ...institution,
-    courses: (institution.courses || []).map((course) => normalizeCourseData(course)),
-  }));
+  nextPlatform.institutions = (nextPlatform.institutions || [])
+    .filter((institution) => !legacyDemoIds.has(institution.id))
+    .map((institution) => ({
+      ...institution,
+      courses: (institution.courses || [])
+        .filter((course) => !legacyDemoIds.has(course.id))
+        .map((course) => {
+          const nextCourse = normalizeCourseData(course);
+          nextCourse.cases = nextCourse.cases.filter((item) => !legacyDemoIds.has(item.id));
+          nextCourse.instructors = nextCourse.instructors.filter((item) => !legacyDemoIds.has(item.id));
+          nextCourse.learners = nextCourse.learners.filter((item) => !legacyDemoIds.has(item.id));
+          nextCourse.publishedCaseIds = nextCourse.publishedCaseIds.filter((caseId) => !legacyDemoIds.has(caseId));
+          nextCourse.documents = nextCourse.documents.filter((document) => !legacyDemoIds.has(document.caseId));
+          nextCourse.learnerRuns = nextCourse.learnerRuns.filter(
+            (run) => !legacyDemoIds.has(run.caseId) && !legacyDemoIds.has(run.learnerId)
+          );
+          return nextCourse;
+        }),
+    }));
   return nextPlatform;
 }
 
@@ -402,12 +260,20 @@ function buildRemotePlatform({
               prompt: caseRow.prompt || "",
               learningGoals: asArray(caseRow.learning_goals),
               constraints: asArray(caseRow.constraints),
-              metrics: asObject(caseRow.metrics, {
-                personalization: 60,
-                teacherLoad: 50,
-                privacy: 60,
-                accessibility: 60,
-              }),
+              metrics: asObject(
+                caseRow.metrics,
+                deriveMetricsFromText(
+                  [
+                    caseRow.title,
+                    caseRow.summary,
+                    caseRow.prompt,
+                    ...asArray(caseRow.learning_goals),
+                    ...asArray(caseRow.constraints),
+                  ]
+                    .filter(Boolean)
+                    .join(" ")
+                )
+              ),
               evidence: asArray(caseRow.evidence),
               decisions: asArray(caseRow.decisions),
               chat: asArray(caseRow.chat),
@@ -432,7 +298,7 @@ function buildRemotePlatform({
             id: course.id,
             name: course.name,
             code: course.code,
-            joinCode: course.join_code || `${String(course.code || "COURSE").replace(/[^A-Za-z0-9]/g, "").toUpperCase()}-OPEN`,
+              joinCode: course.join_code || "",
             publishedCaseIds: courseCases.filter((item) => item.published).map((item) => item.id),
             settings: asObject(course.settings),
             instructors: coursePeople
@@ -601,7 +467,7 @@ async function signInWithSupabase(email, password) {
     throw new Error("Supabase is not configured. Add your project URL and anon key first.");
   }
   state.auth.loading = true;
-  state.auth.message = "Signing in with Supabase…";
+  state.auth.message = "Signing in with Supabaseâ€¦";
   renderLandingLogin();
 
   const { data, error } = await client.auth.signInWithPassword({ email, password });
@@ -639,290 +505,7 @@ async function signOutSupabaseIfNeeded() {
   await client.auth.signOut();
 }
 
-const seedPlatform = {
-  institutions: [
-    {
-      id: "inst-northstar",
-      name: "Northstar University",
-      settings: {
-        defaultAccess: "course-members",
-        governanceGate: "Required",
-        accessibilityGate: "Mandatory",
-      },
-      courses: [
-        {
-          id: "course-id-studio",
-          name: "Instructional Design Studio",
-          code: "IDT-640",
-          joinCode: "IDT640-OPEN",
-          publishedCaseIds: ["case-personalized-pathways"],
-          settings: {
-            learnerVisibility: "Published cases only",
-            evidenceRule: "One accessibility note per case",
-            reportMode: "Shared memo + reflection",
-          },
-          instructors: [
-            { id: "instructor-rivera", name: "Prof. Elena Rivera", title: "Lead instructor", courseId: "course-id-studio" },
-            { id: "instructor-kim", name: "Prof. Daniel Kim", title: "Section instructor", courseId: "course-id-studio" },
-          ],
-          learners: [
-            { id: "learner-maya-cho", name: "Maya Cho", focus: "Feedback equity", section: "Studio A", courseId: "course-id-studio" },
-            { id: "learner-adrian-bell", name: "Adrian Bell", focus: "Teacher workload", section: "Studio B", courseId: "course-id-studio" },
-            { id: "learner-sofia-rahman", name: "Sofia Rahman", focus: "Governance review", section: "Studio A", courseId: "course-id-studio" },
-          ],
-          documents: [
-            {
-              id: "doc-pathways-brief",
-              title: "AI Personalized Pathways Brief",
-              kind: "syllabus-brief",
-              uploadedAt: "2026-03-31",
-              published: true,
-              text:
-                "Design an AI-supported feedback environment that helps graduate students compare competing instructional design choices, justify revisions, and reflect on stakeholder trade-offs. Teachers need manageable review time, administrators need scalable adoption, students need agency, and accessibility advocates need equivalent participation pathways. The system must fit current LMS workflows, limit raw telemetry, and preserve clear evidence traces.",
-              caseId: "case-personalized-pathways",
-            },
-          ],
-          cases: [
-            {
-              id: "case-personalized-pathways",
-              title: "AI-Personalized Learning Pathways",
-              summary:
-                "A graduate instructional design case focused on making stakeholder tension visible before students redesign with AI support.",
-              prompt:
-                "Design an AI-supported feedback environment that helps graduate students compare competing instructional design choices, justify revisions, and reflect on stakeholder trade-offs.",
-              learningGoals: [
-                "Make hidden stakeholder conflicts visible.",
-                "Help students compare feedback, accessibility, and feasibility trade-offs.",
-                "Support redesign with evidence, not intuition alone.",
-              ],
-              constraints: [
-                "Teacher review time capped at 4 hrs/week",
-                "Accessibility evidence required",
-                "No raw learner telemetry exports",
-                "Must fit current LMS workflow",
-              ],
-              metrics: {
-                personalization: 82,
-                teacherLoad: 68,
-                privacy: 64,
-                accessibility: 58,
-              },
-              evidence: [
-                {
-                  stakeholder: "teacher",
-                  title: "Teacher bandwidth warning",
-                  body: "The current orchestration shifts too much moderation work to faculty during peer feedback cycles.",
-                },
-                {
-                  stakeholder: "accessibility",
-                  title: "Accessibility audit flag",
-                  body: "Multimodal feedback is promising, but screen-reader pacing and alt-text quality are not yet guaranteed.",
-                },
-                {
-                  stakeholder: "student",
-                  title: "Agency concern",
-                  body: "Students value tailored feedback, but they still want to know why the system is routing them toward a redesign option.",
-                },
-              ],
-              decisions: [
-                {
-                  stamp: "Today 14:20",
-                  title: "Teacher review remains in the loop",
-                  body: "Autonomous iteration can suggest redesign moves, but release gating stays with the instructor to protect pedagogical judgment.",
-                },
-                {
-                  stamp: "Today 12:40",
-                  title: "Accessibility evidence elevated",
-                  body: "The evidence board now requires at least one accessibility note before the case can move to redesign review.",
-                },
-                {
-                  stamp: "Today 09:10",
-                  title: "Privacy threshold tightened",
-                  body: "Telemetry fields were reduced to scenario-level summaries instead of raw behavioral logs.",
-                },
-              ],
-              chat: [
-                {
-                  role: "user",
-                  stakeholder: "teacher",
-                  body: "How does the current design affect the quality of qualitative feedback?",
-                },
-                {
-                  role: "agent",
-                  stakeholder: "teacher",
-                  body:
-                    "It creates a tension: faster triage is helpful, but if teacher load stays high, the qualitative comments that remain can become generic and detached from the learner's revision path.",
-                },
-              ],
-              timeline: [
-                "Case parsed into stakeholders, goals, and constraints.",
-                "Swarm run surfaced workload, agency, privacy, and accessibility tensions.",
-                "Current focus: rebalance personalization depth without increasing teacher overload.",
-              ],
-              pipeline: {
-                ontologyStatus: "Structured",
-                graphStatus: "Case map ready",
-                simulationStatus: "Question prompts ready",
-                reportStatus: "Memo available",
-              },
-              published: true,
-            },
-          ],
-          learnerRuns: [
-            {
-              id: "run-case-personalized-pathways-learner-maya-cho",
-              caseId: "case-personalized-pathways",
-              learnerId: "learner-maya-cho",
-              learnerName: "Maya Cho",
-              learnerFocus: "Feedback equity",
-              status: "Reflection in progress",
-              metrics: {
-                personalization: 78,
-                teacherLoad: 71,
-                privacy: 67,
-                accessibility: 66,
-              },
-              evidence: [
-                {
-                  stakeholder: "teacher",
-                  title: "Teacher bandwidth warning",
-                  body: "The current orchestration shifts too much moderation work to faculty during peer feedback cycles.",
-                },
-                {
-                  stakeholder: "accessibility",
-                  title: "Accessibility audit flag",
-                  body: "Multimodal feedback is promising, but screen-reader pacing and alt-text quality are not yet guaranteed.",
-                },
-                {
-                  stakeholder: "student",
-                  title: "Maya Cho note",
-                  body: "Maya is testing whether personalized pathways can stay transparent enough for students to understand why a recommendation was made.",
-                },
-              ],
-              decisions: [
-                {
-                  stamp: "Demo",
-                  title: "Learner memo branch started",
-                  body: "Maya opened a private learner run so her questions and memo draft no longer overwrite the instructor-authored case.",
-                },
-              ],
-              chat: [
-                {
-                  role: "user",
-                  stakeholder: "student",
-                  body: "Which trade-off matters most if I want personalization without hiding the rationale?",
-                },
-                {
-                  role: "agent",
-                  stakeholder: "student",
-                  body: "Start with explanation quality. If students cannot see why a pathway changed, personalization starts to feel like opaque automation rather than guided support.",
-                },
-              ],
-              timeline: [
-                "Published instructor case opened in a private learner workspace.",
-                "Maya is comparing student agency concerns against teacher feedback pressure.",
-                "Current focus: keep explanation quality visible while preserving personalization depth.",
-              ],
-            },
-            {
-              id: "run-case-personalized-pathways-learner-adrian-bell",
-              caseId: "case-personalized-pathways",
-              learnerId: "learner-adrian-bell",
-              learnerName: "Adrian Bell",
-              learnerFocus: "Teacher workload",
-              status: "Evidence comparison active",
-              metrics: {
-                personalization: 84,
-                teacherLoad: 63,
-                privacy: 61,
-                accessibility: 56,
-              },
-              evidence: [
-                {
-                  stakeholder: "teacher",
-                  title: "Teacher bandwidth warning",
-                  body: "The current orchestration shifts too much moderation work to faculty during peer feedback cycles.",
-                },
-                {
-                  stakeholder: "student",
-                  title: "Adrian Bell note",
-                  body: "Adrian is tracing where teacher review can stay visible without turning every AI intervention into extra faculty moderation work.",
-                },
-              ],
-              decisions: [
-                {
-                  stamp: "Demo",
-                  title: "Workload-first inquiry",
-                  body: "Adrian's learner run is prioritizing low-overhead feedback structures before scaling personalization further.",
-                },
-              ],
-              chat: [
-                {
-                  role: "user",
-                  stakeholder: "teacher",
-                  body: "What if we reduce exception handling and keep only two faculty checkpoints?",
-                },
-                {
-                  role: "agent",
-                  stakeholder: "teacher",
-                  body: "That move lowers workload pressure, but it only works if the evidence trace becomes clearer so students still understand how redesign decisions are being made.",
-                },
-              ],
-              timeline: [
-                "Published case cloned into Adrian's learner workspace.",
-                "Teacher workload was set as the primary tension lens.",
-                "Current focus: reduce exception handling without weakening evidence quality.",
-              ],
-            },
-          ],
-        },
-        {
-          id: "course-learning-sciences",
-          name: "Learning Sciences Methods",
-          code: "LS-701",
-          publishedCaseIds: [],
-          settings: {
-            learnerVisibility: "No learner release yet",
-            evidenceRule: "Instructor approval required",
-            reportMode: "Instructor only",
-          },
-          instructors: buildDemoInstructors({ id: "course-learning-sciences" }),
-          learners: buildDemoLearners({ id: "course-learning-sciences" }),
-          learnerRuns: [],
-          documents: [],
-          cases: [],
-        },
-      ],
-    },
-    {
-      id: "inst-harbor",
-      name: "Harbor Teaching College",
-      settings: {
-        defaultAccess: "institution-members",
-        governanceGate: "Optional",
-        accessibilityGate: "Recommended",
-      },
-      courses: [
-        {
-          id: "course-curriculum-lab",
-          name: "Curriculum Lab",
-          code: "CUR-510",
-          publishedCaseIds: [],
-          settings: {
-            learnerVisibility: "Published cases only",
-            evidenceRule: "Two evidence notes per case",
-            reportMode: "Learner memo only",
-          },
-          instructors: buildDemoInstructors({ id: "course-curriculum-lab" }),
-          learners: buildDemoLearners({ id: "course-curriculum-lab" }),
-          learnerRuns: [],
-          documents: [],
-          cases: [],
-        },
-      ],
-    },
-  ],
-};
+const seedPlatform = { institutions: [] };
 
 const dom = {
   landingShell: document.getElementById("landing-shell"),
@@ -932,14 +515,12 @@ const dom = {
     document.getElementById("landing-cta-primary"),
     document.getElementById("landing-footer-enter"),
   ].filter(Boolean),
-  landingSkipTestingButton: document.getElementById("landing-skip-testing"),
   landingNetworkAnchor: document.getElementById("landing-network-anchor"),
   landingNetwork: document.getElementById("landing-network"),
   landingLoginCard: document.getElementById("landing-login-card"),
   landingLoginForm: document.getElementById("landing-login-form"),
   landingLoginEmail: document.getElementById("landing-login-email"),
   landingLoginPassword: document.getElementById("landing-login-password"),
-  landingDemoSubmit: document.getElementById("landing-demo-submit"),
   landingLoginHelper: document.getElementById("landing-login-helper"),
   landingAuthStatus: document.getElementById("landing-auth-status"),
   landingJoinForm: document.getElementById("landing-join-form"),
@@ -1150,9 +731,9 @@ function initializeSupabase() {
   const hasConfig = Boolean(DEFAULT_SUPABASE_CONFIG.url && DEFAULT_SUPABASE_CONFIG.anonKey);
   state.auth.configured = hasClient && hasConfig;
   if (!state.auth.configured) {
-    state.auth.source = "demo";
+    state.auth.source = "none";
     if (!state.auth.loading) {
-      state.auth.message = "Supabase URL and anon key are not configured yet. Demo mode is available below.";
+      state.auth.message = "Supabase URL and anon key are not configured yet.";
     }
     return null;
   }
@@ -1187,6 +768,26 @@ function loadPlatformState() {
   } catch (error) {
     return normalizePlatformState(seedPlatform);
   }
+}
+
+function createEmptyCourseTemplate({ id, name, code, joinCode = "" }) {
+  return {
+    id,
+    name,
+    code,
+    joinCode,
+    publishedCaseIds: [],
+    settings: {
+      learnerVisibility: "Published cases only",
+      evidenceRule: "One evidence note per case",
+      reportMode: "Shared memo + reflection",
+    },
+    instructors: [],
+    learners: [],
+    learnerRuns: [],
+    documents: [],
+    cases: [],
+  };
 }
 
 function persistPlatformState() {
@@ -1255,8 +856,7 @@ function getOrCreateLearnerRun(caseId = state.activeCaseId, learnerId = state.ac
 
   let run = getLearnerRun(caseId, learnerId, course);
   if (!run) {
-    const learnerIndex = getLearners(course).findIndex((item) => item.id === learnerId);
-    run = buildLearnerRunFromCase(caseRecord, learner, Math.max(learnerIndex, 0));
+    run = createLearnerRunScaffold(caseRecord, learner);
     course.learnerRuns.push(run);
     persistPlatformState();
   }
@@ -1668,7 +1268,7 @@ async function requestGeminiJson(options) {
 async function structureCaseFromDocumentWithAi(input) {
   const baseCase = structuredCaseFromDocument(input);
 
-  setAiStatus(`Structuring this case with ${getGeminiConfig().model}…`, { busy: true });
+  setAiStatus(`Structuring this case with ${getGeminiConfig().model}â€¦`, { busy: true });
   try {
     const draft = await requestGeminiJson({
       systemInstruction:
@@ -1708,7 +1308,7 @@ async function generateAgendaExpansionsWithAi(agendaNode, activeCase = getActive
   const fallback = generateAgendaExpansions(agendaNode, activeCase);
 
   const settings = getCaseBoardSettings(activeCase);
-  setAiStatus(`Expanding learner agenda with ${getGeminiConfig().model}…`, { busy: true });
+  setAiStatus(`Expanding learner agenda with ${getGeminiConfig().model}â€¦`, { busy: true });
   try {
     const payload = await requestGeminiJson({
       systemInstruction:
@@ -1760,7 +1360,7 @@ async function generateAgentReplyWithAi(stakeholderKey, question) {
 
   const stakeholder = getCaseStakeholderMeta(stakeholderKey);
   const activeCase = getActiveCaseRecord();
-  setAiStatus(`Responding with ${getGeminiConfig().model}…`, { busy: true });
+  setAiStatus(`Responding with ${getGeminiConfig().model}â€¦`, { busy: true });
   try {
     const response = await requestGeminiContent({
       systemInstruction:
@@ -1876,7 +1476,7 @@ function syncActiveCaseState() {
   dom.caseSummaryLabel.textContent = state.activeRole === "admin" ? "Selected Instructor Case" : "Selected Published Case";
   dom.sidebarTensionLabel.textContent = state.activeRole === "admin" ? "Case tension" : "Learner run tension";
   if (!activeCase) {
-    state.metrics = { personalization: 58, teacherLoad: 48, privacy: 62, accessibility: 60 };
+    state.metrics = { ...emptyMetrics };
     state.evidence = [];
     state.decisions = [];
     state.chat = [];
@@ -2604,7 +2204,7 @@ function renderPlatformControlsLegacy() {
   dom.intakeTitle.textContent = state.activeRole === "admin" ? "Create or Choose a Case" : "Choose a Published Case";
   dom.intakeBadge.textContent = state.activeRole === "admin" ? "Instructor" : "Student";
   dom.workflowGuide.innerHTML = buildWorkflowGuideMarkup(course, activeCase, visibleCases, activeLearner);
-  dom.courseSelect.innerHTML = dom.courseSelect.innerHTML.replace(/Â·/g, "·");
+  dom.courseSelect.innerHTML = dom.courseSelect.innerHTML.replace(/Ã‚Â·/g, "Â·");
   dom.platformContext.innerHTML = `
     <article class="context-card">
       <strong>${institution?.name || "No institution selected"}</strong>
@@ -2649,7 +2249,7 @@ function renderPlatformControlsLegacy() {
       }
     </article>
   `;
-  dom.platformContext.innerHTML = dom.platformContext.innerHTML.replace(/Â·/g, "·");
+  dom.platformContext.innerHTML = dom.platformContext.innerHTML.replace(/Ã‚Â·/g, "Â·");
 }
 
 function renderPlatformControls() {
@@ -2826,6 +2426,10 @@ function pipelineStatusMarkup(activeCase) {
   `;
 }
 
+function emptyNoteMarkup(message) {
+  return `<div class="empty-note">${message}</div>`;
+}
+
 function renderPipelineConsole() {
   const institution = getActiveInstitution();
   const course = getActiveCourse();
@@ -2842,13 +2446,13 @@ function renderPipelineConsole() {
         <p>Paste a syllabus, assignment prompt, policy note, or design brief. The app will turn it into one structured case.</p>
         <form class="pipeline-form" id="upload-document-form">
           <div class="pipeline-form-row two-up">
-            <input name="documentTitle" type="text" placeholder="Document title…" autocomplete="off" required>
+            <input name="documentTitle" type="text" placeholder="Document titleâ€¦" autocomplete="off" required>
             <select name="publishMode">
               <option value="published">Publish to learners</option>
               <option value="draft">Keep as draft</option>
             </select>
           </div>
-          <textarea name="documentText" placeholder="Paste the course brief here…" autocomplete="off" required></textarea>
+          <textarea name="documentText" placeholder="Paste the course brief hereâ€¦" autocomplete="off" required></textarea>
           <div class="pipeline-actions">
             <button class="toolbar-button toolbar-button-primary" type="submit">Create case</button>
           </div>
@@ -2861,7 +2465,7 @@ function renderPipelineConsole() {
               <strong>Board settings</strong>
               <p>Decide what students can add, how long the board stays open, and how the map should be laid out.</p>
               <form class="pipeline-form" id="board-settings-form">
-                <textarea name="agendaPrompt" placeholder="Prompt students with the main design question…" autocomplete="off">${getCaseBoardSettings(activeCase).agendaPrompt || ""}</textarea>
+                <textarea name="agendaPrompt" placeholder="Prompt students with the main design questionâ€¦" autocomplete="off">${getCaseBoardSettings(activeCase).agendaPrompt || ""}</textarea>
                 <div class="pipeline-form-row two-up">
                   <label class="mini-control">
                     <span>Due date</span>
@@ -3089,7 +2693,7 @@ function renderPipelineConsole() {
       <strong>Add your idea</strong>
       <p>Add one question or concern. The AI will add related issues to the case map.</p>
       <form class="pipeline-form" id="agenda-node-form">
-        <input name="agendaTitle" type="text" placeholder="Example: Keep teacher feedback visible…" autocomplete="off" required>
+        <input name="agendaTitle" type="text" placeholder="Example: Keep teacher feedback visibleâ€¦" autocomplete="off" required>
         <textarea name="agendaBody" placeholder="Why does this matter for your redesign?" autocomplete="off"></textarea>
         <div class="pipeline-actions">
           <button class="toolbar-button toolbar-button-primary" type="submit">Add to Map</button>
@@ -4073,6 +3677,7 @@ function renderChat() {
 }
 
 function renderMatrix() {
+  const activeCase = getActiveCaseRecord();
   const { personalization, teacherLoad, privacy, accessibility } = state.metrics;
   const { feasibility, alignment, conflict } = computeScores();
   dom.radarFill.setAttribute("points", polygonPoints(radarValues()));
@@ -4099,53 +3704,37 @@ function renderMatrix() {
     )
     .join("");
 
-  dom.matrixInsights.innerHTML = getCaseMatrixInsights([
-    {
-      title: "Dominant trade-off",
-      body:
-        teacherLoad > 65
-          ? "Teacher workload is the leading instability. Even strong personalization is losing value because facilitation overhead stays too high."
-          : "Workload is under control, so the system can safely deepen reflective prompts and evidence capture.",
-    },
-    {
-      title: "Trust signal",
-      body:
-        privacy < 65
-          ? "Governance language is still too weak. Students and admins will both ask for a clearer explanation of data handling."
-          : "Privacy posture is visible enough to support adoption conversations across instructors and administrators.",
-    },
-    {
-      title: "Equity signal",
-      body:
-        accessibility < 60
-          ? "Accessibility remains the weakest dimension. The redesign should prioritize modality parity before adding more automation."
-          : "Accessibility is no longer the primary blocker, so the next iteration can focus on agency and evidence trace quality.",
-    },
-  ])
-    .map(
-      (item) => `
-        <article class="insight-card">
-          <strong>${item.title}</strong>
-          <p>${item.body}</p>
-        </article>
-      `
-    )
-    .join("");
+  const matrixInsights = asArray(activeCase?.matrixInsights);
+  dom.matrixInsights.innerHTML = matrixInsights.length
+    ? matrixInsights
+        .map(
+          (item) => `
+            <article class="insight-card">
+              <strong>${item.title}</strong>
+              <p>${item.body}</p>
+            </article>
+          `
+        )
+        .join("")
+    : emptyNoteMarkup("No trade-off insights have been generated for this case yet.");
 
-  dom.decisionLog.innerHTML = state.decisions
-    .map(
-      (item) => `
-        <article class="decision-item">
-          <time>${item.stamp}</time>
-          <strong>${item.title}</strong>
-          <p>${item.body}</p>
-        </article>
-      `
-    )
-    .join("");
+  dom.decisionLog.innerHTML = state.decisions.length
+    ? state.decisions
+        .map(
+          (item) => `
+            <article class="decision-item">
+              <time>${item.stamp}</time>
+              <strong>${item.title}</strong>
+              <p>${item.body}</p>
+            </article>
+          `
+        )
+        .join("")
+    : emptyNoteMarkup("No decision history has been recorded for this case yet.");
 }
 
 function renderSandbox() {
+  const activeCase = getActiveCaseRecord();
   const { alignment, conflict } = computeScores();
   const loadBand = state.metrics.teacherLoad > 70 ? "Very high" : state.metrics.teacherLoad > 55 ? "High" : "Moderate";
   const lag = Math.round(8 + conflict * 0.12);
@@ -4174,149 +3763,133 @@ function renderSandbox() {
     button.disabled = !instructorMode;
   });
 
-  dom.reactionFeed.innerHTML = getCaseSandboxFeed([
-    {
-      title: "Simulation note",
-      body:
-        state.metrics.teacherLoad > 65
-          ? "Teacher-side moderation remains the first failure point. Reduce exception handling or narrow the scope of autonomous feedback."
-          : "Moderation burden is now manageable enough to test richer reflection prompts in the next run.",
-    },
-    {
-      title: "System recommendation",
-      body:
-        state.metrics.accessibility < 60
-          ? "Reallocate effort toward accessible explanation layers before adding additional personalization channels."
-          : "Accessibility is recovering. The next highest gain comes from clearer evidence tracing for students.",
-    },
-    {
-      title: "Governance check",
-      body:
-        state.metrics.privacy < 65
-          ? "Current privacy resilience is below the comfort threshold for institutional adoption."
-          : "Privacy resilience is strong enough to proceed, but keep telemetry scoped to decision-level summaries.",
-    },
-  ])
-    .map(
-      (item) => `
-        <article class="feed-item">
-          <strong>${item.title}</strong>
-          <p>${item.body}</p>
-        </article>
-      `
-    )
-    .join("");
+  const sandboxFeed = asArray(activeCase?.sandboxFeed);
+  dom.reactionFeed.innerHTML = sandboxFeed.length
+    ? sandboxFeed
+        .map(
+          (item) => `
+            <article class="feed-item">
+              <strong>${item.title || item.label}</strong>
+              <p>${item.body || item.note || item.value || ""}</p>
+            </article>
+          `
+        )
+        .join("")
+    : emptyNoteMarkup("No simulation notes have been generated for this case yet.");
 }
 
 function renderReport() {
-  const { alignment, conflict, feasibility } = computeScores();
-  const activeConflicts = stakeholderConflicts(state.activeStakeholder);
+  const { feasibility } = computeScores();
   const activeCase = getCaseById(state.activeCaseId);
   const course = getActiveCourse();
   const activeLearner = getActiveLearner();
   const uiCopy = getCaseUiCopy();
+  const summary = uiCopy.reportSummary || activeCase?.summary || "";
+  const reportTensions = state.evidence.slice(-3).reverse();
+  const reportRecommendations = state.chat.filter((item) => item.role === "agent").slice(-2).reverse();
 
-  dom.reportSummary.textContent =
-    uiCopy.reportSummary ||
-    (state.activeRole === "admin"
-      ? `This analysis treated ${activeCase ? `"${activeCase.title}"` : "the active instructional case"} in ${course ? course.code : "the current course"} as a system with competing pressures rather than a simple feature choice. Alignment is currently ${alignment}% with conflict load at ${conflict}%. The strongest redesign need is to preserve pedagogical judgment while reducing teacher burden and tightening accessibility and governance evidence.`
-      : `${activeLearner?.name || "The student"} is exploring ${activeCase ? `"${activeCase.title}"` : "the published case"} in ${course ? course.code : "the current course"} through private notes. Alignment is currently ${alignment}% with conflict load at ${conflict}%, and the memo is tracking which evidence most reshapes the student's redesign judgment.`);
+  dom.reportSummary.textContent = summary || "No summary has been generated for this case yet.";
 
-  dom.reportTensions.innerHTML = activeConflicts
-    .map(
-      (item) => `
-        <article class="memo-item">
-          <strong>${item.title}</strong>
-          <p>${item.body}</p>
-        </article>
-      `
-    )
-    .join("");
+  dom.reportTensions.innerHTML = reportTensions.length
+    ? reportTensions
+        .map(
+          (item) => `
+            <article class="memo-item">
+              <strong>${item.title}</strong>
+              <p>${item.body}</p>
+            </article>
+          `
+        )
+        .join("")
+    : emptyNoteMarkup("No priority tensions have been saved yet.");
 
-  dom.reportRecommendations.innerHTML = stakeholderRecommendations(state.activeStakeholder)
-    .map(
-      (item) => `
-        <article class="memo-item">
-          <strong>Recommendation</strong>
-          <p>${item}</p>
-        </article>
-      `
-    )
-    .join("");
+  dom.reportRecommendations.innerHTML = reportRecommendations.length
+    ? reportRecommendations
+        .map(
+          (item) => `
+            <article class="memo-item">
+              <strong>Recommendation</strong>
+              <p>${item.body}</p>
+            </article>
+          `
+        )
+        .join("")
+    : emptyNoteMarkup("No redesign recommendations have been generated yet.");
 
-  dom.reportEvidence.innerHTML = state.evidence
-    .slice(-5)
-    .reverse()
-    .map(
-      (item) => `
-        <article class="memo-item">
-          <strong>${item.title}</strong>
-          <p>${item.body}</p>
-        </article>
-      `
-    )
-    .join("");
+  dom.reportEvidence.innerHTML = state.evidence.length
+    ? state.evidence
+        .slice(-5)
+        .reverse()
+        .map(
+          (item) => `
+            <article class="memo-item">
+              <strong>${item.title}</strong>
+              <p>${item.body}</p>
+            </article>
+          `
+        )
+        .join("")
+    : emptyNoteMarkup("No evidence notes have been added yet.");
 
-  const rubric = [
-    { label: state.activeRole === "admin" ? "Lens coverage" : "Perspective shift", value: Math.min(96, 60 + state.evidence.length * 8) },
-    { label: state.activeRole === "admin" ? "Constraint clarity" : "Constraint clarity", value: Math.round((state.metrics.privacy + state.metrics.accessibility) / 2) },
-    { label: state.activeRole === "admin" ? "Redesign quality" : "Revision quality", value: feasibility },
-    { label: state.activeRole === "admin" ? "Evidence trace" : "Evidence trace", value: Math.min(94, 58 + state.evidence.length * 7) },
-  ];
+  const rubric = activeCase
+    ? [
+        { label: state.activeRole === "admin" ? "Lens coverage" : "Perspective shift", value: Math.min(96, 60 + state.evidence.length * 8) },
+        { label: state.activeRole === "admin" ? "Constraint clarity" : "Constraint clarity", value: Math.round((state.metrics.privacy + state.metrics.accessibility) / 2) },
+        { label: state.activeRole === "admin" ? "Redesign quality" : "Revision quality", value: feasibility },
+        { label: state.activeRole === "admin" ? "Evidence trace" : "Evidence trace", value: Math.min(94, 58 + state.evidence.length * 7) },
+      ]
+    : [];
 
-  dom.rubricList.innerHTML = rubric
-    .map(
-      (item) => `
-        <article class="rubric-item">
-          <header><span>${item.label}</span><strong>${item.value}%</strong></header>
-          <div class="bar-track">
-            <div class="bar-fill" style="width:${item.value}%; background:var(--primary);"></div>
-          </div>
-        </article>
-      `
-    )
-    .join("");
+  dom.rubricList.innerHTML = rubric.length
+    ? rubric
+        .map(
+          (item) => `
+            <article class="rubric-item">
+              <header><span>${item.label}</span><strong>${item.value}%</strong></header>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:${item.value}%; background:var(--primary);"></div>
+              </div>
+            </article>
+          `
+        )
+        .join("")
+    : emptyNoteMarkup("Scores appear after a case is loaded.");
 
   dom.reflectionBadge.textContent =
     state.activeRole === "admin"
       ? "Instructor View"
       : `${activeLearner?.name || "Student"} reflection`;
 
-  dom.reflectionPrompts.innerHTML = getCaseReflectionPrompts(
-    state.activeRole === "admin"
-      ? [
-          "Which stakeholder tension most changed your original design assumptions?",
-          "What trade-off did you knowingly accept, and what evidence justified it?",
-          "How did accessibility or governance concerns reshape the redesign rather than remain an afterthought?",
-        ]
-      : [
-          "Which stakeholder perspective most challenged your first idea for this case?",
-          "What evidence would you cite if you had to defend your redesign choice to the instructor?",
-          "What would you change next after seeing the network tensions more clearly?",
-        ]
-  )
-    .map((item) => `<article class="prompt-item">${item}</article>`)
-    .join("");
+  const reflectionPrompts = asArray(activeCase?.reflectionPrompts);
+  dom.reflectionPrompts.innerHTML = reflectionPrompts.length
+    ? reflectionPrompts.map((item) => `<article class="prompt-item">${item}</article>`).join("")
+    : emptyNoteMarkup("No reflection prompts have been generated for this case yet.");
 
-  dom.reflectionFeed.innerHTML = state.timeline
-    .map(
-      (item, index) => `
-        <article class="reflection-item">
-          <strong>Iteration ${index + 1}</strong>
-          <p>${item}</p>
-        </article>
-      `
-    )
-    .join("");
+  dom.reflectionFeed.innerHTML = state.timeline.length
+    ? state.timeline
+        .map(
+          (item, index) => `
+            <article class="reflection-item">
+              <strong>Iteration ${index + 1}</strong>
+              <p>${item}</p>
+            </article>
+          `
+        )
+        .join("")
+    : emptyNoteMarkup(
+        state.activeRole === "admin"
+          ? "Recent case activity will appear here after the first case actions are saved."
+          : `${activeLearner?.name || "This student"} has not saved any reflections yet.`
+      );
 }
 
 function renderAll() {
   if (dom.visualizerInput) {
-    dom.visualizerInput.placeholder = "Ask what conflict matters most in this case…";
+    dom.visualizerInput.placeholder = "Ask what conflict matters most in this case...";
   }
   const chatInput = document.getElementById("chat-input");
   if (chatInput) {
-    chatInput.placeholder = "Ask what this person would worry about…";
+    chatInput.placeholder = "Ask what this person would worry about...";
   }
   syncActiveCaseState();
   ensureGraphCurrent();
@@ -4349,59 +3922,20 @@ function renderLandingLogin() {
   dom.landingLoginPassword.disabled = state.auth.loading;
   dom.landingJoinName.disabled = state.auth.loading;
   dom.landingJoinCode.disabled = state.auth.loading;
-  dom.landingDemoSubmit.classList.toggle("is-hidden", configured);
-  dom.landingAuthStatus.textContent = state.auth.loading
-    ? "Checking Supabase credentials…"
-    : state.auth.message;
+  dom.landingAuthStatus.textContent = state.auth.loading ? "Checking sign-in..." : state.auth.message;
   dom.landingLoginHelper.textContent =
     state.auth.source === "supabase" && activeInstitution && activeCourse
-      ? `Signed in as ${activeIdentity?.name || state.auth.sessionEmail}. ${activeInstitution.name} · ${activeCourse.code} ${activeCourse.name} was detected automatically.`
+      ? `Signed in as ${activeIdentity?.name || state.auth.sessionEmail}. ${activeInstitution.name} - ${activeCourse.code} ${activeCourse.name} was detected automatically.`
       : configured
-        ? "Sign in with your Supabase account. The app will detect your linked institution, course, and instructor/student mode."
-        : "Supabase is not configured yet. Add project keys in supabase-config.js, or use the demo data button for local preview.";
+        ? "Sign in with your Supabase account. The app will detect your school, course, and role automatically."
+        : "Supabase is not configured yet. Add project keys in supabase-config.js.";
   dom.landingJoinHelper.textContent = configured
-    ? "Use a join code after enrollment is configured, or use this local join flow while testing the course experience."
-    : "For local testing, enter a name and the instructor's join code to open the student workspace.";
-  if (state.auth.loading) {
-    dom.landingAuthStatus.textContent = "Checking sign-in…";
-  }
-  if (state.auth.source === "supabase" && activeInstitution && activeCourse) {
-    dom.landingLoginHelper.textContent = `Signed in as ${activeIdentity?.name || state.auth.sessionEmail}. ${activeInstitution.name} · ${activeCourse.code} ${activeCourse.name} was detected automatically.`;
-  } else if (configured) {
-    dom.landingLoginHelper.textContent = "Sign in with your Supabase account. The app will detect your school, course, and role automatically.";
-  }
-  dom.landingJoinHelper.textContent = configured
-    ? "Use a join code after enrollment is configured, or use this local join flow while testing the course experience."
-    : "For local testing, enter a name and the instructor's join code to open the student view.";
-  dom.landingLoginHelper.textContent = dom.landingLoginHelper.textContent.replace(/Â·/g, "·");
+    ? "Enter the join code your instructor shared to open the published board for your course."
+    : "Join by code becomes available after Supabase and course data are configured.";
   normalizeRenderedCopy();
 }
-
 function normalizeRenderedCopy() {
-  const textTargets = [
-    dom.platformContext,
-    dom.pipelineConsole,
-    dom.workflowGuide,
-    dom.networkMeta,
-    dom.landingLoginHelper,
-    dom.landingJoinHelper,
-    dom.landingAuthStatus,
-  ];
-
-  textTargets.forEach((target) => {
-    if (!target) return;
-    if (typeof target.innerHTML === "string" && target.innerHTML) {
-      target.innerHTML = target.innerHTML.replace(/â€¦/g, "...").replace(/Â·|Ã‚Â·/g, "·");
-      return;
-    }
-    if (typeof target.textContent === "string" && target.textContent) {
-      target.textContent = target.textContent.replace(/â€¦/g, "...").replace(/Â·|Ã‚Â·/g, "·");
-    }
-  });
-
-  if (dom.courseSelect?.innerHTML) {
-    dom.courseSelect.innerHTML = dom.courseSelect.innerHTML.replace(/Â·|Ã‚Â·/g, "·");
-  }
+  return;
 }
 
 function clearTutorialHighlight() {
@@ -4601,11 +4135,6 @@ function createLearnerProfile(name, course) {
     courseId: course.id,
   };
   course.learners.push(learner);
-  course.publishedCaseIds.forEach((caseId, index) => {
-    const caseRecord = getCaseById(caseId, course);
-    if (!caseRecord) return;
-    course.learnerRuns.push(buildLearnerRunFromCase(caseRecord, learner, index));
-  });
   persistPlatformState();
   return learner;
 }
@@ -4647,7 +4176,7 @@ function joinCourseWithCode(name, joinCode) {
   state.activeCaseId = "";
   state.auth = {
     ...state.auth,
-    source: "demo",
+    source: "local",
     loading: false,
     message: `Joined ${course.code} with the shared course code.`,
   };
@@ -4954,6 +4483,29 @@ function initializeLandingNetwork() {
     .attr("y", (node) => (node.type === "core" ? 56 : 30))
     .text((node) => node.label);
 
+  nodeSel.call(
+    d3
+      .drag()
+      .on("start", (event, node) => {
+        if (!event.active) {
+          landingRenderer.simulation.alphaTarget(0.22).restart();
+        }
+        node.fx = node.x;
+        node.fy = node.y;
+      })
+      .on("drag", (event, node) => {
+        node.fx = event.x;
+        node.fy = event.y;
+      })
+      .on("end", (event, node) => {
+        if (!event.active) {
+          landingRenderer.simulation.alphaTarget(0);
+        }
+        node.fx = event.x;
+        node.fy = event.y;
+      })
+  );
+
   landingRenderer.simulation = d3
     .forceSimulation(nodes)
     .force("link", d3.forceLink(links).id((node) => node.id).distance((link) => (link.target.type === "minor" ? 42 : 120)).strength((link) => (link.target.type === "minor" ? 0.9 : 0.3)))
@@ -5075,22 +4627,11 @@ function addInstitution(name) {
       accessibilityGate: "Mandatory",
     },
     courses: [
-      {
+      createEmptyCourseTemplate({
         id: courseId,
         name: "New Course",
         code: "NEW-100",
-        publishedCaseIds: [],
-        settings: {
-          learnerVisibility: "Published cases only",
-          evidenceRule: "One evidence note per case",
-          reportMode: "Shared memo + reflection",
-        },
-        instructors: buildDemoInstructors({ id: courseId }),
-        learners: buildDemoLearners({ id: courseId }),
-        learnerRuns: [],
-        documents: [],
-        cases: [],
-      },
+      }),
     ],
   });
   state.activeInstitutionId = institutionId;
@@ -5103,23 +4644,14 @@ function addCourse(name, code) {
   const institution = getActiveInstitution();
   if (!institution) return;
   const courseId = `course-${slugify(code || name)}-${Date.now().toString(36)}`;
-  institution.courses.push({
-    id: courseId,
-    name,
-    code,
-    joinCode: buildJoinCode(code || name),
-    publishedCaseIds: [],
-    settings: {
-      learnerVisibility: "Published cases only",
-      evidenceRule: "One evidence note per case",
-      reportMode: "Shared memo + reflection",
-    },
-    instructors: buildDemoInstructors({ id: courseId }),
-    learners: buildDemoLearners({ id: courseId }),
-    learnerRuns: [],
-    documents: [],
-    cases: [],
-  });
+  institution.courses.push(
+    createEmptyCourseTemplate({
+      id: courseId,
+      name,
+      code,
+      joinCode: buildJoinCode(code || name),
+    })
+  );
   state.activeCourseId = courseId;
   state.activeCaseId = "";
   persistPlatformState();
@@ -5479,21 +5011,6 @@ dom.landingEnterButtons.forEach((button) => {
   });
 });
 
-dom.landingDemoSubmit?.addEventListener("click", () => {
-  state.auth = {
-    ...state.auth,
-    source: "demo",
-    loading: false,
-    message: "Using local demo data.",
-  };
-  renderLandingLogin();
-  openStudio();
-});
-
-dom.landingSkipTestingButton?.addEventListener("click", () => {
-  dom.landingDemoSubmit?.click();
-});
-
 dom.startTutorialButton?.addEventListener("click", () => {
   startTutorial(true);
 });
@@ -5534,14 +5051,14 @@ dom.returnToLanding?.addEventListener("click", async () => {
   await signOutSupabaseIfNeeded();
   state.auth = {
     ...state.auth,
-    source: state.auth.configured ? "supabase" : "demo",
+    source: state.auth.configured ? "supabase" : "none",
     loading: false,
     userId: "",
     sessionEmail: "",
     remoteRole: "",
     message: state.auth.configured
       ? "Signed out. Sign in again to detect your institution and course."
-      : "Using demo mode.",
+      : "Supabase is not configured yet.",
   };
   returnToLanding();
 });
@@ -5570,3 +5087,4 @@ async function boot() {
 }
 
 boot();
+

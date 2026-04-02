@@ -2390,6 +2390,14 @@ body {
   height: 100%;
 }
 
+.landing-network .landing-node-group {
+  cursor: grab;
+}
+
+.landing-network .landing-node-group:active {
+  cursor: grabbing;
+}
+
 .landing-network .landing-link {
   fill: none;
   stroke-linecap: round;

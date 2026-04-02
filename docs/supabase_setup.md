@@ -3,9 +3,9 @@
 1. Put your project URL and anon key in [supabase-config.js](C:\Users\jewoo\Desktop\Swarm_ID\supabase-config.js).
 2. Run the SQL in [supabase_schema.sql](C:\Users\jewoo\Desktop\Swarm_ID\docs\supabase_schema.sql) in the Supabase SQL editor.
 3. Create Auth users in Supabase Auth.
-4. Insert matching rows into `profiles`, `institutions`, `courses`, and `course_memberships`.
+4. Insert your own rows into `profiles`, `institutions`, `courses`, and `course_memberships`.
 5. Put a shareable `join_code` on each course if students should be able to join by code.
-6. Add `cases`, `documents`, and optional `learner_runs` for each course.
+6. Add `cases`, `documents`, optional `learner_runs`, and optional `cohort_graph_snapshots` for each course.
 7. If you want live AI generation in local browser testing, put a Gemini key in `gemini-config.js`.
 8. If you want live AI generation on Vercel, add `GEMINI_API_KEY` to the project environment variables. The app will call `/api/gemini` when no browser-side key is present.
 
