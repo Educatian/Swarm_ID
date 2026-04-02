@@ -556,6 +556,7 @@ const dom = {
   sidebarCaseSelect: document.getElementById("sidebar-case-select"),
   caseTitle: document.getElementById("case-title"),
   caseSubtitle: document.getElementById("case-subtitle"),
+  topKicker: document.getElementById("top-kicker"),
   topTitle: document.getElementById("view-title"),
   sidebarTensionLabel: document.getElementById("sidebar-tension-label"),
   sidebarTension: document.getElementById("sidebar-tension"),
@@ -2128,22 +2129,22 @@ function renderNavigation() {
     panel.classList.toggle("is-hidden", !allowed);
     panel.classList.toggle("is-active", panel.dataset.viewPanel === state.activeView);
   });
-  const titleMap = {
-    admin: {
-      visualizer: hasActiveCase() ? "Review the Case Network" : "Create a Case",
-      perspectives: "Compare Stakeholder Perspectives",
-      matrix: "Review Key Trade-offs",
-      sandbox: "Test Design Changes",
-      report: "Prepare the Case Report",
-    },
-    user: {
-      visualizer: hasActiveCase() ? "Explore the Published Case" : "Choose a Published Case",
-      perspectives: "Read Stakeholder Perspectives",
-      matrix: "Compare the Main Trade-offs",
-      report: "Write Reflection & Report",
-    },
-  };
-  dom.topTitle.textContent = titleMap[state.activeRole][state.activeView];
+  const course = getActiveCourse();
+  const activeCase = getCaseById(state.activeCaseId, course);
+  if (dom.topKicker) {
+    dom.topKicker.textContent = activeCase
+      ? state.activeRole === "admin"
+        ? "Current case"
+        : "Published case"
+      : course
+        ? "Current course"
+        : "Workspace";
+  }
+  dom.topTitle.textContent = activeCase
+    ? activeCase.title
+    : course
+      ? `${course.code} · ${course.name}`
+      : "Workspace";
 }
 
 function renderPlatformControlsLegacy() {
