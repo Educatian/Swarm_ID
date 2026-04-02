@@ -359,6 +359,110 @@ function buildRemotePlatform({
   });
 }
 
+function isSupabaseSessionActive() {
+  return state.auth.source === "supabase" && Boolean(state.auth.userId);
+}
+
+function serializeCaseForSupabase(caseRecord, courseId) {
+  return {
+    course_id: courseId,
+    title: caseRecord.title,
+    summary: caseRecord.summary || "",
+    prompt: caseRecord.prompt || "",
+    agenda_prompt: getCaseBoardSettings(caseRecord).agendaPrompt || "",
+    submission_deadline: getCaseBoardSettings(caseRecord).dueAt
+      ? new Date(`${getCaseBoardSettings(caseRecord).dueAt}T23:59:00Z`).toISOString()
+      : null,
+    learning_goals: asArray(caseRecord.learningGoals),
+    constraints: asArray(caseRecord.constraints),
+    metrics: asObject(caseRecord.metrics),
+    evidence: asArray(caseRecord.evidence),
+    decisions: asArray(caseRecord.decisions),
+    chat: asArray(caseRecord.chat),
+    timeline: asArray(caseRecord.timeline),
+    stakeholder_profiles: asObject(caseRecord.stakeholderProfiles),
+    matrix_insights: asArray(caseRecord.matrixInsights),
+    sandbox_feed: asArray(caseRecord.sandboxFeed),
+    reflection_prompts: asArray(caseRecord.reflectionPrompts),
+    network_meta: asArray(caseRecord.networkMeta),
+    ui_copy: asObject(caseRecord.uiCopy),
+    board_settings: asObject(caseRecord.boardSettings),
+    pipeline: asObject(caseRecord.pipeline),
+    published: Boolean(caseRecord.published),
+  };
+}
+
+function serializeDocumentForSupabase(documentRecord, courseId, caseId) {
+  return {
+    course_id: courseId,
+    case_id: caseId,
+    title: documentRecord.title,
+    kind: documentRecord.kind || "uploaded-brief",
+    text: documentRecord.text || "",
+    published: Boolean(documentRecord.published),
+    uploaded_at: documentRecord.uploadedAt || new Date().toISOString().slice(0, 10),
+  };
+}
+
+function serializeLearnerRunForSupabase(runRecord, caseId = state.activeCaseId, learnerId = state.activeLearnerId) {
+  return {
+    case_id: caseId,
+    learner_id: learnerId,
+    learner_name: runRecord.learnerName || "",
+    learner_focus: runRecord.learnerFocus || "",
+    status: runRecord.status || "Learner workspace updated",
+    metrics: asObject(runRecord.metrics),
+    evidence: asArray(runRecord.evidence),
+    decisions: asArray(runRecord.decisions),
+    chat: asArray(runRecord.chat),
+    timeline: asArray(runRecord.timeline),
+    agenda_nodes: asArray(runRecord.agendaNodes),
+    ai_generated_nodes: asArray(runRecord.aiGeneratedNodes),
+    annotations: asArray(runRecord.annotations),
+  };
+}
+
+async function refreshRemotePlatformContext(preferredCaseId = "") {
+  if (!isSupabaseSessionActive()) return;
+  const context = await fetchSupabaseContext(state.auth.userId);
+  applyRemoteSessionContext(context, {
+    id: state.auth.userId,
+    email: state.auth.sessionEmail,
+  });
+  if (preferredCaseId) {
+    state.activeCaseId = preferredCaseId;
+    syncActiveCaseState();
+  }
+}
+
+async function syncCaseToSupabase(caseRecord, courseId = getActiveCourse()?.id) {
+  if (!isSupabaseSessionActive() || !caseRecord || !courseId) return;
+  const client = initializeSupabase();
+  if (!client) throw new Error("Login is not ready yet.");
+  const { error } = await client
+    .from("cases")
+    .update(serializeCaseForSupabase(caseRecord, courseId))
+    .eq("id", caseRecord.id);
+  if (error) throw error;
+}
+
+async function syncLearnerRunToSupabase(runRecord, caseId = state.activeCaseId, learnerId = state.activeLearnerId) {
+  if (!isSupabaseSessionActive() || !runRecord || !caseId || !learnerId) return;
+  const client = initializeSupabase();
+  if (!client) throw new Error("Login is not ready yet.");
+  const { data, error } = await client
+    .from("learner_runs")
+    .upsert(serializeLearnerRunForSupabase(runRecord, caseId, learnerId), {
+      onConflict: "case_id,learner_id",
+    })
+    .select("*")
+    .single();
+  if (error) throw error;
+  if (data?.id) {
+    runRecord.id = data.id;
+  }
+}
+
 async function fetchSupabaseContext(userId) {
   const client = initializeSupabase();
   if (!client) {
@@ -1526,6 +1630,14 @@ function persistActiveCaseState() {
     activeCase.chat = safeClone(state.chat);
     activeCase.timeline = safeClone(state.timeline);
   });
+  if (isSupabaseSessionActive()) {
+    const activeCase = getActiveCaseRecord();
+    syncCaseToSupabase(activeCase).catch((error) => {
+      console.error(error);
+      state.auth.message = error.message || "Case changes could not be saved.";
+      renderLandingLogin();
+    });
+  }
 }
 
 function updateActiveLearnerRunRecord(mutator) {
@@ -1545,6 +1657,14 @@ function persistActiveLearnerRunState() {
     activeRun.status = "Learner workspace updated";
     activeRun.updatedAt = new Date().toISOString();
   });
+  if (isSupabaseSessionActive()) {
+    const activeRun = getActiveLearnerRun();
+    syncLearnerRunToSupabase(activeRun).catch((error) => {
+      console.error(error);
+      state.auth.message = error.message || "Your changes could not be saved.";
+      renderLandingLogin();
+    });
+  }
 }
 
 function persistActiveWorkspaceState() {
@@ -4281,6 +4401,13 @@ async function addAgendaNode(title, body = "") {
     ...state.evidence,
   ].slice(0, 6);
   regenerateGraph(`agenda ${agendaNode.title}`);
+  if (isSupabaseSessionActive()) {
+    syncLearnerRunToSupabase(getActiveLearnerRun()).catch((error) => {
+      console.error(error);
+      state.auth.message = error.message || "Your node could not be saved.";
+      renderLandingLogin();
+    });
+  }
 }
 
 function updateBoardSettings(values) {
@@ -4297,6 +4424,14 @@ function updateBoardSettings(values) {
     });
   });
   persistActiveWorkspaceState();
+  if (isSupabaseSessionActive()) {
+    const activeCase = getActiveCaseRecord();
+    syncCaseToSupabase(activeCase).catch((error) => {
+      console.error(error);
+      state.auth.message = error.message || "Board settings could not be saved.";
+      renderLandingLogin();
+    });
+  }
 }
 
 function addNodeAnnotation(noteType, visibility, body) {
@@ -4354,6 +4489,13 @@ function addNodeAnnotation(noteType, visibility, body) {
     ...state.evidence,
   ].slice(0, 8);
   regenerateGraph(`annotation ${selected.label}`);
+  if (isSupabaseSessionActive()) {
+    syncLearnerRunToSupabase(getActiveLearnerRun()).catch((error) => {
+      console.error(error);
+      state.auth.message = error.message || "Your note could not be saved.";
+      renderLandingLogin();
+    });
+  }
 }
 
 function focusLandingLogin() {
@@ -4671,6 +4813,22 @@ async function uploadStructuredDocument(title, text, publishMode) {
     text: text.trim(),
     caseId: nextCase.id,
   };
+  if (isSupabaseSessionActive()) {
+    const client = initializeSupabase();
+    if (!client) throw new Error("Login is not ready yet.");
+    const { data: insertedCase, error: caseError } = await client
+      .from("cases")
+      .insert(serializeCaseForSupabase(nextCase, course.id))
+      .select("*")
+      .single();
+    if (caseError) throw caseError;
+    const { error: documentError } = await client
+      .from("documents")
+      .insert(serializeDocumentForSupabase(nextDocument, course.id, insertedCase.id));
+    if (documentError) throw documentError;
+    await refreshRemotePlatformContext(insertedCase.id);
+    return;
+  }
   course.documents.push(nextDocument);
   course.cases.unshift(nextCase);
   if (publish && !course.publishedCaseIds.includes(nextCase.id)) {
@@ -4701,6 +4859,19 @@ function toggleCasePublish(caseId) {
     ensureActiveSelections();
   }
   persistPlatformState();
+  if (isSupabaseSessionActive()) {
+    syncCaseToSupabase(targetCase, course.id)
+      .then(async () => {
+        const client = initializeSupabase();
+        if (!client) return;
+        await client.from("documents").update({ published: targetCase.published }).eq("case_id", caseId);
+      })
+      .catch((error) => {
+        console.error(error);
+        state.auth.message = error.message || "Case status could not be updated.";
+        renderLandingLogin();
+      });
+  }
 }
 
 dom.viewButtons.forEach((button) => {

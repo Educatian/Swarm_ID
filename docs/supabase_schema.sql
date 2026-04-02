@@ -169,6 +169,47 @@ using (
   )
 );
 
+drop policy if exists "admins can insert cases" on public.cases;
+drop policy if exists "admins can update cases" on public.cases;
+
+create policy "admins can insert cases"
+on public.cases
+for insert
+with check (
+  exists (
+    select 1
+    from public.course_memberships m
+    where m.course_id = cases.course_id
+      and m.user_id = auth.uid()
+      and m.role = 'admin'
+      and m.status = 'active'
+  )
+);
+
+create policy "admins can update cases"
+on public.cases
+for update
+using (
+  exists (
+    select 1
+    from public.course_memberships m
+    where m.course_id = cases.course_id
+      and m.user_id = auth.uid()
+      and m.role = 'admin'
+      and m.status = 'active'
+  )
+)
+with check (
+  exists (
+    select 1
+    from public.course_memberships m
+    where m.course_id = cases.course_id
+      and m.user_id = auth.uid()
+      and m.role = 'admin'
+      and m.status = 'active'
+  )
+);
+
 create policy "students can read published documents and instructors can read all documents"
 on public.documents
 for select
@@ -183,10 +224,89 @@ using (
   )
 );
 
+drop policy if exists "admins can insert documents" on public.documents;
+drop policy if exists "admins can update documents" on public.documents;
+
+create policy "admins can insert documents"
+on public.documents
+for insert
+with check (
+  exists (
+    select 1
+    from public.course_memberships m
+    where m.course_id = documents.course_id
+      and m.user_id = auth.uid()
+      and m.role = 'admin'
+      and m.status = 'active'
+  )
+);
+
+create policy "admins can update documents"
+on public.documents
+for update
+using (
+  exists (
+    select 1
+    from public.course_memberships m
+    where m.course_id = documents.course_id
+      and m.user_id = auth.uid()
+      and m.role = 'admin'
+      and m.status = 'active'
+  )
+)
+with check (
+  exists (
+    select 1
+    from public.course_memberships m
+    where m.course_id = documents.course_id
+      and m.user_id = auth.uid()
+      and m.role = 'admin'
+      and m.status = 'active'
+  )
+);
+
 create policy "learners can read own runs and instructors can read course runs"
 on public.learner_runs
 for select
 using (
+  learner_id = auth.uid()
+  or exists (
+    select 1
+    from public.cases c
+    join public.course_memberships m on m.course_id = c.course_id
+    where c.id = learner_runs.case_id
+      and m.user_id = auth.uid()
+      and m.role = 'admin'
+      and m.status = 'active'
+  )
+);
+
+drop policy if exists "learners can insert own runs" on public.learner_runs;
+drop policy if exists "learners can update own runs and instructors can update course runs" on public.learner_runs;
+
+create policy "learners can insert own runs"
+on public.learner_runs
+for insert
+with check (
+  learner_id = auth.uid()
+);
+
+create policy "learners can update own runs and instructors can update course runs"
+on public.learner_runs
+for update
+using (
+  learner_id = auth.uid()
+  or exists (
+    select 1
+    from public.cases c
+    join public.course_memberships m on m.course_id = c.course_id
+    where c.id = learner_runs.case_id
+      and m.user_id = auth.uid()
+      and m.role = 'admin'
+      and m.status = 'active'
+  )
+)
+with check (
   learner_id = auth.uid()
   or exists (
     select 1
