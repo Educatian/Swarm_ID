@@ -146,17 +146,13 @@ using (
   )
 );
 
-create policy "members can read same-course memberships"
+drop policy if exists "members can read same-course memberships" on public.course_memberships;
+
+create policy "users can read own memberships"
 on public.course_memberships
 for select
 using (
-  exists (
-    select 1
-    from public.course_memberships own
-    where own.course_id = course_memberships.course_id
-      and own.user_id = auth.uid()
-      and own.status = 'active'
-  )
+  user_id = auth.uid()
 );
 
 create policy "students can read published cases and instructors can read all cases"

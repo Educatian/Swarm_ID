@@ -2104,6 +2104,7 @@ function polygonPoints(values) {
 }
 
 function renderConstraints() {
+  if (!dom.constraintTokens) return;
   const activeCase = getCaseById(state.activeCaseId);
   const constraints = activeCase?.constraints || [];
   dom.constraintTokens.innerHTML = constraints.map((item) => `<span class="token">${item}</span>`).join("");
