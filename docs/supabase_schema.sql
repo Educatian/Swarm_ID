@@ -39,6 +39,10 @@ create table if not exists public.course_memberships (
   unique (user_id, course_id)
 );
 
+create unique index if not exists course_memberships_one_active_student_per_user
+on public.course_memberships (user_id)
+where role = 'user' and status = 'active';
+
 create table if not exists public.cases (
   id uuid primary key default gen_random_uuid(),
   course_id uuid not null references public.courses (id) on delete cascade,

@@ -31,6 +31,8 @@ For student notes, store node or link annotations in `learner_runs.annotations`.
 
 If you want to persist a class-level synthesized graph instead of computing it on the fly, write snapshots into `cohort_graph_snapshots`.
 
+The schema also includes a partial unique index so a learner account can have only one `active` membership at a time. Instructors can still belong to multiple courses, but a student account cannot be attached to multiple active courses at once.
+
 Optional case-level text can now come from the database too. Put values into `cases.stakeholder_profiles`, `cases.matrix_insights`, `cases.sandbox_feed`, `cases.reflection_prompts`, `cases.network_meta`, and `cases.ui_copy` if you want the visible copy blocks to render from incoming data instead of the built-in fallback text.
 
 When `gemini-config.js` is present, the app uses Gemini for:

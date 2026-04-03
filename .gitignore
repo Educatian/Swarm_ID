@@ -12,6 +12,7 @@ Thumbs.db
 
 node_modules/
 .vercel/
+.vs/
 
 stitch/
 stitch (1).zip
