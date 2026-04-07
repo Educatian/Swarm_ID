@@ -4103,12 +4103,12 @@ function renderExportActions() {
     return;
   }
 
-  const canExport = state.activeRole === "user" && hasActiveCase() && state.activeMapLayer === "personal";
+  const canExport = state.activeRole === "user" && hasActiveCase();
   dom.studentExportActions.hidden = state.activeRole !== "user";
   dom.downloadPngButton.disabled = !canExport;
   dom.downloadHtmlButton.disabled = !canExport;
-  dom.downloadPngButton.title = canExport ? "Download the current network as a PNG." : "Switch to My view and open a case to export.";
-  dom.downloadHtmlButton.title = canExport ? "Download a standalone HTML snapshot of the current network." : "Switch to My view and open a case to export.";
+  dom.downloadPngButton.title = canExport ? "Download the current network as a PNG." : "Open a case to export.";
+  dom.downloadHtmlButton.title = canExport ? "Download a standalone HTML snapshot of the current network." : "Open a case to export.";
 }
 
 function getSelectedRenderableNode() {
