@@ -4359,13 +4359,24 @@ function getTutorialSteps() {
 
 function positionTutorialCard(target) {
   const rect = target.getBoundingClientRect();
-  const cardWidth = Math.min(360, window.innerWidth - 32);
-  const preferredLeft = Math.min(
-    window.innerWidth - cardWidth - 16,
-    Math.max(16, rect.left + rect.width / 2 - cardWidth / 2)
+  const viewportPadding = 16;
+  const cardWidth = Math.min(360, window.innerWidth - viewportPadding * 2);
+  const cardHeight = Math.min(
+    dom.tourCard.offsetHeight || 220,
+    window.innerHeight - viewportPadding * 2
   );
-  const showAbove = rect.bottom + 220 > window.innerHeight;
-  const top = showAbove ? Math.max(16, rect.top - 196) : Math.min(window.innerHeight - 180, rect.bottom + 16);
+  const preferredLeft = Math.min(
+    window.innerWidth - cardWidth - viewportPadding,
+    Math.max(viewportPadding, rect.left + rect.width / 2 - cardWidth / 2)
+  );
+  const spaceBelow = window.innerHeight - rect.bottom - viewportPadding;
+  const spaceAbove = rect.top - viewportPadding;
+  const showAbove = spaceBelow < cardHeight && spaceAbove > spaceBelow;
+  const preferredTop = showAbove ? rect.top - cardHeight - 12 : rect.bottom + 12;
+  const top = Math.max(
+    viewportPadding,
+    Math.min(window.innerHeight - cardHeight - viewportPadding, preferredTop)
+  );
   dom.tourCard.style.left = `${preferredLeft}px`;
   dom.tourCard.style.top = `${top}px`;
 }
@@ -4393,7 +4404,7 @@ function renderTutorialStep() {
   clearTutorialHighlight();
   tutorialState.target = target;
   target.classList.add("tour-target-active");
-  target.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+  target.scrollIntoView({ behavior: "auto", block: "center", inline: "nearest" });
   dom.tourOverlay.classList.remove("is-hidden");
   dom.tourOverlay.setAttribute("aria-hidden", "false");
   dom.tourStepLabel.textContent = `Step ${tutorialState.stepIndex + 1} of ${tutorialState.steps.length}`;
@@ -4401,7 +4412,7 @@ function renderTutorialStep() {
   dom.tourBody.textContent = step.body;
   dom.tourBack.disabled = tutorialState.stepIndex === 0;
   dom.tourNext.textContent = tutorialState.stepIndex === tutorialState.steps.length - 1 ? "Finish" : "Next";
-  positionTutorialCard(target);
+  window.requestAnimationFrame(() => positionTutorialCard(target));
 }
 
 function startTutorial(force = false) {
@@ -4921,7 +4932,15 @@ function generateAgentReply(stakeholderKey) {
 async function handleAsk(question) {
   const clean = question.trim();
   if (!clean) return;
+  if (!hasActiveCase()) {
+    throw new Error(
+      state.activeRole === "admin"
+        ? "Create or choose a case before asking a question."
+        : "Choose a published case before asking a question."
+    );
+  }
   state.chat.push({ role: "user", stakeholder: state.activeStakeholder, body: clean });
+  renderAll();
   const response = await generateAgentReplyWithAi(state.activeStakeholder, clean);
   state.chat.push({ role: "agent", stakeholder: state.activeStakeholder, body: response });
   pushEvidence(state.activeStakeholder, `${stakeholders[state.activeStakeholder].label} response`, response);
@@ -5339,30 +5358,56 @@ document.addEventListener("submit", async (event) => {
   }
 });
 
-document.getElementById("visualizer-form").addEventListener("submit", (event) => {
+document.getElementById("visualizer-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const input = document.getElementById("visualizer-input");
-  handleAsk(input.value)
-    .then(() => {
-      input.value = "";
-    })
-    .catch((error) => {
-      state.auth.message = error.message || "The question could not be processed.";
-      renderLandingLogin();
-    });
+  const submitButton = event.target.querySelector('button[type="submit"]');
+  const previousLabel = submitButton?.textContent || "";
+  try {
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Thinking...";
+    }
+    input.disabled = true;
+    await handleAsk(input.value);
+    input.value = "";
+  } catch (error) {
+    state.auth.message = error.message || "The question could not be processed.";
+    renderLandingLogin();
+  } finally {
+    input.disabled = false;
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = previousLabel || "Ask a Question";
+    }
+    input.focus();
+  }
 });
 
-document.getElementById("chat-form").addEventListener("submit", (event) => {
+document.getElementById("chat-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const input = document.getElementById("chat-input");
-  handleAsk(input.value)
-    .then(() => {
-      input.value = "";
-    })
-    .catch((error) => {
-      state.auth.message = error.message || "The question could not be processed.";
-      renderLandingLogin();
-    });
+  const submitButton = event.target.querySelector('button[type="submit"]');
+  const previousLabel = submitButton?.textContent || "";
+  try {
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Thinking...";
+    }
+    input.disabled = true;
+    await handleAsk(input.value);
+    input.value = "";
+  } catch (error) {
+    state.auth.message = error.message || "The question could not be processed.";
+    renderLandingLogin();
+  } finally {
+    input.disabled = false;
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = previousLabel || "Ask";
+    }
+    input.focus();
+  }
 });
 
 Object.entries(dom.metricInputs).forEach(([key, input]) => {

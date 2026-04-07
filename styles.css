@@ -740,12 +740,12 @@ textarea:focus-visible,
 }
 
 .visualizer-layout {
-  grid-template-columns: minmax(280px, 1fr) minmax(0, 1.9fr) minmax(280px, 1fr);
+  grid-template-columns: minmax(340px, 1.15fr) minmax(0, 2fr) minmax(300px, 0.88fr);
   align-items: start;
 }
 
 .visualizer-layout.is-focused {
-  grid-template-columns: minmax(220px, 0.72fr) minmax(0, 2.6fr) minmax(320px, 0.98fr);
+  grid-template-columns: minmax(360px, 1.02fr) minmax(0, 2.45fr) minmax(300px, 0.82fr);
 }
 
 .lens-layout {
@@ -860,6 +860,10 @@ textarea:disabled {
   gap: 16px;
 }
 
+.swarm-activity-panel {
+  margin-top: 2px;
+}
+
 .visualizer-layout.is-focused .canvas-panel {
   padding: 0;
   background: transparent;
@@ -868,7 +872,7 @@ textarea:disabled {
 }
 
 .visualizer-layout.is-focused .intake-panel {
-  padding: 20px;
+  padding: 22px;
   position: sticky;
   top: 20px;
 }
@@ -876,6 +880,12 @@ textarea:disabled {
 .visualizer-layout.is-focused .workflow-guide,
 .visualizer-layout.is-focused .platform-context {
   display: none;
+}
+
+.intake-panel .case-card p,
+.intake-panel .pipeline-card p,
+.intake-panel .context-note {
+  line-height: 1.65;
 }
 
 .canvas-stats {
@@ -2161,6 +2171,8 @@ body {
 .tour-card {
   position: fixed;
   width: min(360px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow: auto;
   padding: 20px;
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.96);
