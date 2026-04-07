@@ -861,6 +861,9 @@ const dom = {
   stageNoteBody: document.getElementById("stage-note-body"),
   networkMetaGrid: document.getElementById("network-meta-grid"),
   visualizerInput: document.getElementById("visualizer-input"),
+  studentExportActions: document.getElementById("student-export-actions"),
+  downloadPngButton: document.getElementById("download-png-button"),
+  downloadHtmlButton: document.getElementById("download-html-button"),
   graphCycle: document.getElementById("graph-cycle"),
   graphEvents: document.getElementById("graph-events"),
   lensName: document.getElementById("lens-name"),
@@ -3420,6 +3423,304 @@ function hideNetworkTooltip() {
   dom.networkTooltip.hidden = true;
 }
 
+function getNetworkExportFilename(extension) {
+  const activeCase = getActiveCaseRecord();
+  const activeLearner = getActiveLearner();
+  const layerLabel = state.activeMapLayer === "cohort" ? "class-view" : state.activeMapLayer === "personal" ? "my-view" : "base-map";
+  const caseLabel = slugify(activeCase?.title || "case-map");
+  const learnerLabel = slugify(activeLearner?.name || "student");
+  return `${caseLabel}-${learnerLabel}-${layerLabel}.${extension}`;
+}
+
+function getNetworkExportSvgStyles() {
+  return `
+    svg {
+      background: #f5f7fb;
+    }
+    .network-link {
+      stroke: rgba(198, 205, 219, 0.22);
+      stroke-linecap: round;
+    }
+    .network-link[data-tone="danger"] { stroke: rgba(255, 113, 107, 0.58); }
+    .network-link[data-tone="primary"] { stroke: rgba(151, 169, 255, 0.44); }
+    .network-link[data-tone="ok"] { stroke: rgba(0, 239, 160, 0.48); }
+    .network-link.is-active { opacity: 0.94; stroke-width: 2.4px; }
+    .network-link.is-faded { opacity: 0.15; }
+    .network-node text {
+      font-family: Inter, Arial, sans-serif;
+      pointer-events: none;
+    }
+    .network-node .node-shell {
+      fill: rgba(255, 255, 255, 0.94);
+      stroke: rgba(170, 171, 176, 0.5);
+      stroke-width: 1.3px;
+    }
+    .network-node .node-body {
+      fill: rgba(20, 24, 30, 0.9);
+      stroke: rgba(255, 255, 255, 0.12);
+      stroke-width: 1.5px;
+    }
+    .network-node .node-halo {
+      fill: none;
+      stroke: rgba(255, 221, 87, 0.86);
+      stroke-width: 2.3px;
+      opacity: 0;
+    }
+    .network-node .node-icon {
+      font-size: 14px;
+      fill: #f6f6fc;
+      text-anchor: middle;
+      dominant-baseline: central;
+    }
+    .network-node .node-label {
+      fill: rgba(246, 246, 252, 0.92);
+      font-size: 11px;
+      font-weight: 700;
+      text-anchor: middle;
+    }
+    .network-node .node-meta {
+      fill: rgba(170, 171, 176, 0.94);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-anchor: middle;
+    }
+    .network-node[data-tone="primary"] .node-body { stroke: rgba(151, 169, 255, 0.75); }
+    .network-node[data-tone="danger"] .node-body { stroke: rgba(255, 113, 107, 0.76); }
+    .network-node[data-tone="ok"] .node-body { stroke: rgba(0, 239, 160, 0.7); }
+    .network-node[data-type="core"] .node-body {
+      fill: rgba(18, 24, 40, 0.96);
+      stroke: rgba(151, 169, 255, 0.95);
+      stroke-width: 2.2px;
+      filter: drop-shadow(0 0 18px rgba(62, 101, 255, 0.34));
+    }
+    .network-node[data-type="signal"] .node-body { fill: rgba(16, 20, 28, 0.9); }
+    .network-node.is-active .node-halo,
+    .network-node.is-hotspot .node-halo,
+    .network-node.is-selected .node-halo {
+      opacity: 1;
+    }
+    .network-node.is-selected .node-body,
+    .network-node.is-selected .node-shell {
+      stroke: #ffbf47 !important;
+      stroke-width: 2.8px;
+    }
+    .network-node.is-faded .node-body,
+    .network-node.is-faded .node-shell,
+    .network-node.is-faded text {
+      opacity: 0.24;
+    }
+  `;
+}
+
+function buildExportableSvgMarkup() {
+  if (!hasActiveCase()) {
+    throw new Error("Open a case before downloading.");
+  }
+  if (!dom.networkSvg || !dom.networkSvg.childNodes.length) {
+    throw new Error("The network is not ready yet.");
+  }
+
+  const exportWidth = graphRenderer.width || 1200;
+  const exportHeight = graphRenderer.height || 760;
+  const svgClone = dom.networkSvg.cloneNode(true);
+  svgClone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  svgClone.setAttribute("width", String(exportWidth));
+  svgClone.setAttribute("height", String(exportHeight));
+  svgClone.setAttribute("viewBox", svgClone.getAttribute("viewBox") || `0 0 ${exportWidth} ${exportHeight}`);
+
+  const style = document.createElementNS("http://www.w3.org/2000/svg", "style");
+  style.textContent = getNetworkExportSvgStyles();
+  svgClone.insertBefore(style, svgClone.firstChild);
+
+  const background = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  background.setAttribute("x", "0");
+  background.setAttribute("y", "0");
+  background.setAttribute("width", String(exportWidth));
+  background.setAttribute("height", String(exportHeight));
+  background.setAttribute("fill", "#f5f7fb");
+  svgClone.insertBefore(background, style.nextSibling);
+
+  return new XMLSerializer().serializeToString(svgClone);
+}
+
+function downloadBlob(filename, blob) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+async function downloadNetworkPngSnapshot() {
+  const svgMarkup = buildExportableSvgMarkup();
+  const svgBlob = new Blob([svgMarkup], { type: "image/svg+xml;charset=utf-8" });
+  const svgUrl = URL.createObjectURL(svgBlob);
+
+  try {
+    const image = await new Promise((resolve, reject) => {
+      const nextImage = new Image();
+      nextImage.onload = () => resolve(nextImage);
+      nextImage.onerror = () => reject(new Error("The network image could not be prepared."));
+      nextImage.src = svgUrl;
+    });
+
+    const exportWidth = graphRenderer.width || 1200;
+    const exportHeight = graphRenderer.height || 760;
+    const canvas = document.createElement("canvas");
+    canvas.width = exportWidth * 2;
+    canvas.height = exportHeight * 2;
+    const context = canvas.getContext("2d");
+    context.scale(2, 2);
+    context.fillStyle = "#f5f7fb";
+    context.fillRect(0, 0, exportWidth, exportHeight);
+    context.drawImage(image, 0, 0, exportWidth, exportHeight);
+
+    const pngBlob = await new Promise((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        if (blob) {
+          resolve(blob);
+        } else {
+          reject(new Error("The PNG file could not be created."));
+        }
+      }, "image/png");
+    });
+
+    downloadBlob(getNetworkExportFilename("png"), pngBlob);
+  } finally {
+    URL.revokeObjectURL(svgUrl);
+  }
+}
+
+function downloadNetworkHtmlSnapshot() {
+  const activeCase = getActiveCaseRecord();
+  const activeInstitution = getActiveInstitution();
+  const activeCourse = getActiveCourse();
+  const activeLearner = getActiveLearner();
+  const svgMarkup = buildExportableSvgMarkup();
+  const caseTitle = escapeHtml(activeCase?.title || "Case map snapshot");
+  const institutionName = escapeHtml(activeInstitution?.name || "Institution");
+  const courseName = escapeHtml(`${activeCourse?.code || "Course"} ${activeCourse?.name || ""}`.trim());
+  const learnerName = escapeHtml(activeLearner?.name || "Student");
+  const layerLabel = escapeHtml(state.activeMapLayer === "cohort" ? "Class view" : state.activeMapLayer === "personal" ? "My view" : "Base map");
+  const lensLabel = escapeHtml(`${getCaseStakeholderMeta(state.activeStakeholder).label} lens`);
+  const html = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${caseTitle}</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Inter, Arial, sans-serif;
+        background:
+          linear-gradient(rgba(151, 169, 255, 0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(151, 169, 255, 0.06) 1px, transparent 1px),
+          #f5f7fb;
+        background-size: 36px 36px;
+        color: #1d2433;
+      }
+      .snapshot-shell {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 32px;
+      }
+      .snapshot-header {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .eyebrow {
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        font-size: 11px;
+        color: #6a7387;
+      }
+      h1 {
+        margin: 0;
+        font-family: "Space Grotesk", Inter, Arial, sans-serif;
+        font-size: 38px;
+        line-height: 1.05;
+        color: #1d2433;
+      }
+      .snapshot-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .snapshot-chip {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 0 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.82);
+        border: 1px solid rgba(151, 169, 255, 0.24);
+        color: #41506e;
+        font-size: 13px;
+      }
+      .snapshot-stage {
+        border-radius: 28px;
+        border: 1px solid rgba(151, 169, 255, 0.18);
+        background: rgba(255, 255, 255, 0.82);
+        box-shadow: 0 24px 60px rgba(93, 109, 155, 0.12);
+        overflow: hidden;
+      }
+      .snapshot-stage svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .snapshot-note {
+        margin-top: 18px;
+        color: #5c677f;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="snapshot-shell">
+      <header class="snapshot-header">
+        <p class="eyebrow">Design Tension Studio · HTML snapshot</p>
+        <h1>${caseTitle}</h1>
+        <div class="snapshot-meta">
+          <span class="snapshot-chip">${institutionName}</span>
+          <span class="snapshot-chip">${courseName}</span>
+          <span class="snapshot-chip">${learnerName}</span>
+          <span class="snapshot-chip">${layerLabel}</span>
+          <span class="snapshot-chip">${lensLabel}</span>
+        </div>
+      </header>
+      <section class="snapshot-stage">
+        ${svgMarkup}
+      </section>
+      <p class="snapshot-note">This file is a standalone snapshot of the current network view. Open it in any browser to revisit the map, inspect labels, and share a stable version of your design discussion.</p>
+    </main>
+  </body>
+</html>`;
+
+  downloadBlob(getNetworkExportFilename("html"), new Blob([html], { type: "text/html;charset=utf-8" }));
+}
+
 function initializeGraphRenderer() {
   if (graphRenderer.initialized || !window.d3 || !dom.networkSvg) {
     return;
@@ -3795,6 +4096,19 @@ function renderGraph() {
 
   initializeGraphRenderer();
   updateGraphRenderer(frame);
+}
+
+function renderExportActions() {
+  if (!dom.studentExportActions || !dom.downloadPngButton || !dom.downloadHtmlButton) {
+    return;
+  }
+
+  const canExport = state.activeRole === "user" && hasActiveCase() && state.activeMapLayer === "personal";
+  dom.studentExportActions.hidden = state.activeRole !== "user";
+  dom.downloadPngButton.disabled = !canExport;
+  dom.downloadHtmlButton.disabled = !canExport;
+  dom.downloadPngButton.title = canExport ? "Download the current network as a PNG." : "Switch to My view and open a case to export.";
+  dom.downloadHtmlButton.title = canExport ? "Download a standalone HTML snapshot of the current network." : "Switch to My view and open a case to export.";
 }
 
 function getSelectedRenderableNode() {
@@ -4222,6 +4536,7 @@ function renderAll() {
   renderNavigation();
   renderSidebar();
   renderGraph();
+  renderExportActions();
   renderStakeholderFocus();
   renderChat();
   renderMatrix();
@@ -4326,26 +4641,26 @@ function getTutorialSteps() {
       title: "Choose a Published Case",
       body: "This list only shows cases your instructor has shared with students.",
     },
-    {
-      selector: "#pipeline-console",
-      title: "Add Your Own Idea",
-      body: "Use this area to add one question or concern. The AI will add related issues to the map.",
-      view: "visualizer",
-    },
-    {
-      selector: "#network-stage",
-      title: "Explore the Case Map",
-      body: "Hover to inspect an issue and click a person to change the perspective.",
-      view: "visualizer",
-    },
-    {
-      selector: "#chat-form",
-      title: "Ask from One Perspective",
-      body: "Use this question box when you want to hear what one person in the case would worry about.",
-      view: "perspectives",
-    },
     ...(hasCase
       ? [
+          {
+            selector: "#agenda-node-form",
+            title: "Add One Node",
+            body: "Add one question, concern, or issue from your own point of view. This becomes part of your private learner layer.",
+            view: "visualizer",
+          },
+          {
+            selector: "#network-stage",
+            title: "Read the Case Map",
+            body: "Scan the main clusters first. Hover a node to inspect it, then click a stakeholder node to shift the lens.",
+            view: "visualizer",
+          },
+          {
+            selector: "#chat-form",
+            title: "Ask from One Perspective",
+            body: "Use this box when you want a response from one stakeholder's point of view.",
+            view: "perspectives",
+          },
           {
             selector: "#reflection-prompts",
             title: "Write Your Reflection",
@@ -5383,6 +5698,50 @@ document.getElementById("visualizer-form").addEventListener("submit", async (eve
     input.focus();
   }
 });
+
+if (dom.downloadPngButton) {
+  dom.downloadPngButton.addEventListener("click", async () => {
+    const previousLabel = dom.downloadPngButton.textContent;
+    try {
+      dom.downloadPngButton.disabled = true;
+      dom.downloadPngButton.textContent = "Preparing...";
+      await downloadNetworkPngSnapshot();
+    } catch (error) {
+      console.error(error);
+      state.graph.events.unshift({
+        title: "PNG export unavailable",
+        body: error.message || "The PNG export could not be created.",
+      });
+      state.graph.events = state.graph.events.slice(0, 4);
+      renderAll();
+    } finally {
+      dom.downloadPngButton.textContent = previousLabel;
+      renderExportActions();
+    }
+  });
+}
+
+if (dom.downloadHtmlButton) {
+  dom.downloadHtmlButton.addEventListener("click", () => {
+    const previousLabel = dom.downloadHtmlButton.textContent;
+    try {
+      dom.downloadHtmlButton.disabled = true;
+      dom.downloadHtmlButton.textContent = "Preparing...";
+      downloadNetworkHtmlSnapshot();
+    } catch (error) {
+      console.error(error);
+      state.graph.events.unshift({
+        title: "HTML snapshot unavailable",
+        body: error.message || "The HTML snapshot could not be created.",
+      });
+      state.graph.events = state.graph.events.slice(0, 4);
+      renderAll();
+    } finally {
+      dom.downloadHtmlButton.textContent = previousLabel;
+      renderExportActions();
+    }
+  });
+}
 
 document.getElementById("chat-form").addEventListener("submit", async (event) => {
   event.preventDefault();

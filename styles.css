@@ -1256,6 +1256,17 @@ textarea:disabled {
   align-items: center;
 }
 
+.export-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.export-actions[hidden] {
+  display: none;
+}
+
 .composer-input {
   flex: 1;
   min-height: 56px;
