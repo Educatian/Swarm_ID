@@ -66,6 +66,545 @@ const emptyMetrics = {
   accessibility: 0,
 };
 
+const translations = {
+  en: {
+    languageToggle: "KO",
+    skipToMain: "Skip to main content",
+    labName: "Instructional design systems lab",
+    signIn: "Sign In",
+    landingHeroKicker: "AI + Human Network Visualization",
+    landingHeroTitle: "Turn design tension into a living network.",
+    landingHeroBody: "Human judgment, institutional friction, and AI reasoning in one responsive field.",
+    signalTeacherLoad: "Teacher load",
+    signalStudentAgency: "Student agency",
+    signalGovernance: "Governance",
+    signalAccessibility: "Accessibility",
+    openWorkspace: "Open your workspace",
+    studentJoin: "Student join",
+    joinCourse: "Join a course",
+    email: "Email",
+    password: "Password",
+    courseCode: "Course code",
+    joinWithCode: "Join with Code",
+    landingHuman: "Human",
+    landingHumanBody: "Teachers, students, critique, workload",
+    landingSystem: "System",
+    landingSystemBody: "Policy, platform, evidence, scale",
+    selectedCase: "Selected Case",
+    case: "Case",
+    noActiveCase: "No active case",
+    waitingForCourseData: "Waiting for course data.",
+    caseTension: "Case tension",
+    navNetwork: "Network",
+    navPerspectives: "Perspectives",
+    navTradeoffs: "Trade-offs",
+    navSandbox: "Sandbox",
+    navReport: "Report",
+    currentStatus: "Current status",
+    workspace: "Workspace",
+    institution: "Institution",
+    course: "Course",
+    student: "Student",
+    showTutorial: "Show Tutorial",
+    switchAccount: "Switch Account",
+    startHere: "Start here",
+    createOrChooseCase: "Create or Choose a Case",
+    choosePublishedCase: "Choose a Published Case",
+    instructor: "Instructor",
+    systemTopology: "System topology",
+    proposalNetwork: "Proposal network",
+    mapLayer: "Map layer",
+    baseMap: "Base map",
+    myView: "My view",
+    classView: "Class view",
+    selectedLens: "Selected lens",
+    topTensions: "Top tensions",
+    evidenceQueue: "Evidence queue",
+    selectedNode: "Selected node",
+    hoverOrClick: "Hover or click",
+    noNodeSelected: "No node selected",
+    hoverNodeHelp: "Hover or click a node in the network to inspect it here.",
+    relatedActivity: "Related activity",
+    myQuestions: "My questions",
+    classPatterns: "Class patterns",
+    noteType: "Note type",
+    share: "Share",
+    note: "Note",
+    question: "Question",
+    concern: "Concern",
+    onlyMe: "Only me",
+    addNotePlaceholder: "Add a note to the selected node...",
+    saveNote: "Save note",
+    askQuestionPlaceholder: "Ask what conflict matters most in this case...",
+    askQuestion: "Ask a Question",
+    downloadPng: "Download PNG",
+    downloadHtmlSnapshot: "Download HTML Snapshot",
+    swarmActivity: "Swarm activity",
+    peopleInCase: "People in the case",
+    keyConcerns: "Key concerns",
+    currentFocus: "Current focus",
+    questions: "Questions",
+    askAboutPerspective: "Ask about this perspective",
+    askPerspectivePlaceholder: "Ask what this person would worry about...",
+    ask: "Ask",
+    tradeoffRadar: "Trade-off radar chart",
+    personalizationDepth: "Personalization depth",
+    teacherLoadLabel: "Teacher load",
+    privacyResilience: "Privacy resilience",
+    accessibilityCoverage: "Accessibility coverage",
+    budgetCut: "50% budget cut",
+    noSummary: "No summary",
+    noTensions: "No tensions",
+    noRecommendations: "No recommendations",
+    noEvidence: "No evidence",
+    noScores: "No scores",
+    instructorView: "Instructor View",
+    noPrompts: "No prompts",
+    noActivity: "No activity",
+    checking: "Checking...",
+    noCourseLinkedYet: "No course linked yet.",
+    studentJoinHelper: "Sign in as a student, then enter your course code.",
+    tutorialBack: "Back",
+    tutorialNext: "Next",
+    tutorialSkip: "Skip",
+    tutorialFinish: "Finish",
+    createFirstCase: "Create the first case",
+    noPublishedCasesYet: "No published cases yet",
+    currentCase: "Current case",
+    publishedCase: "Published case",
+    currentCourse: "Current course",
+    draft: "Draft",
+    published: "Published",
+    notSet: "not set",
+    live: "Live",
+    signInEmailPlaceholder: "you@school.edu",
+    studentEmailPlaceholder: "student@school.edu",
+    passwordPlaceholder: "Password",
+    courseCodePlaceholder: "Course join code",
+    workspaceRole: "Workspace",
+    stageD3: "D3 force graph",
+    stakeholderTeacher: "Teacher",
+    stakeholderAdministrator: "Administrator",
+    stakeholderStudent: "Student",
+    stakeholderIt: "IT Systems",
+    stakeholderAccessibility: "Accessibility",
+    statusNeedsAttention: "Needs attention",
+    statusLookingStable: "Looking stable",
+    statusMixedSignals: "Mixed signals",
+    statusAtRisk: "At risk",
+    statusNeedsReview: "Needs review",
+    workflowQuickStart: "Quick start",
+    wfChooseCourse: "Choose the course",
+    wfConfirmCourse: "Confirm the course before creating or editing a case.",
+    wfReviewUpdateCase: "Review or update the case",
+    wfUseCaseSelector: "Use the case selector to switch cases or keep editing the current one.",
+    wfCreateCase: "Create a case",
+    wfPasteBrief: "Paste a course brief below and the studio will structure it.",
+    wfPublishedToStudents: "Published to students",
+    wfStudentsCanOpen: "Students can now open this case in their workspace.",
+    wfPublishWhenReady: "Publish when ready",
+    wfKeepDraftPrivate: "Keep drafts private until you want students to work from them.",
+    wfStartInCourse: "Start in the course where your instructor published the case.",
+    wfOpenPublishedCase: "Open the published case",
+    wfSelectPublishedCase: "Select a published case",
+    wfSelectedCaseLoaded: "The selected case is now loaded into your learner run.",
+    wfUseSelectorPublished: "Use the case selector above to pick one published case.",
+    wfWaitInstructorPublish: "Wait for your instructor to publish a case for this course.",
+    wfAskQuestionsReflect: "Ask questions and reflect",
+    wfUseNetworkReflect: "Use the network, evidence, and prompts to build your reflection.",
+    wfStartLearnerRun: "Start your learner run",
+    wfCaseUnlocksPage: "Once a case is selected, the rest of the page will open up.",
+    courseSetup: "Course setup",
+    institutionNamePlaceholder: "Institution name...",
+    addInstitution: "Add institution",
+    courseNamePlaceholder: "Course name...",
+    addCourse: "Add course",
+    newCase: "New case",
+    titlePlaceholder: "Title...",
+    publishToLearners: "Publish to learners",
+    keepAsDraft: "Keep as draft",
+    pasteBriefPlaceholder: "Paste the brief...",
+    createCaseBtn: "Create case",
+    createCourseFirst: "Create a course first.",
+    noCourseAssigned: "No course assigned.",
+    boardSettings: "Board settings",
+    mainQuestionPlaceholder: "Main question...",
+    dueDate: "Due date",
+    sharingMode: "Sharing mode",
+    privateOnly: "Private only",
+    nodeLimitPerStudent: "Node limit per student",
+    aiAdditionsPerNode: "AI additions per node",
+    layout: "Layout",
+    force: "Force",
+    cluster: "Cluster",
+    radial: "Radial",
+    saveSettings: "Save settings",
+    courseCases: "Course cases",
+    courseCasesHelp: "Open a case to keep working, or publish it when students should be able to choose it.",
+    openCase: "Open case",
+    publishVerb: "Publish",
+    unpublishVerb: "Unpublish",
+    noCasesYet: "No cases yet.",
+    yourCopy: "Your copy",
+    readyToStart: "Ready to start",
+    availableCases: "Available cases",
+    ready: "Ready",
+    addNode: "Add a node",
+    agendaBodyPlaceholder: "Why does this matter for your redesign?",
+    addToMap: "Add to Map",
+    addNodeDefaultPrompt: "Add a node.",
+    noNodes: "No nodes",
+    aiAdditionsTitle: "AI additions",
+    aiSuggested: "AI suggested",
+    noAdditions: "No additions",
+    classViewTitle: "Class view",
+    off: "Off",
+    sharedPatterns: "Shared patterns",
+    sharedClustersCount: "{count} shared clusters",
+    studentRunsCount: "{count} student runs",
+    noInstitutionSelected: "No institution selected",
+    noCourseSelected: "No course selected",
+    createBaseBoardNote: "Create the base board here, decide how much students can add, then share the join code when the board is ready.",
+    choosePublishedBoardNote: "Choose one published board, inspect the instructor's base map, then add your own nodes and notes in your private layer.",
+    caseCount: "{count} cases",
+    publishedCount: "{count} published",
+    publishedCasesCount: "{count} published cases",
+    statusCasePublished: "This case is published. Students can now open it in their own view.",
+    statusCaseDraft: "This case is still a draft. Publish it when students should start using it.",
+    statusCreateChoose: "Create or choose a case to start the workflow.",
+    statusLearnerExploring: "{name} is exploring the selected case in private notes.",
+    statusChoosePublished: "Choose a published case to unlock the rest of the page.",
+    noCasePick: "No case",
+    pickCase: "Pick a case",
+    start: "Start",
+    startWithCase: "Start with a case.",
+    casePreview: "Case preview",
+    panelUpdatesWhenCaseOpen: "The panel updates when a case is open.",
+    noLens: "No lens",
+    openCaseShort: "Open a case.",
+    selectNode: "Select a node",
+    noRelatedQuestionsYet: "No related questions yet.",
+    openLearnerRun: "Open a learner run.",
+    noSharedPatternsYet: "No shared patterns yet.",
+    noDialogueYet: "No dialogue yet.",
+    youLabel: "You",
+    matrixNeedsAttention: "Needs attention",
+    matrixBalanced: "Balanced",
+    matrixWatchClosely: "Watch closely",
+    personalization: "Personalization",
+    feasibility: "Feasibility",
+    teacherSlack: "Teacher slack",
+    noInsights: "No insights",
+    noHistory: "No history",
+    veryHigh: "Very high",
+    high: "High",
+    moderate: "Moderate",
+    sandboxCriticalReview: "Critical review",
+    sandboxStable: "Stable",
+    sandboxNeedsTuning: "Needs tuning",
+    instructorOnly: "Instructor only",
+    noNotes: "No notes",
+    autoIteration: "Autonomous iteration",
+    autoIterationBody: "Allow the system to suggest redesign moves before instructor review.",
+    stressScenarios: "Stress scenarios",
+    accessibilityAudit: "Accessibility audit",
+    unionWorkloadComplaint: "Union workload complaint",
+    systemResponse: "System response",
+    whatChangesAfterAdjustment: "What changes after the adjustment",
+    alignmentCohesion: "Alignment cohesion",
+    cognitiveLoadLabel: "Cognitive load",
+    responseTime: "Response time",
+    caseReport: "Case report",
+    draftSummary: "Draft the summary",
+    refreshSummary: "Refresh summary",
+    executiveSummary: "Executive summary",
+    priorityTensions: "Priority tensions",
+    recommendedRedesignMoves: "Recommended redesign moves",
+    evidenceTrace: "Evidence trace",
+    reflection: "Reflection",
+    feedbackAndReflection: "Feedback and reflection",
+    reflectionPromptsLabel: "Reflection prompts",
+    recentDialogue: "Recent dialogue",
+    exampleView: "Example view",
+    caseMapAppears: "This is where the case map appears.",
+    caseMapAppearsBody: "Once a case is selected, the map will show people, constraints, and the main tensions around the design.",
+    instructionalSignals: "Instructional signals",
+    constraintFriction: "Constraint friction",
+    alignedEvidence: "Aligned evidence",
+    mobileMap: "Map",
+    mobilePeople: "People",
+    mobileTest: "Test",
+  },
+  ko: {
+    languageToggle: "EN",
+    skipToMain: "본문으로 바로가기",
+    labName: "수업설계 시스템 연구실",
+    signIn: "로그인",
+    landingHeroKicker: "AI + 인간 네트워크 시각화",
+    landingHeroTitle: "설계의 긴장을 살아 있는 네트워크로 바꾸세요.",
+    landingHeroBody: "인간의 판단, 제도적 마찰, AI 추론을 하나의 반응형 장에서 살펴봅니다.",
+    signalTeacherLoad: "교수자 부담",
+    signalStudentAgency: "학생 주체성",
+    signalGovernance: "거버넌스",
+    signalAccessibility: "접근성",
+    openWorkspace: "워크스페이스 열기",
+    studentJoin: "학생 참여",
+    joinCourse: "코스 참여하기",
+    email: "이메일",
+    password: "비밀번호",
+    courseCode: "코스 코드",
+    joinWithCode: "코드로 참여",
+    landingHuman: "인간",
+    landingHumanBody: "교수자, 학생, 비평, 업무 부담",
+    landingSystem: "시스템",
+    landingSystemBody: "정책, 플랫폼, 근거, 확장성",
+    selectedCase: "선택된 케이스",
+    case: "케이스",
+    noActiveCase: "열린 케이스 없음",
+    waitingForCourseData: "코스 데이터를 기다리는 중입니다.",
+    caseTension: "케이스 긴장도",
+    navNetwork: "네트워크",
+    navPerspectives: "관점",
+    navTradeoffs: "트레이드오프",
+    navSandbox: "샌드박스",
+    navReport: "리포트",
+    currentStatus: "현재 상태",
+    workspace: "워크스페이스",
+    institution: "기관",
+    course: "코스",
+    student: "학생",
+    showTutorial: "튜토리얼 보기",
+    switchAccount: "계정 전환",
+    startHere: "여기서 시작",
+    createOrChooseCase: "케이스 만들기 또는 선택",
+    choosePublishedCase: "게시된 케이스 선택",
+    instructor: "교수자",
+    systemTopology: "시스템 토폴로지",
+    proposalNetwork: "제안 네트워크",
+    mapLayer: "맵 레이어",
+    baseMap: "기본 맵",
+    myView: "내 보기",
+    classView: "클래스 보기",
+    selectedLens: "선택된 렌즈",
+    topTensions: "핵심 긴장",
+    evidenceQueue: "근거 큐",
+    selectedNode: "선택된 노드",
+    hoverOrClick: "호버 또는 클릭",
+    noNodeSelected: "선택된 노드 없음",
+    hoverNodeHelp: "네트워크의 노드를 호버하거나 클릭해 여기서 살펴보세요.",
+    relatedActivity: "관련 활동",
+    myQuestions: "내 질문",
+    classPatterns: "클래스 패턴",
+    noteType: "노트 유형",
+    share: "공유",
+    note: "노트",
+    question: "질문",
+    concern: "우려",
+    onlyMe: "나만 보기",
+    addNotePlaceholder: "선택한 노드에 메모를 추가하세요...",
+    saveNote: "노트 저장",
+    askQuestionPlaceholder: "이 케이스에서 가장 중요한 갈등이 무엇인지 물어보세요...",
+    askQuestion: "질문하기",
+    downloadPng: "PNG 다운로드",
+    downloadHtmlSnapshot: "HTML 스냅샷 다운로드",
+    swarmActivity: "스웜 활동",
+    peopleInCase: "케이스 속 행위자",
+    keyConcerns: "핵심 쟁점",
+    currentFocus: "현재 초점",
+    questions: "질문",
+    askAboutPerspective: "이 관점에 질문하기",
+    askPerspectivePlaceholder: "이 사람은 무엇을 걱정할지 물어보세요...",
+    ask: "질문",
+    tradeoffRadar: "트레이드오프 레이더 차트",
+    personalizationDepth: "개인화 깊이",
+    teacherLoadLabel: "교수자 부담",
+    privacyResilience: "프라이버시 안정성",
+    accessibilityCoverage: "접근성 범위",
+    budgetCut: "예산 50% 삭감",
+    noSummary: "요약 없음",
+    noTensions: "긴장 없음",
+    noRecommendations: "추천 없음",
+    noEvidence: "근거 없음",
+    noScores: "점수 없음",
+    instructorView: "교수자 보기",
+    noPrompts: "프롬프트 없음",
+    noActivity: "활동 없음",
+    checking: "확인 중...",
+    noCourseLinkedYet: "아직 연결된 코스가 없습니다.",
+    studentJoinHelper: "학생으로 로그인한 뒤 코스 코드를 입력하세요.",
+    tutorialBack: "이전",
+    tutorialNext: "다음",
+    tutorialSkip: "건너뛰기",
+    tutorialFinish: "완료",
+    createFirstCase: "첫 케이스 만들기",
+    noPublishedCasesYet: "게시된 케이스가 아직 없습니다",
+    currentCase: "현재 케이스",
+    publishedCase: "게시된 케이스",
+    currentCourse: "현재 코스",
+    draft: "초안",
+    published: "게시됨",
+    notSet: "미설정",
+    live: "실시간",
+    signInEmailPlaceholder: "you@school.edu",
+    studentEmailPlaceholder: "student@school.edu",
+    passwordPlaceholder: "비밀번호",
+    courseCodePlaceholder: "코스 참여 코드",
+    workspaceRole: "워크스페이스",
+    stageD3: "D3 포스 그래프",
+    stakeholderTeacher: "교수자",
+    stakeholderAdministrator: "관리자",
+    stakeholderStudent: "학생",
+    stakeholderIt: "IT 시스템",
+    stakeholderAccessibility: "접근성",
+    statusNeedsAttention: "주의 필요",
+    statusLookingStable: "안정적",
+    statusMixedSignals: "혼재된 신호",
+    statusAtRisk: "위험",
+    statusNeedsReview: "검토 필요",
+    workflowQuickStart: "빠른 시작",
+    wfChooseCourse: "코스 선택",
+    wfConfirmCourse: "케이스를 만들거나 수정하기 전에 올바른 코스인지 확인하세요.",
+    wfReviewUpdateCase: "케이스 검토 또는 수정",
+    wfUseCaseSelector: "케이스 선택기에서 초안과 게시된 케이스를 전환하거나 현재 케이스를 계속 수정하세요.",
+    wfCreateCase: "케이스 만들기",
+    wfPasteBrief: "아래에 코스 브리프를 붙여 넣으면 스튜디오가 케이스로 구조화합니다.",
+    wfPublishedToStudents: "학생에게 게시됨",
+    wfStudentsCanOpen: "이제 학생들이 자신의 워크스페이스에서 이 케이스를 열 수 있습니다.",
+    wfPublishWhenReady: "준비되면 게시",
+    wfKeepDraftPrivate: "학생이 작업할 시점까지 초안은 비공개로 유지하세요.",
+    wfStartInCourse: "교수자가 케이스를 게시한 코스에서 시작하세요.",
+    wfOpenPublishedCase: "게시된 케이스 열기",
+    wfSelectPublishedCase: "게시된 케이스 선택",
+    wfSelectedCaseLoaded: "선택한 케이스가 이제 개인 learner run에 열렸습니다.",
+    wfUseSelectorPublished: "위의 케이스 선택기에서 게시된 케이스 하나를 고르세요.",
+    wfWaitInstructorPublish: "교수자가 이 코스에 케이스를 게시할 때까지 기다리세요.",
+    wfAskQuestionsReflect: "질문하고 리플렉션하기",
+    wfUseNetworkReflect: "네트워크, 근거, 프롬프트를 활용해 리플렉션을 구성하세요.",
+    wfStartLearnerRun: "학습 런 시작",
+    wfCaseUnlocksPage: "케이스를 선택하면 나머지 페이지가 열립니다.",
+    courseSetup: "코스 설정",
+    institutionNamePlaceholder: "기관 이름...",
+    addInstitution: "기관 추가",
+    courseNamePlaceholder: "코스 이름...",
+    addCourse: "코스 추가",
+    newCase: "새 케이스",
+    titlePlaceholder: "제목...",
+    publishToLearners: "학생에게 게시",
+    keepAsDraft: "초안으로 유지",
+    pasteBriefPlaceholder: "브리프를 붙여 넣으세요...",
+    createCaseBtn: "케이스 생성",
+    createCourseFirst: "먼저 코스를 만드세요.",
+    noCourseAssigned: "할당된 코스가 없습니다.",
+    boardSettings: "보드 설정",
+    mainQuestionPlaceholder: "핵심 질문...",
+    dueDate: "마감일",
+    sharingMode: "공유 방식",
+    privateOnly: "나만 보기",
+    nodeLimitPerStudent: "학생당 노드 제한",
+    aiAdditionsPerNode: "노드당 AI 추가 수",
+    layout: "레이아웃",
+    force: "포스",
+    cluster: "클러스터",
+    radial: "방사형",
+    saveSettings: "설정 저장",
+    courseCases: "코스 케이스",
+    courseCasesHelp: "계속 작업할 케이스를 열거나, 학생이 선택할 수 있게 게시하세요.",
+    openCase: "케이스 열기",
+    publishVerb: "게시",
+    unpublishVerb: "게시 취소",
+    noCasesYet: "아직 케이스가 없습니다.",
+    yourCopy: "내 작업본",
+    readyToStart: "시작할 준비 완료",
+    availableCases: "이용 가능한 케이스",
+    ready: "준비됨",
+    addNode: "노드 추가",
+    agendaBodyPlaceholder: "이것이 당신의 리디자인에 왜 중요한가요?",
+    addToMap: "맵에 추가",
+    addNodeDefaultPrompt: "노드를 추가하세요.",
+    noNodes: "노드 없음",
+    aiAdditionsTitle: "AI 추가 노드",
+    aiSuggested: "AI 제안",
+    noAdditions: "추가 노드 없음",
+    classViewTitle: "클래스 보기",
+    off: "끔",
+    sharedPatterns: "공유 패턴",
+    sharedClustersCount: "공유 클러스터 {count}개",
+    studentRunsCount: "학생 런 {count}개",
+    noInstitutionSelected: "선택된 기관 없음",
+    noCourseSelected: "선택된 코스 없음",
+    createBaseBoardNote: "여기에서 기본 보드를 만들고, 학생이 얼마나 추가할 수 있을지 정한 뒤 보드가 준비되면 조인 코드를 공유하세요.",
+    choosePublishedBoardNote: "게시된 보드 하나를 선택하고, 교수자의 기본 맵을 살펴본 뒤, 개인 레이어에서 자신의 노드와 메모를 추가하세요.",
+    caseCount: "케이스 {count}개",
+    publishedCount: "게시 {count}개",
+    publishedCasesCount: "게시된 케이스 {count}개",
+    statusCasePublished: "이 케이스는 게시되었습니다. 이제 학생들이 자신의 보기에서 열 수 있습니다.",
+    statusCaseDraft: "이 케이스는 아직 초안입니다. 학생들이 사용해야 할 때 게시하세요.",
+    statusCreateChoose: "워크플로를 시작하려면 케이스를 만들거나 선택하세요.",
+    statusLearnerExploring: "{name}님이 선택한 케이스를 개인 메모에서 탐색하고 있습니다.",
+    statusChoosePublished: "나머지 페이지를 열려면 게시된 케이스를 선택하세요.",
+    noCasePick: "케이스 없음",
+    pickCase: "케이스 선택",
+    start: "시작",
+    startWithCase: "케이스부터 시작하세요.",
+    casePreview: "케이스 미리보기",
+    panelUpdatesWhenCaseOpen: "케이스를 열면 이 패널이 업데이트됩니다.",
+    noLens: "렌즈 없음",
+    openCaseShort: "케이스를 여세요.",
+    selectNode: "노드 선택",
+    noRelatedQuestionsYet: "아직 관련 질문이 없습니다.",
+    openLearnerRun: "learner run을 여세요.",
+    noSharedPatternsYet: "아직 공유 패턴이 없습니다.",
+    noDialogueYet: "아직 대화가 없습니다.",
+    youLabel: "나",
+    matrixNeedsAttention: "주의 필요",
+    matrixBalanced: "균형 잡힘",
+    matrixWatchClosely: "면밀히 보기",
+    personalization: "개인화",
+    feasibility: "실행 가능성",
+    teacherSlack: "교수자 여유",
+    noInsights: "인사이트 없음",
+    noHistory: "이력 없음",
+    veryHigh: "매우 높음",
+    high: "높음",
+    moderate: "보통",
+    sandboxCriticalReview: "집중 검토",
+    sandboxStable: "안정적",
+    sandboxNeedsTuning: "조정 필요",
+    instructorOnly: "교수자 전용",
+    noNotes: "메모 없음",
+    autoIteration: "자율 반복",
+    autoIterationBody: "교수자 검토 전에 시스템이 리디자인 방향을 먼저 제안하게 합니다.",
+    stressScenarios: "스트레스 시나리오",
+    accessibilityAudit: "접근성 감사",
+    unionWorkloadComplaint: "노동조합 업무부담 이슈",
+    systemResponse: "시스템 반응",
+    whatChangesAfterAdjustment: "조정 후 무엇이 달라지는가",
+    alignmentCohesion: "정렬 응집도",
+    cognitiveLoadLabel: "인지 부하",
+    responseTime: "응답 시간",
+    caseReport: "케이스 리포트",
+    draftSummary: "요약 초안 만들기",
+    refreshSummary: "요약 새로고침",
+    executiveSummary: "핵심 요약",
+    priorityTensions: "우선 긴장",
+    recommendedRedesignMoves: "권장 리디자인 방향",
+    evidenceTrace: "근거 추적",
+    reflection: "리플렉션",
+    feedbackAndReflection: "피드백과 리플렉션",
+    reflectionPromptsLabel: "리플렉션 프롬프트",
+    recentDialogue: "최근 대화",
+    exampleView: "예시 보기",
+    caseMapAppears: "여기에 케이스 맵이 표시됩니다.",
+    caseMapAppearsBody: "케이스를 선택하면 이 맵에 사람, 제약, 주요 긴장이 나타납니다.",
+    instructionalSignals: "수업 설계 신호",
+    constraintFriction: "제약 마찰",
+    alignedEvidence: "정렬된 근거",
+    mobileMap: "맵",
+    mobilePeople: "사람",
+    mobileTest: "테스트",
+  },
+};
+
 const legacyDemoIds = new Set([
   "inst-northstar",
   "course-id-studio",
@@ -75,6 +614,7 @@ const legacyDemoIds = new Set([
 ]);
 
 const state = {
+  locale: window.localStorage.getItem(LOCALE_STORAGE_KEY) || "en",
   activeView: "visualizer",
   activeStakeholder: "teacher",
   activeMapLayer: "base",
@@ -124,6 +664,7 @@ const state = {
 const STORAGE_KEY = "swarm-id-platform-v2";
 const SESSION_STORAGE_KEY = "swarm-id-session-v1";
 const TUTORIAL_STORAGE_KEY = "swarm-id-tutorial-v1";
+const LOCALE_STORAGE_KEY = "swarm-id-locale-v1";
 const PLATFORM_ADMIN_EMAIL = "admin@swarm.io";
 const DEFAULT_SUPABASE_CONFIG = window.SUPABASE_CONFIG || { url: "", anonKey: "" };
 const DEFAULT_GEMINI_CONFIG = window.GEMINI_CONFIG || { apiKey: "", model: "gemini-2.5-flash" };
@@ -212,6 +753,364 @@ function asArray(value) {
 
 function asObject(value, fallback = {}) {
   return value && typeof value === "object" && !Array.isArray(value) ? value : fallback;
+}
+
+function t(key, vars = {}) {
+  const locale = translations[state.locale] ? state.locale : "en";
+  const fallbackLocale = translations.en;
+  const value =
+    key.split(".").reduce((acc, part) => (acc && acc[part] != null ? acc[part] : undefined), translations[locale]) ??
+    key.split(".").reduce((acc, part) => (acc && acc[part] != null ? acc[part] : undefined), fallbackLocale) ??
+    key;
+  return String(value).replace(/\{(\w+)\}/g, (_, token) => String(vars[token] ?? ""));
+}
+
+function setLocale(nextLocale) {
+  state.locale = nextLocale === "ko" ? "ko" : "en";
+  window.localStorage.setItem(LOCALE_STORAGE_KEY, state.locale);
+  document.documentElement.lang = state.locale;
+  applyStaticTranslations();
+  renderAll();
+  renderLandingLogin();
+}
+
+function stakeholderLabelKey(key) {
+  return (
+    {
+      teacher: "stakeholderTeacher",
+      administrator: "stakeholderAdministrator",
+      student: "stakeholderStudent",
+      it: "stakeholderIt",
+      accessibility: "stakeholderAccessibility",
+    }[key] || ""
+  );
+}
+
+function stakeholderStatusKey(status) {
+  return (
+    {
+      "Needs attention": "statusNeedsAttention",
+      "Looking stable": "statusLookingStable",
+      "Mixed signals": "statusMixedSignals",
+      "At risk": "statusAtRisk",
+      "Needs review": "statusNeedsReview",
+    }[status] || ""
+  );
+}
+
+function applyStaticTranslations() {
+  document.title = "Design Tension Studio";
+  document.documentElement.lang = state.locale;
+  const skipLink = document.querySelector(".skip-link");
+  if (skipLink) skipLink.textContent = t("skipToMain");
+
+  const brandKickers = document.querySelectorAll(".landing-brand-kicker, .brand-block p");
+  brandKickers.forEach((node) => {
+    node.textContent = t("labName");
+  });
+
+  if (dom.landingLocaleToggle) dom.landingLocaleToggle.textContent = t("languageToggle");
+  if (dom.workspaceLocaleToggle) dom.workspaceLocaleToggle.textContent = t("languageToggle");
+  if (dom.startTutorialButton) dom.startTutorialButton.textContent = t("showTutorial");
+  if (dom.returnToLanding) dom.returnToLanding.textContent = t("switchAccount");
+  if (document.getElementById("landing-enter-button")) document.getElementById("landing-enter-button").textContent = t("signIn");
+  if (document.getElementById("landing-login-submit")) document.getElementById("landing-login-submit").textContent = t("signIn");
+  if (document.getElementById("landing-join-submit")) document.getElementById("landing-join-submit").textContent = t("joinWithCode");
+
+  const landingCopy = document.querySelector(".landing-copy");
+  if (landingCopy) {
+    const kicker = landingCopy.querySelector(".landing-kicker");
+    const title = landingCopy.querySelector("h2");
+    const body = landingCopy.querySelector(".landing-body");
+    if (kicker) kicker.textContent = t("landingHeroKicker");
+    if (title) title.textContent = t("landingHeroTitle");
+    if (body) body.textContent = t("landingHeroBody");
+  }
+
+  const signalSpans = document.querySelectorAll(".landing-signal-row span");
+  [t("signalTeacherLoad"), t("signalStudentAgency"), t("signalGovernance"), t("signalAccessibility")].forEach((text, index) => {
+    if (signalSpans[index]) signalSpans[index].textContent = text;
+  });
+
+  const loginHeads = document.querySelectorAll(".landing-login-head");
+  if (loginHeads[0]) {
+    const kicker = loginHeads[0].querySelector(".landing-kicker");
+    const strong = loginHeads[0].querySelector("strong");
+    if (kicker) kicker.textContent = t("signIn");
+    if (strong) strong.textContent = t("openWorkspace");
+  }
+  if (loginHeads[1]) {
+    const kicker = loginHeads[1].querySelector(".landing-kicker");
+    const strong = loginHeads[1].querySelector("strong");
+    if (kicker) kicker.textContent = t("studentJoin");
+    if (strong) strong.textContent = t("joinCourse");
+  }
+
+  const loginLabels = document.querySelectorAll("#landing-login-form .mini-control > span");
+  if (loginLabels[0]) loginLabels[0].textContent = t("email");
+  if (loginLabels[1]) loginLabels[1].textContent = t("password");
+  const joinLabels = document.querySelectorAll("#landing-join-form .mini-control > span");
+  if (joinLabels[0]) joinLabels[0].textContent = t("email");
+  if (joinLabels[1]) joinLabels[1].textContent = t("password");
+  if (joinLabels[2]) joinLabels[2].textContent = t("courseCode");
+
+  if (dom.landingLoginEmail) dom.landingLoginEmail.placeholder = t("signInEmailPlaceholder");
+  if (dom.landingLoginPassword) dom.landingLoginPassword.placeholder = t("passwordPlaceholder");
+  if (dom.landingJoinEmail) dom.landingJoinEmail.placeholder = t("studentEmailPlaceholder");
+  if (dom.landingJoinPassword) dom.landingJoinPassword.placeholder = t("passwordPlaceholder");
+  if (dom.landingJoinCode) dom.landingJoinCode.placeholder = t("courseCodePlaceholder");
+  if (dom.visualizerInput) dom.visualizerInput.placeholder = t("askQuestionPlaceholder");
+  const chatInput = document.getElementById("chat-input");
+  if (chatInput) chatInput.placeholder = t("askPerspectivePlaceholder");
+  const quickAnnotationBody = document.getElementById("quick-annotation-body");
+  if (quickAnnotationBody) quickAnnotationBody.placeholder = t("addNotePlaceholder");
+
+  const landingAnnotations = document.querySelectorAll(".landing-annotation");
+  if (landingAnnotations[0]) {
+    const label = landingAnnotations[0].querySelector(".landing-annotation-label");
+    const strong = landingAnnotations[0].querySelector("strong");
+    if (label) label.textContent = t("landingHuman");
+    if (strong) strong.textContent = t("landingHumanBody");
+  }
+  if (landingAnnotations[1]) {
+    const label = landingAnnotations[1].querySelector(".landing-annotation-label");
+    const strong = landingAnnotations[1].querySelector("strong");
+    if (label) label.textContent = t("landingSystem");
+    if (strong) strong.textContent = t("landingSystemBody");
+  }
+
+  const navMap = {
+    visualizer: "navNetwork",
+    perspectives: "navPerspectives",
+    matrix: "navTradeoffs",
+    sandbox: "navSandbox",
+    report: "navReport",
+  };
+  document.querySelectorAll("[data-view]").forEach((button) => {
+    const label = button.querySelector("span:last-child");
+    if (label && navMap[button.dataset.view]) {
+      label.textContent = t(navMap[button.dataset.view]);
+    }
+  });
+
+  const healthHeaderLabel = document.querySelector(".health-header span");
+  if (healthHeaderLabel) healthHeaderLabel.textContent = t("currentStatus");
+
+  const roleLabel = document.querySelector("#role-control > span");
+  if (roleLabel) roleLabel.textContent = t("workspaceRole");
+  const institutionLabel = document.querySelector("#institution-select")?.closest("label")?.querySelector("span");
+  const courseLabel = document.querySelector("#course-select")?.closest("label")?.querySelector("span");
+  const learnerLabel = document.querySelector("#learner-control > span");
+  if (institutionLabel) institutionLabel.textContent = t("institution");
+  if (courseLabel) courseLabel.textContent = t("course");
+  if (learnerLabel) learnerLabel.textContent = t("student");
+
+  const roleOptions = document.querySelectorAll("#role-select option");
+  if (roleOptions[0]) roleOptions[0].textContent = t("instructor");
+  if (roleOptions[1]) roleOptions[1].textContent = t("student");
+
+  const canvasHeader = document.querySelector(".canvas-header");
+  if (canvasHeader) {
+    const eyebrow = canvasHeader.querySelector(".eyebrow");
+    const title = canvasHeader.querySelector("h3");
+    if (eyebrow) eyebrow.textContent = t("systemTopology");
+    if (title) title.textContent = t("proposalNetwork");
+  }
+  const mapLayerLabel = document.querySelector("#map-layer-control > span");
+  if (mapLayerLabel) mapLayerLabel.textContent = t("mapLayer");
+  const mapLayerOptions = document.querySelectorAll("#map-layer-select option");
+  if (mapLayerOptions[0]) mapLayerOptions[0].textContent = t("baseMap");
+  if (mapLayerOptions[1]) mapLayerOptions[1].textContent = t("myView");
+  if (mapLayerOptions[2]) mapLayerOptions[2].textContent = t("classView");
+  const activeMapLayerSelect = dom.mapLayerSelect;
+  if (activeMapLayerSelect) {
+    [...activeMapLayerSelect.options].forEach((option) => {
+      if (option.value === "base") option.textContent = t("baseMap");
+      if (option.value === "personal") option.textContent = t("myView");
+      if (option.value === "cohort") option.textContent = t("classView");
+    });
+  }
+
+  const insightPanel = document.querySelector(".insight-panel");
+  if (insightPanel) {
+    const sectionHeads = insightPanel.querySelectorAll(".subsection-head h4");
+    if (insightPanel.querySelector(".section-header .eyebrow")) insightPanel.querySelector(".section-header .eyebrow").textContent = t("selectedLens");
+    if (sectionHeads[0]) sectionHeads[0].textContent = t("topTensions");
+    if (sectionHeads[1]) sectionHeads[1].textContent = t("evidenceQueue");
+    if (sectionHeads[2]) sectionHeads[2].textContent = t("selectedNode");
+    if (sectionHeads[3]) sectionHeads[3].textContent = t("relatedActivity");
+  }
+  const activityEyebrows = document.querySelectorAll(".related-activity-columns .eyebrow");
+  if (activityEyebrows[0]) activityEyebrows[0].textContent = t("myQuestions");
+  if (activityEyebrows[1]) activityEyebrows[1].textContent = t("classPatterns");
+  const quickLabels = document.querySelectorAll("#quick-annotation-form .mini-control > span");
+  if (quickLabels[0]) quickLabels[0].textContent = t("noteType");
+  if (quickLabels[1]) quickLabels[1].textContent = t("share");
+  const noteTypeOptions = document.querySelectorAll('#quick-annotation-form select[name="noteType"] option');
+  if (noteTypeOptions[0]) noteTypeOptions[0].textContent = t("note");
+  if (noteTypeOptions[1]) noteTypeOptions[1].textContent = t("question");
+  if (noteTypeOptions[2]) noteTypeOptions[2].textContent = t("concern");
+  const shareOptions = document.querySelectorAll('#quick-annotation-form select[name="visibility"] option');
+  if (shareOptions[0]) shareOptions[0].textContent = t("onlyMe");
+  if (shareOptions[1]) shareOptions[1].textContent = t("classView");
+  if (dom.quickAnnotationSubmit) dom.quickAnnotationSubmit.textContent = t("saveNote");
+  if (dom.downloadPngButton) dom.downloadPngButton.textContent = t("downloadPng");
+  if (dom.downloadHtmlButton) dom.downloadHtmlButton.textContent = t("downloadHtmlSnapshot");
+  const swarmHead = document.querySelector(".swarm-activity-panel .subsection-head h4");
+  if (swarmHead) swarmHead.textContent = t("swarmActivity");
+  const visualizerSubmit = document.querySelector('#visualizer-form button[type="submit"]');
+  if (visualizerSubmit && !visualizerSubmit.disabled) visualizerSubmit.textContent = t("askQuestion");
+
+  const stageLegendLabels = document.querySelectorAll(".stage-overlay-bottom .legend-item span:last-child");
+  if (stageLegendLabels[0]) stageLegendLabels[0].textContent = t("instructionalSignals");
+  if (stageLegendLabels[1]) stageLegendLabels[1].textContent = t("constraintFriction");
+  if (stageLegendLabels[2]) stageLegendLabels[2].textContent = t("alignedEvidence");
+
+  const emptyPreview = document.querySelector(".network-empty-preview");
+  if (emptyPreview) {
+    const eyebrow = emptyPreview.querySelector(".eyebrow");
+    const title = emptyPreview.querySelector("strong");
+    const body = emptyPreview.querySelector("p:not(.eyebrow)");
+    const tokens = emptyPreview.querySelectorAll(".preview-token");
+    if (eyebrow) eyebrow.textContent = t("exampleView");
+    if (title) title.textContent = t("caseMapAppears");
+    if (body) body.textContent = t("caseMapAppearsBody");
+    if (tokens[0]) tokens[0].textContent = t("signalTeacherLoad");
+    if (tokens[1]) tokens[1].textContent = t("signalStudentAgency");
+    if (tokens[2]) tokens[2].textContent = t("signalAccessibility");
+  }
+
+  const perspectivesView = document.querySelector('[data-view-panel="perspectives"]');
+  if (perspectivesView) {
+    const headers = perspectivesView.querySelectorAll(".section-header");
+    if (headers[0]) {
+      const eyebrow = headers[0].querySelector(".eyebrow");
+      const title = headers[0].querySelector("h3");
+      if (eyebrow) eyebrow.textContent = t("peopleInCase");
+      if (title) title.textContent = t("keyConcerns");
+    }
+    if (headers[1]) {
+      const eyebrow = headers[1].querySelector(".eyebrow");
+      if (eyebrow) eyebrow.textContent = t("currentFocus");
+    }
+    if (headers[2]) {
+      const eyebrow = headers[2].querySelector(".eyebrow");
+      const title = headers[2].querySelector("h3");
+      if (eyebrow) eyebrow.textContent = t("questions");
+      if (title) title.textContent = t("askAboutPerspective");
+    }
+  }
+  const chatSubmit = document.querySelector('#chat-form button[type="submit"]');
+  if (chatSubmit && !chatSubmit.disabled) chatSubmit.textContent = t("ask");
+
+  const chatPromptButtons = document.querySelectorAll('#chat-form button[data-prompt]');
+  if (chatPromptButtons[0]) chatPromptButtons[0].textContent = state.locale === "ko" ? "해결 방향 제안" : "Suggest a fix";
+  if (chatPromptButtons[1]) chatPromptButtons[1].textContent = state.locale === "ko" ? "핵심 우려 찾기" : "Find the main concern";
+
+  const metricLabels = {
+    'label[for="personalization-range"]': "personalizationDepth",
+    'label[for="teacher-load-range"]': "teacherLoadLabel",
+    'label[for="privacy-range"]': "privacyResilience",
+    'label[for="accessibility-range"]': "accessibilityCoverage",
+  };
+  Object.entries(metricLabels).forEach(([selector, key]) => {
+    const label = document.querySelector(selector);
+    if (label) {
+      const valueSpan = label.querySelector("span");
+      label.childNodes[0].textContent = `${t(key)} `;
+      if (valueSpan) label.appendChild(valueSpan);
+    }
+  });
+  const budgetButton = document.querySelector('[data-scenario="budget"]');
+  if (budgetButton) budgetButton.textContent = t("budgetCut");
+  const accessibilityButton = document.querySelector('[data-scenario="accessibility"]');
+  if (accessibilityButton) accessibilityButton.textContent = t("accessibilityAudit");
+  const workloadButton = document.querySelector('[data-scenario="workload"]');
+  if (workloadButton) workloadButton.textContent = t("unionWorkloadComplaint");
+
+  const matrixView = document.querySelector('[data-view-panel="matrix"]');
+  if (matrixView) {
+    const sectionHeaders = matrixView.querySelectorAll(".section-header");
+    if (sectionHeaders[0]) {
+      const eyebrow = sectionHeaders[0].querySelector(".eyebrow");
+      const title = sectionHeaders[0].querySelector("h3");
+      if (eyebrow) eyebrow.textContent = t("navTradeoffs");
+      if (title) title.textContent = state.locale === "ko" ? "함께 변하는 요소" : "What changes together";
+    }
+    if (sectionHeaders[1]) {
+      const eyebrow = sectionHeaders[1].querySelector(".eyebrow");
+      const title = sectionHeaders[1].querySelector("h3");
+      if (eyebrow) eyebrow.textContent = state.locale === "ko" ? "변경 이력" : "Change history";
+      if (title) title.textContent = state.locale === "ko" ? "의사결정 로그" : "Decision log";
+    }
+    const radarLabels = matrixView.querySelectorAll(".radar-label");
+    if (radarLabels[0]) radarLabels[0].textContent = t("personalization");
+    if (radarLabels[1]) radarLabels[1].textContent = state.locale === "ko" ? "프라이버시" : "Privacy";
+    if (radarLabels[2]) radarLabels[2].textContent = t("accessibility");
+    if (radarLabels[3]) radarLabels[3].textContent = t("feasibility");
+    if (radarLabels[4]) radarLabels[4].textContent = t("teacherLoadLabel");
+  }
+
+  const sandboxView = document.querySelector('[data-view-panel="sandbox"]');
+  if (sandboxView) {
+    const sectionHeaders = sandboxView.querySelectorAll(".section-header");
+    if (sectionHeaders[0]) {
+      const eyebrow = sectionHeaders[0].querySelector(".eyebrow");
+      const title = sectionHeaders[0].querySelector("h3");
+      if (eyebrow) eyebrow.textContent = state.locale === "ko" ? "변화 실험" : "Test changes";
+      if (title) title.textContent = state.locale === "ko" ? "케이스 조정" : "Adjust the case";
+    }
+    if (sectionHeaders[1]) {
+      const eyebrow = sectionHeaders[1].querySelector(".eyebrow");
+      const title = sectionHeaders[1].querySelector("h3");
+      if (eyebrow) eyebrow.textContent = t("systemResponse");
+      if (title) title.textContent = t("whatChangesAfterAdjustment");
+    }
+    const toggleTitle = sandboxView.querySelector(".toggle-row h4");
+    const toggleBody = sandboxView.querySelector(".toggle-row p");
+    const stressLabel = sandboxView.querySelector(".scenario-group .label");
+    const reactionCards = sandboxView.querySelectorAll(".reaction-grid .metric-card p");
+    if (toggleTitle) toggleTitle.textContent = t("autoIteration");
+    if (toggleBody) toggleBody.textContent = t("autoIterationBody");
+    if (stressLabel) stressLabel.textContent = t("stressScenarios");
+    if (reactionCards[0]) reactionCards[0].textContent = t("alignmentCohesion");
+    if (reactionCards[1]) reactionCards[1].textContent = t("cognitiveLoadLabel");
+    if (reactionCards[2]) reactionCards[2].textContent = t("responseTime");
+  }
+
+  const reportView = document.querySelector('[data-view-panel="report"]');
+  if (reportView) {
+    const sectionHeaders = reportView.querySelectorAll(".section-header");
+    if (sectionHeaders[0]) {
+      const eyebrow = sectionHeaders[0].querySelector(".eyebrow");
+      const title = sectionHeaders[0].querySelector("h3");
+      if (eyebrow) eyebrow.textContent = t("caseReport");
+      if (title) title.textContent = t("draftSummary");
+    }
+    if (sectionHeaders[1]) {
+      const eyebrow = sectionHeaders[1].querySelector(".eyebrow");
+      const title = sectionHeaders[1].querySelector("h3");
+      if (eyebrow) eyebrow.textContent = t("reflection");
+      if (title) title.textContent = t("feedbackAndReflection");
+    }
+    const labels = reportView.querySelectorAll(".memo-section .label, .reflection-block .label");
+    if (labels[0]) labels[0].textContent = t("executiveSummary");
+    if (labels[1]) labels[1].textContent = t("priorityTensions");
+    if (labels[2]) labels[2].textContent = t("recommendedRedesignMoves");
+    if (labels[3]) labels[3].textContent = t("evidenceTrace");
+    if (labels[4]) labels[4].textContent = t("reflectionPromptsLabel");
+    if (labels[5]) labels[5].textContent = t("recentDialogue");
+  }
+
+  const regenerateMemoButton = document.getElementById("regenerate-memo");
+  if (regenerateMemoButton) regenerateMemoButton.textContent = t("refreshSummary");
+
+  const mobileDockLabels = document.querySelectorAll(".mobile-dock .dock-item span:last-child");
+  if (mobileDockLabels[0]) mobileDockLabels[0].textContent = t("mobileMap");
+  if (mobileDockLabels[1]) mobileDockLabels[1].textContent = t("mobilePeople");
+  if (mobileDockLabels[2]) mobileDockLabels[2].textContent = t("navTradeoffs");
+  if (mobileDockLabels[3]) mobileDockLabels[3].textContent = t("mobileTest");
+  if (mobileDockLabels[4]) mobileDockLabels[4].textContent = t("navReport");
 }
 
 function defaultBoardSettings(overrides = {}) {
@@ -807,6 +1706,7 @@ const dom = {
   landingLoginPassword: document.getElementById("landing-login-password"),
   landingLoginHelper: document.getElementById("landing-login-helper"),
   landingAuthStatus: document.getElementById("landing-auth-status"),
+  landingLocaleToggle: document.getElementById("landing-locale-toggle"),
   landingJoinForm: document.getElementById("landing-join-form"),
   landingJoinEmail: document.getElementById("landing-join-email"),
   landingJoinPassword: document.getElementById("landing-join-password"),
@@ -826,6 +1726,7 @@ const dom = {
   sessionIdentityLabel: document.getElementById("session-identity-label"),
   startTutorialButton: document.getElementById("start-tutorial"),
   returnToLanding: document.getElementById("return-to-landing"),
+  workspaceLocaleToggle: document.getElementById("workspace-locale-toggle"),
   visualizerLayout: document.getElementById("visualizer-layout"),
   intakeTitle: document.getElementById("intake-title"),
   intakeBadge: document.getElementById("intake-badge"),
@@ -1189,12 +2090,14 @@ function getCaseStakeholderMeta(key) {
   const activeCase = getActiveCaseRecord();
   const base = stakeholders[key];
   const overrides = asObject(activeCase?.stakeholderProfiles?.[key]);
+  const labelKey = stakeholderLabelKey(key);
+  const statusKey = stakeholderStatusKey(overrides.status || base.status);
   return {
     ...base,
     ...overrides,
-    label: overrides.label || base.label,
+    label: overrides.label || (labelKey ? t(labelKey) : base.label),
     icon: overrides.icon || base.icon,
-    status: overrides.status || base.status,
+    status: statusKey ? t(statusKey) : overrides.status || base.status,
     summary: overrides.summary || base.summary,
   };
 }
@@ -1248,12 +2151,12 @@ function buildJoinCode(seed = "") {
 
 function getAllowedMapLayers(caseRecord = getActiveCaseRecord()) {
   const settings = getCaseBoardSettings(caseRecord);
-  const layers = [{ value: "base", label: "Base map" }];
+  const layers = [{ value: "base", label: t("baseMap") }];
   if (state.activeRole === "user") {
-    layers.push({ value: "personal", label: "My view" });
+    layers.push({ value: "personal", label: t("myView") });
   }
   if (settings.sharingMode !== "private") {
-    layers.push({ value: "cohort", label: "Class view" });
+    layers.push({ value: "cohort", label: t("classView") });
   }
   return layers;
 }
@@ -1764,19 +2667,19 @@ function syncActiveCaseState() {
   ensureActiveSelections();
   const course = getActiveCourse();
   const activeCase = getCaseById(state.activeCaseId, course);
-  dom.caseSummaryLabel.textContent = state.activeRole === "admin" ? "Selected Instructor Case" : "Selected Published Case";
-  dom.sidebarTensionLabel.textContent = state.activeRole === "admin" ? "Case tension" : "Learner run tension";
+  dom.caseSummaryLabel.textContent = state.activeRole === "admin" ? (state.locale === "ko" ? "선택된 교수자 케이스" : "Selected Instructor Case") : (state.locale === "ko" ? "선택된 게시 케이스" : "Selected Published Case");
+  dom.sidebarTensionLabel.textContent = state.activeRole === "admin" ? t("caseTension") : (state.locale === "ko" ? "학습 런 긴장도" : "Learner run tension");
   if (!activeCase) {
     state.metrics = { ...emptyMetrics };
     state.evidence = [];
     state.decisions = [];
     state.chat = [];
     state.timeline = [];
-    dom.caseTitle.textContent = "No case selected";
+    dom.caseTitle.textContent = state.locale === "ko" ? "선택된 케이스 없음" : "No case selected";
     dom.caseSubtitle.textContent =
       state.activeRole === "admin"
-        ? "Create or select a case."
-        : "Choose a published case.";
+        ? (state.locale === "ko" ? "케이스를 만들거나 선택하세요." : "Create or select a case.")
+        : (state.locale === "ko" ? "게시된 케이스를 선택하세요." : "Choose a published case.");
     return;
   }
 
@@ -2495,17 +3398,17 @@ function renderNavigation() {
   if (dom.topKicker) {
     dom.topKicker.textContent = activeCase
       ? state.activeRole === "admin"
-        ? "Current case"
-        : "Published case"
+        ? t("case")
+        : t("published")
       : course
-        ? "Current course"
-        : "Workspace";
+        ? t("course")
+        : t("workspace");
   }
   dom.topTitle.textContent = activeCase
     ? activeCase.title
     : course
       ? `${course.code} · ${course.name}`
-      : "Workspace";
+      : t("workspace");
 }
 
 function renderPlatformControlsLegacy() {
@@ -2532,7 +3435,7 @@ function renderPlatformControlsLegacy() {
     .map((item) => `<option value="${item.id}">${item.code} · ${item.name}</option>`)
     .join("");
   dom.courseSelect.value = course?.id || "";
-  dom.caseControlLabel.textContent = state.activeRole === "admin" ? "Instructor case" : "Published case";
+  dom.caseControlLabel.textContent = state.activeRole === "admin" ? t("instructor") + " " + t("case").toLowerCase() : t("published") + " " + t("case").toLowerCase();
   dom.caseSelect.innerHTML = selectableCases.length
     ? selectableCases
         .map(
@@ -2542,11 +3445,11 @@ function renderPlatformControlsLegacy() {
             }</option>`
         )
         .join("")
-    : `<option value="">${state.activeRole === "admin" ? "Create the first case" : "No published cases yet"}</option>`;
+    : `<option value="">${state.activeRole === "admin" ? t("createFirstCase") : t("noPublishedCasesYet")}</option>`;
   dom.caseSelect.value = state.activeCaseId || selectableCases[0]?.id || "";
   dom.caseSelect.disabled = selectableCases.length === 0;
   dom.caseControl.classList.toggle("is-hidden", !course);
-  dom.sidebarCaseLabel.textContent = state.activeRole === "admin" ? "Instructor case" : "Published case";
+  dom.sidebarCaseLabel.textContent = state.activeRole === "admin" ? t("instructor") + " " + t("case").toLowerCase() : t("published") + " " + t("case").toLowerCase();
   dom.sidebarCaseSelect.innerHTML = dom.caseSelect.innerHTML;
   dom.sidebarCaseSelect.value = dom.caseSelect.value;
   dom.sidebarCaseSelect.disabled = dom.caseSelect.disabled;
@@ -2567,8 +3470,8 @@ function renderPlatformControlsLegacy() {
       ? activeInstructor?.name || "Instructor"
       : activeLearner?.name || "Student";
 
-  dom.intakeTitle.textContent = state.activeRole === "admin" ? "Create or Choose a Case" : "Choose a Published Case";
-  dom.intakeBadge.textContent = state.activeRole === "admin" ? "Instructor" : "Student";
+  dom.intakeTitle.textContent = state.activeRole === "admin" ? t("createOrChooseCase") : t("choosePublishedCase");
+  dom.intakeBadge.textContent = state.activeRole === "admin" ? t("instructor") : t("student");
   dom.workflowGuide.innerHTML = buildWorkflowGuideMarkup(course, activeCase, visibleCases, activeLearner);
   dom.courseSelect.innerHTML = dom.courseSelect.innerHTML.replace(/Ã‚Â·/g, "Â·");
   dom.platformContext.innerHTML = `
@@ -2643,22 +3546,22 @@ function renderPlatformControls() {
     .join("");
   dom.courseSelect.value = course?.id || "";
 
-  dom.caseControlLabel.textContent = state.activeRole === "admin" ? "Instructor case" : "Published case";
+  dom.caseControlLabel.textContent = state.activeRole === "admin" ? `${t("instructor")} ${t("case").toLowerCase()}` : t("publishedCase");
   dom.caseSelect.innerHTML = selectableCases.length
     ? selectableCases
         .map(
           (item) =>
             `<option value="${item.id}">${item.title}${
-              state.activeRole === "admin" ? ` (${item.published ? "Published" : "Draft"})` : ""
+              state.activeRole === "admin" ? ` (${item.published ? t("published") : t("draft")})` : ""
             }</option>`
         )
         .join("")
-    : `<option value="">${state.activeRole === "admin" ? "Create the first case" : "No published cases yet"}</option>`;
+    : `<option value="">${state.activeRole === "admin" ? t("createFirstCase") : t("noPublishedCasesYet")}</option>`;
   dom.caseSelect.value = state.activeCaseId || selectableCases[0]?.id || "";
   dom.caseSelect.disabled = selectableCases.length === 0;
   dom.caseControl.classList.toggle("is-hidden", !course);
 
-  dom.sidebarCaseLabel.textContent = state.activeRole === "admin" ? "Instructor case" : "Published case";
+  dom.sidebarCaseLabel.textContent = state.activeRole === "admin" ? `${t("instructor")} ${t("case").toLowerCase()}` : t("publishedCase");
   dom.sidebarCaseSelect.innerHTML = dom.caseSelect.innerHTML;
   dom.sidebarCaseSelect.value = dom.caseSelect.value;
   dom.sidebarCaseSelect.disabled = dom.caseSelect.disabled;
@@ -2675,26 +3578,26 @@ function renderPlatformControls() {
   dom.mapLayerControl.classList.toggle("is-hidden", !activeCase);
 
   dom.sessionIdentityLabel.textContent =
-    state.activeRole === "admin" ? activeInstructor?.name || "Instructor" : activeLearner?.name || "Student";
+    state.activeRole === "admin" ? activeInstructor?.name || t("instructor") : activeLearner?.name || t("student");
 
-  dom.intakeTitle.textContent = state.activeRole === "admin" ? "Create or Choose a Case" : "Choose a Published Case";
-  dom.intakeBadge.textContent = state.activeRole === "admin" ? "Instructor" : "Student";
+  dom.intakeTitle.textContent = state.activeRole === "admin" ? t("createOrChooseCase") : t("choosePublishedCase");
+  dom.intakeBadge.textContent = state.activeRole === "admin" ? t("instructor") : t("student");
   dom.workflowGuide.innerHTML = buildWorkflowGuideMarkup(course, activeCase, visibleCases, activeLearner);
 
   dom.platformContext.innerHTML = `
     <article class="context-card">
-      <strong>${course ? `${course.code} · ${course.name}` : institution?.name || "No course selected"}</strong>
-      <p>${institution?.name || "No institution selected"}</p>
+      <strong>${course ? `${course.code} · ${course.name}` : institution?.name || t("noCourseSelected")}</strong>
+      <p>${institution?.name || t("noInstitutionSelected")}</p>
       ${
         state.activeRole === "admin" && activeInstructor
-          ? `<div class="card-meta"><span>${activeInstructor.name}</span><span>${course?.cases?.length || 0} cases</span><span>${visibleCases.length} published</span><span>Join code ${course?.joinCode || "not set"}</span></div>
-             <p class="context-note">Create the base board here, decide how much students can add, then share the join code when the board is ready.</p>`
+          ? `<div class="card-meta"><span>${activeInstructor.name}</span><span>${t("caseCount", { count: course?.cases?.length || 0 })}</span><span>${t("publishedCount", { count: visibleCases.length })}</span><span>${t("courseCode")} ${course?.joinCode || t("notSet")}</span></div>
+             <p class="context-note">${t("createBaseBoardNote")}</p>`
           : ""
       }
       ${
         state.activeRole === "user" && activeLearner
-          ? `<div class="card-meta"><span>${activeLearner.name}</span><span>${visibleCases.length} published cases</span></div>
-             <p class="context-note">Choose one published board, inspect the instructor's base map, then add your own nodes and notes in your private layer.</p>`
+          ? `<div class="card-meta"><span>${activeLearner.name}</span><span>${t("publishedCasesCount", { count: visibleCases.length })}</span></div>
+             <p class="context-note">${t("choosePublishedBoardNote")}</p>`
           : ""
       }
     </article>
@@ -2706,52 +3609,52 @@ function buildWorkflowGuideMarkup(course, activeCase, visibleCases, activeLearne
     state.activeRole === "admin"
       ? [
           {
-            label: "Choose the course",
-            body: "Confirm the course before creating or editing a case.",
+            label: t("wfChooseCourse"),
+            body: t("wfConfirmCourse"),
             state: course ? "done" : "current",
           },
           {
-            label: activeCase ? "Review or update the case" : "Create a case",
+            label: activeCase ? t("wfReviewUpdateCase") : t("wfCreateCase"),
             body: activeCase
-              ? "Use the case selector to switch cases or keep editing the current one."
-              : "Paste a course brief below and the studio will structure it.",
+              ? t("wfUseCaseSelector")
+              : t("wfPasteBrief"),
             state: activeCase ? "done" : course ? "current" : "upcoming",
           },
           {
-            label: activeCase?.published ? "Published to students" : "Publish when ready",
+            label: activeCase?.published ? t("wfPublishedToStudents") : t("wfPublishWhenReady"),
             body: activeCase?.published
-              ? "Students can now open this case in their workspace."
-              : "Keep drafts private until you want students to work from them.",
+              ? t("wfStudentsCanOpen")
+              : t("wfKeepDraftPrivate"),
             state: activeCase?.published ? "done" : activeCase ? "current" : "upcoming",
           },
         ]
       : [
           {
-            label: "Choose the course",
-            body: "Start in the course where your instructor published the case.",
+            label: t("wfChooseCourse"),
+            body: t("wfStartInCourse"),
             state: course ? "done" : "current",
           },
           {
-            label: activeCase ? "Open the published case" : "Select a published case",
+            label: activeCase ? t("wfOpenPublishedCase") : t("wfSelectPublishedCase"),
             body: activeCase
-              ? "The selected case is now loaded into your learner run."
+              ? t("wfSelectedCaseLoaded")
               : visibleCases.length
-                ? "Use the case selector above to pick one published case."
-                : "Wait for your instructor to publish a case for this course.",
+                ? t("wfUseSelectorPublished")
+                : t("wfWaitInstructorPublish"),
             state: activeCase ? "done" : course ? "current" : "upcoming",
           },
           {
-            label: activeLearner ? "Ask questions & reflect" : "Start your learner run",
+            label: activeLearner ? t("wfAskQuestionsReflect") : t("wfStartLearnerRun"),
             body: activeCase
-              ? "Use the network, evidence, and prompts to build your reflection."
-              : "Once a case is selected, the rest of the page will open up.",
+              ? t("wfUseNetworkReflect")
+              : t("wfCaseUnlocksPage"),
             state: activeCase ? "current" : "upcoming",
           },
         ];
 
   return `
     <article class="workflow-card">
-      <p class="eyebrow">Quick start</p>
+      <p class="eyebrow">${t("workflowQuickStart")}</p>
       <div class="workflow-steps">
         ${steps
           .map(
@@ -2773,11 +3676,7 @@ function buildWorkflowGuideMarkup(course, activeCase, visibleCases, activeLearne
 
 function pipelineStatusMarkup(activeCase) {
   if (!activeCase) {
-    return `<div class="empty-note">${
-      state.activeRole === "admin"
-        ? "No case"
-        : "No case"
-    }</div>`;
+    return `<div class="empty-note">${t("noCasePick")}</div>`;
   }
 
   return `
@@ -2785,7 +3684,7 @@ function pipelineStatusMarkup(activeCase) {
       <strong>${activeCase.title}</strong>
       <p>${activeCase.summary}</p>
       <div class="pipeline-chip-row">
-        <span class="pipeline-chip">${activeCase.published ? "Published" : "Draft"}</span>
+        <span class="pipeline-chip">${activeCase.published ? t("published") : t("draft")}</span>
         <span class="pipeline-chip">${activeCase.pipeline.graphStatus}</span>
       </div>
     </article>
@@ -2812,16 +3711,16 @@ function renderPipelineConsole() {
         canManageCourses
           ? `
             <article class="pipeline-card">
-              <strong>Course setup</strong>
+              <strong>${t("courseSetup")}</strong>
               <div class="pipeline-form-row two-up">
                 <form class="pipeline-form" id="add-institution-form">
-                  <input name="institutionName" type="text" placeholder="Institution name..." required>
-                  <button class="toolbar-button" type="submit">Add institution</button>
+                  <input name="institutionName" type="text" placeholder="${t("institutionNamePlaceholder")}" required>
+                  <button class="toolbar-button" type="submit">${t("addInstitution")}</button>
                 </form>
                 <form class="pipeline-form" id="add-course-form">
-                  <input name="courseName" type="text" placeholder="Course name..." required>
-                  <input name="courseCode" type="text" placeholder="Course code..." required>
-                  <button class="toolbar-button" type="submit">Add course</button>
+                  <input name="courseName" type="text" placeholder="${t("courseNamePlaceholder")}" required>
+                  <input name="courseCode" type="text" placeholder="${t("courseCode")}" required>
+                  <button class="toolbar-button" type="submit">${t("addCourse")}</button>
                 </form>
               </div>
             </article>
@@ -2829,70 +3728,70 @@ function renderPipelineConsole() {
           : ""
       }
       <article class="pipeline-card">
-        <strong>New case</strong>
+        <strong>${t("newCase")}</strong>
         ${
           course
             ? `
               <form class="pipeline-form" id="upload-document-form">
                 <div class="pipeline-form-row two-up">
-                  <input name="documentTitle" type="text" placeholder="Title..." autocomplete="off" required>
+                  <input name="documentTitle" type="text" placeholder="${t("titlePlaceholder")}" autocomplete="off" required>
                   <select name="publishMode">
-                    <option value="published">Publish to learners</option>
-                    <option value="draft">Keep as draft</option>
+                    <option value="published">${t("publishToLearners")}</option>
+                    <option value="draft">${t("keepAsDraft")}</option>
                   </select>
                 </div>
-                <textarea name="documentText" placeholder="Paste the brief..." autocomplete="off" required></textarea>
+                <textarea name="documentText" placeholder="${t("pasteBriefPlaceholder")}" autocomplete="off" required></textarea>
                 <div class="pipeline-actions">
-                  <button class="toolbar-button toolbar-button-primary" type="submit">Create case</button>
+                  <button class="toolbar-button toolbar-button-primary" type="submit">${t("createCaseBtn")}</button>
                 </div>
               </form>
             `
-            : `<div class="empty-note">${canManageCourses ? "Create a course first." : "No course assigned."}</div>`
+            : `<div class="empty-note">${canManageCourses ? t("createCourseFirst") : t("noCourseAssigned")}</div>`
         }
       </article>
       ${
         activeCase
           ? `
             <article class="pipeline-card">
-              <strong>Board settings</strong>
+              <strong>${t("boardSettings")}</strong>
               <p></p>
               <form class="pipeline-form" id="board-settings-form">
-                <textarea name="agendaPrompt" placeholder="Main question..." autocomplete="off">${getCaseBoardSettings(activeCase).agendaPrompt || ""}</textarea>
+                <textarea name="agendaPrompt" placeholder="${t("mainQuestionPlaceholder")}" autocomplete="off">${getCaseBoardSettings(activeCase).agendaPrompt || ""}</textarea>
                 <div class="pipeline-form-row two-up">
                   <label class="mini-control">
-                    <span>Due date</span>
+                    <span>${t("dueDate")}</span>
                     <input name="dueAt" type="date" value="${getCaseBoardSettings(activeCase).dueAt || ""}">
                   </label>
                   <label class="mini-control">
-                    <span>Sharing mode</span>
+                    <span>${t("sharingMode")}</span>
                     <select name="sharingMode">
-                      <option value="private" ${getCaseBoardSettings(activeCase).sharingMode === "private" ? "selected" : ""}>Private only</option>
-                      <option value="cohort" ${getCaseBoardSettings(activeCase).sharingMode === "cohort" ? "selected" : ""}>Class view</option>
+                      <option value="private" ${getCaseBoardSettings(activeCase).sharingMode === "private" ? "selected" : ""}>${t("privateOnly")}</option>
+                      <option value="cohort" ${getCaseBoardSettings(activeCase).sharingMode === "cohort" ? "selected" : ""}>${t("classView")}</option>
                     </select>
                   </label>
                 </div>
                 <div class="pipeline-form-row two-up">
                   <label class="mini-control">
-                    <span>Node limit per student</span>
+                    <span>${t("nodeLimitPerStudent")}</span>
                     <input name="maxLearnerNodes" type="number" min="1" max="20" value="${getCaseBoardSettings(activeCase).maxLearnerNodes}">
                   </label>
                   <label class="mini-control">
-                    <span>AI additions per node</span>
+                    <span>${t("aiAdditionsPerNode")}</span>
                     <input name="maxAiExpansionsPerNode" type="number" min="1" max="8" value="${getCaseBoardSettings(activeCase).maxAiExpansionsPerNode}">
                   </label>
                 </div>
                 <div class="pipeline-form-row two-up">
                   <label class="mini-control">
-                    <span>Layout</span>
+                    <span>${t("layout")}</span>
                     <select name="layoutMode">
-                      <option value="force" ${getCaseBoardSettings(activeCase).layoutMode === "force" ? "selected" : ""}>Force</option>
-                      <option value="cluster" ${getCaseBoardSettings(activeCase).layoutMode === "cluster" ? "selected" : ""}>Cluster</option>
-                      <option value="radial" ${getCaseBoardSettings(activeCase).layoutMode === "radial" ? "selected" : ""}>Radial</option>
+                      <option value="force" ${getCaseBoardSettings(activeCase).layoutMode === "force" ? "selected" : ""}>${t("force")}</option>
+                      <option value="cluster" ${getCaseBoardSettings(activeCase).layoutMode === "cluster" ? "selected" : ""}>${t("cluster")}</option>
+                      <option value="radial" ${getCaseBoardSettings(activeCase).layoutMode === "radial" ? "selected" : ""}>${t("radial")}</option>
                     </select>
                   </label>
                 </div>
                 <div class="pipeline-actions">
-                  <button class="toolbar-button toolbar-button-primary" type="submit">Save settings</button>
+                  <button class="toolbar-button toolbar-button-primary" type="submit">${t("saveSettings")}</button>
                 </div>
               </form>
             </article>
@@ -2900,8 +3799,8 @@ function renderPipelineConsole() {
           : ""
       }
       <article class="pipeline-card">
-        <strong>Course cases</strong>
-        <p>Open a case to keep working, or publish it when students should be able to choose it.</p>
+        <strong>${t("courseCases")}</strong>
+        <p>${t("courseCasesHelp")}</p>
         <div class="case-list">
           ${
             course?.cases?.length
@@ -2912,19 +3811,19 @@ function renderPipelineConsole() {
                       <strong>${item.title}</strong>
                       <p>${item.summary}</p>
                       <div class="card-meta">
-                        <span>${item.published ? "Published" : "Draft"}</span>
+                        <span>${item.published ? t("published") : t("draft")}</span>
                       </div>
                       <div class="card-actions">
-                        <button class="toolbar-button" type="button" data-select-case="${item.id}">Open Case</button>
+                        <button class="toolbar-button" type="button" data-select-case="${item.id}">${t("openCase")}</button>
                         <button class="toolbar-button" type="button" data-toggle-publish="${item.id}">
-                          ${item.published ? "Unpublish" : "Publish"}
+                          ${item.published ? t("unpublishVerb") : t("publishVerb")}
                         </button>
                       </div>
                     </article>
                   `
                   )
                   .join("")
-              : '<div class="empty-note">No cases yet.</div>'
+              : `<div class="empty-note">${t("noCasesYet")}</div>`
           }
         </div>
       </article>
@@ -3037,7 +3936,7 @@ function renderPipelineConsole() {
   dom.pipelineConsole.innerHTML = `
     ${pipelineStatusMarkup(activeCase)}
     <article class="pipeline-card">
-      <strong>Your copy</strong>
+      <strong>${t("yourCopy")}</strong>
       <p></p>
       ${
         activeLearner
@@ -3045,14 +3944,14 @@ function renderPipelineConsole() {
             <div class="card-meta">
               <span>${activeLearner.name}</span>
               <span>${activeLearner.focus}</span>
-              <span>${activeRun?.status || "Ready to start"}</span>
+              <span>${activeRun?.status || t("readyToStart")}</span>
             </div>
           `
           : ""
       }
     </article>
     <article class="pipeline-card">
-      <strong>Available cases</strong>
+      <strong>${t("availableCases")}</strong>
       <div class="case-list">
         ${
           visibleCases.length
@@ -3067,31 +3966,31 @@ function renderPipelineConsole() {
                       <span>${
                         (course?.learnerRuns || []).filter(
                           (run) => run.caseId === item.id && run.learnerId === activeLearner?.id
-                        )[0]?.status || "Ready"
+                        )[0]?.status || t("ready")
                       }</span>
                     </div>
                     <div class="card-actions">
-                      <button class="toolbar-button" type="button" data-select-case="${item.id}">Open Case</button>
+                      <button class="toolbar-button" type="button" data-select-case="${item.id}">${t("openCase")}</button>
                     </div>
                   </article>
                 `
                 )
                 .join("")
-            : '<div class="empty-note">No cases</div>'
+            : `<div class="empty-note">${t("noCasePick")}</div>`
         }
       </div>
     </article>
     <article class="pipeline-card">
-      <strong>Add a node</strong>
+      <strong>${t("addNode")}</strong>
       <p></p>
       <form class="pipeline-form" id="agenda-node-form">
-        <input name="agendaTitle" type="text" placeholder="Title..." autocomplete="off" required>
-        <textarea name="agendaBody" placeholder="Why does this matter for your redesign?" autocomplete="off"></textarea>
+        <input name="agendaTitle" type="text" placeholder="${t("titlePlaceholder")}" autocomplete="off" required>
+        <textarea name="agendaBody" placeholder="${t("agendaBodyPlaceholder")}" autocomplete="off"></textarea>
         <div class="pipeline-actions">
-          <button class="toolbar-button toolbar-button-primary" type="submit">Add to Map</button>
+          <button class="toolbar-button toolbar-button-primary" type="submit">${t("addToMap")}</button>
         </div>
       </form>
-      <p class="context-note">${getCaseBoardSettings(activeCase).agendaPrompt || "Add a node."}</p>
+      <p class="context-note">${getCaseBoardSettings(activeCase).agendaPrompt || t("addNodeDefaultPrompt")}</p>
       <div class="case-list">
         ${
           asArray(activeRun?.agendaNodes).length
@@ -3103,18 +4002,18 @@ function renderPipelineConsole() {
                     <p>${item.body}</p>
                     <div class="card-meta">
                       <span>${getCaseStakeholderMeta(item.stakeholder || "student").label}</span>
-                      <span>${item.createdAt || "Now"}</span>
+                      <span>${item.createdAt || (state.locale === "ko" ? "지금" : "Now")}</span>
                     </div>
                   </article>
                 `
                 )
                 .join("")
-            : '<div class="empty-note">No nodes</div>'
+            : `<div class="empty-note">${t("noNodes")}</div>`
         }
       </div>
     </article>
     <article class="pipeline-card">
-      <strong>AI additions</strong>
+      <strong>${t("aiAdditionsTitle")}</strong>
       <div class="document-list">
         ${
           asArray(activeRun?.aiGeneratedNodes).length
@@ -3126,26 +4025,26 @@ function renderPipelineConsole() {
                     <p>${item.body}</p>
                     <div class="card-meta">
                       <span>${getCaseStakeholderMeta(item.stakeholder || "teacher").label}</span>
-                      <span>AI suggested</span>
+                      <span>${t("aiSuggested")}</span>
                     </div>
                   </article>
                 `
                 )
                 .join("")
-            : '<div class="empty-note">No additions</div>'
+            : `<div class="empty-note">${t("noAdditions")}</div>`
         }
       </div>
     </article>
     <article class="pipeline-card">
-      <strong>Class view</strong>
+      <strong>${t("classViewTitle")}</strong>
       <p>${
         getCaseBoardSettings(activeCase).sharingMode === "private"
-          ? "Off"
-          : "Shared patterns"
+          ? t("off")
+          : t("sharedPatterns")
       }</p>
       <div class="card-meta">
-        <span>${buildCohortIssueEntries(activeCase).length} shared clusters</span>
-        <span>${getVisibleLearnerRunsForCase(activeCase, course).length} student runs</span>
+        <span>${t("sharedClustersCount", { count: buildCohortIssueEntries(activeCase).length })}</span>
+        <span>${t("studentRunsCount", { count: getVisibleLearnerRunsForCase(activeCase, course).length })}</span>
       </div>
     </article>
   `;
@@ -3162,12 +4061,12 @@ function renderSidebar() {
     state.activeRole === "admin"
       ? activeCase
         ? activeCase.published
-          ? "This case is published. Students can now open it in their own view."
-          : "This case is still a draft. Publish it when students should start using it."
-        : "Create or choose a case to start the workflow."
+          ? t("statusCasePublished")
+          : t("statusCaseDraft")
+        : t("statusCreateChoose")
       : activeCase
-        ? `${activeLearner?.name || "This learner"} is exploring the selected case in private notes.`
-        : "Choose a published case to unlock the rest of the page.";
+        ? t("statusLearnerExploring", { name: activeLearner?.name || t("student") })
+        : t("statusChoosePublished");
   dom.healthCopy.textContent = state.ai.busy ? `${baseHealthCopy} ${state.ai.status}` : baseHealthCopy;
 }
 
@@ -4074,18 +4973,34 @@ function renderGraph() {
 
   dom.stageNoteTitle.textContent = activeCase
     ? state.activeMapLayer === "cohort"
-      ? "This view combines patterns shared across the class."
+      ? state.locale === "ko"
+        ? "이 보기는 클래스 전체에서 반복된 패턴을 묶어 보여줍니다."
+        : "This view combines patterns shared across the class."
       : state.activeMapLayer === "personal"
-        ? "Hover to inspect an issue and click to add your notes."
-        : "Hover a node to inspect the issue behind it."
-    : "Create or choose a case to generate the network.";
+        ? state.locale === "ko"
+          ? "노드에 호버해 이슈를 보고 클릭해 메모를 추가하세요."
+          : "Hover to inspect an issue and click to add your notes."
+        : state.locale === "ko"
+          ? "노드에 호버해 그 뒤의 이슈를 살펴보세요."
+          : "Hover a node to inspect the issue behind it."
+    : state.locale === "ko"
+      ? "케이스를 만들거나 선택하면 네트워크가 생성됩니다."
+      : "Create or choose a case to generate the network.";
   dom.stageNoteBody.textContent = activeCase
     ? state.activeMapLayer === "cohort"
-      ? "Class view groups repeated student concerns into shared clusters instead of showing every personal note."
+      ? state.locale === "ko"
+        ? "클래스 보기는 모든 개인 메모를 그대로 보여주지 않고 반복된 학생 우려를 공유 클러스터로 묶습니다."
+        : "Class view groups repeated student concerns into shared clusters instead of showing every personal note."
       : state.activeMapLayer === "personal"
-        ? "Click a node to select it, then add a note in the right lens panel. The map updates after new questions or notes."
-        : "Click a stakeholder node to change perspective. The network updates when the case changes or a new question is asked."
-    : "Once a case is available, this map will show stakeholders, tensions, and evidence links.";
+        ? state.locale === "ko"
+          ? "노드를 클릭해 선택한 뒤 오른쪽 렌즈 패널에 메모를 추가하세요. 새 질문이나 메모 뒤에는 맵이 갱신됩니다."
+          : "Click a node to select it, then add a note in the right lens panel. The map updates after new questions or notes."
+        : state.locale === "ko"
+          ? "이해관계자 노드를 클릭하면 관점이 바뀝니다. 케이스가 바뀌거나 새 질문이 들어오면 네트워크도 함께 갱신됩니다."
+          : "Click a stakeholder node to change perspective. The network updates when the case changes or a new question is asked."
+    : state.locale === "ko"
+      ? "케이스가 준비되면 이 맵에 이해관계자, 긴장, 근거 연결이 나타납니다."
+      : "Once a case is available, this map will show stakeholders, tensions, and evidence links.";
 
   const metaItems = activeCase
     ? getCaseNetworkMeta([
@@ -4116,11 +5031,11 @@ function renderGraph() {
       ])
     : [
         {
-          title: "Before You Start",
+          title: state.locale === "ko" ? "시작 전에" : "Before You Start",
           body:
             state.activeRole === "admin"
-              ? "Create a case from a course brief, then the network will appear here."
-              : "Choose one published case from your course to load the network.",
+              ? (state.locale === "ko" ? "코스 브리프에서 케이스를 만들면 이곳에 네트워크가 나타납니다." : "Create a case from a course brief, then the network will appear here.")
+              : (state.locale === "ko" ? "코스에서 게시된 케이스 하나를 선택하면 네트워크가 로드됩니다." : "Choose one published case from your course to load the network."),
         },
       ];
 
@@ -4221,43 +5136,43 @@ function syncGraphLoop() {
 function renderStakeholderFocus() {
   const activeCase = getCaseById(state.activeCaseId, getActiveCourse());
   if (!activeCase) {
-    dom.activeStakeholderPill.textContent = "No case";
-    dom.activeStakeholderStatus.textContent = "Pick a case";
-    dom.lensName.textContent = "Selected lens";
+    dom.activeStakeholderPill.textContent = t("noCasePick");
+    dom.activeStakeholderStatus.textContent = t("pickCase");
+    dom.lensName.textContent = t("selectedLens");
     dom.lensSummary.textContent =
       state.activeRole === "admin"
-        ? "Start with a case."
-        : "Pick a case.";
-    dom.lensStatus.textContent = state.activeRole === "admin" ? "Start" : "Pick";
+        ? t("startWithCase")
+        : t("pickCase");
+    dom.lensStatus.textContent = state.activeRole === "admin" ? t("start") : t("pickCase");
     dom.lensScore.textContent = "--";
-    dom.orbitTitle.textContent = "Case preview";
+    dom.orbitTitle.textContent = t("casePreview");
     dom.orbitIcon.textContent = "hub";
-    dom.orbitSummary.textContent = "The panel updates when a case is open.";
-    dom.chatBadge.textContent = "No case";
+    dom.orbitSummary.textContent = t("panelUpdatesWhenCaseOpen");
+    dom.chatBadge.textContent = t("noCasePick");
     dom.topTensions.innerHTML = `
       <article class="tension-item">
-        <strong>Start here</strong>
-        <p>${state.activeRole === "admin" ? "Create a case." : "Pick a case."}</p>
+        <strong>${t("startHere")}</strong>
+        <p>${state.activeRole === "admin" ? t("wfCreateCase") : t("pickCase")}</p>
       </article>
     `;
     dom.evidenceStrip.innerHTML = `
       <article class="evidence-item">
-        <strong>No evidence</strong>
-        <p>Open a case.</p>
+        <strong>${t("noEvidence")}</strong>
+        <p>${t("openCaseShort")}</p>
       </article>
     `;
     dom.stakeholderPills.innerHTML = "";
     if (dom.perspectiveStakeholderPills) {
       dom.perspectiveStakeholderPills.innerHTML = "";
     }
-    dom.selectedNodeKicker.textContent = "Hover or click";
-    dom.selectedNodeTitle.textContent = "No node selected";
-    dom.selectedNodeCopy.textContent = "Hover or click a node in the network to inspect it here.";
+    dom.selectedNodeKicker.textContent = t("hoverOrClick");
+    dom.selectedNodeTitle.textContent = t("noNodeSelected");
+    dom.selectedNodeCopy.textContent = t("hoverNodeHelp");
     if (dom.relatedPersonalActivity) {
-      dom.relatedPersonalActivity.innerHTML = emptyNoteMarkup("Select a node");
+      dom.relatedPersonalActivity.innerHTML = emptyNoteMarkup(t("selectNode"));
     }
     if (dom.relatedClassActivity) {
-      dom.relatedClassActivity.innerHTML = emptyNoteMarkup("Select a node");
+      dom.relatedClassActivity.innerHTML = emptyNoteMarkup(t("selectNode"));
     }
     if (dom.quickAnnotationForm) {
       dom.quickAnnotationForm.hidden = true;
@@ -4267,8 +5182,8 @@ function renderStakeholderFocus() {
     }
     dom.perspectiveConflicts.innerHTML = `
       <article class="conflict-card">
-        <strong>No lens</strong>
-        <p>Open a case.</p>
+        <strong>${t("noLens")}</strong>
+        <p>${t("openCaseShort")}</p>
       </article>
     `;
     return;
@@ -4310,8 +5225,8 @@ function renderStakeholderFocus() {
         .slice(0, 4)
     : [];
 
-  dom.activeStakeholderPill.textContent = `${stakeholder.label} focus`;
-  dom.activeStakeholderStatus.textContent = `${stakeholder.status} · cycle ${state.graph.iteration}`;
+  dom.activeStakeholderPill.textContent = state.locale === "ko" ? `${stakeholder.label} 관점` : `${stakeholder.label} focus`;
+  dom.activeStakeholderStatus.textContent = state.locale === "ko" ? `${stakeholder.status} · 사이클 ${state.graph.iteration}` : `${stakeholder.status} · cycle ${state.graph.iteration}`;
   dom.lensName.textContent = stakeholder.label;
   dom.lensSummary.textContent = stakeholder.summary;
   dom.lensStatus.textContent = stakeholder.status;
@@ -4319,9 +5234,7 @@ function renderStakeholderFocus() {
   dom.orbitTitle.textContent = `${stakeholder.label} orbit`;
   dom.orbitIcon.textContent = stakeholder.icon;
   dom.orbitSummary.textContent = stakeholder.summary;
-  dom.chatBadge.textContent = `${stakeholder.label} online`;
-  dom.activeStakeholderStatus.textContent = `${stakeholder.status} · cycle ${state.graph.iteration}`;
-  dom.chatBadge.textContent = `${stakeholder.label} view`;
+  dom.chatBadge.textContent = state.locale === "ko" ? `${stakeholder.label} 보기` : `${stakeholder.label} view`;
   dom.activeStakeholderStatus.textContent = stakeholder.status;
 
   dom.topTensions.innerHTML = conflicts
@@ -4362,18 +5275,18 @@ function renderStakeholderFocus() {
     dom.perspectiveStakeholderPills.innerHTML = stakeholderPillMarkup;
   }
 
-  dom.selectedNodeKicker.textContent = selectedNodeIssue?.kicker || "Hover or click";
-  dom.selectedNodeTitle.textContent = selectedNodeIssue?.title || "No node selected";
+  dom.selectedNodeKicker.textContent = selectedNodeIssue?.kicker || t("hoverOrClick");
+  dom.selectedNodeTitle.textContent = selectedNodeIssue?.title || t("noNodeSelected");
   dom.selectedNodeCopy.textContent =
-    selectedNodeIssue?.body || "Hover or click a node in the network to inspect it here.";
+    selectedNodeIssue?.body || t("hoverNodeHelp");
   if (dom.relatedPersonalActivity) {
     dom.relatedPersonalActivity.innerHTML = renderRelatedActivityList(
       personalItems,
-      state.activeRole === "user" ? "No related questions yet." : "Open a learner run."
+      state.activeRole === "user" ? t("noRelatedQuestionsYet") : t("openLearnerRun")
     );
   }
   if (dom.relatedClassActivity) {
-    dom.relatedClassActivity.innerHTML = renderRelatedActivityList(classItems, "No shared patterns yet.");
+    dom.relatedClassActivity.innerHTML = renderRelatedActivityList(classItems, t("noSharedPatternsYet"));
   }
   if (dom.quickAnnotationForm) {
     dom.quickAnnotationForm.hidden = state.activeRole !== "user";
@@ -4405,18 +5318,18 @@ function renderChat() {
   const filtered = state.chat.filter((entry) => entry.stakeholder === state.activeStakeholder);
   dom.chatThread.innerHTML = filtered.length
     ? filtered
-        .map(
+      .map(
           (entry) => `
             <article class="chat-message ${entry.role}">
               <div>${entry.body}</div>
-              <small>${entry.role === "agent" ? getCaseStakeholderMeta(entry.stakeholder).label : "You"}</small>
+              <small>${entry.role === "agent" ? getCaseStakeholderMeta(entry.stakeholder).label : t("youLabel")}</small>
             </article>
           `
         )
         .join("")
     : `
       <article class="chat-message agent">
-        <div>${getCaseUiCopy().emptyChatMessage || "No dialogue yet."}</div>
+        <div>${getCaseUiCopy().emptyChatMessage || t("noDialogueYet")}</div>
         <small>${getCaseStakeholderMeta(state.activeStakeholder).label}</small>
       </article>
     `;
@@ -4428,14 +5341,14 @@ function renderMatrix() {
   const { personalization, teacherLoad, privacy, accessibility } = state.metrics;
   const { feasibility, alignment, conflict } = computeScores();
   dom.radarFill.setAttribute("points", polygonPoints(radarValues()));
-  dom.matrixState.textContent = conflict > 70 ? "Needs Attention" : alignment > 75 ? "Balanced" : "Watch Closely";
+  dom.matrixState.textContent = conflict > 70 ? t("matrixNeedsAttention") : alignment > 75 ? t("matrixBalanced") : t("matrixWatchClosely");
 
   const bars = [
-    { label: "Personalization", value: personalization, color: "var(--primary)" },
-    { label: "Privacy", value: privacy, color: "var(--tertiary-dim)" },
-    { label: "Accessibility", value: accessibility, color: "var(--primary)" },
-    { label: "Feasibility", value: feasibility, color: "var(--tertiary-dim)" },
-    { label: "Teacher slack", value: 100 - teacherLoad, color: "var(--secondary)" },
+    { label: t("personalization"), value: personalization, color: "var(--primary)" },
+    { label: state.locale === "ko" ? "프라이버시" : "Privacy", value: privacy, color: "var(--tertiary-dim)" },
+    { label: t("stakeholderAccessibility"), value: accessibility, color: "var(--primary)" },
+    { label: t("feasibility"), value: feasibility, color: "var(--tertiary-dim)" },
+    { label: t("teacherSlack"), value: 100 - teacherLoad, color: "var(--secondary)" },
   ];
 
   dom.metricBars.innerHTML = bars
@@ -4463,7 +5376,7 @@ function renderMatrix() {
           `
         )
         .join("")
-    : emptyNoteMarkup("No insights");
+    : emptyNoteMarkup(t("noInsights"));
 
   dom.decisionLog.innerHTML = state.decisions.length
     ? state.decisions
@@ -4477,13 +5390,13 @@ function renderMatrix() {
           `
         )
         .join("")
-    : emptyNoteMarkup("No history");
+    : emptyNoteMarkup(t("noHistory"));
 }
 
 function renderSandbox() {
   const activeCase = getActiveCaseRecord();
   const { alignment, conflict } = computeScores();
-  const loadBand = state.metrics.teacherLoad > 70 ? "Very high" : state.metrics.teacherLoad > 55 ? "High" : "Moderate";
+  const loadBand = state.metrics.teacherLoad > 70 ? t("veryHigh") : state.metrics.teacherLoad > 55 ? t("high") : t("moderate");
   const lag = Math.round(8 + conflict * 0.12);
   const instructorMode = state.activeRole === "admin";
 
@@ -4492,11 +5405,11 @@ function renderSandbox() {
   dom.inferenceLag.textContent = `${lag}ms`;
   dom.simulationState.textContent = instructorMode
     ? conflict > 72
-      ? "Critical review"
+      ? t("sandboxCriticalReview")
       : alignment > 75
-        ? "Stable"
-        : "Needs tuning"
-    : "Instructor only";
+        ? t("sandboxStable")
+        : t("sandboxNeedsTuning")
+    : t("instructorOnly");
 
   Object.entries(dom.metricLabels).forEach(([key, label]) => {
     label.textContent = String(state.metrics[key]);
@@ -4522,7 +5435,7 @@ function renderSandbox() {
           `
         )
         .join("")
-    : emptyNoteMarkup("No notes");
+    : emptyNoteMarkup(t("noNotes"));
 }
 
 function renderReport() {
@@ -4535,7 +5448,7 @@ function renderReport() {
   const reportTensions = state.evidence.slice(-3).reverse();
   const reportRecommendations = state.chat.filter((item) => item.role === "agent").slice(-2).reverse();
 
-  dom.reportSummary.textContent = summary || "No summary";
+  dom.reportSummary.textContent = summary || t("noSummary");
 
   dom.reportTensions.innerHTML = reportTensions.length
     ? reportTensions
@@ -4548,20 +5461,20 @@ function renderReport() {
           `
         )
         .join("")
-    : emptyNoteMarkup("No tensions");
+    : emptyNoteMarkup(t("noTensions"));
 
   dom.reportRecommendations.innerHTML = reportRecommendations.length
     ? reportRecommendations
         .map(
           (item) => `
             <article class="memo-item">
-              <strong>Recommendation</strong>
+              <strong>${state.locale === "ko" ? "추천" : "Recommendation"}</strong>
               <p>${item.body}</p>
             </article>
           `
         )
         .join("")
-    : emptyNoteMarkup("No recommendations");
+    : emptyNoteMarkup(t("noRecommendations"));
 
   dom.reportEvidence.innerHTML = state.evidence.length
     ? state.evidence
@@ -4576,14 +5489,37 @@ function renderReport() {
           `
         )
         .join("")
-    : emptyNoteMarkup("No evidence");
+    : emptyNoteMarkup(t("noEvidence"));
 
   const rubric = activeCase
     ? [
-        { label: state.activeRole === "admin" ? "Lens coverage" : "Perspective shift", value: Math.min(96, 60 + state.evidence.length * 8) },
-        { label: state.activeRole === "admin" ? "Constraint clarity" : "Constraint clarity", value: Math.round((state.metrics.privacy + state.metrics.accessibility) / 2) },
-        { label: state.activeRole === "admin" ? "Redesign quality" : "Revision quality", value: feasibility },
-        { label: state.activeRole === "admin" ? "Evidence trace" : "Evidence trace", value: Math.min(94, 58 + state.evidence.length * 7) },
+        {
+          label:
+            state.activeRole === "admin"
+              ? state.locale === "ko"
+                ? "렌즈 범위"
+                : "Lens coverage"
+              : state.locale === "ko"
+                ? "관점 전환"
+                : "Perspective shift",
+          value: Math.min(96, 60 + state.evidence.length * 8),
+        },
+        {
+          label: state.locale === "ko" ? "제약 명확성" : "Constraint clarity",
+          value: Math.round((state.metrics.privacy + state.metrics.accessibility) / 2),
+        },
+        {
+          label:
+            state.activeRole === "admin"
+              ? state.locale === "ko"
+                ? "리디자인 품질"
+                : "Redesign quality"
+              : state.locale === "ko"
+                ? "수정 품질"
+                : "Revision quality",
+          value: feasibility,
+        },
+        { label: t("evidenceTrace"), value: Math.min(94, 58 + state.evidence.length * 7) },
       ]
     : [];
 
@@ -4600,37 +5536,40 @@ function renderReport() {
           `
         )
         .join("")
-    : emptyNoteMarkup("No scores");
+    : emptyNoteMarkup(t("noScores"));
 
   dom.reflectionBadge.textContent =
     state.activeRole === "admin"
-      ? "Instructor View"
-      : `${activeLearner?.name || "Student"} reflection`;
+      ? t("instructorView")
+      : `${activeLearner?.name || t("student")} ${state.locale === "ko" ? "리플렉션" : "reflection"}`;
 
   const reflectionPrompts = asArray(activeCase?.reflectionPrompts);
   dom.reflectionPrompts.innerHTML = reflectionPrompts.length
     ? reflectionPrompts.map((item) => `<article class="prompt-item">${item}</article>`).join("")
-    : emptyNoteMarkup("No prompts");
+    : emptyNoteMarkup(t("noPrompts"));
 
   dom.reflectionFeed.innerHTML = state.timeline.length
     ? state.timeline
         .map(
           (item, index) => `
             <article class="reflection-item">
-              <strong>Iteration ${index + 1}</strong>
+              <strong>${state.locale === "ko" ? `${index + 1}차 반복` : `Iteration ${index + 1}`}</strong>
               <p>${item}</p>
             </article>
           `
         )
         .join("")
-    : emptyNoteMarkup("No activity");
+    : emptyNoteMarkup(t("noActivity"));
 }
 
 function renderAll() {
   if (dom.visualizerInput) {
-    dom.visualizerInput.placeholder = "Ask what conflict matters most in this case...";
+    dom.visualizerInput.placeholder = t("askQuestionPlaceholder");
   }
   const chatInput = document.getElementById("chat-input");
+  if (chatInput) {
+    chatInput.placeholder = t("askPerspectivePlaceholder");
+  }
   syncActiveCaseState();
   ensureGraphCurrent();
   dom.visualizerLayout?.classList.toggle("is-focused", hasActiveCase());
@@ -4664,17 +5603,17 @@ function renderLandingLogin() {
   dom.landingJoinEmail.disabled = state.auth.loading;
   dom.landingJoinPassword.disabled = state.auth.loading;
   dom.landingJoinCode.disabled = state.auth.loading;
-  dom.landingAuthStatus.textContent = state.auth.loading ? "Checking..." : state.auth.message;
+  dom.landingAuthStatus.textContent = state.auth.loading ? t("checking") : state.auth.message;
   dom.landingLoginHelper.textContent =
     state.auth.source === "supabase" && activeInstitution && activeCourse
       ? `${activeInstitution.name} - ${activeCourse.code} ${activeCourse.name}`
       : state.auth.source === "supabase"
-        ? "No course linked yet."
-      : configured
+        ? t("noCourseLinkedYet")
+        : configured
         ? ""
         : "";
   dom.landingJoinHelper.textContent = configured
-    ? "Sign in as a student, then enter your course code."
+    ? t("studentJoinHelper")
     : "";
   normalizeRenderedCopy();
 }
@@ -4695,38 +5634,38 @@ function getTutorialSteps() {
     return [
       {
         selector: "#course-select",
-        title: "Choose the Course",
-        body: "Start by making sure you are in the right course before creating or editing a case.",
+        title: state.locale === "ko" ? "코스 선택" : "Choose the Course",
+        body: state.locale === "ko" ? "케이스를 만들거나 수정하기 전에 올바른 코스인지 먼저 확인하세요." : "Start by making sure you are in the right course before creating or editing a case.",
       },
       {
         selector: "#case-select",
-        title: "Pick the Case You Want to Work On",
-        body: "Use this list to switch between drafts and published cases.",
+        title: state.locale === "ko" ? "작업할 케이스 선택" : "Pick the Case You Want to Work On",
+        body: state.locale === "ko" ? "이 목록에서 초안과 게시된 케이스를 전환할 수 있습니다." : "Use this list to switch between drafts and published cases.",
       },
       {
         selector: "#pipeline-console",
-        title: "Create or Publish a Case",
-        body: "Paste a course brief here to make a case, then publish it when students should see it.",
+        title: state.locale === "ko" ? "케이스 생성 또는 게시" : "Create or Publish a Case",
+        body: state.locale === "ko" ? "여기에 코스 브리프를 붙여 케이스를 만들고, 학생에게 보여줄 준비가 되면 게시하세요." : "Paste a course brief here to make a case, then publish it when students should see it.",
         view: "visualizer",
       },
       {
         selector: "#network-stage",
-        title: "Read the Case Map",
-        body: "This map shows the people, constraints, and tensions that shape the design decision.",
+        title: state.locale === "ko" ? "케이스 맵 읽기" : "Read the Case Map",
+        body: state.locale === "ko" ? "이 맵은 설계 결정을 형성하는 사람, 제약, 긴장을 보여줍니다." : "This map shows the people, constraints, and tensions that shape the design decision.",
         view: "visualizer",
       },
       {
         selector: "#visualizer-form",
-        title: "Ask a Question",
-        body: "Ask about the most important conflict or a stakeholder concern to add more insight to the map.",
+        title: state.locale === "ko" ? "질문하기" : "Ask a Question",
+        body: state.locale === "ko" ? "가장 중요한 갈등이나 특정 이해관계자의 우려를 물어 맵의 해석을 더해보세요." : "Ask about the most important conflict or a stakeholder concern to add more insight to the map.",
         view: "visualizer",
       },
       ...(hasCase
         ? [
             {
               selector: "#report-summary",
-              title: "Turn the Analysis into a Summary",
-              body: "When you are ready, open the report view to review the summary, tensions, and evidence.",
+              title: state.locale === "ko" ? "분석을 요약으로 정리" : "Turn the Analysis into a Summary",
+              body: state.locale === "ko" ? "준비가 되면 리포트 보기에서 요약, 긴장, 근거를 확인하세요." : "When you are ready, open the report view to review the summary, tensions, and evidence.",
               view: "report",
             },
           ]
@@ -4737,38 +5676,38 @@ function getTutorialSteps() {
   return [
     {
       selector: "#course-select",
-      title: "Check the Course",
-      body: "Make sure you are in the course your instructor asked you to join.",
+      title: state.locale === "ko" ? "코스 확인" : "Check the Course",
+      body: state.locale === "ko" ? "교수자가 안내한 코스에 들어와 있는지 먼저 확인하세요." : "Make sure you are in the course your instructor asked you to join.",
     },
     {
       selector: "#case-select",
-      title: "Choose a Published Case",
-      body: "This list only shows cases your instructor has shared with students.",
+      title: state.locale === "ko" ? "게시된 케이스 선택" : "Choose a Published Case",
+      body: state.locale === "ko" ? "이 목록에는 교수자가 학생과 공유한 케이스만 보입니다." : "This list only shows cases your instructor has shared with students.",
     },
     ...(hasCase
       ? [
           {
             selector: "#agenda-node-form",
-            title: "Add One Node",
-            body: "Add one question, concern, or issue from your own point of view. This becomes part of your private learner layer.",
+            title: state.locale === "ko" ? "노드 하나 추가" : "Add One Node",
+            body: state.locale === "ko" ? "자신의 관점에서 질문, 우려, 이슈 하나를 추가하세요. 이것은 개인 학습 레이어의 일부가 됩니다." : "Add one question, concern, or issue from your own point of view. This becomes part of your private learner layer.",
             view: "visualizer",
           },
           {
             selector: "#network-stage",
-            title: "Read the Case Map",
-            body: "Scan the main clusters first. Hover a node to inspect it, then click a stakeholder node to shift the lens.",
+            title: state.locale === "ko" ? "케이스 맵 읽기" : "Read the Case Map",
+            body: state.locale === "ko" ? "먼저 큰 클러스터를 훑어보세요. 노드에 호버하면 내용을 보고, 이해관계자 노드를 클릭하면 렌즈가 바뀝니다." : "Scan the main clusters first. Hover a node to inspect it, then click a stakeholder node to shift the lens.",
             view: "visualizer",
           },
           {
             selector: "#chat-form",
-            title: "Ask from One Perspective",
-            body: "Use this box when you want a response from one stakeholder's point of view.",
+            title: state.locale === "ko" ? "한 관점에서 질문하기" : "Ask from One Perspective",
+            body: state.locale === "ko" ? "특정 이해관계자의 관점에서 답을 듣고 싶을 때 이 입력창을 사용하세요." : "Use this box when you want a response from one stakeholder's point of view.",
             view: "perspectives",
           },
           {
             selector: "#reflection-prompts",
-            title: "Write Your Reflection",
-            body: "Use these prompts to turn what you found in the map into a short reflection.",
+            title: state.locale === "ko" ? "리플렉션 작성" : "Write Your Reflection",
+            body: state.locale === "ko" ? "이 프롬프트를 활용해 맵에서 찾은 내용을 짧은 리플렉션으로 정리하세요." : "Use these prompts to turn what you found in the map into a short reflection.",
             view: "report",
           },
         ]
@@ -4826,11 +5765,16 @@ function renderTutorialStep() {
   target.scrollIntoView({ behavior: "auto", block: "center", inline: "nearest" });
   dom.tourOverlay.classList.remove("is-hidden");
   dom.tourOverlay.setAttribute("aria-hidden", "false");
-  dom.tourStepLabel.textContent = `Step ${tutorialState.stepIndex + 1} of ${tutorialState.steps.length}`;
+  dom.tourStepLabel.textContent =
+    state.locale === "ko"
+      ? `${tutorialState.stepIndex + 1} / ${tutorialState.steps.length} 단계`
+      : `Step ${tutorialState.stepIndex + 1} of ${tutorialState.steps.length}`;
   dom.tourTitle.textContent = step.title;
   dom.tourBody.textContent = step.body;
   dom.tourBack.disabled = tutorialState.stepIndex === 0;
-  dom.tourNext.textContent = tutorialState.stepIndex === tutorialState.steps.length - 1 ? "Finish" : "Next";
+  dom.tourBack.textContent = t("tutorialBack");
+  dom.tourSkip.textContent = t("tutorialSkip");
+  dom.tourNext.textContent = tutorialState.stepIndex === tutorialState.steps.length - 1 ? t("tutorialFinish") : t("tutorialNext");
   window.requestAnimationFrame(() => positionTutorialCard(target));
 }
 
@@ -5944,6 +6888,14 @@ dom.tourSkip?.addEventListener("click", () => {
   endTutorial(true);
 });
 
+dom.landingLocaleToggle?.addEventListener("click", () => {
+  setLocale(state.locale === "en" ? "ko" : "en");
+});
+
+dom.workspaceLocaleToggle?.addEventListener("click", () => {
+  setLocale(state.locale === "en" ? "ko" : "en");
+});
+
 window.addEventListener("resize", () => {
   if (tutorialState.active) {
     renderTutorialStep();
@@ -5981,6 +6933,7 @@ dom.returnToLanding?.addEventListener("click", async () => {
 });
 
 async function boot() {
+  applyStaticTranslations();
   state.platform = loadPlatformState();
   hydrateSessionState();
   hydrateTutorialState();
