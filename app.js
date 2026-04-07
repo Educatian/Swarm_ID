@@ -613,6 +613,14 @@ const legacyDemoIds = new Set([
   "learner-maya-cho",
 ]);
 
+const STORAGE_KEY = "swarm-id-platform-v2";
+const SESSION_STORAGE_KEY = "swarm-id-session-v1";
+const TUTORIAL_STORAGE_KEY = "swarm-id-tutorial-v1";
+const LOCALE_STORAGE_KEY = "swarm-id-locale-v1";
+const PLATFORM_ADMIN_EMAIL = "admin@swarm.io";
+const DEFAULT_SUPABASE_CONFIG = window.SUPABASE_CONFIG || { url: "", anonKey: "" };
+const DEFAULT_GEMINI_CONFIG = window.GEMINI_CONFIG || { apiKey: "", model: "gemini-2.5-flash" };
+
 const state = {
   locale: window.localStorage.getItem(LOCALE_STORAGE_KEY) || "en",
   activeView: "visualizer",
@@ -661,13 +669,6 @@ const state = {
   },
 };
 
-const STORAGE_KEY = "swarm-id-platform-v2";
-const SESSION_STORAGE_KEY = "swarm-id-session-v1";
-const TUTORIAL_STORAGE_KEY = "swarm-id-tutorial-v1";
-const LOCALE_STORAGE_KEY = "swarm-id-locale-v1";
-const PLATFORM_ADMIN_EMAIL = "admin@swarm.io";
-const DEFAULT_SUPABASE_CONFIG = window.SUPABASE_CONFIG || { url: "", anonKey: "" };
-const DEFAULT_GEMINI_CONFIG = window.GEMINI_CONFIG || { apiKey: "", model: "gemini-2.5-flash" };
 const tutorialState = {
   active: false,
   stepIndex: 0,
