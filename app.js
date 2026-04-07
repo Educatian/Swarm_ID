@@ -1647,14 +1647,30 @@ async function joinCourseWithCodeRemote(joinCode) {
     status: "active",
   };
 
-  const { error: membershipError } = await client
+  const { data: existingMemberships, error: membershipLookupError } = await client
     .from("course_memberships")
-    .upsert(membershipPayload, { onConflict: "user_id,course_id" });
-  if (membershipError) {
-    if (membershipError.code === "23505") {
+    .select("id, course_id, role, status")
+    .eq("user_id", state.auth.userId)
+    .eq("status", "active");
+  if (membershipLookupError) throw membershipLookupError;
+
+  const activeMemberships = asArray(existingMemberships);
+  const sameCourseMembership = activeMemberships.find((item) => item.course_id === course.id && item.role === "user");
+  if (!sameCourseMembership) {
+    const otherActiveStudentMembership = activeMemberships.find(
+      (item) => item.course_id !== course.id && item.role === "user"
+    );
+    if (otherActiveStudentMembership) {
       throw new Error("This student account is already linked to another active course.");
     }
-    throw membershipError;
+
+    const { error: membershipInsertError } = await client.from("course_memberships").insert(membershipPayload);
+    if (membershipInsertError) {
+      if (membershipInsertError.code === "23505") {
+        throw new Error("This student account is already linked to another active course.");
+      }
+      throw membershipInsertError;
+    }
   }
 
   await refreshRemotePlatformContext();
