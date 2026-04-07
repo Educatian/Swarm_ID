@@ -718,18 +718,13 @@ async function updateSignedInProfileName(fullName) {
   if (error) throw error;
 }
 
-async function joinCourseWithCodeRemote(name, joinCode) {
+async function joinCourseWithCodeRemote(joinCode) {
   const client = initializeSupabase();
   if (!client) throw new Error("Login is not ready yet.");
   if (!state.auth.userId) throw new Error("Sign in first.");
   const normalizedCode = String(joinCode || "").trim().toUpperCase();
-  const displayName = String(name || "").trim();
   if (!normalizedCode) {
     throw new Error("Enter a course code first.");
-  }
-
-  if (displayName) {
-    await updateSignedInProfileName(displayName);
   }
 
   const { data: course, error: courseError } = await client
@@ -747,7 +742,7 @@ async function joinCourseWithCodeRemote(name, joinCode) {
     institution_id: course.institution_id,
     course_id: course.id,
     role: "user",
-    display_name: displayName || getAuthDisplayName(),
+    display_name: getAuthDisplayName(),
     is_primary: true,
     status: "active",
   };
@@ -815,7 +810,6 @@ const dom = {
   landingJoinForm: document.getElementById("landing-join-form"),
   landingJoinEmail: document.getElementById("landing-join-email"),
   landingJoinPassword: document.getElementById("landing-join-password"),
-  landingJoinName: document.getElementById("landing-join-name"),
   landingJoinCode: document.getElementById("landing-join-code"),
   landingJoinHelper: document.getElementById("landing-join-helper"),
   viewButtons: [...document.querySelectorAll("[data-view]")],
@@ -4250,7 +4244,6 @@ function renderLandingLogin() {
   dom.landingLoginPassword.disabled = state.auth.loading;
   dom.landingJoinEmail.disabled = state.auth.loading;
   dom.landingJoinPassword.disabled = state.auth.loading;
-  dom.landingJoinName.disabled = state.auth.loading;
   dom.landingJoinCode.disabled = state.auth.loading;
   dom.landingAuthStatus.textContent = state.auth.loading ? "Checking..." : state.auth.message;
   dom.landingLoginHelper.textContent =
@@ -4492,10 +4485,7 @@ function joinCourseWithCode(name, joinCode) {
 
   const { institution, course } = match;
   normalizeCourseData(course);
-  const normalizedName = String(name || "").trim();
-  if (!normalizedName) {
-    throw new Error("Enter your name before joining the course.");
-  }
+  const normalizedName = String(name || "").trim() || "Student";
 
   let learner =
     getLearners(course).find((item) => item.name.toLowerCase() === normalizedName.toLowerCase()) ||
@@ -5225,7 +5215,7 @@ document.addEventListener("submit", async (event) => {
         throw new Error("Enter your student email and password.");
       }
       await signInWithSupabase(joinEmail, joinPassword);
-      await joinCourseWithCodeRemote(dom.landingJoinName.value.trim(), dom.landingJoinCode.value.trim());
+      await joinCourseWithCodeRemote(dom.landingJoinCode.value.trim());
       renderLandingLogin();
       openStudio();
     } catch (error) {
