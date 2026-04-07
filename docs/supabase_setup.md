@@ -17,6 +17,8 @@ If instructors should create or publish cases from the app UI, make sure the ins
 
 If students should add agenda nodes, annotations, and learner-side reflections from the app UI, also apply the `learner_runs` insert/update policies from [supabase_schema.sql](C:\Users\jewoo\Desktop\Swarm_ID\docs\supabase_schema.sql). Without those policies, learner activity will stay local and disappear when the remote course data reloads.
 
+If students should use the landing-page course join flow, also apply the course-join policies from [supabase_schema.sql](C:\Users\jewoo\Desktop\Swarm_ID\docs\supabase_schema.sql). Those policies let an authenticated student look up a joinable course by `join_code` and insert exactly one active student membership for that account.
+
 The landing page then authenticates with email/password, reads the logged-in user's active course memberships, and opens the linked instructor or student workspace automatically.
 
 For the learner-run model, keep the instructor case canonical and store student exploration in `learner_runs`. The `agenda_nodes` field should hold the student's own added issue nodes, and `ai_generated_nodes` should hold related nodes suggested by the AI after expansion.

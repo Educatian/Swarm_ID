@@ -662,7 +662,7 @@ async function fetchSupabaseContext(userId) {
 
 function applyRemoteSessionContext({ profile, primaryMembership, platform }, sessionUser) {
   state.platform = platform;
-  state.activeRole = primaryMembership?.role || (isPlatformAdminAccount(sessionUser?.email) ? "admin" : state.activeRole || "user");
+  state.activeRole = primaryMembership?.role || (isPlatformAdminAccount(sessionUser?.email) ? "admin" : "user");
   state.activeInstitutionId = primaryMembership?.institution_id || "";
   state.activeCourseId = primaryMembership?.course_id || "";
   state.activeInstructorId = primaryMembership?.role === "admin" ? primaryMembership.user_id : "";
@@ -705,6 +705,69 @@ async function signInWithSupabase(email, password) {
   const context = await fetchSupabaseContext(sessionUser.id);
   applyRemoteSessionContext(context, sessionUser);
   return context;
+}
+
+async function updateSignedInProfileName(fullName) {
+  const client = initializeSupabase();
+  const nextName = String(fullName || "").trim();
+  if (!client || !state.auth.userId || !nextName) return;
+  const { error } = await client
+    .from("profiles")
+    .update({ full_name: nextName })
+    .eq("id", state.auth.userId);
+  if (error) throw error;
+}
+
+async function joinCourseWithCodeRemote(name, joinCode) {
+  const client = initializeSupabase();
+  if (!client) throw new Error("Login is not ready yet.");
+  if (!state.auth.userId) throw new Error("Sign in first.");
+  const normalizedCode = String(joinCode || "").trim().toUpperCase();
+  const displayName = String(name || "").trim();
+  if (!normalizedCode) {
+    throw new Error("Enter a course code first.");
+  }
+
+  if (displayName) {
+    await updateSignedInProfileName(displayName);
+  }
+
+  const { data: course, error: courseError } = await client
+    .from("courses")
+    .select("id, institution_id, code, name, join_code")
+    .eq("join_code", normalizedCode)
+    .maybeSingle();
+  if (courseError) throw courseError;
+  if (!course) {
+    throw new Error("That course code was not found.");
+  }
+
+  const membershipPayload = {
+    user_id: state.auth.userId,
+    institution_id: course.institution_id,
+    course_id: course.id,
+    role: "user",
+    display_name: displayName || getAuthDisplayName(),
+    is_primary: true,
+    status: "active",
+  };
+
+  const { error: membershipError } = await client
+    .from("course_memberships")
+    .upsert(membershipPayload, { onConflict: "user_id,course_id" });
+  if (membershipError) {
+    if (membershipError.code === "23505") {
+      throw new Error("This student account is already linked to another active course.");
+    }
+    throw membershipError;
+  }
+
+  await refreshRemotePlatformContext();
+  state.activeRole = "user";
+  state.auth.message = `Joined ${course.code}.`;
+  ensureActiveSelections();
+  persistSessionState();
+  return course;
 }
 
 async function restoreSupabaseSession() {
@@ -750,6 +813,8 @@ const dom = {
   landingLoginHelper: document.getElementById("landing-login-helper"),
   landingAuthStatus: document.getElementById("landing-auth-status"),
   landingJoinForm: document.getElementById("landing-join-form"),
+  landingJoinEmail: document.getElementById("landing-join-email"),
+  landingJoinPassword: document.getElementById("landing-join-password"),
   landingJoinName: document.getElementById("landing-join-name"),
   landingJoinCode: document.getElementById("landing-join-code"),
   landingJoinHelper: document.getElementById("landing-join-helper"),
@@ -4183,6 +4248,8 @@ function renderLandingLogin() {
   dom.landingLoginPassword.value = "";
   dom.landingLoginEmail.disabled = state.auth.loading;
   dom.landingLoginPassword.disabled = state.auth.loading;
+  dom.landingJoinEmail.disabled = state.auth.loading;
+  dom.landingJoinPassword.disabled = state.auth.loading;
   dom.landingJoinName.disabled = state.auth.loading;
   dom.landingJoinCode.disabled = state.auth.loading;
   dom.landingAuthStatus.textContent = state.auth.loading ? "Checking..." : state.auth.message;
@@ -4195,7 +4262,7 @@ function renderLandingLogin() {
         ? ""
         : "";
   dom.landingJoinHelper.textContent = configured
-    ? "Enter your code."
+    ? "Sign in as a student, then enter your course code."
     : "";
   normalizeRenderedCopy();
 }
@@ -5152,7 +5219,13 @@ document.addEventListener("submit", async (event) => {
   if (event.target.id === "landing-join-form") {
     event.preventDefault();
     try {
-      joinCourseWithCode(dom.landingJoinName.value.trim(), dom.landingJoinCode.value.trim());
+      const joinEmail = dom.landingJoinEmail.value.trim();
+      const joinPassword = dom.landingJoinPassword.value;
+      if (!joinEmail || !joinPassword) {
+        throw new Error("Enter your student email and password.");
+      }
+      await signInWithSupabase(joinEmail, joinPassword);
+      await joinCourseWithCodeRemote(dom.landingJoinName.value.trim(), dom.landingJoinCode.value.trim());
       renderLandingLogin();
       openStudio();
     } catch (error) {

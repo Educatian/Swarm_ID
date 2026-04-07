@@ -176,6 +176,8 @@ drop policy if exists "members can read same-course memberships" on public.cours
 drop policy if exists "platform admin can create institutions" on public.institutions;
 drop policy if exists "platform admin can create courses" on public.courses;
 drop policy if exists "platform admin can create memberships" on public.course_memberships;
+drop policy if exists "authenticated users can read joinable courses" on public.courses;
+drop policy if exists "students can join a course by code" on public.course_memberships;
 
 create policy "users can read own memberships"
 on public.course_memberships
@@ -203,6 +205,30 @@ on public.course_memberships
 for insert
 with check (
   (auth.jwt() ->> 'email') = 'admin@swarm.io'
+);
+
+create policy "authenticated users can read joinable courses"
+on public.courses
+for select
+using (
+  auth.role() = 'authenticated'
+  and join_code is not null
+);
+
+create policy "students can join a course by code"
+on public.course_memberships
+for insert
+with check (
+  user_id = auth.uid()
+  and role = 'user'
+  and status = 'active'
+  and exists (
+    select 1
+    from public.courses c
+    where c.id = course_memberships.course_id
+      and c.institution_id = course_memberships.institution_id
+      and c.join_code is not null
+  )
 );
 
 create policy "students can read published cases and instructors can read all cases"
