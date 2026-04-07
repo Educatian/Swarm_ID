@@ -877,6 +877,8 @@ const dom = {
   selectedNodeKicker: document.getElementById("selected-node-kicker"),
   selectedNodeTitle: document.getElementById("selected-node-title"),
   selectedNodeCopy: document.getElementById("selected-node-copy"),
+  relatedPersonalActivity: document.getElementById("related-personal-activity"),
+  relatedClassActivity: document.getElementById("related-class-activity"),
   quickAnnotationForm: document.getElementById("quick-annotation-form"),
   quickAnnotationSubmit: document.getElementById("quick-annotation-submit"),
   perspectiveConflicts: document.getElementById("perspective-conflicts"),
@@ -2053,6 +2055,64 @@ function buildCohortIssueEntries(activeCase = getActiveCaseRecord(), course = ge
     });
 
   return cohortEntries;
+}
+
+function tokenizeForMatch(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .map((token) => token.trim())
+    .filter((token) => token.length > 3);
+}
+
+function hasMeaningfulOverlap(left, right) {
+  const leftTokens = tokenizeForMatch(left);
+  const rightTokens = new Set(tokenizeForMatch(right));
+  return leftTokens.some((token) => rightTokens.has(token));
+}
+
+function getComparableNodeForActivity(node) {
+  if (!node) return null;
+  if (node.type !== "satellite") return node;
+  const frame = buildRenderableGraph();
+  return frame.nodes.find((entry) => entry.id === node.parent) || node;
+}
+
+function nodeMatchesActivity(node, item) {
+  const comparableNode = getComparableNodeForActivity(node);
+  if (!comparableNode || !item) return false;
+  const itemTitle = String(item.title || item.targetLabel || "").trim();
+  const itemBody = String(item.body || "").trim();
+  const itemText = `${itemTitle} ${itemBody}`.trim();
+
+  if (comparableNode.type === "stakeholder") {
+    return (item.stakeholder || "student") === comparableNode.id;
+  }
+
+  if (itemTitle && comparableNode.label && itemTitle.toLowerCase() === comparableNode.label.toLowerCase()) {
+    return true;
+  }
+
+  return (
+    ((item.stakeholder || "") === comparableNode.stakeholder && comparableNode.type !== "core") ||
+    hasMeaningfulOverlap(itemText, `${comparableNode.label || ""} ${comparableNode.detail || ""}`)
+  );
+}
+
+function renderRelatedActivityList(items, emptyMessage) {
+  return items.length
+    ? items
+        .map(
+          (item) => `
+            <article class="evidence-item">
+              <strong>${item.title}</strong>
+              <p>${item.body}</p>
+            </article>
+          `
+        )
+        .join("")
+    : emptyNoteMarkup(emptyMessage);
 }
 
 function buildCaseIssueEntries(activeCase) {
@@ -4193,6 +4253,12 @@ function renderStakeholderFocus() {
     dom.selectedNodeKicker.textContent = "Hover or click";
     dom.selectedNodeTitle.textContent = "No node selected";
     dom.selectedNodeCopy.textContent = "Hover or click a node in the network to inspect it here.";
+    if (dom.relatedPersonalActivity) {
+      dom.relatedPersonalActivity.innerHTML = emptyNoteMarkup("Select a node");
+    }
+    if (dom.relatedClassActivity) {
+      dom.relatedClassActivity.innerHTML = emptyNoteMarkup("Select a node");
+    }
     if (dom.quickAnnotationForm) {
       dom.quickAnnotationForm.hidden = true;
     }
@@ -4214,6 +4280,35 @@ function renderStakeholderFocus() {
   const riskScore = Math.round(scores.conflict * 0.65 + conflicts.length * 6);
   const selectedNode = getSelectedRenderableNode();
   const selectedNodeIssue = selectedNode ? describeNodeIssue(selectedNode) : null;
+  const comparableNode = getComparableNodeForActivity(selectedNode);
+  const activeRun = state.activeRole === "user" ? getActiveLearnerRun() : null;
+  const personalItems = comparableNode
+    ? [
+        ...asArray(activeRun?.agendaNodes).map((item) => ({
+          title: item.title || "Question",
+          body: item.body || "Added to your map.",
+          stakeholder: item.stakeholder || "student",
+        })),
+        ...asArray(activeRun?.aiGeneratedNodes).map((item) => ({
+          title: item.title || "AI addition",
+          body: item.body || "AI generated issue.",
+          stakeholder: item.stakeholder || "student",
+        })),
+        ...asArray(activeRun?.annotations).map((item) => ({
+          title: item.targetLabel ? `${item.targetLabel} note` : "Note",
+          body: item.body || "Added note.",
+          stakeholder: item.stakeholder || "student",
+          targetLabel: item.targetLabel || "",
+        })),
+      ]
+        .filter((item) => nodeMatchesActivity(comparableNode, item))
+        .slice(0, 4)
+    : [];
+  const classItems = comparableNode
+    ? buildCohortIssueEntries(activeCase)
+        .filter((item) => nodeMatchesActivity(comparableNode, item))
+        .slice(0, 4)
+    : [];
 
   dom.activeStakeholderPill.textContent = `${stakeholder.label} focus`;
   dom.activeStakeholderStatus.textContent = `${stakeholder.status} · cycle ${state.graph.iteration}`;
@@ -4271,6 +4366,15 @@ function renderStakeholderFocus() {
   dom.selectedNodeTitle.textContent = selectedNodeIssue?.title || "No node selected";
   dom.selectedNodeCopy.textContent =
     selectedNodeIssue?.body || "Hover or click a node in the network to inspect it here.";
+  if (dom.relatedPersonalActivity) {
+    dom.relatedPersonalActivity.innerHTML = renderRelatedActivityList(
+      personalItems,
+      state.activeRole === "user" ? "No related questions yet." : "Open a learner run."
+    );
+  }
+  if (dom.relatedClassActivity) {
+    dom.relatedClassActivity.innerHTML = renderRelatedActivityList(classItems, "No shared patterns yet.");
+  }
   if (dom.quickAnnotationForm) {
     dom.quickAnnotationForm.hidden = state.activeRole !== "user";
     const visibilitySelect = dom.quickAnnotationForm.querySelector('select[name="visibility"]');

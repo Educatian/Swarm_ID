@@ -1279,6 +1279,22 @@ textarea:disabled {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.selected-node-related {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.related-activity-columns {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.related-activity-columns > div {
+  min-width: 0;
+}
+
 .composer-input span {
   color: var(--primary);
 }
@@ -2116,6 +2132,10 @@ textarea:disabled {
   }
 
   .matrix-insights {
+    grid-template-columns: 1fr;
+  }
+
+  .related-activity-columns {
     grid-template-columns: 1fr;
   }
 
