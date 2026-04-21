@@ -2892,9 +2892,10 @@ async function renderInstructorCohortPanel() {
     const rows = members
       .map((m) => {
         const entry = byUser.get(m.user_id) || { total: 0, joined: false, opened: false, addedNode: false, reflected: false, askedQuestion: false, lastAt: null };
+        const name = escapeHtml(m.display_name || m.user_id.slice(0, 8));
         return `
-          <tr>
-            <td>${escapeHtml(m.display_name || m.user_id.slice(0, 8))}</td>
+          <tr class="cohort-row" data-cohort-user="${escapeHtml(m.user_id)}" data-cohort-name="${name}">
+            <td><button type="button" class="cohort-name-button">${name}</button></td>
             <td>${tick(entry.joined)}</td>
             <td>${tick(entry.opened)}</td>
             <td>${tick(entry.addedNode)}</td>
@@ -2911,10 +2912,166 @@ async function renderInstructorCohortPanel() {
         <thead><tr>${headers.map((h) => `<th>${escapeHtml(h)}</th>`).join("")}</tr></thead>
         <tbody>${rows}</tbody>
       </table>
+      <div id="cohort-drilldown" class="cohort-drilldown" hidden></div>
     `;
   } catch (error) {
     console.error("cohort panel load failed", error);
     panel.innerHTML = `<p class="muted">${state.locale === "ko" ? "불러오기 실패" : "Failed to load cohort data."}</p>`;
+  }
+}
+
+function formatDrilldownEvent(ev) {
+  const payload = ev.payload || {};
+  const stamp = ev.created_at ? new Date(ev.created_at).toISOString().slice(0, 16).replace("T", " ") : "";
+  const safe = (v) => escapeHtml(String(v == null ? "" : v));
+  const ko = state.locale === "ko";
+  switch (ev.event_type) {
+    case "auth.sign_in":
+      return { stamp, label: ko ? "로그인" : "Signed in", body: "" };
+    case "course.join":
+      return { stamp, label: ko ? "코스 참여" : "Joined course", body: payload.course_code ? safe(payload.course_code) : "" };
+    case "case.open":
+      return { stamp, label: ko ? "케이스 열기" : "Opened case", body: payload.via ? `via ${safe(payload.via)}` : "" };
+    case "case.create":
+      return { stamp, label: ko ? "케이스 생성" : "Created case", body: safe(payload.title || "") };
+    case "case.rename":
+      return { stamp, label: ko ? "케이스 이름 변경" : "Renamed case", body: `${safe(payload.from)} → ${safe(payload.to)}` };
+    case "case.publish":
+      return { stamp, label: ko ? "게시" : "Published case", body: safe(payload.title || "") };
+    case "case.unpublish":
+      return { stamp, label: ko ? "게시 취소" : "Unpublished case", body: safe(payload.title || "") };
+    case "view.switch":
+      return { stamp, label: ko ? "뷰 전환" : "Viewed", body: `${safe(payload.from)} → ${safe(payload.to)}` };
+    case "lens.change":
+      return { stamp, label: ko ? "렌즈 변경" : "Switched lens", body: `${safe(payload.from)} → ${safe(payload.to)}` };
+    case "node.add":
+      return { stamp, label: ko ? "노드 추가" : "Added node", body: safe(payload.title || "(untitled)"), sub: payload.stakeholder ? `stakeholder: ${safe(payload.stakeholder)}` : "" };
+    case "question.ask":
+      return { stamp, label: ko ? "질문" : "Asked", body: safe(payload.text || ""), sub: payload.stakeholder ? `lens: ${safe(payload.stakeholder)}` : "" };
+    case "perspective.quick":
+      return { stamp, label: ko ? "빠른 프롬프트" : "Quick prompt", body: safe(payload.prompt || "") };
+    case "reflection.submit":
+      return {
+        stamp,
+        label: ko ? `리플렉션 #${payload.prompt_index ?? "?"}` : `Reflection #${payload.prompt_index ?? "?"}`,
+        body: safe(payload.answer || ""),
+        sub: payload.prompt ? `prompt: ${safe(payload.prompt)}` : "",
+        highlight: true,
+      };
+    case "tutorial.start":
+      return { stamp, label: ko ? "튜토리얼 시작" : "Tutorial started", body: "" };
+    case "tutorial.step":
+      return { stamp, label: ko ? "튜토리얼 단계" : "Tutorial step", body: `#${safe(payload.step_index)}` };
+    case "tutorial.complete":
+      return { stamp, label: ko ? "튜토리얼 완료" : "Tutorial completed", body: "" };
+    case "tutorial.skip":
+      return { stamp, label: ko ? "튜토리얼 건너뛰기" : "Tutorial skipped", body: `#${safe(payload.step_index ?? 0)}` };
+    default:
+      return { stamp, label: safe(ev.event_type), body: safe(JSON.stringify(payload).slice(0, 160)) };
+  }
+}
+
+async function renderStudentDrilldown(userId, displayName) {
+  const container = document.getElementById("cohort-drilldown");
+  if (!container) return;
+  const course = getActiveCourse();
+  if (!course?.id) return;
+  if (!isSupabaseSessionActive()) return;
+  const client = initializeSupabase();
+  if (!client) return;
+  container.hidden = false;
+  const ko = state.locale === "ko";
+  const loading = ko ? "불러오는 중…" : "Loading timeline…";
+  container.innerHTML = `
+    <div class="drilldown-header">
+      <h4>${escapeHtml(displayName)} ${ko ? "활동 타임라인" : "activity timeline"}</h4>
+      <button type="button" class="toolbar-button" data-drilldown-close>${ko ? "닫기" : "Close"}</button>
+    </div>
+    <p class="muted">${loading}</p>
+  `;
+  try {
+    const { data, error } = await client
+      .from("analytics_events")
+      .select("event_type, payload, case_id, created_at")
+      .eq("course_id", course.id)
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(200);
+    if (error) throw error;
+    const events = asArray(data);
+    if (!events.length) {
+      container.innerHTML = `
+        <div class="drilldown-header">
+          <h4>${escapeHtml(displayName)} ${ko ? "활동 타임라인" : "activity timeline"}</h4>
+          <button type="button" class="toolbar-button" data-drilldown-close>${ko ? "닫기" : "Close"}</button>
+        </div>
+        <p class="muted">${ko ? "활동 이벤트가 없습니다." : "No activity yet."}</p>
+      `;
+      return;
+    }
+    const reflections = events
+      .filter((ev) => ev.event_type === "reflection.submit")
+      .sort((a, b) => (a.created_at < b.created_at ? -1 : 1));
+    const reflectionMarkup = reflections.length
+      ? `
+        <section class="drilldown-section">
+          <p class="label">${ko ? "리플렉션 답변" : "Reflection answers"}</p>
+          <div class="drilldown-reflections">
+            ${reflections
+              .map((ev) => {
+                const p = ev.payload || {};
+                return `
+                  <article class="drilldown-reflection">
+                    <header>#${escapeHtml(String(p.prompt_index ?? "?"))} &middot; ${escapeHtml(new Date(ev.created_at).toISOString().slice(0, 16).replace("T", " "))}</header>
+                    ${p.prompt ? `<p class="muted">${escapeHtml(String(p.prompt))}</p>` : ""}
+                    <p>${escapeHtml(String(p.answer || ""))}</p>
+                  </article>
+                `;
+              })
+              .join("")}
+          </div>
+        </section>
+      `
+      : "";
+    const timelineMarkup = `
+      <section class="drilldown-section">
+        <p class="label">${ko ? "이벤트 타임라인" : "Event timeline"}</p>
+        <ol class="drilldown-timeline">
+          ${events
+            .map((ev) => {
+              const row = formatDrilldownEvent(ev);
+              const cls = row.highlight ? "drilldown-item is-highlight" : "drilldown-item";
+              return `
+                <li class="${cls}">
+                  <span class="drilldown-stamp">${escapeHtml(row.stamp)}</span>
+                  <span class="drilldown-label">${row.label}</span>
+                  ${row.body ? `<p class="drilldown-body">${row.body}</p>` : ""}
+                  ${row.sub ? `<p class="drilldown-sub muted">${row.sub}</p>` : ""}
+                </li>
+              `;
+            })
+            .join("")}
+        </ol>
+      </section>
+    `;
+    container.innerHTML = `
+      <div class="drilldown-header">
+        <h4>${escapeHtml(displayName)} ${ko ? "활동 타임라인" : "activity timeline"}</h4>
+        <span class="muted drilldown-count">${events.length} ${ko ? "건" : "events"}</span>
+        <button type="button" class="toolbar-button" data-drilldown-close>${ko ? "닫기" : "Close"}</button>
+      </div>
+      ${reflectionMarkup}
+      ${timelineMarkup}
+    `;
+  } catch (error) {
+    console.error("drilldown load failed", error);
+    container.innerHTML = `
+      <div class="drilldown-header">
+        <h4>${escapeHtml(displayName)} ${ko ? "활동 타임라인" : "activity timeline"}</h4>
+        <button type="button" class="toolbar-button" data-drilldown-close>${ko ? "닫기" : "Close"}</button>
+      </div>
+      <p class="muted">${ko ? "불러오기 실패" : "Failed to load timeline."}</p>
+    `;
   }
 }
 
@@ -6872,6 +7029,22 @@ document.addEventListener("click", (event) => {
   if (reflectionSubmit) {
     const idx = Number(reflectionSubmit.getAttribute("data-reflection-submit"));
     if (Number.isFinite(idx)) handleReflectionSubmit(idx);
+  }
+
+  const cohortRow = event.target.closest("[data-cohort-user]");
+  if (cohortRow) {
+    const uid = cohortRow.getAttribute("data-cohort-user");
+    const name = cohortRow.getAttribute("data-cohort-name") || uid.slice(0, 8);
+    if (uid) renderStudentDrilldown(uid, name);
+  }
+
+  const drilldownClose = event.target.closest("[data-drilldown-close]");
+  if (drilldownClose) {
+    const container = document.getElementById("cohort-drilldown");
+    if (container) {
+      container.hidden = true;
+      container.innerHTML = "";
+    }
   }
 
   const scenarioButton = event.target.closest("[data-scenario]");

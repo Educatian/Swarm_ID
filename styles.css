@@ -2969,3 +2969,132 @@ body {
   color: rgba(120, 130, 150, 0.8);
   font-style: italic;
 }
+
+.cohort-panel .cohort-row {
+  cursor: pointer;
+}
+
+.cohort-panel .cohort-row:hover {
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.cohort-panel .cohort-name-button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--primary, #2563eb);
+  text-align: left;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.cohort-panel .cohort-name-button:hover {
+  text-decoration: underline;
+}
+
+.cohort-drilldown {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(121, 140, 171, 0.18);
+  background: rgba(248, 250, 253, 0.85);
+}
+
+.cohort-drilldown .drilldown-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.cohort-drilldown .drilldown-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  flex: 1;
+}
+
+.cohort-drilldown .drilldown-count {
+  font-size: 0.8rem;
+}
+
+.cohort-drilldown .drilldown-section {
+  margin-top: 12px;
+}
+
+.cohort-drilldown .drilldown-section .label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(80, 90, 110, 0.75);
+  margin-bottom: 6px;
+}
+
+.drilldown-reflections {
+  display: grid;
+  gap: 8px;
+}
+
+.drilldown-reflection {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(59, 130, 246, 0.18);
+}
+
+.drilldown-reflection header {
+  font-size: 0.78rem;
+  color: rgba(60, 70, 90, 0.78);
+  margin-bottom: 4px;
+}
+
+.drilldown-reflection p {
+  margin: 4px 0 0;
+}
+
+.drilldown-timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.drilldown-item {
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(121, 140, 171, 0.12);
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 6px 10px;
+  font-size: 0.86rem;
+}
+
+.drilldown-item.is-highlight {
+  border-color: rgba(59, 130, 246, 0.35);
+  background: rgba(239, 246, 255, 0.9);
+}
+
+.drilldown-item .drilldown-stamp {
+  color: rgba(90, 100, 120, 0.8);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.78rem;
+  align-self: center;
+}
+
+.drilldown-item .drilldown-label {
+  font-weight: 600;
+}
+
+.drilldown-item .drilldown-body,
+.drilldown-item .drilldown-sub {
+  grid-column: 1 / -1;
+  margin: 2px 0 0;
+}
+
+.drilldown-item .drilldown-sub {
+  font-size: 0.78rem;
+}
