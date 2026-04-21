@@ -1869,6 +1869,9 @@ const dom = {
   reflectionPrompts: document.getElementById("reflection-prompts"),
   reflectionFeed: document.getElementById("reflection-feed"),
   reflectionBadge: document.getElementById("reflection-badge"),
+  instructorCohortBlock: document.getElementById("instructor-cohort-block"),
+  instructorCohortPanel: document.getElementById("instructor-cohort-panel"),
+  cohortRefresh: document.getElementById("cohort-refresh"),
   tourOverlay: document.getElementById("tour-overlay"),
   tourCard: document.getElementById("tour-card"),
   tourStepLabel: document.getElementById("tour-step-label"),
@@ -2785,6 +2788,133 @@ async function renameActiveCase() {
     } catch (error) {
       console.error("Failed to persist case rename", error);
     }
+  }
+}
+
+function handleReflectionSubmit(promptIndex) {
+  const activeCase = getCaseById(state.activeCaseId);
+  if (!activeCase) return;
+  const prompts = asArray(activeCase.reflectionPrompts);
+  const prompt = prompts[promptIndex];
+  if (prompt == null) return;
+  const textarea = dom.reflectionPrompts?.querySelector(
+    `textarea.reflection-response[data-prompt-index="${promptIndex}"]`
+  );
+  const status = dom.reflectionPrompts?.querySelector(
+    `[data-reflection-status="${promptIndex}"]`
+  );
+  const answer = String(textarea?.value || "").trim();
+  if (!answer) {
+    if (status) status.textContent = state.locale === "ko" ? "먼저 답변을 적어주세요." : "Write your reflection first.";
+    return;
+  }
+  logEvent("reflection.submit", {
+    prompt_index: promptIndex,
+    prompt: String(prompt).slice(0, 400),
+    answer: answer.slice(0, 2000),
+    length: answer.length,
+  });
+  if (status) status.textContent = state.locale === "ko" ? "제출됨 · 강사에게 공유되었습니다." : "Submitted — shared with your instructor.";
+}
+
+async function renderInstructorCohortPanel() {
+  const panel = dom.instructorCohortPanel;
+  if (!panel) return;
+  const course = getActiveCourse();
+  const activeCase = getCaseById(state.activeCaseId);
+  if (!course?.id || !activeCase?.id) {
+    panel.innerHTML = `<p class="muted">${state.locale === "ko" ? "게시된 케이스가 선택되면 표시됩니다." : "Select a case to see cohort activity."}</p>`;
+    return;
+  }
+  if (!isSupabaseSessionActive()) {
+    panel.innerHTML = `<p class="muted">${state.locale === "ko" ? "로그인 후 데이터가 표시됩니다." : "Sign in to load cohort data."}</p>`;
+    return;
+  }
+  const client = initializeSupabase();
+  if (!client) return;
+  panel.innerHTML = `<p class="muted">${state.locale === "ko" ? "불러오는 중…" : "Loading…"}</p>`;
+  try {
+    const [membersRes, eventsRes] = await Promise.all([
+      client
+        .from("course_memberships")
+        .select("user_id, display_name, status, role")
+        .eq("course_id", course.id)
+        .eq("role", "user")
+        .eq("status", "active"),
+      client
+        .from("analytics_events")
+        .select("user_id, event_type, case_id, created_at")
+        .eq("course_id", course.id),
+    ]);
+    if (membersRes.error) throw membersRes.error;
+    if (eventsRes.error) throw eventsRes.error;
+    const members = asArray(membersRes.data);
+    const events = asArray(eventsRes.data);
+    if (!members.length) {
+      panel.innerHTML = `<p class="muted">${state.locale === "ko" ? "활동 중인 학생이 없습니다." : "No active students yet."}</p>`;
+      return;
+    }
+    const byUser = new Map();
+    for (const ev of events) {
+      if (!ev.user_id) continue;
+      let entry = byUser.get(ev.user_id);
+      if (!entry) {
+        entry = {
+          total: 0,
+          joined: false,
+          opened: false,
+          addedNode: false,
+          reflected: false,
+          askedQuestion: false,
+          lastAt: null,
+        };
+        byUser.set(ev.user_id, entry);
+      }
+      entry.total += 1;
+      if (!entry.lastAt || ev.created_at > entry.lastAt) entry.lastAt = ev.created_at;
+      if (ev.event_type === "course.join") entry.joined = true;
+      const scopedToCase = ev.case_id === activeCase.id;
+      if (ev.event_type === "case.open" && scopedToCase) entry.opened = true;
+      if (ev.event_type === "node.add" && scopedToCase) entry.addedNode = true;
+      if (ev.event_type === "reflection.submit" && scopedToCase) entry.reflected = true;
+      if (ev.event_type === "question.ask" && scopedToCase) entry.askedQuestion = true;
+    }
+    const tick = (b) => (b ? '<span class="check">&#10003;</span>' : '<span class="dash">&mdash;</span>');
+    const fmt = (iso) => {
+      if (!iso) return '<span class="dash">&mdash;</span>';
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return '<span class="dash">&mdash;</span>';
+      return escapeHtml(d.toISOString().slice(0, 16).replace("T", " "));
+    };
+    const headers = state.locale === "ko"
+      ? ["학생", "참여", "케이스 열기", "노드 추가", "질문", "리플렉션", "총 이벤트", "최근 활동"]
+      : ["Student", "Joined", "Opened case", "Added node", "Asked", "Reflected", "Events", "Last active"];
+    const rows = members
+      .map((m) => {
+        const entry = byUser.get(m.user_id) || { total: 0, joined: false, opened: false, addedNode: false, reflected: false, askedQuestion: false, lastAt: null };
+        return `
+          <tr>
+            <td>${escapeHtml(m.display_name || m.user_id.slice(0, 8))}</td>
+            <td>${tick(entry.joined)}</td>
+            <td>${tick(entry.opened)}</td>
+            <td>${tick(entry.addedNode)}</td>
+            <td>${tick(entry.askedQuestion)}</td>
+            <td>${tick(entry.reflected)}</td>
+            <td>${entry.total}</td>
+            <td>${fmt(entry.lastAt)}</td>
+          </tr>
+        `;
+      })
+      .join("");
+    panel.innerHTML = `
+      <table>
+        <thead><tr>${headers.map((h) => `<th>${escapeHtml(h)}</th>`).join("")}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+  } catch (error) {
+    console.error("cohort panel load failed", error);
+    panel.innerHTML = `<p class="muted">${state.locale === "ko" ? "불러오기 실패" : "Failed to load cohort data."}</p>`;
   }
 }
 
@@ -5641,9 +5771,35 @@ function renderReport() {
       : `${activeLearner?.name || t("student")} ${state.locale === "ko" ? "리플렉션" : "reflection"}`;
 
   const reflectionPrompts = asArray(activeCase?.reflectionPrompts);
+  const isStudent = state.activeRole === "user";
   dom.reflectionPrompts.innerHTML = reflectionPrompts.length
-    ? reflectionPrompts.map((item) => `<article class="prompt-item">${item}</article>`).join("")
+    ? reflectionPrompts
+        .map((item, index) => {
+          const safe = escapeHtml(String(item || ""));
+          if (!isStudent) return `<article class="prompt-item">${safe}</article>`;
+          const placeholder = state.locale === "ko" ? "당신의 답변을 적으세요..." : "Type your reflection...";
+          const submitLabel = state.locale === "ko" ? "제출" : "Submit";
+          return `
+            <article class="prompt-item" data-prompt-index="${index}">
+              <span class="prompt-text">${safe}</span>
+              <textarea class="reflection-response" data-prompt-index="${index}" placeholder="${placeholder}"></textarea>
+              <div class="reflection-footer">
+                <button type="button" class="toolbar-button toolbar-button-primary reflection-submit" data-reflection-submit="${index}">${submitLabel}</button>
+                <span class="reflection-status" data-reflection-status="${index}"></span>
+              </div>
+            </article>
+          `;
+        })
+        .join("")
     : emptyNoteMarkup(t("noPrompts"));
+
+  if (dom.instructorCohortBlock) {
+    const showCohort = state.activeRole === "admin" && Boolean(activeCase);
+    dom.instructorCohortBlock.hidden = !showCohort;
+    if (showCohort) {
+      renderInstructorCohortPanel();
+    }
+  }
 
   dom.reflectionFeed.innerHTML = state.timeline.length
     ? state.timeline
@@ -6712,6 +6868,12 @@ document.addEventListener("click", (event) => {
     logEvent("perspective.quick", { prompt: promptButton.dataset.prompt, stakeholder: state.activeStakeholder });
   }
 
+  const reflectionSubmit = event.target.closest("[data-reflection-submit]");
+  if (reflectionSubmit) {
+    const idx = Number(reflectionSubmit.getAttribute("data-reflection-submit"));
+    if (Number.isFinite(idx)) handleReflectionSubmit(idx);
+  }
+
   const scenarioButton = event.target.closest("[data-scenario]");
   if (scenarioButton) {
     applyScenario(scenarioButton.dataset.scenario);
@@ -7120,6 +7282,10 @@ window.addEventListener("keydown", (event) => {
 
 dom.caseTitleEdit?.addEventListener("click", () => {
   renameActiveCase();
+});
+
+dom.cohortRefresh?.addEventListener("click", () => {
+  renderInstructorCohortPanel();
 });
 
 dom.returnToLanding?.addEventListener("click", async () => {
