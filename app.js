@@ -5710,7 +5710,9 @@ function getTutorialSteps() {
       {
         selector: "#pipeline-console",
         title: state.locale === "ko" ? "케이스 생성 또는 게시" : "Create or Publish a Case",
-        body: state.locale === "ko" ? "여기에 코스 브리프를 붙여 케이스를 만들고, 학생에게 보여줄 준비가 되면 게시하세요." : "Paste a course brief here to make a case, then publish it when students should see it.",
+        body: state.locale === "ko"
+          ? "제목, 수업 브리프, 공개 설정을 입력해 케이스를 만드세요. 기본값은 초안이며, 학생에게 공개할 준비가 되면 '학생에게 게시'로 전환하세요."
+          : "Fill in the title, instructional brief, and visibility to create a case. New cases start as drafts — switch to 'Publish to learners' when students should see it.",
         view: "visualizer",
       },
       {
@@ -5814,11 +5816,18 @@ function renderTutorialStep() {
 
   if (step.view && state.activeView !== step.view) {
     setView(step.view);
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(renderTutorialStep);
+    });
     return;
   }
 
   const target = document.querySelector(step.selector);
   if (!target) {
+    if (tutorialState.stepIndex >= tutorialState.steps.length - 1) {
+      endTutorial(true);
+      return;
+    }
     tutorialState.stepIndex += 1;
     renderTutorialStep();
     return;
