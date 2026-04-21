@@ -130,15 +130,21 @@
           <span id="sidebar-case-label">Case</span>
           <select id="sidebar-case-select"></select>
         </label>
-        <h2 id="case-title">No active case</h2>
+        <div class="case-title-row">
+          <h2 id="case-title">No active case</h2>
+          <button id="case-title-edit" class="icon-button" type="button" hidden title="Rename case" aria-label="Rename case">
+            <span class="material-symbols-outlined">edit</span>
+          </button>
+        </div>
         <p class="case-subtitle" id="case-subtitle">Waiting for course data.</p>
         <div class="meter-label">
           <span id="sidebar-tension-label">Case tension</span>
-          <strong id="sidebar-tension">High</strong>
+          <strong id="sidebar-tension" title="0–100. Higher means more unresolved friction across stakeholders.">High</strong>
         </div>
         <div class="meter">
           <div class="meter-fill meter-fill-danger" id="sidebar-tension-fill"></div>
         </div>
+        <p class="meter-hint" id="sidebar-tension-hint">0–100 · higher means more friction across stakeholders</p>
       </div>
 
       <nav class="primary-nav" aria-label="Primary">
@@ -302,6 +308,7 @@
                   <input id="visualizer-input" name="visualizerQuestion" type="text" placeholder="Ask what conflict matters most in this caseâ€¦" autocomplete="off">
                 </label>
                 <button class="toolbar-button toolbar-button-primary" type="submit">Ask a Question</button>
+                <p class="composer-hint" id="visualizer-hint">Your question will be added to the cohort graph. Your instructor and classmates can see it.</p>
               </form>
 
               <div class="export-actions" id="student-export-actions" hidden>

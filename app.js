@@ -72,6 +72,7 @@ const translations = {
     skipToMain: "Skip to main content",
     labName: "Instructional design systems lab",
     signIn: "Sign In",
+    signInSubmit: "Continue",
     landingHeroKicker: "AI + Human Network Visualization",
     landingHeroTitle: "Turn design tension into a living network.",
     landingHeroBody: "Human judgment, institutional friction, and AI reasoning in one responsive field.",
@@ -106,7 +107,7 @@ const translations = {
     course: "Course",
     student: "Student",
     showTutorial: "Show Tutorial",
-    switchAccount: "Switch Account",
+    switchAccount: "Sign out",
     startHere: "Start here",
     createOrChooseCase: "Create or Choose a Case",
     choosePublishedCase: "Choose a Published Case",
@@ -137,6 +138,8 @@ const translations = {
     saveNote: "Save note",
     askQuestionPlaceholder: "Ask what conflict matters most in this case...",
     askQuestion: "Ask a Question",
+    askQuestionHint: "Your question will be added to the cohort graph. Your instructor and classmates can see it.",
+    tensionScaleHint: "0–100 · higher means more friction across stakeholders",
     downloadPng: "Download PNG",
     downloadHtmlSnapshot: "Download HTML Snapshot",
     swarmActivity: "Swarm activity",
@@ -221,9 +224,12 @@ const translations = {
     addCourse: "Add course",
     newCase: "New case",
     titlePlaceholder: "Title...",
+    caseTitleLabel: "Case title",
+    caseBriefLabel: "Instructional brief",
+    caseVisibilityLabel: "Visibility",
     publishToLearners: "Publish to learners",
-    keepAsDraft: "Keep as draft",
-    pasteBriefPlaceholder: "Paste the brief...",
+    keepAsDraft: "Keep as draft (review before sharing)",
+    pasteBriefPlaceholder: "Paste the brief — include audience, learning objective, constraints, and resources...",
     createCaseBtn: "Create case",
     createCourseFirst: "Create a course first.",
     noCourseAssigned: "No course assigned.",
@@ -340,6 +346,7 @@ const translations = {
     skipToMain: "본문으로 바로가기",
     labName: "수업설계 시스템 연구실",
     signIn: "로그인",
+    signInSubmit: "계속",
     landingHeroKicker: "AI + 인간 네트워크 시각화",
     landingHeroTitle: "설계의 긴장을 살아 있는 네트워크로 바꾸세요.",
     landingHeroBody: "인간의 판단, 제도적 마찰, AI 추론을 하나의 반응형 장에서 살펴봅니다.",
@@ -374,7 +381,7 @@ const translations = {
     course: "코스",
     student: "학생",
     showTutorial: "튜토리얼 보기",
-    switchAccount: "계정 전환",
+    switchAccount: "로그아웃",
     startHere: "여기서 시작",
     createOrChooseCase: "케이스 만들기 또는 선택",
     choosePublishedCase: "게시된 케이스 선택",
@@ -405,6 +412,8 @@ const translations = {
     saveNote: "노트 저장",
     askQuestionPlaceholder: "이 케이스에서 가장 중요한 갈등이 무엇인지 물어보세요...",
     askQuestion: "질문하기",
+    askQuestionHint: "질문은 코호트 그래프에 추가되어 교수자와 동료 학생들이 볼 수 있습니다.",
+    tensionScaleHint: "0–100 · 숫자가 클수록 이해관계자 간 마찰이 큽니다",
     downloadPng: "PNG 다운로드",
     downloadHtmlSnapshot: "HTML 스냅샷 다운로드",
     swarmActivity: "스웜 활동",
@@ -489,9 +498,12 @@ const translations = {
     addCourse: "코스 추가",
     newCase: "새 케이스",
     titlePlaceholder: "제목...",
+    caseTitleLabel: "케이스 제목",
+    caseBriefLabel: "수업 브리프",
+    caseVisibilityLabel: "공개 설정",
     publishToLearners: "학생에게 게시",
-    keepAsDraft: "초안으로 유지",
-    pasteBriefPlaceholder: "브리프를 붙여 넣으세요...",
+    keepAsDraft: "초안으로 유지 (공유 전 검토)",
+    pasteBriefPlaceholder: "브리프를 붙여 넣으세요 — 대상, 학습목표, 제약조건, 자원을 포함하세요...",
     createCaseBtn: "케이스 생성",
     createCourseFirst: "먼저 코스를 만드세요.",
     noCourseAssigned: "할당된 코스가 없습니다.",
@@ -815,7 +827,7 @@ function applyStaticTranslations() {
   if (dom.startTutorialButton) dom.startTutorialButton.textContent = t("showTutorial");
   if (dom.returnToLanding) dom.returnToLanding.textContent = t("switchAccount");
   if (document.getElementById("landing-enter-button")) document.getElementById("landing-enter-button").textContent = t("signIn");
-  if (document.getElementById("landing-login-submit")) document.getElementById("landing-login-submit").textContent = t("signIn");
+  if (document.getElementById("landing-login-submit")) document.getElementById("landing-login-submit").textContent = t("signInSubmit");
   if (document.getElementById("landing-join-submit")) document.getElementById("landing-join-submit").textContent = t("joinWithCode");
 
   const landingCopy = document.querySelector(".landing-copy");
@@ -961,6 +973,8 @@ function applyStaticTranslations() {
   if (swarmHead) swarmHead.textContent = t("swarmActivity");
   const visualizerSubmit = document.querySelector('#visualizer-form button[type="submit"]');
   if (visualizerSubmit && !visualizerSubmit.disabled) visualizerSubmit.textContent = t("askQuestion");
+  const visualizerHint = document.getElementById("visualizer-hint");
+  if (visualizerHint) visualizerHint.textContent = t("askQuestionHint");
 
   const stageLegendLabels = document.querySelectorAll(".stage-overlay-bottom .legend-item span:last-child");
   if (stageLegendLabels[0]) stageLegendLabels[0].textContent = t("instructionalSignals");
@@ -1755,12 +1769,14 @@ const dom = {
   sidebarCaseLabel: document.getElementById("sidebar-case-label"),
   sidebarCaseSelect: document.getElementById("sidebar-case-select"),
   caseTitle: document.getElementById("case-title"),
+  caseTitleEdit: document.getElementById("case-title-edit"),
   caseSubtitle: document.getElementById("case-subtitle"),
   topKicker: document.getElementById("top-kicker"),
   topTitle: document.getElementById("view-title"),
   sidebarTensionLabel: document.getElementById("sidebar-tension-label"),
   sidebarTension: document.getElementById("sidebar-tension"),
   sidebarTensionFill: document.getElementById("sidebar-tension-fill"),
+  sidebarTensionHint: document.getElementById("sidebar-tension-hint"),
   healthFill: document.getElementById("health-fill"),
   healthCopy: document.getElementById("health-copy"),
   activeStakeholderPill: document.getElementById("active-stakeholder-pill"),
@@ -2686,6 +2702,7 @@ function syncActiveCaseState() {
   const activeCase = getCaseById(state.activeCaseId, course);
   dom.caseSummaryLabel.textContent = state.activeRole === "admin" ? (state.locale === "ko" ? "선택된 교수자 케이스" : "Selected Instructor Case") : (state.locale === "ko" ? "선택된 게시 케이스" : "Selected Published Case");
   dom.sidebarTensionLabel.textContent = state.activeRole === "admin" ? t("caseTension") : (state.locale === "ko" ? "학습 런 긴장도" : "Learner run tension");
+  if (dom.sidebarTensionHint) dom.sidebarTensionHint.textContent = t("tensionScaleHint");
   if (!activeCase) {
     state.metrics = { ...emptyMetrics };
     state.evidence = [];
@@ -2697,6 +2714,7 @@ function syncActiveCaseState() {
       state.activeRole === "admin"
         ? (state.locale === "ko" ? "케이스를 만들거나 선택하세요." : "Create or select a case.")
         : (state.locale === "ko" ? "게시된 케이스를 선택하세요." : "Choose a published case.");
+    if (dom.caseTitleEdit) dom.caseTitleEdit.hidden = true;
     return;
   }
 
@@ -2713,6 +2731,29 @@ function syncActiveCaseState() {
     activeCase.summary ||
     course?.settings?.courseSummary ||
     "Live case data is connected to this workspace.";
+  if (dom.caseTitleEdit) dom.caseTitleEdit.hidden = state.activeRole !== "admin";
+}
+
+async function renameActiveCase() {
+  const course = getActiveCourse();
+  const activeCase = getCaseById(state.activeCaseId, course);
+  if (!activeCase || state.activeRole !== "admin") return;
+  const prompt = state.locale === "ko" ? "새 케이스 제목을 입력하세요" : "Enter a new case title";
+  const nextTitle = window.prompt(prompt, activeCase.title);
+  if (nextTitle === null) return;
+  const trimmed = nextTitle.trim();
+  if (!trimmed || trimmed === activeCase.title) return;
+  activeCase.title = trimmed;
+  dom.caseTitle.textContent = trimmed;
+  persistPlatformState();
+  renderPipeline();
+  if (isSupabaseSessionActive()) {
+    try {
+      await syncCaseToSupabase(activeCase, course?.id);
+    } catch (error) {
+      console.error("Failed to persist case rename", error);
+    }
+  }
 }
 
 function updateActiveCaseRecord(mutator) {
@@ -3750,14 +3791,21 @@ function renderPipelineConsole() {
           course
             ? `
               <form class="pipeline-form" id="upload-document-form">
-                <div class="pipeline-form-row two-up">
+                <label class="mini-control">
+                  <span>${t("caseTitleLabel")}</span>
                   <input name="documentTitle" type="text" placeholder="${t("titlePlaceholder")}" autocomplete="off" required>
+                </label>
+                <label class="mini-control">
+                  <span>${t("caseBriefLabel")}</span>
+                  <textarea name="documentText" placeholder="${t("pasteBriefPlaceholder")}" autocomplete="off" required></textarea>
+                </label>
+                <label class="mini-control">
+                  <span>${t("caseVisibilityLabel")}</span>
                   <select name="publishMode">
+                    <option value="draft" selected>${t("keepAsDraft")}</option>
                     <option value="published">${t("publishToLearners")}</option>
-                    <option value="draft">${t("keepAsDraft")}</option>
                   </select>
-                </div>
-                <textarea name="documentText" placeholder="${t("pasteBriefPlaceholder")}" autocomplete="off" required></textarea>
+                </label>
                 <div class="pipeline-actions">
                   <button class="toolbar-button toolbar-button-primary" type="submit">${t("createCaseBtn")}</button>
                 </div>
@@ -6657,6 +6705,19 @@ document.addEventListener("submit", async (event) => {
   if (event.target.id === "upload-document-form") {
     event.preventDefault();
     const form = new FormData(event.target);
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    const originalLabel = submitButton ? submitButton.textContent : "";
+    const stages = state.locale === "ko"
+      ? ["브리프 분석 중…", "이해관계자 추출 중…", "긴장 관계 계산 중…", "케이스 저장 중…"]
+      : ["Parsing brief…", "Extracting stakeholders…", "Computing tensions…", "Saving case…"];
+    let stageIndex = 0;
+    const setStage = (label) => { if (submitButton) submitButton.textContent = label; };
+    setStage(stages[0]);
+    if (submitButton) submitButton.disabled = true;
+    const stageTimer = setInterval(() => {
+      stageIndex = Math.min(stageIndex + 1, stages.length - 1);
+      setStage(stages[stageIndex]);
+    }, 700);
     try {
       await uploadStructuredDocument(
         String(form.get("documentTitle")).trim(),
@@ -6669,6 +6730,12 @@ document.addEventListener("submit", async (event) => {
     } catch (error) {
       state.auth.message = error.message || "The document could not be structured.";
       renderLandingLogin();
+    } finally {
+      clearInterval(stageTimer);
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = originalLabel || t("createCaseBtn");
+      }
     }
     return;
   }
@@ -6930,6 +6997,10 @@ window.addEventListener("keydown", (event) => {
   if (event.key === "ArrowLeft") {
     advanceTutorial(-1);
   }
+});
+
+dom.caseTitleEdit?.addEventListener("click", () => {
+  renameActiveCase();
 });
 
 dom.returnToLanding?.addEventListener("click", async () => {
