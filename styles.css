@@ -435,6 +435,7 @@ textarea:focus-visible,
 .topbar {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 18px;
   padding: 14px 18px;
   border-radius: 26px;
@@ -442,6 +443,55 @@ textarea:focus-visible,
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.14);
+  transition: padding 0.2s ease;
+}
+
+.topbar-heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar-compact-summary {
+  margin: 6px 0 0 !important;
+  font-size: 0.82rem;
+  color: rgba(246, 246, 252, 0.55) !important;
+  max-width: 100% !important;
+  letter-spacing: 0.01em;
+}
+
+.topbar-collapse-toggle {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(246, 246, 252, 0.7);
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topbar-collapse-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.topbar.is-collapsed .topbar-side {
+  display: none;
+}
+
+.topbar.is-collapsed {
+  padding: 10px 14px;
+}
+
+.topbar.is-collapsed .topbar-collapse-toggle .chevron {
+  display: inline-block;
+  transform: rotate(-90deg);
 }
 
 .topbar h2 {

@@ -1803,6 +1803,9 @@ const dom = {
   sessionIdentityLabel: document.getElementById("session-identity-label"),
   startTutorialButton: document.getElementById("start-tutorial"),
   returnToLanding: document.getElementById("return-to-landing"),
+  topbar: document.querySelector(".topbar"),
+  topbarCollapseToggle: document.getElementById("topbar-collapse-toggle"),
+  topbarCompactSummary: document.getElementById("topbar-compact-summary"),
   workspaceLocaleToggle: document.getElementById("workspace-locale-toggle"),
   visualizerLayout: document.getElementById("visualizer-layout"),
   intakeTitle: document.getElementById("intake-title"),
@@ -6023,6 +6026,7 @@ function renderAll() {
   if (chatInput) {
     chatInput.placeholder = t("askPerspectivePlaceholder");
   }
+  updateTopbarCompactSummary();
   syncActiveCaseState();
   ensureGraphCurrent();
   dom.visualizerLayout?.classList.toggle("is-focused", hasActiveCase());
@@ -7539,6 +7543,44 @@ dom.returnToLanding?.addEventListener("click", async () => {
   returnToLanding();
 });
 
+function updateTopbarCompactSummary() {
+  const summary = dom.topbarCompactSummary;
+  if (!summary) return;
+  const collapsed = dom.topbar?.classList.contains("is-collapsed");
+  if (!collapsed) {
+    summary.hidden = true;
+    summary.textContent = "";
+    return;
+  }
+  const course = getActiveCourse();
+  const caseRec = getCaseById(state.activeCaseId);
+  const parts = [];
+  if (course?.code) parts.push(course.code);
+  if (caseRec?.title) parts.push(caseRec.title);
+  summary.textContent = parts.join(" · ") || "Context hidden";
+  summary.hidden = false;
+}
+
+function setTopbarCollapsed(collapsed, { persist = true } = {}) {
+  if (!dom.topbar) return;
+  dom.topbar.classList.toggle("is-collapsed", !!collapsed);
+  if (dom.topbarCollapseToggle) {
+    const label = collapsed ? "Expand context bar" : "Collapse context bar";
+    dom.topbarCollapseToggle.setAttribute("aria-label", label);
+    dom.topbarCollapseToggle.setAttribute("title", label);
+  }
+  updateTopbarCompactSummary();
+  if (persist) {
+    try { localStorage.setItem("topbar-collapsed", collapsed ? "1" : "0"); } catch (_) {}
+  }
+}
+
+function restoreTopbarCollapse() {
+  let stored = "0";
+  try { stored = localStorage.getItem("topbar-collapsed") || "0"; } catch (_) {}
+  setTopbarCollapsed(stored === "1", { persist: false });
+}
+
 function restoreDismissedViewIntros() {
   document.querySelectorAll("[data-view-intro]").forEach((card) => {
     const key = card.getAttribute("data-view-intro");
@@ -7553,6 +7595,11 @@ function restoreDismissedViewIntros() {
 async function boot() {
   applyStaticTranslations();
   restoreDismissedViewIntros();
+  restoreTopbarCollapse();
+  dom.topbarCollapseToggle?.addEventListener("click", () => {
+    const nextCollapsed = !dom.topbar?.classList.contains("is-collapsed");
+    setTopbarCollapsed(nextCollapsed);
+  });
   state.platform = loadPlatformState();
   hydrateSessionState();
   hydrateTutorialState();
