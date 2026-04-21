@@ -1406,6 +1406,34 @@ async function syncLearnerRunToSupabase(runRecord, caseId = state.activeCaseId, 
   }
 }
 
+function logEvent(eventType, payload = {}) {
+  if (!isSupabaseSessionActive()) return;
+  const client = initializeSupabase();
+  if (!client) return;
+  const course = getActiveCourse();
+  const row = {
+    user_id: state.auth.userId,
+    course_id: course?.id || null,
+    case_id: state.activeCaseId || null,
+    role: state.activeRole || null,
+    event_type: String(eventType || "unknown"),
+    payload: payload && typeof payload === "object" ? payload : { value: payload },
+    client_ts: new Date().toISOString(),
+  };
+  try {
+    const result = client.from("analytics_events").insert(row);
+    if (result && typeof result.then === "function") {
+      result.then(({ error } = {}) => {
+        if (error) console.warn("analytics_events insert failed", eventType, error.message || error);
+      }).catch((error) => {
+        console.warn("analytics_events insert threw", eventType, error?.message || error);
+      });
+    }
+  } catch (error) {
+    console.warn("analytics_events dispatch failed", eventType, error?.message || error);
+  }
+}
+
 async function createInstitutionInSupabase(name) {
   const client = initializeSupabase();
   if (!client) throw new Error("Login is not ready yet.");
@@ -1618,6 +1646,7 @@ async function signInWithSupabase(email, password) {
   await ensureSupabaseProfile(sessionUser);
   const context = await fetchSupabaseContext(sessionUser.id);
   applyRemoteSessionContext(context, sessionUser);
+  logEvent("auth.sign_in", { email_domain: (sessionUser.email || "").split("@")[1] || "", role: state.activeRole });
   return context;
 }
 
@@ -1692,6 +1721,7 @@ async function joinCourseWithCodeRemote(joinCode) {
   state.auth.message = `Joined ${course.code}.`;
   ensureActiveSelections();
   persistSessionState();
+  logEvent("course.join", { course_code: course.code, course_id: course.id });
   return course;
 }
 
@@ -2743,10 +2773,12 @@ async function renameActiveCase() {
   if (nextTitle === null) return;
   const trimmed = nextTitle.trim();
   if (!trimmed || trimmed === activeCase.title) return;
+  const previousTitle = activeCase.title;
   activeCase.title = trimmed;
   dom.caseTitle.textContent = trimmed;
   persistPlatformState();
   renderPipeline();
+  logEvent("case.rename", { case_id: activeCase.id, from: previousTitle, to: trimmed });
   if (isSupabaseSessionActive()) {
     try {
       await syncCaseToSupabase(activeCase, course?.id);
@@ -5874,10 +5906,14 @@ function startTutorial(force = false) {
   tutorialState.stepIndex = 0;
   tutorialState.active = tutorialState.steps.length > 0;
   if (!tutorialState.active) return;
+  logEvent("tutorial.start", { role: roleKey, forced: Boolean(force), step_count: tutorialState.steps.length });
   window.requestAnimationFrame(renderTutorialStep);
 }
 
 function endTutorial(markSeen = true) {
+  const wasActive = tutorialState.active;
+  const lastIndex = tutorialState.stepIndex;
+  const total = tutorialState.steps.length;
   if (markSeen) {
     tutorialState.seenByRole[state.activeRole] = true;
     persistTutorialState();
@@ -5888,6 +5924,14 @@ function endTutorial(markSeen = true) {
   tutorialState.steps = [];
   dom.tourOverlay.classList.add("is-hidden");
   dom.tourOverlay.setAttribute("aria-hidden", "true");
+  if (wasActive) {
+    const reachedEnd = total > 0 && lastIndex >= total - 1;
+    logEvent(reachedEnd ? "tutorial.complete" : "tutorial.skip", {
+      role: state.activeRole,
+      step_index: lastIndex,
+      step_count: total,
+    });
+  }
 }
 
 function advanceTutorial(direction) {
@@ -5897,6 +5941,11 @@ function advanceTutorial(direction) {
     return;
   }
   tutorialState.stepIndex = Math.max(0, Math.min(tutorialState.steps.length - 1, tutorialState.stepIndex + direction));
+  logEvent("tutorial.step", {
+    role: state.activeRole,
+    step_index: tutorialState.stepIndex,
+    direction: direction > 0 ? "forward" : "back",
+  });
   renderTutorialStep();
 }
 
@@ -6064,6 +6113,13 @@ async function addAgendaNode(title, body = "") {
     ...state.evidence,
   ].slice(0, 6);
   regenerateGraph(`agenda ${agendaNode.title}`);
+  logEvent("node.add", {
+    node_id: agendaNode.id,
+    title: agendaNode.title.slice(0, 200),
+    body_length: agendaNode.body.length,
+    stakeholder: agendaNode.stakeholder,
+    expansion_count: expansions.length,
+  });
   if (isSupabaseSessionActive()) {
     syncLearnerRunToSupabase(getActiveLearnerRun()).catch((error) => {
       console.error(error);
@@ -6352,13 +6408,21 @@ function setView(nextView) {
     renderNavigation();
     return;
   }
+  const previous = state.activeView;
   state.activeView = nextView;
   renderNavigation();
+  if (previous !== nextView) {
+    logEvent("view.switch", { from: previous, to: nextView });
+  }
 }
 
 function setStakeholder(nextStakeholder) {
+  const previous = state.activeStakeholder;
   state.activeStakeholder = nextStakeholder;
   renderAll();
+  if (previous !== nextStakeholder) {
+    logEvent("lens.change", { from: previous, to: nextStakeholder });
+  }
 }
 
 function pushEvidence(stakeholder, title, body) {
@@ -6391,6 +6455,12 @@ async function handleAsk(question) {
   }
   state.chat.push({ role: "user", stakeholder: state.activeStakeholder, body: clean });
   renderAll();
+  logEvent("question.ask", {
+    text: clean.slice(0, 500),
+    length: clean.length,
+    stakeholder: state.activeStakeholder,
+    view: state.activeView,
+  });
   const response = await generateAgentReplyWithAi(state.activeStakeholder, clean);
   state.chat.push({ role: "agent", stakeholder: state.activeStakeholder, body: response });
   pushEvidence(state.activeStakeholder, `${stakeholders[state.activeStakeholder].label} response`, response);
@@ -6536,6 +6606,7 @@ function toggleCasePublish(caseId) {
   if (!course || !targetCase) return;
   targetCase.published = !targetCase.published;
   targetCase.pipeline.reportStatus = targetCase.published ? "Published to learner side" : "Admin draft only";
+  logEvent(targetCase.published ? "case.publish" : "case.unpublish", { case_id: caseId, title: targetCase.title });
   course.publishedCaseIds = course.cases.filter((item) => item.published).map((item) => item.id);
   course.documents.forEach((document) => {
     if (document.caseId === caseId) {
@@ -6598,6 +6669,7 @@ dom.caseSelect.addEventListener("change", (event) => {
   ensureActiveSelections();
   persistSessionState();
   renderAll();
+  logEvent("case.open", { via: "topbar" });
 });
 
 dom.sidebarCaseSelect.addEventListener("change", (event) => {
@@ -6605,6 +6677,7 @@ dom.sidebarCaseSelect.addEventListener("change", (event) => {
   ensureActiveSelections();
   persistSessionState();
   renderAll();
+  logEvent("case.open", { via: "sidebar" });
 });
 
 dom.learnerSelect.addEventListener("change", (event) => {
@@ -6636,6 +6709,7 @@ document.addEventListener("click", (event) => {
   const promptButton = event.target.closest("[data-prompt]");
   if (promptButton) {
     document.getElementById("chat-input").value = promptButton.dataset.prompt;
+    logEvent("perspective.quick", { prompt: promptButton.dataset.prompt, stakeholder: state.activeStakeholder });
   }
 
   const scenarioButton = event.target.closest("[data-scenario]");
@@ -6741,14 +6815,19 @@ document.addEventListener("submit", async (event) => {
       setStage(stages[stageIndex]);
     }, 700);
     try {
-      await uploadStructuredDocument(
-        String(form.get("documentTitle")).trim(),
-        String(form.get("documentText")).trim(),
-        String(form.get("publishMode"))
-      );
+      const submittedTitle = String(form.get("documentTitle")).trim();
+      const submittedText = String(form.get("documentText")).trim();
+      const submittedMode = String(form.get("publishMode"));
+      await uploadStructuredDocument(submittedTitle, submittedText, submittedMode);
       event.target.reset();
       regenerateGraph("admin upload structured");
       renderAll();
+      logEvent("case.create", {
+        title: submittedTitle.slice(0, 200),
+        brief_length: submittedText.length,
+        publish_mode: submittedMode,
+        case_id: state.activeCaseId || null,
+      });
     } catch (error) {
       state.auth.message = error.message || "The document could not be structured.";
       renderLandingLogin();
