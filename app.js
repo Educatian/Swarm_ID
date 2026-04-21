@@ -5695,7 +5695,20 @@ function clearTutorialHighlight() {
 
 function getTutorialSteps() {
   const hasCase = hasActiveCase();
+  const hasCourse = Boolean(getActiveCourse());
   if (state.activeRole === "admin") {
+    if (!hasCourse) {
+      return [
+        {
+          selector: "#add-course-form",
+          title: state.locale === "ko" ? "첫 코스 만들기" : "Create Your First Course",
+          body: state.locale === "ko"
+            ? "아직 코스가 없습니다. 코스 이름과 코드(예: W200)를 입력해 학생을 위한 첫 코스를 만드세요. 코스를 만든 뒤 튜토리얼을 다시 실행하면 나머지 단계를 안내합니다."
+            : "You don't have a course yet. Enter a course name and code (e.g., W200) here to spin up your first course. Replay the tutorial after creating the course to see the rest of the flow.",
+          view: "visualizer",
+        },
+      ];
+    }
     return [
       {
         selector: "#course-select",
@@ -5708,7 +5721,7 @@ function getTutorialSteps() {
         body: state.locale === "ko" ? "이 목록에서 초안과 게시된 케이스를 전환할 수 있습니다." : "Use this list to switch between drafts and published cases.",
       },
       {
-        selector: "#pipeline-console",
+        selector: "#upload-document-form",
         title: state.locale === "ko" ? "케이스 생성 또는 게시" : "Create or Publish a Case",
         body: state.locale === "ko"
           ? "제목, 수업 브리프, 공개 설정을 입력해 케이스를 만드세요. 기본값은 초안이며, 학생에게 공개할 준비가 되면 '학생에게 게시'로 전환하세요."
@@ -6979,6 +6992,24 @@ dom.tourBack?.addEventListener("click", () => {
 
 dom.tourSkip?.addEventListener("click", () => {
   endTutorial(true);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (!tutorialState.active) return;
+  if (event.key === "Escape") {
+    event.preventDefault();
+    endTutorial(true);
+    return;
+  }
+  if (event.key === "ArrowRight") {
+    event.preventDefault();
+    advanceTutorial(1);
+    return;
+  }
+  if (event.key === "ArrowLeft") {
+    event.preventDefault();
+    advanceTutorial(-1);
+  }
 });
 
 dom.landingLocaleToggle?.addEventListener("click", () => {
