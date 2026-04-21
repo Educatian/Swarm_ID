@@ -2931,6 +2931,34 @@ body {
   margin-bottom: 6px;
 }
 
+.cohort-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 10px 0;
+}
+
+.cohort-filter-button {
+  padding: 4px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.cohort-filter-button:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.cohort-filter-button.is-active {
+  background: rgba(120, 180, 255, 0.25);
+  border-color: rgba(120, 180, 255, 0.6);
+  color: #ffffff;
+}
+
 .cohort-panel {
   width: 100%;
   overflow-x: auto;

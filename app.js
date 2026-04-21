@@ -1672,12 +1672,27 @@ async function joinCourseWithCodeRemote(joinCode) {
 
   const { data: course, error: courseError } = await client
     .from("courses")
-    .select("id, institution_id, code, name, join_code")
+    .select("id, institution_id, code, name, join_code, settings")
     .eq("join_code", normalizedCode)
     .maybeSingle();
   if (courseError) throw courseError;
   if (!course) {
     throw new Error("That course code was not found.");
+  }
+
+  const courseSections = Array.isArray(course.settings?.sections)
+    ? course.settings.sections.map((s) => String(s).trim()).filter(Boolean)
+    : [];
+  let chosenSection = null;
+  if (courseSections.length > 0) {
+    const prompt = `Which section of ${course.code} are you in?\n\nEnter one of: ${courseSections.join(", ")}`;
+    for (let i = 0; i < 3 && !chosenSection; i++) {
+      const raw = window.prompt(prompt, courseSections[0]);
+      if (raw === null) throw new Error("Section is required to join this course.");
+      const match = courseSections.find((s) => s.toLowerCase() === String(raw).trim().toLowerCase());
+      if (match) chosenSection = match;
+    }
+    if (!chosenSection) throw new Error("Section not recognized. Ask your instructor for the correct section number.");
   }
 
   const membershipPayload = {
@@ -1689,6 +1704,7 @@ async function joinCourseWithCodeRemote(joinCode) {
     is_primary: true,
     status: "active",
   };
+  if (chosenSection) membershipPayload.section = chosenSection;
 
   const { data: existingMemberships, error: membershipLookupError } = await client
     .from("course_memberships")
@@ -1721,7 +1737,7 @@ async function joinCourseWithCodeRemote(joinCode) {
   state.auth.message = `Joined ${course.code}.`;
   ensureActiveSelections();
   persistSessionState();
-  logEvent("course.join", { course_code: course.code, course_id: course.id });
+  logEvent("course.join", { course_code: course.code, course_id: course.id, section: chosenSection || null });
   return course;
 }
 
@@ -2837,7 +2853,7 @@ async function renderInstructorCohortPanel() {
     const [membersRes, eventsRes] = await Promise.all([
       client
         .from("course_memberships")
-        .select("user_id, display_name, status, role")
+        .select("user_id, display_name, status, role, section")
         .eq("course_id", course.id)
         .eq("role", "user")
         .eq("status", "active"),
@@ -2848,10 +2864,31 @@ async function renderInstructorCohortPanel() {
     ]);
     if (membersRes.error) throw membersRes.error;
     if (eventsRes.error) throw eventsRes.error;
-    const members = asArray(membersRes.data);
+    const allMembers = asArray(membersRes.data);
     const events = asArray(eventsRes.data);
+    const configuredSections = Array.isArray(course.settings?.sections)
+      ? course.settings.sections.map((s) => String(s).trim()).filter(Boolean)
+      : [];
+    const currentFilter = state.cohortSectionFilter && (configuredSections.includes(state.cohortSectionFilter) || state.cohortSectionFilter === "__unassigned__")
+      ? state.cohortSectionFilter
+      : "__all__";
+    state.cohortSectionFilter = currentFilter;
+    const members = currentFilter === "__all__"
+      ? allMembers
+      : currentFilter === "__unassigned__"
+        ? allMembers.filter((m) => !m.section)
+        : allMembers.filter((m) => m.section === currentFilter);
+    const filterBar = configuredSections.length
+      ? `<div class="cohort-filter" role="group" aria-label="Section filter">
+          ${[
+            { v: "__all__", label: state.locale === "ko" ? "전체" : "All" },
+            ...configuredSections.map((s) => ({ v: s, label: s })),
+            { v: "__unassigned__", label: state.locale === "ko" ? "미지정" : "Unassigned" },
+          ].map((opt) => `<button type="button" class="cohort-filter-button${opt.v === currentFilter ? " is-active" : ""}" data-cohort-filter="${escapeHtml(opt.v)}">${escapeHtml(opt.label)}</button>`).join("")}
+        </div>`
+      : "";
     if (!members.length) {
-      panel.innerHTML = `<p class="muted">${state.locale === "ko" ? "활동 중인 학생이 없습니다." : "No active students yet."}</p>`;
+      panel.innerHTML = `${filterBar}<p class="muted">${state.locale === "ko" ? "이 섹션에 학생이 없습니다." : "No students in this section."}</p>`;
       return;
     }
     const byUser = new Map();
@@ -2886,16 +2923,21 @@ async function renderInstructorCohortPanel() {
       if (Number.isNaN(d.getTime())) return '<span class="dash">&mdash;</span>';
       return escapeHtml(d.toISOString().slice(0, 16).replace("T", " "));
     };
+    const showSectionCol = configuredSections.length > 0;
     const headers = state.locale === "ko"
-      ? ["학생", "참여", "케이스 열기", "노드 추가", "질문", "리플렉션", "총 이벤트", "최근 활동"]
-      : ["Student", "Joined", "Opened case", "Added node", "Asked", "Reflected", "Events", "Last active"];
+      ? ["학생", ...(showSectionCol ? ["섹션"] : []), "참여", "케이스 열기", "노드 추가", "질문", "리플렉션", "총 이벤트", "최근 활동"]
+      : ["Student", ...(showSectionCol ? ["Section"] : []), "Joined", "Opened case", "Added node", "Asked", "Reflected", "Events", "Last active"];
     const rows = members
       .map((m) => {
         const entry = byUser.get(m.user_id) || { total: 0, joined: false, opened: false, addedNode: false, reflected: false, askedQuestion: false, lastAt: null };
         const name = escapeHtml(m.display_name || m.user_id.slice(0, 8));
+        const sectionCell = showSectionCol
+          ? `<td>${m.section ? escapeHtml(m.section) : '<span class="dash">&mdash;</span>'}</td>`
+          : "";
         return `
           <tr class="cohort-row" data-cohort-user="${escapeHtml(m.user_id)}" data-cohort-name="${name}">
             <td><button type="button" class="cohort-name-button">${name}</button></td>
+            ${sectionCell}
             <td>${tick(entry.joined)}</td>
             <td>${tick(entry.opened)}</td>
             <td>${tick(entry.addedNode)}</td>
@@ -2908,6 +2950,7 @@ async function renderInstructorCohortPanel() {
       })
       .join("");
     panel.innerHTML = `
+      ${filterBar}
       <table>
         <thead><tr>${headers.map((h) => `<th>${escapeHtml(h)}</th>`).join("")}</tr></thead>
         <tbody>${rows}</tbody>
@@ -7029,6 +7072,15 @@ document.addEventListener("click", (event) => {
   if (reflectionSubmit) {
     const idx = Number(reflectionSubmit.getAttribute("data-reflection-submit"));
     if (Number.isFinite(idx)) handleReflectionSubmit(idx);
+  }
+
+  const cohortFilterBtn = event.target.closest("[data-cohort-filter]");
+  if (cohortFilterBtn) {
+    state.cohortSectionFilter = cohortFilterBtn.getAttribute("data-cohort-filter");
+    const ddContainer = document.getElementById("cohort-drilldown");
+    if (ddContainer) { ddContainer.hidden = true; ddContainer.innerHTML = ""; }
+    renderInstructorCohortPanel();
+    return;
   }
 
   const cohortRow = event.target.closest("[data-cohort-user]");
