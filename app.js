@@ -7074,6 +7074,15 @@ document.addEventListener("click", (event) => {
     if (Number.isFinite(idx)) handleReflectionSubmit(idx);
   }
 
+  const viewIntroDismiss = event.target.closest("[data-view-intro-dismiss]");
+  if (viewIntroDismiss) {
+    const key = viewIntroDismiss.getAttribute("data-view-intro-dismiss");
+    const card = document.querySelector(`[data-view-intro="${key}"]`);
+    if (card) card.classList.add("is-hidden");
+    try { localStorage.setItem(`view-intro-dismissed:${key}`, "1"); } catch (_) {}
+    return;
+  }
+
   const cohortFilterBtn = event.target.closest("[data-cohort-filter]");
   if (cohortFilterBtn) {
     state.cohortSectionFilter = cohortFilterBtn.getAttribute("data-cohort-filter");
@@ -7530,8 +7539,20 @@ dom.returnToLanding?.addEventListener("click", async () => {
   returnToLanding();
 });
 
+function restoreDismissedViewIntros() {
+  document.querySelectorAll("[data-view-intro]").forEach((card) => {
+    const key = card.getAttribute("data-view-intro");
+    try {
+      if (localStorage.getItem(`view-intro-dismissed:${key}`) === "1") {
+        card.classList.add("is-hidden");
+      }
+    } catch (_) {}
+  });
+}
+
 async function boot() {
   applyStaticTranslations();
+  restoreDismissedViewIntros();
   state.platform = loadPlatformState();
   hydrateSessionState();
   hydrateTutorialState();
