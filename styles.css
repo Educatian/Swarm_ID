@@ -871,6 +871,19 @@ textarea:focus-visible,
   display: none;
 }
 
+/* Pin each panel to its column so collapsed (display:none) panels don't cause
+   the canvas to auto-place into the now-zero-width first column. */
+.visualizer-layout > .intake-panel[data-collapsible-panel="intake"] {
+  grid-column: 1;
+}
+.visualizer-layout > .canvas-panel {
+  grid-column: 2;
+  min-width: 0;
+}
+.visualizer-layout > .insight-panel[data-collapsible-panel="insight"] {
+  grid-column: 3;
+}
+
 .panel-expand-toggle {
   display: inline-flex;
   align-items: center;
