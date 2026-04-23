@@ -1039,16 +1039,16 @@ textarea:focus-visible,
 }
 
 .visualizer-layout {
-  grid-template-columns: minmax(340px, 1.15fr) minmax(0, 2fr) minmax(300px, 0.88fr);
+  grid-template-columns: minmax(340px, 1.15fr) minmax(0, 2.35fr) minmax(270px, 0.7fr);
   align-items: start;
 }
 
 .visualizer-layout.is-focused {
-  grid-template-columns: minmax(360px, 1.02fr) minmax(0, 2.45fr) minmax(300px, 0.82fr);
+  grid-template-columns: minmax(360px, 1.02fr) minmax(0, 2.75fr) minmax(260px, 0.62fr);
 }
 
 .visualizer-layout.intake-collapsed {
-  grid-template-columns: 0 minmax(0, 1fr) minmax(300px, 0.88fr);
+  grid-template-columns: 0 minmax(0, 1fr) minmax(270px, 0.7fr);
 }
 
 .visualizer-layout.insight-collapsed {
@@ -2102,7 +2102,7 @@ textarea:disabled {
 .selected-node-card {
   display: grid;
   gap: 8px;
-  padding: 16px 18px;
+  padding: 14px 14px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
