@@ -701,6 +701,55 @@ textarea:focus-visible,
   background: rgba(67, 97, 238, 0.08);
 }
 
+/* Collapsible pipeline cards — click the header to expand/collapse the body. */
+.pipeline-card-collapsible {
+  padding: 0;
+}
+
+.pipeline-card-collapsible .pipeline-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  border-radius: inherit;
+  transition: background 140ms ease;
+}
+
+.pipeline-card-collapsible .pipeline-card-header:hover {
+  background: rgba(67, 97, 238, 0.06);
+}
+
+.pipeline-card-collapsible .pipeline-card-header strong {
+  flex: 1;
+}
+
+.pipeline-card-collapsible .pipeline-card-header .chevron {
+  font-size: 0.95rem;
+  color: rgba(246, 246, 252, 0.62);
+  transition: transform 180ms ease;
+}
+
+.pipeline-card-collapsible.is-collapsed .pipeline-card-header .chevron {
+  transform: rotate(-90deg);
+}
+
+.pipeline-card-collapsible .pipeline-card-body {
+  display: block;
+  padding: 0 16px 14px 16px;
+}
+
+.pipeline-card-collapsible.is-collapsed .pipeline-card-body {
+  display: none;
+}
+
 .context-card p,
 .pipeline-card p,
 .document-card p,

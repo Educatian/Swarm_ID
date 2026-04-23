@@ -826,6 +826,34 @@ function t(key, vars = {}) {
   return String(value).replace(/\{(\w+)\}/g, (_, token) => String(vars[token] ?? ""));
 }
 
+// Per-pipeline-card collapsed state for the student view's "Add a node",
+// "AI additions", and "Class view" cards. Defaults to collapsed so the student
+// lands on a quieter panel and expands the one they actually need.
+const PIPELINE_CARD_DEFAULTS_COLLAPSED = new Set(["addNode", "aiAdditions", "classView"]);
+const pipelineCardCollapsed = new Set();
+(function restorePipelineCardCollapsed() {
+  try {
+    const stored = localStorage.getItem("pipeline-card-collapsed");
+    if (stored) {
+      JSON.parse(stored).forEach((key) => pipelineCardCollapsed.add(key));
+      return;
+    }
+  } catch (_) {}
+  PIPELINE_CARD_DEFAULTS_COLLAPSED.forEach((k) => pipelineCardCollapsed.add(k));
+})();
+
+function isPipelineCardCollapsed(key) {
+  return pipelineCardCollapsed.has(key);
+}
+
+function togglePipelineCardCollapsed(key) {
+  if (pipelineCardCollapsed.has(key)) pipelineCardCollapsed.delete(key);
+  else pipelineCardCollapsed.add(key);
+  try {
+    localStorage.setItem("pipeline-card-collapsed", JSON.stringify([...pipelineCardCollapsed]));
+  } catch (_) {}
+}
+
 // Timeline entries may be stored as sentinel keys (prefixed with "@") so they
 // can be translated at render time. Plain strings (dynamic timeline pushes,
 // legacy cases) pass through unchanged.
@@ -4574,71 +4602,85 @@ function renderPipelineConsole() {
         }
       </div>
     </article>
-    <article class="pipeline-card">
-      <strong>${t("addNode")}</strong>
-      <p></p>
-      <form class="pipeline-form" id="agenda-node-form">
-        <input name="agendaTitle" type="text" placeholder="${t("titlePlaceholder")}" autocomplete="off" required>
-        <textarea name="agendaBody" placeholder="${t("agendaBodyPlaceholder")}" autocomplete="off"></textarea>
-        <div class="pipeline-actions">
-          <button class="toolbar-button toolbar-button-primary" type="submit">${t("addToMap")}</button>
+    <article class="pipeline-card pipeline-card-collapsible ${isPipelineCardCollapsed("addNode") ? "is-collapsed" : ""}" data-pipeline-key="addNode">
+      <button type="button" class="pipeline-card-header" data-pipeline-toggle aria-expanded="${isPipelineCardCollapsed("addNode") ? "false" : "true"}">
+        <strong>${t("addNode")}</strong>
+        <span class="chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="pipeline-card-body">
+        <form class="pipeline-form" id="agenda-node-form">
+          <input name="agendaTitle" type="text" placeholder="${t("titlePlaceholder")}" autocomplete="off" required>
+          <textarea name="agendaBody" placeholder="${t("agendaBodyPlaceholder")}" autocomplete="off"></textarea>
+          <div class="pipeline-actions">
+            <button class="toolbar-button toolbar-button-primary" type="submit">${t("addToMap")}</button>
+          </div>
+        </form>
+        <p class="context-note">${getCaseBoardSettings(activeCase).agendaPrompt || t("addNodeDefaultPrompt")}</p>
+        <div class="case-list">
+          ${
+            asArray(activeRun?.agendaNodes).length
+              ? asArray(activeRun?.agendaNodes)
+                  .map(
+                    (item) => `
+                    <article class="case-card">
+                      <strong>${item.title}</strong>
+                      <p>${item.body}</p>
+                      <div class="card-meta">
+                        <span>${getCaseStakeholderMeta(item.stakeholder || "student").label}</span>
+                        <span>${item.createdAt || (state.locale === "ko" ? "지금" : "Now")}</span>
+                      </div>
+                    </article>
+                  `
+                  )
+                  .join("")
+              : `<div class="empty-note">${t("noNodes")}</div>`
+          }
         </div>
-      </form>
-      <p class="context-note">${getCaseBoardSettings(activeCase).agendaPrompt || t("addNodeDefaultPrompt")}</p>
-      <div class="case-list">
-        ${
-          asArray(activeRun?.agendaNodes).length
-            ? asArray(activeRun?.agendaNodes)
-                .map(
-                  (item) => `
-                  <article class="case-card">
-                    <strong>${item.title}</strong>
-                    <p>${item.body}</p>
-                    <div class="card-meta">
-                      <span>${getCaseStakeholderMeta(item.stakeholder || "student").label}</span>
-                      <span>${item.createdAt || (state.locale === "ko" ? "지금" : "Now")}</span>
-                    </div>
-                  </article>
-                `
-                )
-                .join("")
-            : `<div class="empty-note">${t("noNodes")}</div>`
-        }
       </div>
     </article>
-    <article class="pipeline-card">
-      <strong>${t("aiAdditionsTitle")}</strong>
-      <div class="document-list">
-        ${
-          asArray(activeRun?.aiGeneratedNodes).length
-            ? asArray(activeRun?.aiGeneratedNodes)
-                .map(
-                  (item) => `
-                  <article class="document-card">
-                    <strong>${item.title}</strong>
-                    <p>${item.body}</p>
-                    <div class="card-meta">
-                      <span>${getCaseStakeholderMeta(item.stakeholder || "teacher").label}</span>
-                      <span>${t("aiSuggested")}</span>
-                    </div>
-                  </article>
-                `
-                )
-                .join("")
-            : `<div class="empty-note">${t("noAdditions")}</div>`
-        }
+    <article class="pipeline-card pipeline-card-collapsible ${isPipelineCardCollapsed("aiAdditions") ? "is-collapsed" : ""}" data-pipeline-key="aiAdditions">
+      <button type="button" class="pipeline-card-header" data-pipeline-toggle aria-expanded="${isPipelineCardCollapsed("aiAdditions") ? "false" : "true"}">
+        <strong>${t("aiAdditionsTitle")}</strong>
+        <span class="chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="pipeline-card-body">
+        <div class="document-list">
+          ${
+            asArray(activeRun?.aiGeneratedNodes).length
+              ? asArray(activeRun?.aiGeneratedNodes)
+                  .map(
+                    (item) => `
+                    <article class="document-card">
+                      <strong>${item.title}</strong>
+                      <p>${item.body}</p>
+                      <div class="card-meta">
+                        <span>${getCaseStakeholderMeta(item.stakeholder || "teacher").label}</span>
+                        <span>${t("aiSuggested")}</span>
+                      </div>
+                    </article>
+                  `
+                  )
+                  .join("")
+              : `<div class="empty-note">${t("noAdditions")}</div>`
+          }
+        </div>
       </div>
     </article>
-    <article class="pipeline-card">
-      <strong>${t("classViewTitle")}</strong>
-      <p>${
-        getCaseBoardSettings(activeCase).sharingMode === "private"
-          ? t("off")
-          : t("sharedPatterns")
-      }</p>
-      <div class="card-meta">
-        <span>${t("sharedClustersCount", { count: buildCohortIssueEntries(activeCase).length })}</span>
-        <span>${t("studentRunsCount", { count: getVisibleLearnerRunsForCase(activeCase, course).length })}</span>
+    <article class="pipeline-card pipeline-card-collapsible ${isPipelineCardCollapsed("classView") ? "is-collapsed" : ""}" data-pipeline-key="classView">
+      <button type="button" class="pipeline-card-header" data-pipeline-toggle aria-expanded="${isPipelineCardCollapsed("classView") ? "false" : "true"}">
+        <strong>${t("classViewTitle")}</strong>
+        <span class="chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="pipeline-card-body">
+        <p>${
+          getCaseBoardSettings(activeCase).sharingMode === "private"
+            ? t("off")
+            : t("sharedPatterns")
+        }</p>
+        <div class="card-meta">
+          <span>${t("sharedClustersCount", { count: buildCohortIssueEntries(activeCase).length })}</span>
+          <span>${t("studentRunsCount", { count: getVisibleLearnerRunsForCase(activeCase, course).length })}</span>
+        </div>
       </div>
     </article>
   `;
@@ -8213,7 +8255,28 @@ function restoreCollapsiblePanels() {
   });
 }
 
+function wirePipelineCardToggles() {
+  if (document.body.dataset.pipelineCardsWired === "1") return;
+  document.body.dataset.pipelineCardsWired = "1";
+  // Event delegation — renderPipelineConsole() re-generates these cards on every
+  // render, so we can't attach listeners to each button. One body-level listener
+  // handles them all.
+  document.body.addEventListener("click", (event) => {
+    const header = event.target.closest("[data-pipeline-toggle]");
+    if (!header) return;
+    const card = header.closest(".pipeline-card-collapsible");
+    if (!card) return;
+    const key = card.getAttribute("data-pipeline-key");
+    if (!key) return;
+    togglePipelineCardCollapsed(key);
+    const nowCollapsed = pipelineCardCollapsed.has(key);
+    card.classList.toggle("is-collapsed", nowCollapsed);
+    header.setAttribute("aria-expanded", nowCollapsed ? "false" : "true");
+  });
+}
+
 function wireCollapsiblePanels() {
+  wirePipelineCardToggles();
   document.querySelectorAll(".panel-collapse-toggle[data-collapse-target]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const key = btn.getAttribute("data-collapse-target");
