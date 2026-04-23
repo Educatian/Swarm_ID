@@ -893,14 +893,16 @@ textarea:focus-visible,
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 14px;
+  padding: 5px 12px;
   border: 1px solid rgba(67, 97, 238, 0.45);
   border-radius: 999px;
   background: rgba(67, 97, 238, 0.18);
   color: #2a3fc8;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
   transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
 }
@@ -940,6 +942,18 @@ textarea:focus-visible,
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+
+.canvas-header-left > div {
+  min-width: 0;
+}
+
+.canvas-header-left .eyebrow {
+  margin: 0;
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
 }
 
 .lens-layout {
@@ -958,14 +972,18 @@ textarea:focus-visible,
   display: flex;
   justify-content: space-between;
   gap: 14px;
-  align-items: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .section-header h3,
 .canvas-header h3 {
-  margin-top: 8px;
-  font-size: 1.45rem;
-  letter-spacing: -0.04em;
+  margin: 0;
+  font-size: 1.1rem;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .badge {
@@ -1085,13 +1103,19 @@ textarea:disabled {
 .canvas-stats {
   display: flex;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
+  min-width: 0;
 }
 
 .mini-control-inline {
-  min-width: 148px;
+  min-width: 130px;
+  padding: 3px 10px !important;
+}
+
+.mini-control-inline span {
+  font-size: 0.58rem !important;
 }
 
 .mini-control-inline span {

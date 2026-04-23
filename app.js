@@ -4805,11 +4805,26 @@ function describeNodeIssue(node) {
   }
 
   if (node.type === "satellite") {
+    const parentNode = (state.graph?.nodes || []).find((n) => n.id === node.parent);
+    const parentLabel = parentNode?.label || node.parent || "";
+    const stakeholderMeta = node.stakeholder ? getCaseStakeholderMeta(node.stakeholder) : null;
+    const ko = state.locale === "ko";
+    const kicker = ko
+      ? `파생 이슈 · ${parentLabel}`
+      : `Branch of ${parentLabel}`;
+    const title = ko
+      ? `${parentLabel}에서 파생된 세부 이슈`
+      : `Sub-issue branching from ${parentLabel}`;
+    const bodyEn = stakeholderMeta
+      ? `This small node is a follow-up concern orbiting "${parentLabel}" from the ${stakeholderMeta.label.toLowerCase()} perspective. Denser clusters here mean that theme is still unresolved — click the parent node to load its full lens.`
+      : `This small node is a follow-up concern orbiting "${parentLabel}". Denser clusters here mean that theme is still unresolved — click the parent node to load its full lens.`;
+    const bodyKo = stakeholderMeta
+      ? `"${parentLabel}"에서 파생된 세부 이슈입니다. ${stakeholderMeta.label} 관점에서 아직 풀리지 않은 지점으로, 주변에 비슷한 작은 노드가 많을수록 해당 주제가 반복되고 있다는 뜻입니다. 상위 노드를 클릭하면 전체 렌즈가 열립니다.`
+      : `"${parentLabel}"에서 파생된 세부 이슈입니다. 주변에 비슷한 작은 노드가 많을수록 해당 주제가 아직 풀리지 않았다는 뜻입니다. 상위 노드를 클릭하면 전체 렌즈가 열립니다.`;
     return {
-      kicker: "Peripheral signal",
-      title: "Secondary issue fragment",
-      body:
-        "This small node represents an echo issue branching off a major stakeholder or signal cluster. Dense satellites usually mean the main issue is spawning follow-up questions.",
+      kicker,
+      title,
+      body: ko ? bodyKo : bodyEn,
     };
   }
 
@@ -5411,7 +5426,6 @@ function updateGraphRenderer(frame) {
   });
 
   nodeMerge
-    .filter((node) => node.type !== "satellite")
     .on("mouseenter", (event, node) => {
       showNetworkTooltip(event, node);
     })
