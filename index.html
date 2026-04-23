@@ -248,9 +248,7 @@
               </ul>
             </div>
           </div>
-          <div class="visualizer-layout" id="visualizer-layout" style="position: relative;">
-          <button class="panel-expand-toggle" type="button" data-expand-target="intake" id="panel-expand-intake" hidden><span class="chevron">▸</span><span id="panel-expand-intake-label">Start here</span></button>
-          <button class="panel-expand-toggle" type="button" data-expand-target="insight" id="panel-expand-insight" hidden><span id="panel-expand-insight-label">Selected lens</span><span class="chevron">◂</span></button>
+          <div class="visualizer-layout" id="visualizer-layout">
             <section class="panel intake-panel" data-collapsible-panel="intake">
               <div class="section-header">
                 <div>
@@ -284,9 +282,12 @@
 
             <section class="panel canvas-panel">
               <div class="canvas-header">
-                <div>
-                  <p class="eyebrow">System topology</p>
-                  <h3>Proposal network</h3>
+                <div class="canvas-header-left">
+                  <button class="panel-expand-toggle" type="button" data-expand-target="intake" id="panel-expand-intake" hidden title="Show Start here panel"><span class="chevron">▸</span><span id="panel-expand-intake-label">Start here</span></button>
+                  <div>
+                    <p class="eyebrow">System topology</p>
+                    <h3>Proposal network</h3>
+                  </div>
                 </div>
                 <div class="canvas-stats">
                   <label class="mini-control mini-control-inline" id="map-layer-control">
@@ -299,6 +300,7 @@
                   </label>
                   <span id="active-stakeholder-pill" class="badge badge-secondary">Teacher focus</span>
                   <span class="badge badge-neutral" id="active-stakeholder-status">Needs attention</span>
+                  <button class="panel-expand-toggle" type="button" data-expand-target="insight" id="panel-expand-insight" hidden title="Show Selected lens panel"><span id="panel-expand-insight-label">Selected lens</span><span class="chevron">◂</span></button>
                 </div>
               </div>
 

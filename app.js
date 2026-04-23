@@ -7719,6 +7719,11 @@ function setPanelCollapsed(panelKey, collapsed, { persist = true } = {}) {
   if (persist) {
     try { localStorage.setItem(`panel-collapsed:${panelKey}`, collapsed ? "1" : "0"); } catch (_) {}
   }
+  // Re-measure the D3 stage after layout changes so the graph expands into the reclaimed space.
+  window.requestAnimationFrame(() => {
+    try { if (typeof resizeGraphRenderer === "function") resizeGraphRenderer(); } catch (_) {}
+    try { if (typeof regenerateGraph === "function") regenerateGraph("panel collapse"); } catch (_) {}
+  });
 }
 
 function restoreCollapsiblePanels() {

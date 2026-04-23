@@ -856,6 +856,15 @@ textarea:focus-visible,
 
 .visualizer-layout.intake-collapsed.insight-collapsed {
   grid-template-columns: 0 minmax(0, 1fr) 0;
+  gap: 0;
+}
+
+.visualizer-layout.intake-collapsed {
+  column-gap: 0;
+}
+
+.visualizer-layout.insight-collapsed {
+  column-gap: 0;
 }
 
 .visualizer-layout [data-collapsible-panel].is-collapsed {
@@ -863,39 +872,33 @@ textarea:focus-visible,
 }
 
 .panel-expand-toggle {
-  position: absolute;
-  top: 14px;
-  z-index: 30;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 10px;
-  border: 1px solid rgba(67, 97, 238, 0.35);
+  padding: 5px 10px;
+  border: 1px solid rgba(67, 97, 238, 0.3);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(67, 97, 238, 0.08);
   color: #4361ee;
   font-size: 0.78rem;
   font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.18);
   transition: background 0.15s;
 }
 
 .panel-expand-toggle:hover {
-  background: rgba(67, 97, 238, 0.12);
-}
-
-.panel-expand-toggle[data-expand-target="intake"] {
-  left: 8px;
-}
-
-.panel-expand-toggle[data-expand-target="insight"] {
-  right: 8px;
+  background: rgba(67, 97, 238, 0.18);
 }
 
 .panel-expand-toggle .chevron {
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1;
+}
+
+.canvas-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .lens-layout {
