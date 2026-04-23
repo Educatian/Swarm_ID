@@ -4807,24 +4807,111 @@ function describeNodeIssue(node) {
   if (node.type === "satellite") {
     const parentNode = (state.graph?.nodes || []).find((n) => n.id === node.parent);
     const parentLabel = parentNode?.label || node.parent || "";
-    const stakeholderMeta = node.stakeholder ? getCaseStakeholderMeta(node.stakeholder) : null;
     const ko = state.locale === "ko";
-    const kicker = ko
-      ? `파생 이슈 · ${parentLabel}`
-      : `Branch of ${parentLabel}`;
-    const title = ko
-      ? `${parentLabel}에서 파생된 세부 이슈`
-      : `Sub-issue branching from ${parentLabel}`;
-    const bodyEn = stakeholderMeta
-      ? `This small node is a follow-up concern orbiting "${parentLabel}" from the ${stakeholderMeta.label.toLowerCase()} perspective. Denser clusters here mean that theme is still unresolved — click the parent node to load its full lens.`
-      : `This small node is a follow-up concern orbiting "${parentLabel}". Denser clusters here mean that theme is still unresolved — click the parent node to load its full lens.`;
-    const bodyKo = stakeholderMeta
-      ? `"${parentLabel}"에서 파생된 세부 이슈입니다. ${stakeholderMeta.label} 관점에서 아직 풀리지 않은 지점으로, 주변에 비슷한 작은 노드가 많을수록 해당 주제가 반복되고 있다는 뜻입니다. 상위 노드를 클릭하면 전체 렌즈가 열립니다.`
-      : `"${parentLabel}"에서 파생된 세부 이슈입니다. 주변에 비슷한 작은 노드가 많을수록 해당 주제가 아직 풀리지 않았다는 뜻입니다. 상위 노드를 클릭하면 전체 렌즈가 열립니다.`;
+    // Per-stakeholder concern pools: each satellite picks a distinct phrase so
+    // siblings orbiting the same parent don't read identical.
+    const concernPool = {
+      teacher: {
+        en: [
+          { t: "Grading turnaround pressure", b: "A section of the class is piling up work to grade, and current tools don't help triage the exceptions." },
+          { t: "Pacing drift across sections", b: "Different sections are drifting off the original lesson cadence; re-alignment is starting to feel manual." },
+          { t: "Differentiation for edge learners", b: "A few students need alternative pathways but the default flow doesn't bend far enough to accommodate them." },
+          { t: "Feedback that actually moves work", b: "Comments are getting acknowledged but not acted on — the revision loop isn't closing." },
+          { t: "Lesson prep overhead", b: "Planning time is being eaten by small logistics decisions that could be templated or delegated." },
+          { t: "Formative check reliability", b: "Quick checks are firing but the signal is noisy — hard to tell if the misconception is real or a guess." },
+          { t: "Parent / guardian loop", b: "External check-ins are landing inconsistently; some families get detail, others get silence." },
+        ],
+        ko: [
+          { t: "채점 회전 부담", b: "일부 분반에서 예외 상황이 쌓이고 있는데, 지금 도구로는 우선순위를 가리기가 쉽지 않습니다." },
+          { t: "분반 간 진도 어긋남", b: "분반마다 원래 잡아둔 수업 리듬에서 어긋나고 있어, 맞추는 작업이 점점 수작업이 되고 있습니다." },
+          { t: "경계 학습자 차별화", b: "몇몇 학생은 다른 경로가 필요한데, 현재 기본 흐름은 그만큼 유연하게 구부러지지 않습니다." },
+          { t: "실제로 수정에 반영되는 피드백", b: "피드백은 확인되지만 수정으로 이어지지 않아, 리뷰-수정 루프가 닫히지 않고 있습니다." },
+          { t: "수업 준비 오버헤드", b: "작은 운영 결정들이 준비 시간을 잠식하고 있어 — 템플릿화하거나 위임할 여지가 있습니다." },
+          { t: "형성 평가 신호 품질", b: "짧은 점검이 돌고는 있지만 신호가 잡음이 많아, 진짜 오개념인지 찍은 건지 구분이 어렵습니다." },
+          { t: "학부모·보호자 연락 루프", b: "외부 소통이 불균일합니다 — 어떤 가정은 상세 안내를, 어떤 가정은 공백을 받고 있습니다." },
+        ],
+      },
+      student: {
+        en: [
+          { t: "Why-this-matters gap", b: "The point of the assignment isn't landing; students engage procedurally but disengage from the meaning." },
+          { t: "Time-on-task anxiety", b: "Learners are unsure how much time is 'enough' — they either overwork or quietly skip." },
+          { t: "Feedback legibility", b: "Comments arrive but students can't always tell what to DO with them next." },
+          { t: "Group dynamics friction", b: "Peer collaboration is uneven; load concentrates on a few while others coast." },
+          { t: "Self-assessment honesty", b: "Students want to self-assess truthfully but worry honesty will cost them points." },
+          { t: "Accessibility mismatch", b: "Default format clashes with how this learner takes in content — captioning, pace, modality." },
+        ],
+        ko: [
+          { t: "왜 중요한지 닿지 않음", b: "과제의 의도가 전달되지 않아, 학생은 절차는 따라가지만 의미에서는 멀어집니다." },
+          { t: "투입 시간 불안", b: "얼마나 해야 '충분한지' 알기 어려워, 과하게 붙잡거나 조용히 건너뜁니다." },
+          { t: "피드백 해석 가능성", b: "피드백은 도착하지만, 다음에 무엇을 해야 하는지는 학생이 알아차리기 어렵습니다." },
+          { t: "모둠 활동 편중", b: "동료 협업 부담이 고르지 않아 — 몇몇에게 몰리고 나머지는 수동적입니다." },
+          { t: "자기평가의 정직함", b: "솔직하게 자기평가를 하고 싶지만, 그것이 점수로 돌아올까 염려합니다." },
+          { t: "접근성 불일치", b: "기본 포맷이 이 학습자의 방식(자막·속도·매체)과 맞지 않습니다." },
+        ],
+      },
+      it: {
+        en: [
+          { t: "SSO and roster sync", b: "Identity handoff between systems is fragile; stale rosters create ghost accounts." },
+          { t: "Data retention ambiguity", b: "Retention policy doesn't map cleanly onto this tool's default storage windows." },
+          { t: "Third-party privacy review", b: "Vendor DPA terms still pending; deployment is blocked on legal sign-off." },
+          { t: "Integration maintenance load", b: "Every new connector adds an on-call surface that IT absorbs silently." },
+          { t: "Network-level accessibility", b: "Latency or firewall rules are quietly degrading the experience for off-campus learners." },
+        ],
+        ko: [
+          { t: "SSO·명단 동기화", b: "시스템 간 신원 연동이 취약하고, 오래된 명단이 유령 계정을 만듭니다." },
+          { t: "데이터 보존 모호함", b: "보존 정책이 이 도구의 기본 저장 기간과 깔끔하게 맞아떨어지지 않습니다." },
+          { t: "외부 업체 개인정보 검토", b: "벤더 DPA 승인이 지연되어 배포가 법무 확인 단계에서 멈춰 있습니다." },
+          { t: "통합 유지보수 부담", b: "새 커넥터마다 IT가 말없이 떠안는 온콜 표면이 늘어납니다." },
+          { t: "네트워크 수준 접근성", b: "지연이나 방화벽 규칙이 교외 학습자의 경험을 조용히 떨어뜨립니다." },
+        ],
+      },
+      administrator: {
+        en: [
+          { t: "Policy audit readiness", b: "When audit season lands, can we show the chain of decisions that produced this outcome?" },
+          { t: "Equity reporting", b: "Outcome data needs to disaggregate cleanly across groups; current pipeline fights this." },
+          { t: "Budget & license runway", b: "Seat licensing renews before pilot evaluation closes — renewal may precede evidence." },
+          { t: "Cross-department alignment", b: "Adjacent programs are running parallel pilots without shared success criteria." },
+        ],
+        ko: [
+          { t: "감사 대응 준비", b: "감사 시즌이 오면 이 결과에 이른 의사결정 흐름을 보여줄 수 있을까요?" },
+          { t: "형평성 보고", b: "집단별로 성과 데이터를 깔끔하게 분해해야 하는데, 현재 파이프라인이 이를 방해합니다." },
+          { t: "예산·라이선스 만료", b: "좌석 라이선스 갱신이 파일럿 평가 마감보다 먼저 와서, 증거 없이 갱신이 일어날 수 있습니다." },
+          { t: "부서 간 정렬", b: "인접 프로그램들이 공통 성공 지표 없이 병행 파일럿을 돌리고 있습니다." },
+        ],
+      },
+      accessibility: {
+        en: [
+          { t: "Caption parity", b: "Video captions are present but not checked for accuracy — synchrony and terminology drift." },
+          { t: "Screen reader traversal", b: "Navigation order jumps around for assistive tech; keyboard-only users lose context." },
+          { t: "Color and contrast", b: "Status indicators rely on color alone; learners with low vision miss them." },
+          { t: "Time-bound tasks", b: "Rigid timers disadvantage learners with processing accommodations." },
+        ],
+        ko: [
+          { t: "자막 동등성", b: "자막은 존재하지만 정확성 검토가 없어, 동기화와 용어가 조금씩 어긋납니다." },
+          { t: "스크린리더 탐색 순서", b: "보조 기기에서 탐색 순서가 뛰어, 키보드만 쓰는 사용자는 맥락을 잃습니다." },
+          { t: "색상·대비", b: "상태 표시가 색에만 의존하여, 저시력 학습자가 놓칩니다." },
+          { t: "시간 제한 과제", b: "고정 타이머가 처리 속도 조정이 필요한 학습자에게 불리하게 작동합니다." },
+        ],
+      },
+    };
+    const fallbackPool = {
+      en: [
+        { t: "Secondary concern", b: "A follow-up issue surfacing from the main cluster. Worth a second look if similar ones keep appearing nearby." },
+        { t: "Edge-case signal", b: "A smaller pattern branching off the main topic — often hints at where the design hasn't been tested yet." },
+      ],
+      ko: [
+        { t: "보조 이슈", b: "주요 군집에서 파생된 후속 이슈입니다. 비슷한 노드가 계속 근처에 생긴다면 다시 들여다볼 가치가 있습니다." },
+        { t: "경계 신호", b: "본 주제에서 갈라진 작은 패턴입니다 — 설계가 아직 검증되지 않은 구간을 시사하는 경우가 많습니다." },
+      ],
+    };
+    const pool = concernPool[node.stakeholder] || fallbackPool;
+    const entries = ko ? pool.ko : pool.en;
+    const idx = ((node.orbitIndex || 0) + (parentNode?.id?.length || 0)) % entries.length;
+    const pick = entries[idx];
     return {
-      kicker,
-      title,
-      body: ko ? bodyKo : bodyEn,
+      kicker: ko ? `파생 이슈 · ${parentLabel}` : `Branch of ${parentLabel}`,
+      title: pick.t,
+      body: pick.b,
     };
   }
 
