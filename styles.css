@@ -925,6 +925,15 @@ textarea:focus-visible,
 .panel-expand-toggle .chevron {
   font-size: 12px;
   line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.panel-expand-toggle.is-panel-open[data-expand-target="intake"] .chevron {
+  transform: rotate(180deg);
+}
+
+.panel-expand-toggle.is-panel-open[data-expand-target="insight"] .chevron {
+  transform: rotate(180deg);
 }
 
 .canvas-header-left {

@@ -7724,8 +7724,13 @@ function setPanelCollapsed(panelKey, collapsed, { persist = true } = {}) {
     toggle.setAttribute("aria-label", label);
     toggle.setAttribute("title", label);
   }
+  // Single toggle pill in the canvas header is always visible; update its state label + chevron orientation.
   const expandBtn = document.getElementById(`panel-expand-${panelKey}`);
-  if (expandBtn) expandBtn.hidden = !collapsed;
+  if (expandBtn) {
+    expandBtn.hidden = false;
+    expandBtn.classList.toggle("is-panel-open", !collapsed);
+    expandBtn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+  }
   if (persist) {
     try { localStorage.setItem(`panel-collapsed:${panelKey}`, collapsed ? "1" : "0"); } catch (_) {}
   }
@@ -7780,7 +7785,9 @@ function wireCollapsiblePanels() {
     btn.addEventListener("click", () => {
       const key = btn.getAttribute("data-expand-target");
       if (!key) return;
-      setPanelCollapsed(key, false);
+      const panel = document.querySelector(`[data-collapsible-panel="${key}"]`);
+      const nextCollapsed = !panel?.classList.contains("is-collapsed");
+      setPanelCollapsed(key, nextCollapsed);
     });
   });
 }
