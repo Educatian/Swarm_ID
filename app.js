@@ -880,17 +880,24 @@ function escapeHtml(value) {
     .replace(/'/g, "&#39;");
 }
 
-function renderCaseSummary(text) {
+function renderCaseSummary(text, openCaseId) {
   const summary = String(text ?? "");
   // Heuristic: only show toggle if summary is long enough to plausibly clamp.
   const needsToggle = summary.length > 140;
-  if (!needsToggle) {
-    return `<div class="case-summary"><p class="case-summary-text is-short">${escapeHtml(summary)}</p></div>`;
-  }
+  const moreBtn = needsToggle
+    ? `<button type="button" class="case-summary-more" data-summary-toggle data-label-more="${escapeHtml(t("showMore"))}" data-label-less="${escapeHtml(t("showLess"))}">${escapeHtml(t("showMore"))}</button>`
+    : "";
+  const openBtn = openCaseId
+    ? `<button type="button" class="case-summary-open" data-select-case="${escapeHtml(openCaseId)}">${escapeHtml(t("openCase"))}</button>`
+    : "";
+  const actions = moreBtn || openBtn
+    ? `<div class="case-summary-actions">${moreBtn}${openBtn}</div>`
+    : "";
+  const textClass = needsToggle ? "case-summary-text" : "case-summary-text is-short";
   return `
     <div class="case-summary">
-      <p class="case-summary-text">${escapeHtml(summary)}</p>
-      <button type="button" class="case-summary-more" data-summary-toggle data-label-more="${escapeHtml(t("showMore"))}" data-label-less="${escapeHtml(t("showLess"))}">${escapeHtml(t("showMore"))}</button>
+      <p class="${textClass}">${escapeHtml(summary)}</p>
+      ${actions}
     </div>
   `;
 }
@@ -4459,12 +4466,11 @@ function renderPipelineConsole() {
                     (item) => `
                     <article class="case-card ${item.id === state.activeCaseId ? "is-selected" : ""}">
                       <strong>${item.title}</strong>
-                      ${renderCaseSummary(item.summary)}
+                      ${renderCaseSummary(item.summary, item.id)}
                       <div class="card-meta">
                         <span>${item.published ? t("published") : t("draft")}</span>
                       </div>
                       <div class="card-actions">
-                        <button class="toolbar-button" type="button" data-select-case="${item.id}">${t("openCase")}</button>
                         <button class="toolbar-button" type="button" data-toggle-publish="${item.id}">
                           ${item.published ? t("unpublishVerb") : t("publishVerb")}
                         </button>
@@ -4534,13 +4540,12 @@ function renderPipelineConsole() {
                     (item) => `
                     <article class="case-card ${item.id === state.activeCaseId ? "is-selected" : ""}">
                       <strong>${item.title}</strong>
-                      ${renderCaseSummary(item.summary)}
+                      ${renderCaseSummary(item.summary, item.id)}
                       <div class="card-meta">
                         <span>${item.published ? "Published" : "Draft"}</span>
                         <span>${item.pipeline.graphStatus}</span>
                       </div>
                       <div class="card-actions">
-                        <button class="toolbar-button" type="button" data-select-case="${item.id}">Open case</button>
                         <button class="toolbar-button" type="button" data-toggle-publish="${item.id}">
                           ${item.published ? "Unpublish" : "Publish"}
                         </button>
@@ -4610,7 +4615,7 @@ function renderPipelineConsole() {
                   (item) => `
                   <article class="case-card ${item.id === state.activeCaseId ? "is-selected" : ""}">
                     <strong>${item.title}</strong>
-                    ${renderCaseSummary(item.summary)}
+                    ${renderCaseSummary(item.summary, item.id)}
                     <div class="card-meta">
                       <span>${item.pipeline.reportStatus}</span>
                       <span>${
@@ -4618,9 +4623,6 @@ function renderPipelineConsole() {
                           (run) => run.caseId === item.id && run.learnerId === activeLearner?.id
                         )[0]?.status || t("ready")
                       }</span>
-                    </div>
-                    <div class="card-actions">
-                      <button class="toolbar-button" type="button" data-select-case="${item.id}">${t("openCase")}</button>
                     </div>
                   </article>
                 `
