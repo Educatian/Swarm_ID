@@ -8225,6 +8225,16 @@ function wireLegendToggle() {
   } catch (err) {
     /* ignore */
   }
+  const swarmInfoToggle = document.getElementById("swarm-info-toggle");
+  const swarmInfoPanel = document.getElementById("swarm-info-panel");
+  if (swarmInfoToggle && swarmInfoPanel && !swarmInfoToggle.dataset.wired) {
+    swarmInfoToggle.dataset.wired = "1";
+    swarmInfoToggle.addEventListener("click", () => {
+      const expanded = swarmInfoToggle.getAttribute("aria-expanded") === "true";
+      swarmInfoToggle.setAttribute("aria-expanded", String(!expanded));
+      swarmInfoPanel.hidden = expanded;
+    });
+  }
 }
 
 async function boot() {
