@@ -7891,6 +7891,39 @@ function wireCollapsiblePanels() {
       setPanelCollapsed(key, nextCollapsed);
     });
   });
+  wireLegendToggle();
+}
+
+function setLegendCollapsed(collapsed) {
+  const legend = document.getElementById("stage-legend");
+  const reopen = document.getElementById("legend-reopen");
+  if (!legend || !reopen) return;
+  legend.setAttribute("data-collapsed", collapsed ? "true" : "false");
+  reopen.hidden = !collapsed;
+  try {
+    localStorage.setItem("legend-collapsed", collapsed ? "1" : "0");
+  } catch (err) {
+    /* ignore storage errors */
+  }
+}
+
+function wireLegendToggle() {
+  const closeBtn = document.getElementById("legend-close");
+  const reopenBtn = document.getElementById("legend-reopen");
+  if (closeBtn && !closeBtn.dataset.wired) {
+    closeBtn.dataset.wired = "1";
+    closeBtn.addEventListener("click", () => setLegendCollapsed(true));
+  }
+  if (reopenBtn && !reopenBtn.dataset.wired) {
+    reopenBtn.dataset.wired = "1";
+    reopenBtn.addEventListener("click", () => setLegendCollapsed(false));
+  }
+  try {
+    const saved = localStorage.getItem("legend-collapsed");
+    if (saved === "1") setLegendCollapsed(true);
+  } catch (err) {
+    /* ignore */
+  }
 }
 
 async function boot() {

@@ -325,7 +325,10 @@
                   <strong id="stage-note-title">Live swarm topology</strong>
                   <span id="stage-note-body">Hover a node to inspect an issue. Click a stakeholder node to shift the active lens.</span>
                 </div>
-                <div class="stage-overlay stage-overlay-bottom">
+                <div class="stage-overlay stage-overlay-bottom" id="stage-legend" data-collapsed="false">
+                  <button type="button" class="legend-close" id="legend-close" aria-label="Collapse legend" title="Collapse legend">
+                    <span class="material-symbols-outlined" aria-hidden="true">close</span>
+                  </button>
                   <div class="legend-item" data-legend-key="instructionalSignals">
                     <span class="legend-swatch legend-swatch-primary"></span>
                     <span class="legend-label">Instructional signals</span>
@@ -342,6 +345,11 @@
                     <em class="legend-desc">Evidence from teachers, students, or IT systems that supports (or challenges) a design move.</em>
                   </div>
                 </div>
+                <button type="button" class="legend-reopen" id="legend-reopen" aria-label="Show legend" title="Show legend" hidden>
+                  <span class="legend-reopen-swatch legend-reopen-swatch-primary"></span>
+                  <span class="legend-reopen-swatch legend-reopen-swatch-danger"></span>
+                  <span class="legend-reopen-swatch legend-reopen-swatch-ok"></span>
+                </button>
               </div>
 
               <form class="composer" id="visualizer-form">
