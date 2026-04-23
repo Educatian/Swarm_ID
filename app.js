@@ -186,6 +186,10 @@ const translations = {
     courseCodePlaceholder: "Course join code",
     workspaceRole: "Workspace",
     stageD3: "D3 force graph",
+    processStep: "Process step",
+    tlUploadParsed: "Uploaded source document parsed into issue fragments and design signals.",
+    tlOntologyExtracted: "Ontology-like stakeholder and constraint structure extracted from the uploaded brief.",
+    tlSynced: "Graph and report state synchronized to the latest published case.",
     stakeholderTeacher: "Teacher",
     stakeholderAdministrator: "Administrator",
     stakeholderStudent: "Student",
@@ -480,6 +484,10 @@ const translations = {
     courseCodePlaceholder: "코스 참여 코드",
     workspaceRole: "워크스페이스",
     stageD3: "D3 포스 그래프",
+    processStep: "단계",
+    tlUploadParsed: "업로드된 원본 문서가 이슈 조각과 설계 신호로 분석되었습니다.",
+    tlOntologyExtracted: "업로드된 설명요약에서 이해관계자 및 제약 구조가 추출되었습니다.",
+    tlSynced: "그래프와 리포트 상태가 최신 게시 케이스와 동기화되었습니다.",
     stakeholderTeacher: "교수자",
     stakeholderAdministrator: "관리자",
     stakeholderStudent: "학생",
@@ -816,6 +824,19 @@ function t(key, vars = {}) {
     key.split(".").reduce((acc, part) => (acc && acc[part] != null ? acc[part] : undefined), fallbackLocale) ??
     key;
   return String(value).replace(/\{(\w+)\}/g, (_, token) => String(vars[token] ?? ""));
+}
+
+// Timeline entries may be stored as sentinel keys (prefixed with "@") so they
+// can be translated at render time. Plain strings (dynamic timeline pushes,
+// legacy cases) pass through unchanged.
+function resolveTimelineEntry(step) {
+  if (typeof step !== "string") return String(step ?? "");
+  if (step.startsWith("@")) {
+    const key = step.slice(1);
+    const translated = t(key);
+    return translated === key ? step : translated;
+  }
+  return step;
 }
 
 function setLocale(nextLocale) {
@@ -2794,10 +2815,13 @@ function structuredCaseFromDocument({ title, text, publish = true }) {
       body: sentence,
     };
   });
+  // Sentinel keys — resolved at render time via resolveTimelineEntry() so the
+  // timeline flips language when the user toggles KO/EN, regardless of the
+  // locale the case was originally created in.
   const timeline = [
-    "Uploaded source document parsed into issue fragments and design signals.",
-    "Ontology-like stakeholder and constraint structure extracted from the uploaded brief.",
-    "Graph and report state synchronized to the latest published case.",
+    "@tlUploadParsed",
+    "@tlOntologyExtracted",
+    "@tlSynced",
   ];
   const prominentStakeholders = Object.entries(keywords)
     .filter(([, present]) => present)
@@ -3595,11 +3619,12 @@ function buildCaseIssueEntries(activeCase) {
   });
 
   timeline.forEach((step, index) => {
+    const body = resolveTimelineEntry(step);
     issueEntries.push({
       issueType: "timeline",
-      title: `Process step ${index + 1}`,
-      body: step,
-      stakeholder: inferStakeholderFromText(step, state.activeStakeholder),
+      title: `${t("processStep")} ${index + 1}`,
+      body,
+      stakeholder: inferStakeholderFromText(body, state.activeStakeholder),
       origin: "brief",
     });
   });
@@ -6324,7 +6349,7 @@ function renderReport() {
           (item, index) => `
             <article class="reflection-item">
               <strong>${state.locale === "ko" ? `${index + 1}차 반복` : `Iteration ${index + 1}`}</strong>
-              <p>${item}</p>
+              <p>${resolveTimelineEntry(item)}</p>
             </article>
           `
         )
@@ -8145,9 +8170,26 @@ function setPanelCollapsed(panelKey, collapsed, { persist = true } = {}) {
       // Restart the simulation with a fresh alpha so nodes visibly migrate to new cluster centers.
       try {
         if (typeof graphRenderer !== "undefined" && graphRenderer?.simulation) {
-          graphRenderer.simulation.alpha(0.85).restart();
+          // Unpin any non-core nodes that updateGraphRenderer may have left with fixed positions
+          // so the force simulation can actually pull them toward the new cluster targets.
+          graphRenderer.simulation.nodes().forEach((node) => {
+            if (node && node.type !== "core") {
+              node.fx = null;
+              node.fy = null;
+            }
+          });
+          // Re-apply the forces so forceX/forceY accessors re-read graphRenderer.width/height.
+          const sim = graphRenderer.simulation;
+          const fx = sim.force("x");
+          const fy = sim.force("y");
+          if (fx?.initialize) fx.initialize(sim.nodes());
+          if (fy?.initialize) fy.initialize(sim.nodes());
+          sim.alpha(1).restart();
         }
       } catch (_) {}
+      // Belt-and-suspenders: trigger the window resize handler too so any other
+      // responsive listeners (tooltips, labels, mini-map) reflow as well.
+      try { window.dispatchEvent(new Event("resize")); } catch (_) {}
     });
   });
 }
@@ -8232,7 +8274,14 @@ function wireLegendToggle() {
   }
   try {
     const saved = localStorage.getItem("legend-collapsed");
-    if (saved === "1") setLegendCollapsed(true);
+    if (saved === "1") {
+      setLegendCollapsed(true);
+    } else if (saved === null && state.activeRole === "user") {
+      // Students default to collapsed — the color legend duplicates info already
+      // available in the case brief and crowds the map when they're reading it.
+      // They can reopen it any time via the reopen pill.
+      setLegendCollapsed(true);
+    }
   } catch (err) {
     /* ignore */
   }
