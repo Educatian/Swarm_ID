@@ -355,6 +355,8 @@ const translations = {
     studentOnboardingStep3: "Switch lenses (Teacher → IT Systems → Students) to see the same case from each side.",
     studentOnboardingStep4: "Ask a question or add a node the original case doesn't capture.",
     studentOnboardingTourButton: "Take the guided tour",
+    expandStartHere: "Start here",
+    expandSelectedLens: "Selected lens",
     mobileMap: "Map",
     mobilePeople: "People",
     mobileTest: "Test",
@@ -647,6 +649,8 @@ const translations = {
     studentOnboardingStep3: "관점을 바꿔가며(교사 → IT 시스템 → 학생) 같은 케이스가 어떻게 달라 보이는지 확인해 보세요.",
     studentOnboardingStep4: "질문을 남기거나, 원본 케이스에 없는 관점을 새 노드로 추가해 보세요.",
     studentOnboardingTourButton: "가이드 투어 시작하기",
+    expandStartHere: "시작하기",
+    expandSelectedLens: "선택한 관점",
     mobileMap: "지도",
     mobilePeople: "인물",
     mobileTest: "테스트",
@@ -1042,6 +1046,11 @@ function applyStaticTranslations() {
     const tourBtn = document.getElementById("student-onboarding-tour-button");
     if (tourBtn) tourBtn.textContent = t("studentOnboardingTourButton");
   }
+
+  const expandIntakeLabel = document.getElementById("panel-expand-intake-label");
+  if (expandIntakeLabel) expandIntakeLabel.textContent = t("expandStartHere");
+  const expandInsightLabel = document.getElementById("panel-expand-insight-label");
+  if (expandInsightLabel) expandInsightLabel.textContent = t("expandSelectedLens");
 
   const conceptHelpTitle = document.getElementById("concept-help-title");
   if (conceptHelpTitle) conceptHelpTitle.textContent = t("conceptHelpTitle");
@@ -7705,6 +7714,8 @@ function setPanelCollapsed(panelKey, collapsed, { persist = true } = {}) {
     toggle.setAttribute("aria-label", label);
     toggle.setAttribute("title", label);
   }
+  const expandBtn = document.getElementById(`panel-expand-${panelKey}`);
+  if (expandBtn) expandBtn.hidden = !collapsed;
   if (persist) {
     try { localStorage.setItem(`panel-collapsed:${panelKey}`, collapsed ? "1" : "0"); } catch (_) {}
   }
@@ -7727,6 +7738,13 @@ function wireCollapsiblePanels() {
       const panel = document.querySelector(`[data-collapsible-panel="${key}"]`);
       const nextCollapsed = !panel?.classList.contains("is-collapsed");
       setPanelCollapsed(key, nextCollapsed);
+    });
+  });
+  document.querySelectorAll(".panel-expand-toggle[data-expand-target]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const key = btn.getAttribute("data-expand-target");
+      if (!key) return;
+      setPanelCollapsed(key, false);
     });
   });
 }
