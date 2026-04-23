@@ -5580,7 +5580,11 @@ function renderGraph() {
   hideNetworkTooltip();
   const activeCase = getCaseById(state.activeCaseId, getActiveCourse());
   dom.networkEmptyPreview.hidden = Boolean(activeCase);
-  dom.graphCycle.textContent = String(state.graph.iteration);
+  const swarmRound = state.graph.swarmRound || 0;
+  const cycleLabel = state.locale === "ko"
+    ? (swarmRound > 0 ? `사이클 ${state.graph.iteration} · 라운드 ${swarmRound}` : `사이클 ${state.graph.iteration}`)
+    : (swarmRound > 0 ? `cycle ${state.graph.iteration} · round ${swarmRound}` : `cycle ${state.graph.iteration}`);
+  dom.graphCycle.textContent = cycleLabel;
   dom.graphEvents.innerHTML = state.graph.events
     .map(
       (event) => `
@@ -7015,6 +7019,55 @@ function generateAgentReply(stakeholderKey) {
   );
 }
 
+const SWARM_AGENTS = ["teacher", "student", "it", "administrator", "accessibility"];
+
+async function runSwarmRound(question) {
+  const isKorean = state.locale === "ko";
+  state.graph.swarmRound = (state.graph.swarmRound || 0) + 1;
+  const roundNumber = state.graph.swarmRound;
+
+  setAiStatus(
+    isKorean
+      ? `스웜 라운드 ${roundNumber} · ${SWARM_AGENTS.length}명의 에이전트가 동시에 응답 중…`
+      : `Swarm round ${roundNumber} · ${SWARM_AGENTS.length} agents responding in parallel…`,
+    { busy: true }
+  );
+
+  const results = await Promise.allSettled(
+    SWARM_AGENTS.map((key) => generateAgentReplyWithAi(key, question))
+  );
+
+  let okCount = 0;
+  results.forEach((r, i) => {
+    const stakeholderKey = SWARM_AGENTS[i];
+    const stakeholder = stakeholders[stakeholderKey];
+    const body =
+      r.status === "fulfilled" && r.value ? r.value : generateAgentReply(stakeholderKey);
+    if (r.status === "fulfilled") okCount += 1;
+    state.chat.push({ role: "agent", stakeholder: stakeholderKey, body });
+    const titlePrefix = isKorean
+      ? `라운드 ${roundNumber} · ${stakeholder.label}`
+      : `Round ${roundNumber} · ${stakeholder.label}`;
+    pushEvidence(stakeholderKey, titlePrefix, body);
+  });
+
+  state.timeline.push(
+    isKorean
+      ? `스웜 라운드 ${roundNumber} 완료 — ${okCount}/${SWARM_AGENTS.length} 에이전트 응답`
+      : `Swarm round ${roundNumber} complete — ${okCount}/${SWARM_AGENTS.length} agents answered`
+  );
+  if (state.timeline.length > 5) state.timeline.shift();
+
+  setAiStatus(
+    isKorean
+      ? `스웜 라운드 ${roundNumber} 완료 (${okCount}/${SWARM_AGENTS.length}명 응답)`
+      : `Swarm round ${roundNumber} complete (${okCount}/${SWARM_AGENTS.length} agents answered)`,
+    { busy: false }
+  );
+
+  return { roundNumber, okCount, total: SWARM_AGENTS.length };
+}
+
 async function handleAsk(question) {
   const clean = question.trim();
   if (!clean) return;
@@ -7033,13 +7086,7 @@ async function handleAsk(question) {
     stakeholder: state.activeStakeholder,
     view: state.activeView,
   });
-  const response = await generateAgentReplyWithAi(state.activeStakeholder, clean);
-  state.chat.push({ role: "agent", stakeholder: state.activeStakeholder, body: response });
-  pushEvidence(state.activeStakeholder, `${stakeholders[state.activeStakeholder].label} response`, response);
-  state.timeline.push(`Swarm dialogue expanded through the ${stakeholders[state.activeStakeholder].label.toLowerCase()} lens.`);
-  if (state.timeline.length > 5) {
-    state.timeline.shift();
-  }
+  await runSwarmRound(clean);
   persistActiveWorkspaceState();
   regenerateGraph(clean);
   renderAll();
