@@ -741,13 +741,14 @@ textarea:focus-visible,
 
 .pipeline-card-collapsible .pipeline-card-header strong {
   flex: 1;
-  color: #e0e6ff;
+  color: #1a2a5c;
   letter-spacing: -0.01em;
+  font-weight: 700;
 }
 
 .pipeline-card-collapsible .pipeline-card-header .chevron {
   font-size: 1rem;
-  color: #a9b6ff;
+  color: #2a3fc8;
   transition: transform 180ms ease;
 }
 
