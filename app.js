@@ -347,6 +347,13 @@ const translations = {
     perspectiveStudentShort: "Students: what learners actually experience.",
     visualizerIntroTitle: "Visualizer — map the case",
     visualizerIntroBody: "Every node is a stakeholder concern, constraint, or design move. Edges show which concerns pull on each other. Click a node to read it; add a new node to extend the case with a worry the original doesn't capture.",
+    thinking: "Thinking...",
+    questionCouldNotBeProcessed: "The question could not be processed.",
+    studentOnboardingTitle: "First steps",
+    studentOnboardingStep1: "Open a published case from the list below.",
+    studentOnboardingStep2: "Read the brief, then look at how nodes connect in the map.",
+    studentOnboardingStep3: "Switch lenses (Teacher → IT Systems → Students) to see the same case from each side.",
+    studentOnboardingStep4: "Ask a question or add a node the original case doesn't capture.",
     mobileMap: "Map",
     mobilePeople: "People",
     mobileTest: "Test",
@@ -631,6 +638,13 @@ const translations = {
     perspectiveStudentShort: "학생: 학습자가 실제로 무엇을 경험하는가.",
     visualizerIntroTitle: "시각화 도구 — 케이스를 지도로 펼치기",
     visualizerIntroBody: "각 노드는 관계자의 우려, 제약, 설계 결정입니다. 선은 어떤 요소들이 서로 맞물리는지를 보여줍니다. 노드를 눌러 내용을 확인하고, 원본에서 빠진 걱정거리는 새 노드로 추가해 보세요.",
+    thinking: "생각 중입니다...",
+    questionCouldNotBeProcessed: "질문을 처리하지 못했습니다.",
+    studentOnboardingTitle: "무엇부터 해볼까요",
+    studentOnboardingStep1: "아래 목록에서 공개된 케이스를 하나 골라 열어 보세요.",
+    studentOnboardingStep2: "설명 요약을 읽고, 지도에서 노드들이 어떻게 연결되는지 살펴 보세요.",
+    studentOnboardingStep3: "관점을 바꿔가며(교사 → IT 시스템 → 학생) 같은 케이스가 어떻게 달라 보이는지 확인해 보세요.",
+    studentOnboardingStep4: "질문을 남기거나, 원본 케이스에 없는 관점을 새 노드로 추가해 보세요.",
     mobileMap: "지도",
     mobilePeople: "인물",
     mobileTest: "테스트",
@@ -1010,6 +1024,20 @@ function applyStaticTranslations() {
   if (visualizerIntroTitle) visualizerIntroTitle.textContent = t("visualizerIntroTitle");
   const visualizerIntroBody = document.getElementById("visualizer-intro-body");
   if (visualizerIntroBody) visualizerIntroBody.textContent = t("visualizerIntroBody");
+
+  const onboardingCard = document.getElementById("student-onboarding");
+  if (onboardingCard) {
+    const isStudent = state.activeRole === "user";
+    let dismissed = false;
+    try { dismissed = localStorage.getItem("view-intro-dismissed:student-onboarding") === "1"; } catch (_) {}
+    onboardingCard.hidden = !isStudent || dismissed;
+    const onbTitle = document.getElementById("student-onboarding-title");
+    if (onbTitle) onbTitle.textContent = t("studentOnboardingTitle");
+    ["1", "2", "3", "4"].forEach((n) => {
+      const el = document.getElementById(`student-onboarding-step-${n}`);
+      if (el) el.textContent = t(`studentOnboardingStep${n}`);
+    });
+  }
 
   const conceptHelpTitle = document.getElementById("concept-help-title");
   if (conceptHelpTitle) conceptHelpTitle.textContent = t("conceptHelpTitle");
@@ -2695,11 +2723,13 @@ async function generateAgentReplyWithAi(stakeholderKey, question) {
 
   const stakeholder = getCaseStakeholderMeta(stakeholderKey);
   const activeCase = getActiveCaseRecord();
+  const isKorean = state.locale === "ko";
   setAiStatus(`Responding with ${getGeminiConfig().model}â€¦`, { busy: true });
   try {
     const response = await requestGeminiContent({
-      systemInstruction:
-        "You are an instructional design analysis assistant. Answer from one stakeholder lens in plain language, with no bullets and no markdown.",
+      systemInstruction: isKorean
+        ? "당신은 교수 설계 분석 보조입니다. 한 관계자의 관점에서 평이한 한국어로 답하세요. 글머리 기호나 마크다운은 사용하지 마세요."
+        : "You are an instructional design analysis assistant. Answer from one stakeholder lens in plain language, with no bullets and no markdown.",
       prompt: [
         `Stakeholder lens: ${stakeholder.label}`,
         `Stakeholder summary: ${stakeholder.summary}`,
@@ -2707,7 +2737,9 @@ async function generateAgentReplyWithAi(stakeholderKey, question) {
         `Case summary: ${activeCase?.summary || ""}`,
         `Constraints: ${normalizeStringList(activeCase?.constraints).join(" | ")}`,
         `Question: ${question}`,
-        "Answer in 2 or 3 concise sentences. Mention one design tension and one practical next check.",
+        isKorean
+          ? "한국어로 2~3문장 이내의 자연스러운 답변을 작성하세요. 설계 관점의 긴장 요소 한 가지와 실무에서 점검할 다음 단계 한 가지를 포함하세요."
+          : "Answer in 2 or 3 concise sentences. Mention one design tension and one practical next check.",
       ].join("\n"),
       responseMimeType: "text/plain",
       temperature: 0.6,
@@ -7137,8 +7169,11 @@ document.addEventListener("click", (event) => {
   const viewIntroDismiss = event.target.closest("[data-view-intro-dismiss]");
   if (viewIntroDismiss) {
     const key = viewIntroDismiss.getAttribute("data-view-intro-dismiss");
-    const card = document.querySelector(`[data-view-intro="${key}"]`);
-    if (card) card.classList.add("is-hidden");
+    const card = document.querySelector(`[data-view-intro="${key}"]`) || document.getElementById(key);
+    if (card) {
+      card.classList.add("is-hidden");
+      if (card.hasAttribute("hidden") || card.tagName.toLowerCase() === "div") card.hidden = true;
+    }
     try { localStorage.setItem(`view-intro-dismissed:${key}`, "1"); } catch (_) {}
     return;
   }
@@ -7370,19 +7405,19 @@ document.getElementById("visualizer-form").addEventListener("submit", async (eve
   try {
     if (submitButton) {
       submitButton.disabled = true;
-      submitButton.textContent = "Thinking...";
+      submitButton.textContent = t("thinking");
     }
     input.disabled = true;
     await handleAsk(input.value);
     input.value = "";
   } catch (error) {
-    state.auth.message = error.message || "The question could not be processed.";
+    state.auth.message = error.message || t("questionCouldNotBeProcessed");
     renderLandingLogin();
   } finally {
     input.disabled = false;
     if (submitButton) {
       submitButton.disabled = false;
-      submitButton.textContent = previousLabel || "Ask a Question";
+      submitButton.textContent = previousLabel || t("askQuestion");
     }
     input.focus();
   }
