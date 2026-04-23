@@ -1767,12 +1767,13 @@ async function joinCourseWithCodeRemote(joinCode) {
     throw new Error("Enter a course code first.");
   }
 
-  const { data: course, error: courseError } = await client
-    .from("courses")
-    .select("id, institution_id, code, name, join_code, settings")
-    .eq("join_code", normalizedCode)
-    .maybeSingle();
+  // Lookup via SECURITY DEFINER RPC so that students who are NOT yet members
+  // can still resolve a course by its join code (courses RLS only exposes
+  // rows to existing members otherwise).
+  const { data: lookupRows, error: courseError } = await client
+    .rpc("lookup_course_by_join_code", { p_join_code: normalizedCode });
   if (courseError) throw courseError;
+  const course = Array.isArray(lookupRows) ? lookupRows[0] : lookupRows;
   if (!course) {
     throw new Error("That course code was not found.");
   }
@@ -1792,17 +1793,8 @@ async function joinCourseWithCodeRemote(joinCode) {
     if (!chosenSection) throw new Error("Section not recognized. Ask your instructor for the correct section number.");
   }
 
-  const membershipPayload = {
-    user_id: state.auth.userId,
-    institution_id: course.institution_id,
-    course_id: course.id,
-    role: "user",
-    display_name: getAuthDisplayName(),
-    is_primary: true,
-    status: "active",
-  };
-  if (chosenSection) membershipPayload.section = chosenSection;
-
+  // Guard: is this account already a student in a DIFFERENT course?
+  // (Own-row SELECT on course_memberships is allowed by existing RLS.)
   const { data: existingMemberships, error: membershipLookupError } = await client
     .from("course_memberships")
     .select("id, course_id, role, status")
@@ -1820,12 +1812,18 @@ async function joinCourseWithCodeRemote(joinCode) {
       throw new Error("This student account is already linked to another active course.");
     }
 
-    const { error: membershipInsertError } = await client.from("course_memberships").insert(membershipPayload);
-    if (membershipInsertError) {
-      if (membershipInsertError.code === "23505") {
+    // Self-enroll through SECURITY DEFINER RPC so we don't need to open
+    // course_memberships INSERT to arbitrary authenticated users.
+    const { error: enrollError } = await client.rpc("enroll_in_course_by_code", {
+      p_join_code: normalizedCode,
+      p_display_name: getAuthDisplayName(),
+      p_section: chosenSection || null,
+    });
+    if (enrollError) {
+      if (enrollError.code === "23505") {
         throw new Error("This student account is already linked to another active course.");
       }
-      throw membershipInsertError;
+      throw enrollError;
     }
   }
 
