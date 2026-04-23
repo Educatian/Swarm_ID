@@ -5565,7 +5565,7 @@ function renderGraph() {
           title: state.locale === "ko" ? "시작 전에" : "Before You Start",
           body:
             state.activeRole === "admin"
-              ? (state.locale === "ko" ? "코스 브리프에서 케이스를 만들면 이곳에 네트워크가 나타납니다." : "Create a case from a course brief, then the network will appear here.")
+              ? (state.locale === "ko" ? "수업 설명요약에서 케이스를 만들면 이곳에 네트워크가 나타납니다." : "Create a case from a course brief, then the network will appear here.")
               : (state.locale === "ko" ? "코스에서 게시된 케이스 하나를 선택하면 네트워크가 로드됩니다." : "Choose one published case from your course to load the network."),
         },
       ];
@@ -6217,7 +6217,7 @@ function getTutorialSteps() {
         selector: "#upload-document-form",
         title: state.locale === "ko" ? "케이스 생성 또는 게시" : "Create or Publish a Case",
         body: state.locale === "ko"
-          ? "제목, 수업 브리프, 공개 설정을 입력해 케이스를 만드세요. 기본값은 초안이며, 학생에게 공개할 준비가 되면 '학생에게 게시'로 전환하세요."
+          ? "제목, 수업 설명요약, 공개 설정을 입력해 케이스를 만드세요. 기본값은 초안이며, 학생에게 공개할 준비가 되면 '학생에게 게시'로 전환하세요."
           : "Fill in the title, instructional brief, and visibility to create a case. New cases start as drafts — switch to 'Publish to learners' when students should see it.",
         view: "visualizer",
       },
@@ -6284,7 +6284,17 @@ function getTutorialSteps() {
             view: "report",
           },
         ]
-      : []),
+      : [
+          // Fallback for students who haven't opened a case yet — still give them somewhere to go.
+          {
+            selector: "#network-stage",
+            title: state.locale === "ko" ? "케이스를 선택하면 지도가 열립니다" : "Pick a Case to Open the Map",
+            body: state.locale === "ko"
+              ? "위의 목록에서 게시된 케이스를 하나 고르면 네트워크 지도가 이곳에 나타납니다. 그 뒤 튜토리얼을 다시 실행하면 노드 추가, 리플렉션까지 나머지 단계를 안내합니다."
+              : "Pick one published case above and the network map will appear here. Replay the tutorial after that and it will walk you through adding a node, asking from a perspective, and writing a reflection.",
+            view: "visualizer",
+          },
+        ]),
   ];
 }
 
@@ -7308,7 +7318,7 @@ document.addEventListener("submit", async (event) => {
     const submitButton = event.target.querySelector('button[type="submit"]');
     const originalLabel = submitButton ? submitButton.textContent : "";
     const stages = state.locale === "ko"
-      ? ["브리프 분석 중…", "이해관계자 추출 중…", "긴장 관계 계산 중…", "케이스 저장 중…"]
+      ? ["설명요약 분석 중…", "이해관계자 추출 중…", "긴장 관계 계산 중…", "케이스 저장 중…"]
       : ["Parsing brief…", "Extracting stakeholders…", "Computing tensions…", "Saving case…"];
     let stageIndex = 0;
     const setStage = (label) => { if (submitButton) submitButton.textContent = label; };
@@ -7720,13 +7730,34 @@ function setPanelCollapsed(panelKey, collapsed, { persist = true } = {}) {
     try { localStorage.setItem(`panel-collapsed:${panelKey}`, collapsed ? "1" : "0"); } catch (_) {}
   }
   // Re-measure the D3 stage after layout changes so the graph expands into the reclaimed space.
+  // Use two rAFs so CSS grid has actually reflowed before we read the new width/height.
   window.requestAnimationFrame(() => {
-    try { if (typeof resizeGraphRenderer === "function") resizeGraphRenderer(); } catch (_) {}
-    try { if (typeof regenerateGraph === "function") regenerateGraph("panel collapse"); } catch (_) {}
+    window.requestAnimationFrame(() => {
+      try { if (typeof resizeGraphRenderer === "function") resizeGraphRenderer(); } catch (_) {}
+      try { if (typeof regenerateGraph === "function") regenerateGraph("panel collapse"); } catch (_) {}
+      // Full render path rebuilds force targets from fresh graphRenderer width/height.
+      try { if (typeof renderGraph === "function") renderGraph(); } catch (_) {}
+      // Restart the simulation with a fresh alpha so nodes visibly migrate to new cluster centers.
+      try {
+        if (typeof graphRenderer !== "undefined" && graphRenderer?.simulation) {
+          graphRenderer.simulation.alpha(0.85).restart();
+        }
+      } catch (_) {}
+    });
   });
 }
 
 function restoreCollapsiblePanels() {
+  // One-time reset for this version: earlier builds could persist a broken collapsed state,
+  // and students benefit from rediscovering the tutorial once more. Runs once per browser.
+  try {
+    if (!localStorage.getItem("panel-collapsed-v2")) {
+      localStorage.removeItem("panel-collapsed:intake");
+      localStorage.removeItem("panel-collapsed:insight");
+      localStorage.removeItem("swarm-id-tutorial-v1");
+      localStorage.setItem("panel-collapsed-v2", "1");
+    }
+  } catch (_) {}
   document.querySelectorAll("[data-collapsible-panel]").forEach((panel) => {
     const key = panel.getAttribute("data-collapsible-panel");
     let stored = "0";

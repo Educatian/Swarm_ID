@@ -875,19 +875,33 @@ textarea:focus-visible,
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 10px;
-  border: 1px solid rgba(67, 97, 238, 0.3);
+  padding: 7px 14px;
+  border: 1px solid rgba(67, 97, 238, 0.45);
   border-radius: 999px;
-  background: rgba(67, 97, 238, 0.08);
-  color: #4361ee;
-  font-size: 0.78rem;
-  font-weight: 500;
+  background: rgba(67, 97, 238, 0.18);
+  color: #2a3fc8;
+  font-size: 0.82rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+}
+
+.panel-expand-toggle[data-expand-target="intake"] {
+  margin-right: 12px;
+}
+
+.panel-expand-toggle[data-expand-target="insight"] {
+  margin-left: 12px;
 }
 
 .panel-expand-toggle:hover {
-  background: rgba(67, 97, 238, 0.18);
+  background: rgba(67, 97, 238, 0.28);
+  box-shadow: 0 2px 6px rgba(67, 97, 238, 0.22);
+}
+
+.panel-expand-toggle:active {
+  transform: translateY(1px);
 }
 
 .panel-expand-toggle .chevron {
@@ -3374,21 +3388,25 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .panel-collapse-toggle {
+  position: relative;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   padding: 0;
-  border: 1px solid rgba(67, 97, 238, 0.3);
+  border: 1px solid rgba(67, 97, 238, 0.4);
   border-radius: 6px;
-  background: rgba(67, 97, 238, 0.08);
-  color: #4361ee;
+  background: rgba(67, 97, 238, 0.14);
+  color: #2a3fc8;
   cursor: pointer;
-  transition: background 0.15s, transform 0.15s;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
 }
 
 .panel-collapse-toggle:hover {
