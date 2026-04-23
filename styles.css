@@ -1269,9 +1269,11 @@ textarea:disabled {
   align-items: flex-start;
   gap: 10px;
   max-width: min(460px, calc(100% - 32px));
-  background: rgba(10, 15, 30, 0.55);
+  background: rgba(255, 255, 255, 0.92);
   padding: 10px 12px;
   border-radius: 10px;
+  border: 1px solid rgba(67, 97, 238, 0.18);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
   backdrop-filter: blur(6px);
 }
 
@@ -1281,7 +1283,7 @@ textarea:disabled {
   column-gap: 8px;
   row-gap: 2px;
   align-items: center;
-  color: rgba(246, 246, 252, 0.85);
+  color: #1a2a5c;
   font-size: 0.78rem;
   line-height: 1.35;
   white-space: normal;
@@ -1289,13 +1291,14 @@ textarea:disabled {
 
 .legend-item .legend-label {
   font-weight: 600;
+  color: #1a2a5c;
 }
 
 .legend-item .legend-desc {
   grid-column: 2;
   font-style: normal;
   font-size: 0.7rem;
-  color: rgba(246, 246, 252, 0.6);
+  color: #2c3a5e;
 }
 
 .legend-swatch {
