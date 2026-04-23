@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Swarm_ID — Student Guide</title>
+  <meta name="description" content="What students see in Swarm_ID — from sign-in through swarm rounds to export.">
+  <style>
+:root {
+  --bg: #fafafa;
+  --panel: #fff;
+  --ink: #1f2937;
+  --muted: #6b7280;
+  --accent: #4361ee;
+  --accent-danger: #ef4444;
+  --accent-ok: #1b9c85;
+  --border: #e5e7eb;
+  --radius: 14px;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--bg);
+  margin: 0;
+  line-height: 1.65;
+  font-size: 16px;
+}
+.hero {
+  background: linear-gradient(135deg, #4361ee 0%, #1b9c85 100%);
+  color: #fff;
+  padding: 48px 32px 56px;
+  margin-bottom: 32px;
+}
+.hero-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.hero .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: 12px;
+  opacity: .82;
+  margin-bottom: 8px;
+}
+.hero h1 {
+  font-size: 40px;
+  margin: 0 0 12px;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+}
+.hero p { opacity: .9; margin: 0; font-size: 17px; max-width: 720px; }
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 32px 96px;
+}
+h1, h2, h3, h4 { color: var(--ink); line-height: 1.25; letter-spacing: -.01em; }
+h2 {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 26px;
+}
+h2:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+h3 { font-size: 20px; margin-top: 32px; }
+h4 { font-size: 17px; margin-top: 22px; color: var(--muted); }
+p { margin: 12px 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code {
+  font-family: var(--mono);
+  background: #eef2ff;
+  color: #3538cd;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.92em;
+}
+pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  margin: 18px 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+blockquote {
+  border-left: 4px solid var(--accent);
+  background: #eef2ff;
+  color: #1e3a8a;
+  padding: 14px 20px;
+  margin: 18px 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+figure {
+  margin: 24px 0;
+  padding: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 18px rgba(15, 23, 42, .06);
+}
+figure img {
+  width: 100%;
+  display: block;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+figcaption {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 10px;
+  text-align: center;
+}
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 40px 0;
+}
+ul, ol { padding-left: 24px; }
+li { margin: 6px 0; }
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 20px 0;
+  background: var(--panel);
+}
+table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+th { background: #f9fafb; font-weight: 600; color: #374151; }
+tr:last-child td { border-bottom: 0; }
+.guide-nav {
+  max-width: 900px;
+  margin: 0 auto 24px;
+  padding: 0 32px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+.guide-nav a {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--muted);
+}
+.guide-nav a.active {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+footer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 32px;
+  color: var(--muted);
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 640px) {
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  main { padding: 0 20px 64px; }
+  h2 { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Swarm_ID · Classroom guide</p>
+      <h1>Swarm_ID — Student Guide</h1>
+      <p>What students see in Swarm_ID — from sign-in through swarm rounds to export.</p>
+    </div>
+  </header>
+  <nav class="guide-nav"><a href="./instructor-en.html">instructor-en</a><a href="./instructor-ko.html">instructor-ko</a><a href="./student-en.html" class="active">student-en</a><a href="./student-ko.html">student-ko</a></nav>
+  <main>
+<p>A step-by-step walkthrough for students using Swarm_ID during a class session. Each step shows <strong>what you will see</strong>, <strong>what to click</strong>, and <strong>what is happening inside the system</strong> — so you can understand the swarm, not just operate it.</p>
+<blockquote>
+<strong>What you are doing here.</strong> You are designing an online lesson.<br>
+Swarm_ID is your &quot;second brain&quot; — when you ask a question, **five<br>
+different stakeholders** (a teacher, a student, an IT specialist,<br>
+an administrator, an accessibility expert) answer **at the same<br>
+time<strong>. You then see where they </strong>agree<strong>, where they </strong>disagree**,<br>
+and decide what <em>you</em> want to do with the tension. Every node you<br>
+see carries a badge that tells you who wrote it: <code>AI</code> (one of the<br>
+agents), <code>Me</code> (you), <code>Peer</code> (a classmate), or <code>Brief</code> (the original<br>
+case).<br>
+</blockquote>
+<hr>
+<h2>Step 1 · Sign in</h2>
+<figure><img src="./screenshots/student-en/01-login.png" alt="Step 1 — Sign in" loading="lazy"><figcaption>Step 1 — Sign in</figcaption></figure>
+<p>Go to <strong>https://swarmid.vercel.app</strong> and sign in with the account your instructor provided. If your instructor gave you a course or join code instead of an account, enter it on the landing screen.</p>
+<p><strong>What the system is doing:</strong> authenticating you through Supabase and loading your cohort context so you see the same course and cases as your classmates.</p>
+<hr>
+<h2>Step 2 · Onboarding card</h2>
+<figure><img src="./screenshots/student-en/02-onboarding.png" alt="Step 2 — Onboarding" loading="lazy"><figcaption>Step 2 — Onboarding</figcaption></figure>
+<p>First-time students see a <strong>&quot;Welcome to Swarm_ID&quot;</strong> card at the top of the Studio. It lists four quick moves:</p>
+<ol>
+<li>Pick a published case.</li>
+<li>Read the case brief and look at the map.</li>
+<li>Ask a question — the swarm answers from 5 lenses.</li>
+<li>Add your own agenda nodes and challenge the ones you disagree with.</li>
+</ol>
+<p>Dismiss the card once you have read it — it will not come back for the same student account.</p>
+<hr>
+<h2>Step 3 · Pick a case</h2>
+<figure><img src="./screenshots/student-en/03-pick-case.png" alt="Step 3 — Pick a case" loading="lazy"><figcaption>Step 3 — Pick a case</figcaption></figure>
+<p>Scroll the <strong>Start here</strong> panel to find the <strong>Course cases</strong> list. Only cards tagged <strong>Published</strong> are available to students. Click <strong>Open case</strong> on the one your instructor pointed you to.</p>
+<p><strong>Tip.</strong> If the list is empty, the instructor has not published a case yet — let them know.</p>
+<hr>
+<h2>Step 4 · Case map</h2>
+<figure><img src="./screenshots/student-en/04-case-map.png" alt="Step 4 — Case map" loading="lazy"><figcaption>Step 4 — Case map</figcaption></figure>
+<p>The canvas now shows the case as a network:</p>
+<ul>
+<li>A center <strong>core</strong> node with the case title.</li>
+<li>Five stakeholder nodes orbiting it (Teacher, Student, IT,</li>
+</ul>
+<p>  Administrator, Accessibility).</p>
+<ul>
+<li>Signal nodes (goals, constraints, evidence) connected to the</li>
+</ul>
+<p>  relevant stakeholder.</p>
+<p>Read the case brief in the left panel first. Every node has a small <strong>provenance badge</strong> in its top-right corner — <code>Brief</code> means this content came from the original case document.</p>
+<hr>
+<h2>Step 5 · Ask your first question</h2>
+<figure><img src="./screenshots/student-en/05-first-question.png" alt="Step 5 — First question" loading="lazy"><figcaption>Step 5 — First question</figcaption></figure>
+<p>At the bottom of the canvas is a composer input: <strong>&quot;Ask a Question&quot;</strong>. Type something you genuinely want to think about — e.g.</p>
+<blockquote>
+*&quot;How do student autonomy and teacher review load collide in this<br>
+design?&quot;*<br>
+</blockquote>
+<p>Hit enter. Do <strong>not</strong> hit it twice — one click launches a swarm round, which costs five Gemini calls in parallel.</p>
+<p><strong>What the system is doing:</strong> your question is sent to <em>all five</em> stakeholder agents simultaneously. Each agent answers from their own perspective — that is the swarm.</p>
+<hr>
+<h2>Step 6 · Swarm round — 5 answers</h2>
+<figure><img src="./screenshots/student-en/06-swarm-round.png" alt="Step 6 — Swarm round" loading="lazy"><figcaption>Step 6 — Swarm round</figcaption></figure>
+<p>Within 5–8 seconds you see <strong>five new nodes</strong> added to the network — one per stakeholder — with <code>AI</code> provenance badges. In the <strong>Swarm activity</strong> sidebar the <code>round</code> counter increments by 1, and in the chat you see five messages, each labeled with a stakeholder name.</p>
+<p><strong>Read them side by side.</strong> The whole point of a swarm is that nobody's answer is &quot;the&quot; answer — they disagree, sometimes sharply.</p>
+<hr>
+<h2>Step 7 · Disagreement edges</h2>
+<figure><img src="./screenshots/student-en/07-disagreement-edges.png" alt="Step 7 — Disagreement edges" loading="lazy"><figcaption>Step 7 — Disagreement edges</figcaption></figure>
+<p>A few seconds after the five answers arrive, a second pass classifies every pair as <strong>agree / disagree / tangential</strong>:</p>
+<ul>
+<li><strong>Green solid line</strong> = agents agree.</li>
+<li><strong>Red dashed line</strong> = agents disagree — *this is where learning</li>
+</ul>
+<p>  lives*.</p>
+<ul>
+<li><strong>Gray dotted line</strong> = tangential (they are talking past each</li>
+</ul>
+<p>  other).</p>
+<p>Click the <code>ⓘ</code> button next to the round counter to see the legend. <strong>Focus on red dashed lines.</strong> Those are the genuine design tensions you will have to resolve in your lesson plan.</p>
+<hr>
+<h2>Step 8 · Challenge one lens</h2>
+<figure><img src="./screenshots/student-en/08-challenge-button.png" alt="Step 8 — Challenge button" loading="lazy"><figcaption>Step 8 — Challenge button</figcaption></figure>
+<p>In the chat, each swarm response has a small <strong>&quot;Challenge this lens&quot;</strong> button. Click it to push back — the system will prompt you for a challenge sentence (e.g. <em>&quot;That ignores our 40-minute class limit&quot;</em>), then it sends the original answer + your challenge back to that same agent. You get a <strong>round-2 refined response</strong> from that specific stakeholder.</p>
+<p><strong>Why this matters:</strong> this is where you stop being a passive reader of AI output and become a co-designer. Your challenge shapes the next answer.</p>
+<hr>
+<h2>Step 9 · Add your own agenda node</h2>
+<figure><img src="./screenshots/student-en/09-add-agenda.png" alt="Step 9 — Add to map" loading="lazy"><figcaption>Step 9 — Add to map</figcaption></figure>
+<p>The <strong>Selected lens</strong> panel (right side) has an <strong>&quot;Add to map&quot;</strong> form. Give your node a short title, optionally a body. When you submit, the node appears on the canvas with a <code>Me</code> badge — that is how you show up in the shared cohort map.</p>
+<p><strong>Classroom rule of thumb:</strong> aim for at least 2–3 <code>Me</code> nodes per session. Those are your design decisions, not the AI's.</p>
+<hr>
+<h2>Step 10 · Report &amp; personal reflection</h2>
+<figure><img src="./screenshots/student-en/10-report.png" alt="Step 10 — Report" loading="lazy"><figcaption>Step 10 — Report</figcaption></figure>
+<p>Click <strong>Report</strong> in the left navigation. The report pulls together your decisions, the swarm rounds you ran, and the evidence attached. This is what you can hand in or paste into your lesson-plan draft.</p>
+<hr>
+<h2>Step 11 · Export / close out</h2>
+<figure><img src="./screenshots/student-en/11-export.png" alt="Step 11 — Export" loading="lazy"><figcaption>Step 11 — Export</figcaption></figure>
+<p>Use <strong>Download PNG</strong> to save the current network as an image (good for slides), or <strong>Download HTML Snapshot</strong> to get a standalone offline copy of the map in its current state.</p>
+<p>Sign out when you are done — your work is saved server-side via Supabase, so you can pick up where you left off next class.</p>
+<hr>
+<h2>Troubleshooting</h2>
+<div class="table-wrap"><table><thead><tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr></thead><tbody><tr><td>Nothing happens after I hit &quot;Ask&quot;</td><td>Offline or Gemini quota exhausted</td><td>Check your wifi, then ask the instructor</td></tr><tr><td>Only my question appears, no 5 answers</td><td>Swarm round failed silently</td><td>Open browser console, look for <code>runSwarmRound</code> warnings</td></tr><tr><td>Red disagreement lines never show up</td><td>Second classifier pass failed</td><td>Reload the page and ask the question again</td></tr><tr><td>Challenge button does nothing</td><td>You closed the prompt dialog</td><td>Click the button again and actually type a challenge</td></tr><tr><td>I can't see the course case</td><td>The case is in Draft</td><td>Your instructor has to publish it</td></tr></tbody></table></div>
+<hr>
+<h2>How to get the most out of a session</h2>
+<ol>
+<li><strong>Write a real question.</strong> &quot;What's hard?&quot; is weak — &quot;How does</li>
+</ol>
+<p>   teacher review time collide with student autonomy in my 40-min    class?&quot; is strong.</p>
+<ol>
+<li><strong>Read all five answers before reacting.</strong> Do not collapse into</li>
+</ol>
+<p>   &quot;the AI said...&quot; — there is no single AI voice here; there are    five.</p>
+<ol>
+<li><strong>Challenge at least one lens.</strong> Turn-taking is where actual</li>
+</ol>
+<p>   learning happens.</p>
+<ol>
+<li><strong>Add your own nodes.</strong> A map full of <code>AI</code> badges with no <code>Me</code></li>
+</ol>
+<p>   badges means you have not taken a position yet.</p>
+<ol>
+<li><strong>Export at the end.</strong> Your instructor can see activity, but the</li>
+</ol>
+<p>   report is easier to review than the raw map.</p>
+  </main>
+  <footer>
+    <p>Generated from <code>guides/student-en.md</code>. Screenshots captured on <code>https://swarmid.vercel.app</code> via Playwright.</p>
+  </footer>
+</body>
+</html>

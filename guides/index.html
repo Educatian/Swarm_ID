@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Swarm_ID — Guides</title>
+  <meta name="description" content="Instructor and student walkthroughs.">
+  <style>
+:root {
+  --bg: #fafafa;
+  --panel: #fff;
+  --ink: #1f2937;
+  --muted: #6b7280;
+  --accent: #4361ee;
+  --accent-danger: #ef4444;
+  --accent-ok: #1b9c85;
+  --border: #e5e7eb;
+  --radius: 14px;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--bg);
+  margin: 0;
+  line-height: 1.65;
+  font-size: 16px;
+}
+.hero {
+  background: linear-gradient(135deg, #4361ee 0%, #1b9c85 100%);
+  color: #fff;
+  padding: 48px 32px 56px;
+  margin-bottom: 32px;
+}
+.hero-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.hero .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: 12px;
+  opacity: .82;
+  margin-bottom: 8px;
+}
+.hero h1 {
+  font-size: 40px;
+  margin: 0 0 12px;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+}
+.hero p { opacity: .9; margin: 0; font-size: 17px; max-width: 720px; }
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 32px 96px;
+}
+h1, h2, h3, h4 { color: var(--ink); line-height: 1.25; letter-spacing: -.01em; }
+h2 {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 26px;
+}
+h2:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+h3 { font-size: 20px; margin-top: 32px; }
+h4 { font-size: 17px; margin-top: 22px; color: var(--muted); }
+p { margin: 12px 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code {
+  font-family: var(--mono);
+  background: #eef2ff;
+  color: #3538cd;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.92em;
+}
+pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  margin: 18px 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+blockquote {
+  border-left: 4px solid var(--accent);
+  background: #eef2ff;
+  color: #1e3a8a;
+  padding: 14px 20px;
+  margin: 18px 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+figure {
+  margin: 24px 0;
+  padding: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 18px rgba(15, 23, 42, .06);
+}
+figure img {
+  width: 100%;
+  display: block;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+figcaption {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 10px;
+  text-align: center;
+}
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 40px 0;
+}
+ul, ol { padding-left: 24px; }
+li { margin: 6px 0; }
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 20px 0;
+  background: var(--panel);
+}
+table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+th { background: #f9fafb; font-weight: 600; color: #374151; }
+tr:last-child td { border-bottom: 0; }
+.guide-nav {
+  max-width: 900px;
+  margin: 0 auto 24px;
+  padding: 0 32px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+.guide-nav a {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--muted);
+}
+.guide-nav a.active {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+footer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 32px;
+  color: var(--muted);
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 640px) {
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  main { padding: 0 20px 64px; }
+  h2 { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Swarm_ID · Classroom guide</p>
+      <h1>Swarm_ID — Guides</h1>
+      <p>Instructor and student walkthroughs.</p>
+    </div>
+  </header>
+  <nav class="guide-nav"><a href="./instructor-en.html" class="active">instructor-en</a><a href="./instructor-ko.html">instructor-ko</a><a href="./student-en.html">student-en</a><a href="./student-ko.html">student-ko</a></nav>
+  <main>
+
+<h2>Four guides</h2>
+<ul>
+<li><a href="./instructor-en.html">Swarm_ID — Instructor Guide</a> — <small>Step-by-step setup for instructors preparing a class session with Swarm_ID.</small></li>
+<li><a href="./instructor-ko.html">Swarm_ID — 강사용 가이드</a> — <small>Swarm_ID로 수업을 준비하는 강사를 위한 단계별 안내서.</small></li>
+<li><a href="./student-en.html">Swarm_ID — Student Guide</a> — <small>What students see in Swarm_ID — from sign-in through swarm rounds to export.</small></li>
+<li><a href="./student-ko.html">Swarm_ID — 학생용 가이드</a> — <small>Swarm_ID에서 학생이 보는 화면 — 로그인부터 스웜 라운드와 내보내기까지.</small></li>
+</ul>
+<h3>How screenshots were captured</h3>
+<p>Each PNG under <code>guides/screenshots/{role}-{locale}/</code> was produced by <code>scripts/capture-guides.mjs</code>, which drives a headless Chromium through the real deployed app at <a href="https://swarmid.vercel.app">swarmid.vercel.app</a>.</p>
+
+  </main>
+  <footer>
+    <p>Generated from <code>guides/instructor-en.md</code>. Screenshots captured on <code>https://swarmid.vercel.app</code> via Playwright.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Swarm_ID — 학생용 가이드</title>
+  <meta name="description" content="Swarm_ID에서 학생이 보는 화면 — 로그인부터 스웜 라운드와 내보내기까지.">
+  <style>
+:root {
+  --bg: #fafafa;
+  --panel: #fff;
+  --ink: #1f2937;
+  --muted: #6b7280;
+  --accent: #4361ee;
+  --accent-danger: #ef4444;
+  --accent-ok: #1b9c85;
+  --border: #e5e7eb;
+  --radius: 14px;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--bg);
+  margin: 0;
+  line-height: 1.65;
+  font-size: 16px;
+}
+.hero {
+  background: linear-gradient(135deg, #4361ee 0%, #1b9c85 100%);
+  color: #fff;
+  padding: 48px 32px 56px;
+  margin-bottom: 32px;
+}
+.hero-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.hero .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: 12px;
+  opacity: .82;
+  margin-bottom: 8px;
+}
+.hero h1 {
+  font-size: 40px;
+  margin: 0 0 12px;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+}
+.hero p { opacity: .9; margin: 0; font-size: 17px; max-width: 720px; }
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 32px 96px;
+}
+h1, h2, h3, h4 { color: var(--ink); line-height: 1.25; letter-spacing: -.01em; }
+h2 {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 26px;
+}
+h2:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+h3 { font-size: 20px; margin-top: 32px; }
+h4 { font-size: 17px; margin-top: 22px; color: var(--muted); }
+p { margin: 12px 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code {
+  font-family: var(--mono);
+  background: #eef2ff;
+  color: #3538cd;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.92em;
+}
+pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  margin: 18px 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+blockquote {
+  border-left: 4px solid var(--accent);
+  background: #eef2ff;
+  color: #1e3a8a;
+  padding: 14px 20px;
+  margin: 18px 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+figure {
+  margin: 24px 0;
+  padding: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 18px rgba(15, 23, 42, .06);
+}
+figure img {
+  width: 100%;
+  display: block;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+figcaption {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 10px;
+  text-align: center;
+}
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 40px 0;
+}
+ul, ol { padding-left: 24px; }
+li { margin: 6px 0; }
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 20px 0;
+  background: var(--panel);
+}
+table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+th { background: #f9fafb; font-weight: 600; color: #374151; }
+tr:last-child td { border-bottom: 0; }
+.guide-nav {
+  max-width: 900px;
+  margin: 0 auto 24px;
+  padding: 0 32px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+.guide-nav a {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--muted);
+}
+.guide-nav a.active {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+footer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 32px;
+  color: var(--muted);
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 640px) {
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  main { padding: 0 20px 64px; }
+  h2 { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Swarm_ID · Classroom guide</p>
+      <h1>Swarm_ID — 학생용 가이드</h1>
+      <p>Swarm_ID에서 학생이 보는 화면 — 로그인부터 스웜 라운드와 내보내기까지.</p>
+    </div>
+  </header>
+  <nav class="guide-nav"><a href="./instructor-en.html">instructor-en</a><a href="./instructor-ko.html">instructor-ko</a><a href="./student-en.html">student-en</a><a href="./student-ko.html" class="active">student-ko</a></nav>
+  <main>
+<p>수업 시간에 Swarm_ID를 사용하는 학생을 위한 단계별 안내서입니다. 각 스텝은 <strong>무엇이 보이는지</strong>, <strong>무엇을 클릭하는지</strong>, <strong>시스템 내부에서 어떤 일이 일어나는지</strong>를 함께 설명합니다 — 스웜을 단순히 조작하는 것을 넘어 이해하도록.</p>
+<blockquote>
+<strong>지금 뭘 하는 거야?</strong> 여러분은 온라인 수업을 설계하고 있고,<br>
+Swarm_ID는 여러분의 &quot;보조 두뇌&quot;입니다. 질문을 던지면 **다섯<br>
+명의 이해관계자**(교사·학생·IT 전문가·행정가·접근성 전문가)가<br>
+<strong>동시에</strong> 답합니다. 그리고 여러분은 그들이 어디서 <strong>동의</strong>하고<br>
+어디서 <strong>이견</strong>을 보이는지 확인한 뒤, 그 긴장을 <strong>스스로</strong><br>
+어떻게 다룰지 결정합니다. 맵의 모든 노드에는 누가 쓴 내용인지<br>
+알려 주는 배지가 달립니다: <code>AI</code>(에이전트 중 하나), <code>나</code>(여러분),<br>
+<code>동료</code>(반 친구), <code>설명</code>(원본 케이스).<br>
+</blockquote>
+<hr>
+<h2>Step 1 · 로그인</h2>
+<figure><img src="./screenshots/student-ko/01-login.png" alt="Step 1 — 로그인" loading="lazy"><figcaption>Step 1 — 로그인</figcaption></figure>
+<p><strong>https://swarmid.vercel.app</strong>에 접속해 강사가 제공한 계정으로 로그인합니다. 계정 대신 강의 코드나 조인 코드를 받았다면 랜딩 화면에 입력하세요.</p>
+<p><strong>내부 동작:</strong> Supabase로 인증하고 여러분의 코호트 컨텍스트를 불러와 반 친구들과 같은 강의·케이스를 볼 수 있게 합니다.</p>
+<hr>
+<h2>Step 2 · 온보딩 카드</h2>
+<figure><img src="./screenshots/student-ko/02-onboarding.png" alt="Step 2 — 온보딩" loading="lazy"><figcaption>Step 2 — 온보딩</figcaption></figure>
+<p>처음 접속한 학생은 스튜디오 상단에 <strong>&quot;Swarm_ID에 오신 걸 환영합니다&quot;</strong> 카드를 보게 됩니다. 네 가지 빠른 동작이 안내됩니다:</p>
+<ol>
+<li>게시된 케이스를 고르세요.</li>
+<li>설명요약을 읽고 맵을 살펴보세요.</li>
+<li>질문을 던지세요 — 스웜이 5가지 관점에서 답합니다.</li>
+<li>여러분만의 아젠다 노드를 추가하고, 납득이 안 되는 관점은</li>
+</ol>
+<p>   &quot;Challenge&quot;로 반박하세요.</p>
+<p>읽은 뒤에는 카드를 닫으세요 — 같은 학생 계정에서는 다시 뜨지 않습니다.</p>
+<hr>
+<h2>Step 3 · 케이스 선택</h2>
+<figure><img src="./screenshots/student-ko/03-pick-case.png" alt="Step 3 — 케이스 선택" loading="lazy"><figcaption>Step 3 — 케이스 선택</figcaption></figure>
+<p><strong>시작하기</strong> 패널을 스크롤해 <strong>강의 케이스</strong> 목록을 찾으세요. <strong>게시됨</strong> 태그가 붙은 카드만 학생에게 열려 있습니다. 강사가 지정한 카드의 <strong>케이스 열기</strong>를 누르세요.</p>
+<p><strong>팁.</strong> 목록이 비어 있다면 강사가 아직 게시를 안 한 상태입니다 — 강사에게 알려 주세요.</p>
+<hr>
+<h2>Step 4 · 케이스 맵</h2>
+<figure><img src="./screenshots/student-ko/04-case-map.png" alt="Step 4 — 케이스 맵" loading="lazy"><figcaption>Step 4 — 케이스 맵</figcaption></figure>
+<p>캔버스가 케이스를 네트워크로 표시합니다:</p>
+<ul>
+<li>케이스 제목을 담은 중앙 <strong>코어</strong> 노드</li>
+<li>코어를 둘러싼 5명의 이해관계자 노드(교사·학생·IT·행정·접근성)</li>
+<li>각 이해관계자에 연결된 시그널 노드(목표·제약·증거)</li>
+</ul>
+<p>먼저 왼쪽 패널에서 케이스 설명요약을 읽으세요. 모든 노드의 오른쪽 위에는 작은 <strong>출처 배지</strong>가 있습니다 — <code>설명</code> 배지는 원본 케이스 문서에서 가져온 내용이라는 뜻입니다.</p>
+<hr>
+<h2>Step 5 · 첫 질문 던지기</h2>
+<figure><img src="./screenshots/student-ko/05-first-question.png" alt="Step 5 — 첫 질문" loading="lazy"><figcaption>Step 5 — 첫 질문</figcaption></figure>
+<p>캔버스 하단에 컴포저 입력 필드가 있습니다: <strong>&quot;질문하기&quot;</strong>. 진짜로 생각해 보고 싶은 것을 입력하세요 — 예를 들어:</p>
+<blockquote>
+*&quot;이 수업에서 학생 자율성과 교사 검토 부담은 어떻게 충돌<br>
+하나요?&quot;*<br>
+</blockquote>
+<p>엔터를 치세요. <strong>두 번 치지 마세요</strong> — 한 번의 전송이 병렬로 5번의 Gemini 호출을 일으키는 스웜 라운드를 실행합니다.</p>
+<p><strong>내부 동작:</strong> 여러분의 질문이 <strong>다섯 명의 이해관계자 에이전트 모두에게 동시에</strong> 보내집니다. 각 에이전트는 자신의 관점에서 답합니다 — 이게 바로 스웜입니다.</p>
+<hr>
+<h2>Step 6 · 스웜 라운드 — 5개의 답</h2>
+<figure><img src="./screenshots/student-ko/06-swarm-round.png" alt="Step 6 — 스웜 라운드" loading="lazy"><figcaption>Step 6 — 스웜 라운드</figcaption></figure>
+<p>5~8초 안에 <strong>5개의 새 노드</strong>가 네트워크에 추가됩니다 — 각 이해 관계자마다 하나씩, <code>AI</code> 출처 배지를 달고. <strong>스웜 활동</strong> 사이드바의 <code>라운드</code> 카운터가 1 올라가고, 채팅에는 이해관계자 이름으로 라벨링된 5개의 메시지가 보입니다.</p>
+<p><strong>5개를 나란히 읽으세요.</strong> 스웜의 핵심은 어느 한 답이 &quot;정답&quot;이 아니라는 점입니다 — 그들은 이견을 내고, 때로는 날카롭게 부딪힙니다.</p>
+<hr>
+<h2>Step 7 · 이견 엣지</h2>
+<figure><img src="./screenshots/student-ko/07-disagreement-edges.png" alt="Step 7 — 이견 엣지" loading="lazy"><figcaption>Step 7 — 이견 엣지</figcaption></figure>
+<p>5개 답이 도착한 몇 초 뒤, 2차 패스가 답변 쌍을 <strong>동의 / 이견 / 부분일치</strong>로 분류합니다:</p>
+<ul>
+<li><strong>초록 실선</strong> = 에이전트 동의.</li>
+<li><strong>빨강 점선</strong> = 에이전트 이견 — <em>배움이 일어나는 곳</em>.</li>
+<li><strong>회색 점점선</strong> = 부분일치 (서로 엇갈리는 이야기).</li>
+</ul>
+<p>라운드 카운터 옆 <code>ⓘ</code> 버튼을 누르면 범례가 보입니다. <strong>빨강 점선에 집중하세요.</strong> 여러분이 수업 계획에서 해결해야 할 진짜 설계 긴장입니다.</p>
+<hr>
+<h2>Step 8 · 한 관점에 도전하기 (Challenge)</h2>
+<figure><img src="./screenshots/student-ko/08-challenge-button.png" alt="Step 8 — 도전 버튼" loading="lazy"><figcaption>Step 8 — 도전 버튼</figcaption></figure>
+<p>채팅의 각 스웜 응답 옆에 작은 <strong>&quot;이 관점에 도전&quot;</strong> 버튼이 있습니다. 누르면 시스템이 도전 문장을 입력하라고 물어봅니다 (예: <em>&quot;그건 40분 수업 제약을 무시한 이야기예요&quot;</em>). 그러면 원래 답변 + 여러분의 도전 문장이 같은 에이전트에게 다시 전달되고, 그 이해관계자로부터 <strong>2라운드 정교화 응답</strong>을 받습니다.</p>
+<p><strong>왜 중요한가:</strong> 여기서 여러분은 AI 결과를 수동적으로 읽는 소비자에서 벗어나 공동 설계자가 됩니다. 여러분의 도전이 다음 답을 만듭니다.</p>
+<hr>
+<h2>Step 9 · 나만의 아젠다 노드 추가</h2>
+<figure><img src="./screenshots/student-ko/09-add-agenda.png" alt="Step 9 — 맵에 추가" loading="lazy"><figcaption>Step 9 — 맵에 추가</figcaption></figure>
+<p>오른쪽 <strong>선택된 렌즈</strong> 패널에 <strong>&quot;맵에 추가&quot;</strong> 폼이 있습니다. 짧은 제목과 선택적 본문을 입력해 제출하면, 캔버스에 <code>나</code> 배지를 단 노드가 나타납니다 — 이게 여러분이 공유 코호트 맵에 등장하는 방식입니다.</p>
+<p><strong>교실 기준.</strong> 세션당 최소 2~3개의 <code>나</code> 노드를 목표로 하세요. 그게 여러분의 설계 결정이고, AI의 결정이 아닙니다.</p>
+<hr>
+<h2>Step 10 · 리포트 &amp; 개인 회고</h2>
+<figure><img src="./screenshots/student-ko/10-report.png" alt="Step 10 — 리포트" loading="lazy"><figcaption>Step 10 — 리포트</figcaption></figure>
+<p>왼쪽 내비게이션의 <strong>리포트</strong>를 클릭하세요. 리포트는 여러분의 결정, 실행한 스웜 라운드, 첨부한 증거를 모아 정리합니다. 과제로 제출하거나 수업 계획 초안에 붙여 넣을 수 있는 결과물이 됩니다.</p>
+<hr>
+<h2>Step 11 · 내보내기 / 마무리</h2>
+<figure><img src="./screenshots/student-ko/11-export.png" alt="Step 11 — 내보내기" loading="lazy"><figcaption>Step 11 — 내보내기</figcaption></figure>
+<p><strong>PNG 다운로드</strong>로 현재 네트워크를 이미지로 저장(슬라이드용) 하거나, <strong>HTML 스냅샷 다운로드</strong>로 현재 상태의 독립형 오프라인 맵을 받으세요.</p>
+<p>마치면 로그아웃하세요 — 작업은 Supabase를 통해 서버에 저장되어 있어 다음 수업에서 이어서 진행할 수 있습니다.</p>
+<hr>
+<h2>문제 해결</h2>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인 추정</th><th>조치</th></tr></thead><tbody><tr><td>&quot;질문하기&quot;를 눌렀는데 반응이 없음</td><td>오프라인 또는 Gemini 쿼터 소진</td><td>와이파이 확인 후 강사에게 보고</td></tr><tr><td>내 질문만 보이고 5개 답이 안 옴</td><td>스웜 라운드가 조용히 실패</td><td>브라우저 콘솔에서 <code>runSwarmRound</code> 경고 확인</td></tr><tr><td>빨강 이견 선이 전혀 안 나타남</td><td>2차 분류 패스 실패</td><td>페이지 리로드 후 다시 질문</td></tr><tr><td>도전 버튼이 반응 없음</td><td>프롬프트 창을 닫아 버림</td><td>다시 누르고 이번엔 실제로 도전 문장을 입력</td></tr><tr><td>강의 케이스가 안 보임</td><td>초안 상태</td><td>강사가 게시해야 함</td></tr></tbody></table></div>
+<hr>
+<h2>수업에서 최대한 뽑아내는 법</h2>
+<ol>
+<li><strong>진짜 질문을 쓰세요.</strong> &quot;뭐가 어렵지?&quot;는 약합니다. &quot;40분 수업</li>
+</ol>
+<p>   에서 교사 리뷰 시간은 학생 자율성과 어떻게 부딪히지?&quot;는    강합니다.</p>
+<ol>
+<li><strong>반응하기 전에 5개 답을 다 읽으세요.</strong> &quot;AI가 그랬다…&quot;로</li>
+</ol>
+<p>   뭉뚱그리지 마세요 — 여기엔 단일한 AI 목소리가 없고, 다섯    목소리가 있습니다.</p>
+<ol>
+<li><strong>최소 한 관점에는 도전하세요.</strong> 턴테이킹이 일어나는 지점이</li>
+</ol>
+<p>   실제 학습이 일어나는 지점입니다.</p>
+<ol>
+<li><strong>여러분의 노드를 추가하세요.</strong> <code>AI</code> 배지만 가득하고 <code>나</code></li>
+</ol>
+<p>   배지가 없는 맵은 여러분이 아직 입장을 잡지 않았다는 뜻입니다.</p>
+<ol>
+<li><strong>마지막에 내보내세요.</strong> 강사가 활동 내역을 볼 수 있지만,</li>
+</ol>
+<p>   리포트가 원본 맵보다 훨씬 보기 쉽습니다.</p>
+  </main>
+  <footer>
+    <p>Generated from <code>guides/student-ko.md</code>. Screenshots captured on <code>https://swarmid.vercel.app</code> via Playwright.</p>
+  </footer>
+</body>
+</html>

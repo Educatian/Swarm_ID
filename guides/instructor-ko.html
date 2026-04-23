@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Swarm_ID — 강사용 가이드</title>
+  <meta name="description" content="Swarm_ID로 수업을 준비하는 강사를 위한 단계별 안내서.">
+  <style>
+:root {
+  --bg: #fafafa;
+  --panel: #fff;
+  --ink: #1f2937;
+  --muted: #6b7280;
+  --accent: #4361ee;
+  --accent-danger: #ef4444;
+  --accent-ok: #1b9c85;
+  --border: #e5e7eb;
+  --radius: 14px;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--bg);
+  margin: 0;
+  line-height: 1.65;
+  font-size: 16px;
+}
+.hero {
+  background: linear-gradient(135deg, #4361ee 0%, #1b9c85 100%);
+  color: #fff;
+  padding: 48px 32px 56px;
+  margin-bottom: 32px;
+}
+.hero-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.hero .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: 12px;
+  opacity: .82;
+  margin-bottom: 8px;
+}
+.hero h1 {
+  font-size: 40px;
+  margin: 0 0 12px;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+}
+.hero p { opacity: .9; margin: 0; font-size: 17px; max-width: 720px; }
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 32px 96px;
+}
+h1, h2, h3, h4 { color: var(--ink); line-height: 1.25; letter-spacing: -.01em; }
+h2 {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 26px;
+}
+h2:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+h3 { font-size: 20px; margin-top: 32px; }
+h4 { font-size: 17px; margin-top: 22px; color: var(--muted); }
+p { margin: 12px 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code {
+  font-family: var(--mono);
+  background: #eef2ff;
+  color: #3538cd;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.92em;
+}
+pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  margin: 18px 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+blockquote {
+  border-left: 4px solid var(--accent);
+  background: #eef2ff;
+  color: #1e3a8a;
+  padding: 14px 20px;
+  margin: 18px 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+figure {
+  margin: 24px 0;
+  padding: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 18px rgba(15, 23, 42, .06);
+}
+figure img {
+  width: 100%;
+  display: block;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+figcaption {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 10px;
+  text-align: center;
+}
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 40px 0;
+}
+ul, ol { padding-left: 24px; }
+li { margin: 6px 0; }
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 20px 0;
+  background: var(--panel);
+}
+table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+th { background: #f9fafb; font-weight: 600; color: #374151; }
+tr:last-child td { border-bottom: 0; }
+.guide-nav {
+  max-width: 900px;
+  margin: 0 auto 24px;
+  padding: 0 32px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+.guide-nav a {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--muted);
+}
+.guide-nav a.active {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+footer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 32px;
+  color: var(--muted);
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 640px) {
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  main { padding: 0 20px 64px; }
+  h2 { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Swarm_ID · Classroom guide</p>
+      <h1>Swarm_ID — 강사용 가이드</h1>
+      <p>Swarm_ID로 수업을 준비하는 강사를 위한 단계별 안내서.</p>
+    </div>
+  </header>
+  <nav class="guide-nav"><a href="./instructor-en.html">instructor-en</a><a href="./instructor-ko.html" class="active">instructor-ko</a><a href="./student-en.html">student-en</a><a href="./student-ko.html">student-ko</a></nav>
+  <main>
+<p>수업용 Swarm_ID 준비를 위한 단계별 안내서입니다. 각 스텝은 <strong>무엇이 보이는지</strong>, <strong>어디를 클릭하는지</strong>, 그리고 <strong>시스템이 어떤 일을 하고 있는지</strong>를 함께 설명합니다.</p>
+<blockquote>
+<strong>Swarm_ID가 다른 이유.</strong> 학생이 질문하면 Swarm_ID는 LLM을<br>
+한 번만 호출하지 않습니다. 대신 <strong>스웜 라운드</strong>를 실행합니다 —<br>
+다섯 명의 이해관계자 에이전트(교사·학생·IT·행정·접근성)가<br>
+같은 질문에 <strong>동시에</strong> 답합니다. 두 번째 패스는 답변 쌍을<br>
+<strong>동의 / 이견 / 부분일치</strong>로 분류해 네트워크 위에 그려 줍니다.<br>
+학생은 다원성·충돌·합의 지점을 한눈에 보고, 특정 관점에 대해<br>
+&quot;Challenge&quot;를 누르면 해당 에이전트가 2라운드 응답으로 정교화<br>
+합니다. 맵의 모든 주요 노드에는 출처 배지(<code>AI</code>, <code>나</code>, <code>동료</code>,<br>
+<code>설명</code>)가 달려 있어 누가 쓴 내용인지 항상 추적 가능합니다.<br>
+</blockquote>
+<hr>
+<h2>Step 1 · 로그인</h2>
+<figure><img src="./screenshots/instructor-ko/01-login.png" alt="Step 1 — 로그인" loading="lazy"><figcaption>Step 1 — 로그인</figcaption></figure>
+<p><strong>https://swarmid.vercel.app</strong> 에 접속해 강사 계정으로 로그인합니다 (Supabase 기반). 아직 계정이 없다면 플랫폼 관리자에게 요청하세요 — 강의 데이터를 기관 내부에 보호하기 위해 자가 가입은 의도적으로 비활성화되어 있습니다.</p>
+<p><strong>내부 동작:</strong> Supabase에 인증한 뒤 기관·강의 컨텍스트를 불러옵니다. 최근 케이스, 튜토리얼 진행 상태 등 로컬 캐시도 <code>localStorage</code>에서 복원됩니다.</p>
+<hr>
+<h2>Step 2 · 스튜디오 진입</h2>
+<figure><img src="./screenshots/instructor-ko/02-studio-landing.png" alt="Step 2 — 스튜디오 진입" loading="lazy"><figcaption>Step 2 — 스튜디오 진입</figcaption></figure>
+<p>스튜디오의 <strong>케이스 네트워크</strong> 뷰로 진입합니다. 왼쪽 사이드바에는 네비게이션(네트워크 · 관점 · 트레이드오프 · 샌드박스 · 리포트)과 <strong>현재 상태</strong> 건강 패널이 있습니다. 중앙 캔버스에 D3 힘 지향 그래프, 오른쪽 사이드바에는 <strong>선택된 렌즈</strong>와 <strong>스웜 활동</strong> 피드가 표시됩니다.</p>
+<p><strong>팁.</strong> &quot;스웜 활동&quot; 옆 알약 라벨은 이제 <code>사이클 N · 라운드 M</code> 으로 표시됩니다. <code>사이클</code>은 그래프 리렌더 횟수, <code>라운드</code>는 실제 다중 에이전트 턴 수를 셉니다. 수업이 끝난 뒤 <code>라운드</code>가 충분히 0보다 커야 학생들이 스웜에 실제로 참여했다는 증거가 됩니다.</p>
+<hr>
+<h2>Step 3 · 케이스 라이브러리 점검</h2>
+<figure><img src="./screenshots/instructor-ko/03-case-library.png" alt="Step 3 — 케이스 라이브러리" loading="lazy"><figcaption>Step 3 — 케이스 라이브러리</figcaption></figure>
+<p><strong>시작하기</strong>(인테이크) 패널을 스크롤해 <strong>강의 케이스</strong> 목록을 확인하세요. 카드마다 제목·요약·초안/게시 상태·열기/게시 버튼이 보입니다. <strong>게시됨</strong>이 붙은 카드는 학생에게 노출되고, <strong>초안</strong> 카드는 강사 전용입니다.</p>
+<p><strong>관리 팁.</strong> 학생이 케이스를 못 찾는 가장 흔한 원인은 <strong>초안</strong> 상태로 남아 있기 때문입니다. 카드의 <strong>게시</strong> 버튼을 한 번 누르면 해결됩니다.</p>
+<hr>
+<h2>Step 4 · 케이스 열기</h2>
+<figure><img src="./screenshots/instructor-ko/04-case-open.png" alt="Step 4 — 케이스 열기" loading="lazy"><figcaption>Step 4 — 케이스 열기</figcaption></figure>
+<p>수업에 사용할 케이스(예: <em>5학년 온라인 디지털 리터러시 모듈</em>)의 <strong>케이스 열기</strong> 버튼을 누르면 캔버스가 재렌더됩니다:</p>
+<ul>
+<li>케이스 제목을 담은 중앙 <strong>코어</strong> 노드</li>
+<li>코어를 둘러싼 이해관계자 노드(교사·학생·IT·행정·접근성)</li>
+<li>각 이해관계자에 연결된 시그널 노드(목표·제약·증거)</li>
+</ul>
+<p>모든 주요 노드에는 오른쪽 위에 작은 <strong>출처 배지</strong>가 붙습니다 — <code>설명</code>이면 업로드된 수업 설명요약에서 나온 노드라는 뜻입니다.</p>
+<hr>
+<h2>Step 5 · 새 설명요약 업로드 / 구조화</h2>
+<figure><img src="./screenshots/instructor-ko/05-upload-brief.png" alt="Step 5 — 설명요약 업로드" loading="lazy"><figcaption>Step 5 — 설명요약 업로드</figcaption></figure>
+<p>이번 수업에 새 케이스가 필요하면, 인테이크 패널의 <strong>수업 설명요약을 붙여 넣으세요</strong> 텍스트 영역에 설명요약을 넣고 <strong>케이스 구조화</strong>를 누르세요. 시스템이 Gemini를 호출해 목표· 제약·이해관계자·시드 증거를 추출하고 케이스 레코드에 넣은 뒤 목록에 <strong>초안</strong>으로 올려 둡니다.</p>
+<p><strong>교수학습 팁.</strong> 설명요약 품질이 곧 스웜 품질입니다. 다음을 포함 하세요: 대상 학습자, 학습 목표(ADDIE / 5E 친화적 언어), 제약(시간· 도구·정책·워크로드), 최소 한 가지 긴장 지점(예: &quot;저작 정책 vs AI 보조 드래프팅&quot;). 긴장이 많이 인코딩될수록 스웜이 그리는 <strong>이견 엣지</strong>가 더 풍부해집니다.</p>
+<hr>
+<h2>Step 6 · 보드 설정</h2>
+<figure><img src="./screenshots/instructor-ko/06-board-settings.png" alt="Step 6 — 보드 설정" loading="lazy"><figcaption>Step 6 — 보드 설정</figcaption></figure>
+<p><strong>설정</strong>을 열어 코호트 보드를 구성하세요. 핵심 노브:</p>
+<ul>
+<li><strong>학습자 노드 최대 개수</strong> — 학생 한 명이 개인 맵에 추가할 수</li>
+</ul>
+<p>  있는 아젠다 노드 수 상한.</p>
+<ul>
+<li><strong>노드당 AI 확장 최대 개수</strong> — Gemini가 특정 학생 노드 아래에</li>
+</ul>
+<p>  자동 생성할 후속 개수 상한.</p>
+<ul>
+<li><strong>거버넌스 게이트 / 접근성 게이트</strong> — 학습자가 결정을 게시</li>
+</ul>
+<p>  하기 전 리뷰 게이트 설정(선택).</p>
+<p>기본값은 30명 섹션에 안전합니다. 더 짧고 신중한 수업을 원하면 값을 낮추세요.</p>
+<hr>
+<h2>Step 7 · 관점 (Perspectives)</h2>
+<figure><img src="./screenshots/instructor-ko/07-perspectives.png" alt="Step 7 — 관점" loading="lazy"><figcaption>Step 7 — 관점</figcaption></figure>
+<p>왼쪽 내비게이션의 <strong>관점</strong>을 클릭합니다. 이해관계자별 상위 충돌 요약과 정량적 긴장 점수가 표시됩니다. 학생이 스스로 스웜 라운드를 돌리기 전에, 강의에서 &quot;각 렌즈가 지금 무엇을 걱정하는가&quot;를 짚기 좋은 뷰입니다.</p>
+<p><strong>교실용 발문 예:</strong> <em>&quot;교사 점수가 74이고 학생 점수가 58이라면, 지금 어느 이해관계자가 더 부담을 짊어지고 있고, 왜 제약이 그렇게 만들었을까?&quot;</em></p>
+<hr>
+<h2>Step 8 · 트레이드오프</h2>
+<figure><img src="./screenshots/instructor-ko/08-trade-offs.png" alt="Step 8 — 트레이드오프" loading="lazy"><figcaption>Step 8 — 트레이드오프</figcaption></figure>
+<p><strong>트레이드오프</strong> 뷰는 레이더(개인화 / 프라이버시 / 접근성 / 실현가능성 / 교사 여유)와 바 차트를 보여 줍니다. <strong>매트릭스 상태</strong> 라벨은 <em>주의 필요</em>, <em>경계</em>, <em>균형</em> 중 하나를 표기합니다.</p>
+<p>활동 단계 사이의 체크포인트로 활용하세요. &quot;지금 어디서 충돌이 튀어 오르는가?&quot;는 코호트 전체용 메타인지 프롬프트로 좋습니다.</p>
+<hr>
+<h2>Step 9 · 샌드박스</h2>
+<figure><img src="./screenshots/instructor-ko/09-sandbox.png" alt="Step 9 — 샌드박스" loading="lazy"><figcaption>Step 9 — 샌드박스</figcaption></figure>
+<p><strong>샌드박스</strong>에서는 사전 정의된 시나리오(<em>예산 · 접근성 · 워크로드</em>) 를 적용해 지표가 어떻게 재분배되는지 관찰할 수 있습니다. <strong>자율 반복</strong>을 켜면 시스템이 안정 상태에 이를 때까지 충돌을 계속 셔플합니다.</p>
+<p>&quot;만약에&quot; 연습에 가장 적합한 뷰입니다. 시나리오 적용 → 학생이 긴장이 어디로 이동할지 예측 → 공개 → 토의 순서.</p>
+<hr>
+<h2>Step 10 · 리포트 &amp; 내보내기</h2>
+<figure><img src="./screenshots/instructor-ko/10-report.png" alt="Step 10 — 리포트" loading="lazy"><figcaption>Step 10 — 리포트</figcaption></figure>
+<p><strong>리포트</strong>는 결정·증거·메모를 하나의 공유 가능한 요약으로 조립합니다. <strong>PNG 다운로드</strong>는 슬라이드용 네트워크 이미지, <strong>HTML 다운로드</strong>는 학생이 간직할 수 있는 독립형 스냅샷을 제공합니다.</p>
+<p><strong>수업 후.</strong> <strong>스웜 활동</strong>을 한번 더 확인하세요 — <code>라운드</code> 카운터는 코호트가 5-에이전트 스웜에 실제로 개입했는지, 아니면 단순히 브라우징만 했는지 보여 줍니다. 학생 30명이 30라운드 이상 만든 수업은 활발한 참여, 5라운드 정도에 그친 수업은 더 명시적인 프롬프팅이 필요합니다.</p>
+<hr>
+<h2>문제 해결</h2>
+<div class="table-wrap"><table><thead><tr><th>증상</th><th>원인 추정</th><th>조치</th></tr></thead><tbody><tr><td>학생이 케이스를 못 봄</td><td>초안 상태</td><td>카드의 <strong>게시</strong> 클릭</td></tr><tr><td>질문 후에도 네트워크가 비어 있음</td><td>학생이 제출 안 함 / Gemini 키 미설정</td><td>Vercel의 <code>/api/gemini</code> 로그 확인</td></tr><tr><td>이견 엣지가 전혀 안 나타남</td><td>2차 Gemini 패스가 조용히 실패</td><td>브라우저 콘솔에서 <code>classifySwarmEdges</code> 경고 확인</td></tr><tr><td>UI에 한/영이 섞임</td><td>렌더 도중 로케일 전환</td><td>로케일 버튼을 두 번 눌러 전체 리렌더 강제</td></tr><tr><td>왼쪽 사이드바 내용 잘림</td><td>뷰포트 높이 부족</td><td>사이드바는 독립 스크롤 — 내부 콘텐츠를 드래그</td></tr></tbody></table></div>
+<hr>
+<h2>수업 직전 프리플라이트</h2>
+<ol>
+<li>사용할 모든 케이스 카드가 <strong>게시됨</strong> 상태.</li>
+<li>보드 설정 완료 (50분 수업 기준 <strong>학습자 노드 최대 개수 ≥ 6</strong>).</li>
+<li>강사 본인이 수업용 케이스를 최소 한 번은 열어 봄 (캐시 워밍 +</li>
+</ol>
+<p>   Gemini 쿼터 이슈 선검출).</p>
+<ol>
+<li>프로젝터/화면 공유 창이 네트워크 뷰를 전폭으로 표시 —</li>
+</ol>
+<p>   시연 시 두 사이드 패널을 쉐브론으로 접어 맵이 캔버스를 채우게    한다.</p>
+<ol>
+<li>학생 가이드(<code>student-en.md</code> / <code>student-ko.md</code>)를 미리 읽어</li>
+</ol>
+<p>   학생이 보게 될 화면을 정확히 파악해 둔다.</p>
+  </main>
+  <footer>
+    <p>Generated from <code>guides/instructor-ko.md</code>. Screenshots captured on <code>https://swarmid.vercel.app</code> via Playwright.</p>
+  </footer>
+</body>
+</html>
