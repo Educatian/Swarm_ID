@@ -354,6 +354,7 @@ const translations = {
     studentOnboardingStep2: "Read the brief, then look at how nodes connect in the map.",
     studentOnboardingStep3: "Switch lenses (Teacher → IT Systems → Students) to see the same case from each side.",
     studentOnboardingStep4: "Ask a question or add a node the original case doesn't capture.",
+    studentOnboardingTourButton: "Take the guided tour",
     mobileMap: "Map",
     mobilePeople: "People",
     mobileTest: "Test",
@@ -645,6 +646,7 @@ const translations = {
     studentOnboardingStep2: "설명 요약을 읽고, 지도에서 노드들이 어떻게 연결되는지 살펴 보세요.",
     studentOnboardingStep3: "관점을 바꿔가며(교사 → IT 시스템 → 학생) 같은 케이스가 어떻게 달라 보이는지 확인해 보세요.",
     studentOnboardingStep4: "질문을 남기거나, 원본 케이스에 없는 관점을 새 노드로 추가해 보세요.",
+    studentOnboardingTourButton: "가이드 투어 시작하기",
     mobileMap: "지도",
     mobilePeople: "인물",
     mobileTest: "테스트",
@@ -1037,6 +1039,8 @@ function applyStaticTranslations() {
       const el = document.getElementById(`student-onboarding-step-${n}`);
       if (el) el.textContent = t(`studentOnboardingStep${n}`);
     });
+    const tourBtn = document.getElementById("student-onboarding-tour-button");
+    if (tourBtn) tourBtn.textContent = t("studentOnboardingTourButton");
   }
 
   const conceptHelpTitle = document.getElementById("concept-help-title");
@@ -7546,6 +7550,10 @@ dom.landingEnterButtons.forEach((button) => {
   button.addEventListener("click", () => {
     focusLandingLogin();
   });
+});
+
+document.getElementById("student-onboarding-tour-button")?.addEventListener("click", () => {
+  startTutorial(true);
 });
 
 dom.startTutorialButton?.addEventListener("click", () => {

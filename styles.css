@@ -3321,6 +3321,12 @@ body {
   color: #7a4f00;
 }
 
+.student-onboarding-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+
 .section-header-actions {
   display: inline-flex;
   align-items: center;
