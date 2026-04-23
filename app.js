@@ -3568,6 +3568,7 @@ function buildCaseIssueEntries(activeCase) {
       title: `Goal ${index + 1}`,
       body: goal,
       stakeholder: inferStakeholderFromText(goal, index === 0 ? "student" : state.activeStakeholder),
+      origin: "brief",
     });
   });
 
@@ -3577,6 +3578,7 @@ function buildCaseIssueEntries(activeCase) {
       title: `Constraint ${index + 1}`,
       body: constraint,
       stakeholder: inferStakeholderFromText(constraint, index === 0 ? "teacher" : state.activeStakeholder),
+      origin: "brief",
     });
   });
 
@@ -3588,6 +3590,9 @@ function buildCaseIssueEntries(activeCase) {
       title,
       body,
       stakeholder: item.stakeholder || inferStakeholderFromText(`${title} ${body}`, state.activeStakeholder),
+      origin: item.origin || "brief",
+      fixedNodeId: item.fixedNodeId,
+      roundId: item.roundId,
     });
   });
 
@@ -3597,6 +3602,7 @@ function buildCaseIssueEntries(activeCase) {
       title: `Process step ${index + 1}`,
       body: step,
       stakeholder: inferStakeholderFromText(step, state.activeStakeholder),
+      origin: "brief",
     });
   });
 
@@ -3606,6 +3612,7 @@ function buildCaseIssueEntries(activeCase) {
       title: item.title || `Agenda ${index + 1}`,
       body: item.body || item.title || "Learner agenda",
       stakeholder: item.stakeholder || inferStakeholderFromText(`${item.title} ${item.body}`, "student"),
+      origin: "me",
     });
   });
 
@@ -3615,6 +3622,7 @@ function buildCaseIssueEntries(activeCase) {
       title: item.title || `AI issue ${index + 1}`,
       body: item.body || item.title || "Related issue",
       stakeholder: item.stakeholder || inferStakeholderFromText(`${item.title} ${item.body}`, state.activeStakeholder),
+      origin: "ai",
     });
   });
 
@@ -3624,11 +3632,12 @@ function buildCaseIssueEntries(activeCase) {
       title: item.targetLabel ? `${item.targetLabel} note ${index + 1}` : `Note ${index + 1}`,
       body: item.body || "Learner note",
       stakeholder: inferStakeholderFromText(`${item.targetLabel || ""} ${item.body || ""}`, item.stakeholder || "student"),
+      origin: "me",
     });
   });
 
   cohortEntries.forEach((item) => {
-    issueEntries.push(item);
+    issueEntries.push({ ...item, origin: item.origin || "peer" });
   });
 
   if (!issueEntries.length && activeCase?.summary) {
@@ -3679,8 +3688,9 @@ function buildGraphSnapshot(reason) {
     const clusterSlot = issueProgressByStakeholder[entry.stakeholder] || 0;
     issueProgressByStakeholder[entry.stakeholder] = clusterSlot + 1;
     const idBase = slugify(`${entry.issueType}-${entry.title}`) || `issue-${index + 1}`;
+    const id = entry.fixedNodeId || `${idBase}-${index + 1}`;
     return {
-      id: `${idBase}-${index + 1}`,
+      id,
       label: entry.title,
       kind: "signal",
       stakeholder: entry.stakeholder,
@@ -3708,6 +3718,8 @@ function buildGraphSnapshot(reason) {
       clusterSlot,
       clusterTotal: issueCountByStakeholder[entry.stakeholder],
       isDerived: true,
+      origin: entry.origin || "brief",
+      roundId: entry.roundId,
     };
   });
 
@@ -3762,6 +3774,34 @@ function buildGraphSnapshot(reason) {
       tone: node.tone,
       weight: 1.2,
       kind: "trace",
+    });
+  });
+
+  // P1: draw inter-agent disagreement edges for any swarm rounds whose nodes are still present.
+  const rounds = asArray(state.graph.rounds);
+  const signalIds = new Set(signalNodes.map((n) => n.id));
+  rounds.forEach((roundData) => {
+    if (!roundData || !Array.isArray(roundData.edges)) return;
+    const n = roundData.round;
+    roundData.edges.forEach((edge) => {
+      const sourceId = `swarm-r${n}-${edge.a}`;
+      const targetId = `swarm-r${n}-${edge.b}`;
+      if (!signalIds.has(sourceId) || !signalIds.has(targetId)) return;
+      const tone =
+        edge.relation === "agree"
+          ? "ok"
+          : edge.relation === "disagree"
+            ? "danger"
+            : "neutral";
+      links.push({
+        id: `swarm-r${n}-${edge.a}-${edge.b}`,
+        source: sourceId,
+        target: targetId,
+        tone,
+        weight: edge.relation === "tangential" ? 0.9 : 1.6,
+        kind: "swarm-edge",
+        relation: edge.relation,
+      });
     });
   });
 
@@ -4623,6 +4663,21 @@ function nodeRadius(node) {
   return node.size ?? 4;
 }
 
+function originBadgeText(origin, locale) {
+  const ko = locale === "ko";
+  switch (origin) {
+    case "ai":
+      return "AI";
+    case "me":
+      return ko ? "나" : "Me";
+    case "peer":
+      return ko ? "동료" : "Peer";
+    case "brief":
+    default:
+      return ko ? "설명" : "Brief";
+  }
+}
+
 function clusterAnchorMap(width, height) {
   return {
     proposal: { x: width * 0.5, y: height * 0.5 },
@@ -5450,6 +5505,8 @@ function updateGraphRenderer(frame) {
     .attr("class", "network-link")
     .merge(linkSelection)
     .attr("data-tone", (link) => link.tone)
+    .attr("data-kind", (link) => link.kind || "")
+    .attr("data-relation", (link) => link.relation || "")
     .classed("is-active", (link) => link.isHighlighted)
     .classed("is-faded", (link) => !link.isHighlighted)
     .attr("stroke-width", (link) => (link.kind === "satellite" ? link.weight : link.weight + 0.2));
@@ -5480,6 +5537,21 @@ function updateGraphRenderer(frame) {
     .attr("y", (node) => nodeRadius(node) + 29)
     .text((node) => node.meta);
 
+  // P2 provenance badge (small circle + letter at top-right of major nodes)
+  const badgeGroups = majorNodes
+    .append("g")
+    .attr("class", "node-badge")
+    .attr("transform", (node) => `translate(${nodeRadius(node) - 2}, ${-(nodeRadius(node) - 2)})`);
+  badgeGroups
+    .append("circle")
+    .attr("r", 8)
+    .attr("data-origin", (node) => node.origin || "brief");
+  badgeGroups
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("dy", "0.32em")
+    .text((node) => originBadgeText(node.origin, state.locale));
+
   const nodeMerge = nodeEnter
     .merge(nodeSelection)
     .attr("data-tone", (node) => node.tone)
@@ -5499,6 +5571,12 @@ function updateGraphRenderer(frame) {
   nodeMerge.select(".node-label").text((node) => node.label);
   nodeMerge.select(".node-meta").text((node) => node.meta);
   nodeMerge.select(".node-icon").text((node) => node.icon);
+  nodeMerge
+    .select(".node-badge circle")
+    .attr("data-origin", (node) => node.origin || "brief");
+  nodeMerge
+    .select(".node-badge text")
+    .text((node) => originBadgeText(node.origin, state.locale));
 
   nodeMerge.on("click", (_, node) => {
     if (node.type === "satellite") {
@@ -5951,17 +6029,26 @@ function renderStakeholderFocus() {
 }
 
 function renderChat() {
-  const filtered = state.chat.filter((entry) => entry.stakeholder === state.activeStakeholder);
-  dom.chatThread.innerHTML = filtered.length
-    ? filtered
-      .map(
-          (entry) => `
-            <article class="chat-message ${entry.role}">
+  const all = state.chat;
+  const ko = state.locale === "ko";
+  const challengeLabel = ko ? "이 관점 밀어붙이기" : "Challenge this lens";
+  dom.chatThread.innerHTML = all.length
+    ? all
+        .map((entry, idx) => {
+          const isAgent = entry.role === "agent";
+          const stakeholderLabel = isAgent ? getCaseStakeholderMeta(entry.stakeholder).label : t("youLabel");
+          const hasRound = isAgent && entry.roundId !== undefined && entry.roundId !== null;
+          const actions = hasRound
+            ? `<div class="chat-actions"><button type="button" class="chat-challenge" data-stakeholder="${entry.stakeholder}" data-round="${entry.roundId}" data-idx="${idx}">${challengeLabel}</button></div>`
+            : "";
+          return `
+            <article class="chat-message ${entry.role}" data-stakeholder="${entry.stakeholder || ""}">
               <div>${entry.body}</div>
-              <small>${entry.role === "agent" ? getCaseStakeholderMeta(entry.stakeholder).label : t("youLabel")}</small>
+              <small>${stakeholderLabel}</small>
+              ${actions}
             </article>
-          `
-        )
+          `;
+        })
         .join("")
     : `
       <article class="chat-message agent">
@@ -5969,6 +6056,29 @@ function renderChat() {
         <small>${getCaseStakeholderMeta(state.activeStakeholder).label}</small>
       </article>
     `;
+
+  dom.chatThread.querySelectorAll(".chat-challenge").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const stakeholderKey = btn.dataset.stakeholder;
+      const roundId = btn.dataset.round;
+      const idx = Number(btn.dataset.idx);
+      const priorMsg = state.chat[idx];
+      if (!priorMsg) return;
+      const prompt = ko
+        ? `${getCaseStakeholderMeta(stakeholderKey).label} 에이전트에게 어떤 반론/추가 질문을 던지시겠습니까?`
+        : `What challenge or follow-up do you want to send to the ${getCaseStakeholderMeta(stakeholderKey).label.toLowerCase()} agent?`;
+      const input = window.prompt(prompt, "");
+      if (!input || !input.trim()) return;
+      btn.disabled = true;
+      btn.textContent = ko ? "재검토 중…" : "Re-probing…";
+      try {
+        await challengeAgent(stakeholderKey, priorMsg.body, input.trim(), roundId);
+      } finally {
+        // renderChat re-runs, old button gone.
+      }
+    });
+  });
+
   dom.chatThread.scrollTop = dom.chatThread.scrollHeight;
 }
 
@@ -7001,8 +7111,8 @@ function setStakeholder(nextStakeholder) {
   }
 }
 
-function pushEvidence(stakeholder, title, body) {
-  state.evidence.push({ stakeholder, title, body });
+function pushEvidence(stakeholder, title, body, extra = {}) {
+  state.evidence.push({ stakeholder, title, body, ...extra });
   if (state.evidence.length > 9) {
     state.evidence.shift();
   }
@@ -7021,6 +7131,126 @@ function generateAgentReply(stakeholderKey) {
 
 const SWARM_AGENTS = ["teacher", "student", "it", "administrator", "accessibility"];
 
+async function classifySwarmEdges(responses, roundId) {
+  if (!Array.isArray(responses) || responses.length < 2) return [];
+  const isKorean = state.locale === "ko";
+  const lines = responses.map((r) => `[${r.stakeholder}] ${r.body}`);
+  const prompt = [
+    isKorean
+      ? "아래는 같은 질문에 대한 여러 이해관계자 응답입니다. 각 응답 쌍이 서로 동의하는지, 반대하는지, 또는 서로 주제가 다른지 분류하세요."
+      : "Below are several stakeholder responses to the same question. Classify each unique unordered pair as agree, disagree, or tangential.",
+    "",
+    lines.join("\n"),
+    "",
+    isKorean
+      ? "반드시 JSON 배열만 반환하세요. 각 원소는 {\"a\":\"<stakeholder>\",\"b\":\"<stakeholder>\",\"relation\":\"agree|disagree|tangential\"} 형식. 해설 없이 JSON만."
+      : "Return ONLY a JSON array. Each element must be {\"a\":\"<stakeholder>\",\"b\":\"<stakeholder>\",\"relation\":\"agree|disagree|tangential\"}. No prose.",
+  ].join("\n");
+
+  try {
+    const parsed = await requestGeminiJson({
+      systemInstruction: isKorean
+        ? "당신은 멀티에이전트 응답 간 합의·충돌 관계를 분류하는 보조입니다."
+        : "You classify agreement and disagreement between multi-agent responses.",
+      prompt,
+      temperature: 0.2,
+    });
+    const valid = Array.isArray(parsed) ? parsed : [];
+    return valid
+      .filter((edge) => edge && edge.a && edge.b && edge.relation)
+      .filter((edge) => edge.a !== edge.b)
+      .map((edge) => ({
+        a: String(edge.a).toLowerCase(),
+        b: String(edge.b).toLowerCase(),
+        relation: ["agree", "disagree", "tangential"].includes(edge.relation)
+          ? edge.relation
+          : "tangential",
+      }));
+  } catch (err) {
+    console.warn("classifySwarmEdges parse error:", err);
+    return [];
+  }
+}
+
+async function challengeAgent(stakeholderKey, priorBody, challengeText, priorRoundId) {
+  const isKorean = state.locale === "ko";
+  const stakeholder = getCaseStakeholderMeta(stakeholderKey);
+  const activeCase = getActiveCaseRecord();
+  setAiStatus(
+    isKorean
+      ? `${stakeholder.label} 관점 재검토 중…`
+      : `Re-probing the ${stakeholder.label.toLowerCase()} lens…`,
+    { busy: true }
+  );
+
+  try {
+    const response = await requestGeminiContent({
+      systemInstruction: isKorean
+        ? "당신은 특정 이해관계자 관점에서 응답하는 교수 설계 보조입니다. 직전 응답과 사용자의 반론을 함께 고려해 입장을 갱신하세요. 마크다운은 쓰지 마세요."
+        : "You respond from one stakeholder lens. Refine your prior position given the user's challenge. No bullets or markdown.",
+      prompt: [
+        `Stakeholder lens: ${stakeholder.label}`,
+        `Case title: ${activeCase?.title || "Untitled"}`,
+        `Case summary: ${activeCase?.summary || ""}`,
+        `Your prior response: ${priorBody}`,
+        `User challenge: ${challengeText}`,
+        isKorean
+          ? "2~3문장으로, 기존 입장에서 어떤 부분을 양보/수정/고수하는지 명확히 밝혀 답하세요."
+          : "Answer in 2-3 sentences. State clearly what you concede, refine, or still hold.",
+      ].join("\n"),
+      temperature: 0.6,
+    });
+
+    const challengeId = `${priorRoundId}c${Date.now().toString(36).slice(-3)}`;
+    state.chat.push({
+      role: "user",
+      stakeholder: stakeholderKey,
+      body: `↳ ${challengeText}`,
+      origin: "me",
+    });
+    state.chat.push({
+      role: "agent",
+      stakeholder: stakeholderKey,
+      body: response,
+      roundId: challengeId,
+      origin: "ai",
+    });
+    pushEvidence(
+      stakeholderKey,
+      isKorean ? `재검토 · ${stakeholder.label}` : `Refined · ${stakeholder.label}`,
+      response,
+      {
+        origin: "ai",
+        roundId: challengeId,
+        fixedNodeId: `swarm-${challengeId}-${stakeholderKey}`,
+      }
+    );
+    state.timeline.push(
+      isKorean
+        ? `${stakeholder.label} 관점 재검토 반영`
+        : `${stakeholder.label} lens refined via challenge`
+    );
+    if (state.timeline.length > 5) state.timeline.shift();
+    persistActiveWorkspaceState();
+    regenerateGraph("agent challenge");
+    renderAll();
+    setAiStatus(
+      isKorean
+        ? `${stakeholder.label} 재검토 완료`
+        : `${stakeholder.label} refined response incorporated`,
+      { busy: false }
+    );
+  } catch (err) {
+    console.error(err);
+    setAiStatus(
+      isKorean
+        ? `재검토 실패: ${err.message}`
+        : `Challenge failed: ${err.message}`,
+      { busy: false, error: err.message }
+    );
+  }
+}
+
 async function runSwarmRound(question) {
   const isKorean = state.locale === "ko";
   state.graph.swarmRound = (state.graph.swarmRound || 0) + 1;
@@ -7038,18 +7268,42 @@ async function runSwarmRound(question) {
   );
 
   let okCount = 0;
+  const successfulResponses = [];
   results.forEach((r, i) => {
     const stakeholderKey = SWARM_AGENTS[i];
     const stakeholder = stakeholders[stakeholderKey];
     const body =
       r.status === "fulfilled" && r.value ? r.value : generateAgentReply(stakeholderKey);
-    if (r.status === "fulfilled") okCount += 1;
-    state.chat.push({ role: "agent", stakeholder: stakeholderKey, body });
+    if (r.status === "fulfilled") {
+      okCount += 1;
+      successfulResponses.push({ stakeholder: stakeholderKey, body });
+    }
+    state.chat.push({ role: "agent", stakeholder: stakeholderKey, body, roundId: roundNumber });
     const titlePrefix = isKorean
       ? `라운드 ${roundNumber} · ${stakeholder.label}`
       : `Round ${roundNumber} · ${stakeholder.label}`;
-    pushEvidence(stakeholderKey, titlePrefix, body);
+    pushEvidence(stakeholderKey, titlePrefix, body, {
+      origin: "ai",
+      roundId: roundNumber,
+      fixedNodeId: `swarm-r${roundNumber}-${stakeholderKey}`,
+    });
   });
+
+  // P1: classify inter-agent disagreements asynchronously; do not block the UI.
+  if (successfulResponses.length >= 2) {
+    classifySwarmEdges(successfulResponses, roundNumber)
+      .then((edges) => {
+        if (!edges || !edges.length) return;
+        state.graph.rounds = state.graph.rounds || [];
+        state.graph.rounds.push({ round: roundNumber, edges });
+        if (state.graph.rounds.length > 3) state.graph.rounds.shift();
+        regenerateGraph(`swarm analysis round ${roundNumber}`);
+        renderAll();
+      })
+      .catch((err) => {
+        console.warn("Swarm edge classification failed:", err);
+      });
+  }
 
   state.timeline.push(
     isKorean
