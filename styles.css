@@ -702,6 +702,50 @@ textarea:focus-visible,
   line-height: 1.42;
 }
 
+.case-summary {
+  margin: 4px 0 2px;
+}
+
+.case-summary-text {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.case-summary.is-expanded .case-summary-text,
+.case-summary-text.is-short {
+  display: block;
+  -webkit-line-clamp: initial;
+  overflow: visible;
+}
+
+.case-summary-more {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border: 1px solid rgba(42, 63, 200, 0.35);
+  background: rgba(42, 63, 200, 0.08);
+  color: #2a3fc8;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.case-summary-more:hover {
+  background: rgba(42, 63, 200, 0.18);
+  border-color: rgba(42, 63, 200, 0.55);
+}
+
 .case-card .card-meta {
   margin-top: 6px;
 }

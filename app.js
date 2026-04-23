@@ -187,6 +187,8 @@ const translations = {
     workspaceRole: "Workspace",
     stageD3: "D3 force graph",
     processStep: "Process step",
+    showMore: "Show more",
+    showLess: "Show less",
     tlUploadParsed: "Uploaded source document parsed into issue fragments and design signals.",
     tlOntologyExtracted: "Ontology-like stakeholder and constraint structure extracted from the uploaded brief.",
     tlSynced: "Graph and report state synchronized to the latest published case.",
@@ -485,6 +487,8 @@ const translations = {
     workspaceRole: "워크스페이스",
     stageD3: "D3 포스 그래프",
     processStep: "단계",
+    showMore: "더보기",
+    showLess: "접기",
     tlUploadParsed: "업로드된 원본 문서가 이슈 조각과 설계 신호로 분석되었습니다.",
     tlOntologyExtracted: "업로드된 설명요약에서 이해관계자 및 제약 구조가 추출되었습니다.",
     tlSynced: "그래프와 리포트 상태가 최신 게시 케이스와 동기화되었습니다.",
@@ -865,6 +869,30 @@ function resolveTimelineEntry(step) {
     return translated === key ? step : translated;
   }
   return step;
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function renderCaseSummary(text) {
+  const summary = String(text ?? "");
+  // Heuristic: only show toggle if summary is long enough to plausibly clamp.
+  const needsToggle = summary.length > 140;
+  if (!needsToggle) {
+    return `<div class="case-summary"><p class="case-summary-text is-short">${escapeHtml(summary)}</p></div>`;
+  }
+  return `
+    <div class="case-summary">
+      <p class="case-summary-text">${escapeHtml(summary)}</p>
+      <button type="button" class="case-summary-more" data-summary-toggle data-label-more="${escapeHtml(t("showMore"))}" data-label-less="${escapeHtml(t("showLess"))}">${escapeHtml(t("showMore"))}</button>
+    </div>
+  `;
 }
 
 function setLocale(nextLocale) {
@@ -4431,7 +4459,7 @@ function renderPipelineConsole() {
                     (item) => `
                     <article class="case-card ${item.id === state.activeCaseId ? "is-selected" : ""}">
                       <strong>${item.title}</strong>
-                      <p>${item.summary}</p>
+                      ${renderCaseSummary(item.summary)}
                       <div class="card-meta">
                         <span>${item.published ? t("published") : t("draft")}</span>
                       </div>
@@ -4506,7 +4534,7 @@ function renderPipelineConsole() {
                     (item) => `
                     <article class="case-card ${item.id === state.activeCaseId ? "is-selected" : ""}">
                       <strong>${item.title}</strong>
-                      <p>${item.summary}</p>
+                      ${renderCaseSummary(item.summary)}
                       <div class="card-meta">
                         <span>${item.published ? "Published" : "Draft"}</span>
                         <span>${item.pipeline.graphStatus}</span>
@@ -4582,7 +4610,7 @@ function renderPipelineConsole() {
                   (item) => `
                   <article class="case-card ${item.id === state.activeCaseId ? "is-selected" : ""}">
                     <strong>${item.title}</strong>
-                    <p>${item.summary}</p>
+                    ${renderCaseSummary(item.summary)}
                     <div class="card-meta">
                       <span>${item.pipeline.reportStatus}</span>
                       <span>${
@@ -8262,6 +8290,18 @@ function wirePipelineCardToggles() {
   // render, so we can't attach listeners to each button. One body-level listener
   // handles them all.
   document.body.addEventListener("click", (event) => {
+    const summaryBtn = event.target.closest("[data-summary-toggle]");
+    if (summaryBtn) {
+      const wrap = summaryBtn.closest(".case-summary");
+      if (wrap) {
+        const nowExpanded = !wrap.classList.contains("is-expanded");
+        wrap.classList.toggle("is-expanded", nowExpanded);
+        const labelMore = summaryBtn.getAttribute("data-label-more") || t("showMore");
+        const labelLess = summaryBtn.getAttribute("data-label-less") || t("showLess");
+        summaryBtn.textContent = nowExpanded ? labelLess : labelMore;
+      }
+      return;
+    }
     const header = event.target.closest("[data-pipeline-toggle]");
     if (!header) return;
     const card = header.closest(".pipeline-card-collapsible");
