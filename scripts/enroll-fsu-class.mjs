@@ -4,9 +4,7 @@
  * uses: sign in as the dummy account, then call the
  * `enroll_in_course_by_code` RPC. Idempotent.
  *
- * Split: fsuclass1..4 → section "FSU-A", fsuclass5..8 → section "FSU-B".
- * (Section labels are free-form strings; adjust below to match whatever
- *  Yujin configures in her course settings.)
+ * All 8 students → section "FSU-A" (single cohort per Yujin's request).
  *
  * ---------- Prerequisites ----------
  * 1. Run scripts/create-fsu-accounts.mjs first to create the 8 dummy accounts.
@@ -42,7 +40,7 @@ const accounts = Array.from({ length: 8 }, (_, i) => {
     email: `fsuclass${n}@swarm.io`,
     password: `classfsu${n}`,
     displayName: `FSU Class ${n}`,
-    section: n <= 4 ? "FSU-A" : "FSU-B",
+    section: "FSU-A",
   };
 });
 

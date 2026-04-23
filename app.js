@@ -394,7 +394,7 @@ const translations = {
     selectedCase: "선택된 케이스",
     case: "케이스",
     noActiveCase: "열린 케이스 없음",
-    waitingForCourseData: "코스 데이터를 기다리는 중입니다.",
+    waitingForCourseData: "수업 정보를 불러오는 중이에요.",
     caseTension: "케이스 긴장 수준",
     navNetwork: "네트워크",
     navPerspectives: "관점",
@@ -422,9 +422,9 @@ const translations = {
     topTensions: "주요 쟁점",
     evidenceQueue: "근거 목록",
     selectedNode: "선택한 노드",
-    hoverOrClick: "올려두거나 클릭하세요",
-    noNodeSelected: "선택된 노드가 없습니다",
-    hoverNodeHelp: "네트워크의 노드에 마우스를 올리거나 클릭하면 이곳에서 내용을 확인할 수 있습니다.",
+    hoverOrClick: "마우스를 올리거나 눌러보세요",
+    noNodeSelected: "아직 선택한 노드가 없어요",
+    hoverNodeHelp: "네트워크의 노드 위에 마우스를 올리거나 노드를 누르면 여기에 내용이 뜹니다.",
     relatedActivity: "관련 활동",
     myQuestions: "내 질문",
     classPatterns: "전체 패턴",
@@ -434,7 +434,7 @@ const translations = {
     question: "질문",
     concern: "걱정되는 점",
     onlyMe: "나만 보기",
-    addNotePlaceholder: "선택한 노드에 메모를 추가해주세요...",
+    addNotePlaceholder: "선택한 노드에 메모를 남겨보세요...",
     saveNote: "메모 저장",
     askQuestionPlaceholder: "이 케이스에서 가장 중요한 갈등은 무엇일지 물어보세요...",
     askQuestion: "질문하기",
@@ -466,7 +466,7 @@ const translations = {
     noActivity: "활동 기록이 없습니다",
     checking: "확인 중...",
     noCourseLinkedYet: "아직 연결된 코스가 없습니다.",
-    studentJoinHelper: "학생으로 로그인한 뒤 코스 참여 코드를 입력해주세요.",
+    studentJoinHelper: "학생으로 로그인한 다음 수업 참여 코드를 입력하세요.",
     tutorialBack: "이전",
     tutorialNext: "다음",
     tutorialSkip: "건너뛰기",
@@ -489,9 +489,9 @@ const translations = {
     processStep: "단계",
     showMore: "더보기",
     showLess: "접기",
-    tlUploadParsed: "업로드된 원본 문서가 이슈 조각과 설계 신호로 분석되었습니다.",
-    tlOntologyExtracted: "업로드된 설명요약에서 이해관계자 및 제약 구조가 추출되었습니다.",
-    tlSynced: "그래프와 리포트 상태가 최신 게시 케이스와 동기화되었습니다.",
+    tlUploadParsed: "업로드한 문서를 이슈와 설계 신호로 분석했어요.",
+    tlOntologyExtracted: "설명요약에서 이해관계자와 제약 구조를 뽑아냈어요.",
+    tlSynced: "그래프와 리포트를 최신 공개 케이스에 맞춰 동기화했어요.",
     stakeholderTeacher: "교수자",
     stakeholderAdministrator: "관리자",
     stakeholderStudent: "학생",
@@ -504,7 +504,7 @@ const translations = {
     statusNeedsReview: "검토 필요",
     workflowQuickStart: "빠른 시작",
     wfChooseCourse: "수업 선택하기",
-    wfConfirmCourse: "케이스를 만들거나 수정하기 전에, 올바른 수업이 선택되어 있는지 확인해주세요.",
+    wfConfirmCourse: "케이스를 만들거나 수정하기 전에 올바른 수업을 선택했는지 확인하세요.",
     wfReviewUpdateCase: "케이스 검토하기 또는 수정하기",
     wfUseCaseSelector: "케이스 선택기로 초안과 공개된 케이스를 전환하거나, 현재 케이스를 계속 수정할 수 있습니다.",
     wfCreateCase: "케이스 만들기",
@@ -6391,7 +6391,7 @@ function renderReport() {
         .map((item, index) => {
           const safe = escapeHtml(String(item || ""));
           if (!isStudent) return `<article class="prompt-item">${safe}</article>`;
-          const placeholder = state.locale === "ko" ? "당신의 답변을 적으세요..." : "Type your reflection...";
+          const placeholder = state.locale === "ko" ? "여기에 답변을 적어보세요..." : "Type your reflection...";
           const submitLabel = state.locale === "ko" ? "제출" : "Submit";
           return `
             <article class="prompt-item" data-prompt-index="${index}">

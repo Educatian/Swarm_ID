@@ -54,7 +54,7 @@ const admin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
 // happens via the admin UI or a separate seed (see enroll-fsu-class.mjs).
 const COHORT = "fsu-yjpark";
 const INSTITUTION = "Florida State University";
-const COURSE = "FSU Yujin Park class";
+const COURSE = "Learner Motivation";
 
 // --- instructor --------------------------------------------------------
 const instructor = {
