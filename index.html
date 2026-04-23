@@ -236,8 +236,17 @@
         <section class="view is-active" data-view-panel="visualizer">
           <div class="view-intro" data-view-intro="visualizer">
             <button class="view-intro-close" type="button" data-view-intro-dismiss="visualizer" aria-label="Dismiss">×</button>
-            <p class="view-intro-title">Visualizer — map the case</p>
-            <p class="view-intro-body">Every node is a stakeholder concern, constraint, or design move. Edges show which concerns pull on each other. Click a node to read it; add a new node to extend the case with a worry the original doesn't capture. Nodes connected by an edge are the ones you need to think about <em>together</em>.</p>
+            <p class="view-intro-title" id="visualizer-intro-title">Visualizer — map the case</p>
+            <p class="view-intro-body" id="visualizer-intro-body">Every node is a stakeholder concern, constraint, or design move. Edges show which concerns pull on each other. Click a node to read it; add a new node to extend the case with a worry the original doesn't capture. Nodes connected by an edge are the ones you need to think about <em>together</em>.</p>
+            <div class="concept-help" id="concept-help">
+              <p class="concept-help-title" id="concept-help-title">How to read this map</p>
+              <p class="concept-help-body" id="concept-help-body">Each case is a design problem viewed through three stakeholders. Switch lenses (Teacher → IT Systems → Students) to see how the same tension looks from each side — they pull on each other, so no single view is enough.</p>
+              <ul class="concept-help-list">
+                <li><strong id="perspective-teacher-label">Teacher</strong><span id="perspective-teacher-body">what they plan and decide.</span></li>
+                <li><strong id="perspective-it-label">IT Systems</strong><span id="perspective-it-body">what the tools allow or block.</span></li>
+                <li><strong id="perspective-student-label">Students</strong><span id="perspective-student-body">what learners actually experience.</span></li>
+              </ul>
+            </div>
           </div>
           <div class="visualizer-layout" id="visualizer-layout">
             <section class="panel intake-panel">
@@ -297,17 +306,20 @@
                   <span id="stage-note-body">Hover a node to inspect an issue. Click a stakeholder node to shift the active lens.</span>
                 </div>
                 <div class="stage-overlay stage-overlay-bottom">
-                  <div class="legend-item">
+                  <div class="legend-item" data-legend-key="instructionalSignals">
                     <span class="legend-swatch legend-swatch-primary"></span>
-                    <span>Instructional signals</span>
+                    <span class="legend-label">Instructional signals</span>
+                    <em class="legend-desc">What the teacher intends — objectives, lesson moves, pedagogical goals.</em>
                   </div>
-                  <div class="legend-item">
+                  <div class="legend-item" data-legend-key="constraintFriction">
                     <span class="legend-swatch legend-swatch-danger"></span>
-                    <span>Constraint friction</span>
+                    <span class="legend-label">Constraint friction</span>
+                    <em class="legend-desc">Where real constraints — time, tools, policies, workload — collide with that intent.</em>
                   </div>
-                  <div class="legend-item">
+                  <div class="legend-item" data-legend-key="alignedEvidence">
                     <span class="legend-swatch legend-swatch-ok"></span>
-                    <span>Aligned evidence</span>
+                    <span class="legend-label">Aligned evidence</span>
+                    <em class="legend-desc">Evidence from teachers, students, or IT systems that supports (or challenges) a design move.</em>
                   </div>
                 </div>
               </div>
