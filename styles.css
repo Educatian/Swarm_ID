@@ -434,21 +434,23 @@ textarea:focus-visible,
 
 .topbar {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 18px;
-  padding: 14px 18px;
-  border-radius: 26px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 14px;
+  border-radius: 22px;
   background: rgba(17, 19, 24, 0.8);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.14);
   transition: padding 0.2s ease;
+  flex-wrap: wrap;
 }
 
 .topbar-heading {
-  flex: 1;
+  flex: 0 1 auto;
   min-width: 0;
+  margin-right: auto;
 }
 
 .topbar-compact-summary {
@@ -497,8 +499,8 @@ textarea:focus-visible,
 }
 
 .topbar h2 {
-  margin: 6px 0 0;
-  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  margin: 2px 0 0;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
   line-height: 1.05;
   letter-spacing: -0.03em;
 }
@@ -510,31 +512,34 @@ textarea:focus-visible,
 }
 
 .topbar-side {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
-  align-content: start;
+  flex: 0 1 auto;
 }
 
 .platform-switcher {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .mini-control {
   display: grid;
-  gap: 8px;
-  padding: 10px 12px;
-  border-radius: 16px;
+  gap: 3px;
+  padding: 5px 10px;
+  border-radius: 10px;
   background: rgba(23, 26, 31, 0.84);
   border: 1px solid rgba(255, 255, 255, 0.05);
+  min-width: 120px;
 }
 
 .mini-control span {
   color: var(--on-surface-variant);
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   font-weight: 700;
 }
 
