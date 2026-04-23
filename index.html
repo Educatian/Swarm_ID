@@ -320,11 +320,17 @@
                     <span class="preview-token">Accessibility</span>
                   </div>
                 </div>
-                <div class="stage-overlay stage-overlay-top">
+                <div class="stage-overlay stage-overlay-top" id="stage-note" data-collapsed="false">
+                  <button type="button" class="legend-close" id="stage-note-close" aria-label="Hide info" title="Hide info">
+                    <span class="material-symbols-outlined" aria-hidden="true">close</span>
+                  </button>
                   <p class="eyebrow" id="stage-note-kicker">D3 force graph</p>
                   <strong id="stage-note-title">Live swarm topology</strong>
                   <span id="stage-note-body">Hover a node to inspect an issue. Click a stakeholder node to shift the active lens.</span>
                 </div>
+                <button type="button" class="stage-note-reopen" id="stage-note-reopen" aria-label="Show info" title="Show info" hidden>
+                  <span class="material-symbols-outlined" aria-hidden="true">info</span>
+                </button>
                 <div class="stage-overlay stage-overlay-bottom" id="stage-legend" data-collapsed="false">
                   <button type="button" class="legend-close" id="legend-close" aria-label="Collapse legend" title="Collapse legend">
                     <span class="material-symbols-outlined" aria-hidden="true">close</span>

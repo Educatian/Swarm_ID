@@ -1347,6 +1347,46 @@ textarea:disabled {
   display: none;
 }
 
+.stage-overlay-top[data-collapsed="true"] {
+  display: none;
+}
+
+.stage-note-reopen {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(13, 15, 20, 0.72);
+  color: rgba(246, 246, 252, 0.9);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.24);
+  backdrop-filter: blur(18px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  z-index: 5;
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+}
+
+.stage-note-reopen[hidden] {
+  display: none;
+}
+
+.stage-note-reopen:hover {
+  transform: scale(1.06);
+  background: rgba(20, 24, 34, 0.88);
+  box-shadow: 0 6px 18px rgba(67, 97, 238, 0.28);
+}
+
+.stage-note-reopen .material-symbols-outlined {
+  font-size: 20px;
+  line-height: 1;
+}
+
 .legend-close {
   position: absolute;
   top: 6px;

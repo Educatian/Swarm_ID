@@ -8206,6 +8206,19 @@ function setLegendCollapsed(collapsed) {
   }
 }
 
+function setStageNoteCollapsed(collapsed) {
+  const note = document.getElementById("stage-note");
+  const reopen = document.getElementById("stage-note-reopen");
+  if (!note || !reopen) return;
+  note.setAttribute("data-collapsed", collapsed ? "true" : "false");
+  reopen.hidden = !collapsed;
+  try {
+    localStorage.setItem("stage-note-collapsed", collapsed ? "1" : "0");
+  } catch (err) {
+    /* ignore storage errors */
+  }
+}
+
 function wireLegendToggle() {
   const closeBtn = document.getElementById("legend-close");
   const reopenBtn = document.getElementById("legend-reopen");
@@ -8220,6 +8233,22 @@ function wireLegendToggle() {
   try {
     const saved = localStorage.getItem("legend-collapsed");
     if (saved === "1") setLegendCollapsed(true);
+  } catch (err) {
+    /* ignore */
+  }
+  const noteCloseBtn = document.getElementById("stage-note-close");
+  const noteReopenBtn = document.getElementById("stage-note-reopen");
+  if (noteCloseBtn && !noteCloseBtn.dataset.wired) {
+    noteCloseBtn.dataset.wired = "1";
+    noteCloseBtn.addEventListener("click", () => setStageNoteCollapsed(true));
+  }
+  if (noteReopenBtn && !noteReopenBtn.dataset.wired) {
+    noteReopenBtn.dataset.wired = "1";
+    noteReopenBtn.addEventListener("click", () => setStageNoteCollapsed(false));
+  }
+  try {
+    const savedNote = localStorage.getItem("stage-note-collapsed");
+    if (savedNote === "1") setStageNoteCollapsed(true);
   } catch (err) {
     /* ignore */
   }
