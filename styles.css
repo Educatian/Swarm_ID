@@ -846,6 +846,18 @@ textarea:focus-visible,
   grid-template-columns: minmax(360px, 1.02fr) minmax(0, 2.45fr) minmax(300px, 0.82fr);
 }
 
+.visualizer-layout.intake-collapsed {
+  grid-template-columns: auto minmax(0, 3fr) minmax(300px, 0.88fr);
+}
+
+.visualizer-layout.insight-collapsed {
+  grid-template-columns: minmax(340px, 1.15fr) minmax(0, 3fr) auto;
+}
+
+.visualizer-layout.intake-collapsed.insight-collapsed {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
 .lens-layout {
   grid-template-columns: minmax(260px, 1fr) minmax(0, 1.25fr) minmax(320px, 1.05fr);
 }
@@ -3274,6 +3286,58 @@ body {
   color: #4361ee;
   font-weight: 600;
   min-width: 78px;
+}
+
+.section-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-collapse-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid rgba(67, 97, 238, 0.3);
+  border-radius: 6px;
+  background: rgba(67, 97, 238, 0.08);
+  color: #4361ee;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.panel-collapse-toggle:hover {
+  background: rgba(67, 97, 238, 0.18);
+}
+
+.panel-collapse-toggle .chevron {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+[data-collapsible-panel].is-collapsed > :not(.section-header) {
+  display: none !important;
+}
+
+[data-collapsible-panel].is-collapsed {
+  padding-bottom: 8px;
+}
+
+[data-collapsible-panel].is-collapsed .panel-collapse-toggle .chevron {
+  transform: rotate(-90deg);
+}
+
+.visualizer-layout:has([data-collapsible-panel="intake"].is-collapsed):has([data-collapsible-panel="insight"].is-collapsed) .canvas-panel {
+  /* both side panels collapsed — let the network stretch */
+}
+.visualizer-layout [data-collapsible-panel].is-collapsed {
+  flex: 0 0 auto;
+  min-width: 0;
 }
 
 .view-intro-close {

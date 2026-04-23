@@ -7648,10 +7648,52 @@ function restoreDismissedViewIntros() {
   });
 }
 
+function setPanelCollapsed(panelKey, collapsed, { persist = true } = {}) {
+  const panel = document.querySelector(`[data-collapsible-panel="${panelKey}"]`);
+  if (!panel) return;
+  panel.classList.toggle("is-collapsed", !!collapsed);
+  const layout = document.getElementById("visualizer-layout");
+  if (layout) {
+    layout.classList.toggle(`${panelKey}-collapsed`, !!collapsed);
+  }
+  const toggle = panel.querySelector(".panel-collapse-toggle");
+  if (toggle) {
+    const label = collapsed ? "Expand panel" : "Collapse panel";
+    toggle.setAttribute("aria-label", label);
+    toggle.setAttribute("title", label);
+  }
+  if (persist) {
+    try { localStorage.setItem(`panel-collapsed:${panelKey}`, collapsed ? "1" : "0"); } catch (_) {}
+  }
+}
+
+function restoreCollapsiblePanels() {
+  document.querySelectorAll("[data-collapsible-panel]").forEach((panel) => {
+    const key = panel.getAttribute("data-collapsible-panel");
+    let stored = "0";
+    try { stored = localStorage.getItem(`panel-collapsed:${key}`) || "0"; } catch (_) {}
+    setPanelCollapsed(key, stored === "1", { persist: false });
+  });
+}
+
+function wireCollapsiblePanels() {
+  document.querySelectorAll(".panel-collapse-toggle[data-collapse-target]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const key = btn.getAttribute("data-collapse-target");
+      if (!key) return;
+      const panel = document.querySelector(`[data-collapsible-panel="${key}"]`);
+      const nextCollapsed = !panel?.classList.contains("is-collapsed");
+      setPanelCollapsed(key, nextCollapsed);
+    });
+  });
+}
+
 async function boot() {
   applyStaticTranslations();
   restoreDismissedViewIntros();
   restoreTopbarCollapse();
+  restoreCollapsiblePanels();
+  wireCollapsiblePanels();
   dom.topbarCollapseToggle?.addEventListener("click", () => {
     const nextCollapsed = !dom.topbar?.classList.contains("is-collapsed");
     setTopbarCollapsed(nextCollapsed);
