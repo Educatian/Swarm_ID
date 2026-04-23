@@ -6559,38 +6559,74 @@ function getTutorialSteps() {
   return [
     {
       selector: "#course-select",
-      title: state.locale === "ko" ? "코스 확인" : "Check the Course",
-      body: state.locale === "ko" ? "교수자가 안내한 코스에 들어와 있는지 먼저 확인하세요." : "Make sure you are in the course your instructor asked you to join.",
+      title: state.locale === "ko" ? "코스 확인" : "Confirm Your Course",
+      body: state.locale === "ko"
+        ? "교수자가 안내한 코스에 들어와 있는지 먼저 확인하세요. 아니라면 드롭다운에서 올바른 코스로 전환하세요."
+        : "Start here. Check that the course dropdown shows the course your instructor assigned — if it doesn't, switch courses before you pick a case.",
     },
     {
       selector: "#case-select",
-      title: state.locale === "ko" ? "게시된 케이스 선택" : "Choose a Published Case",
-      body: state.locale === "ko" ? "이 목록에는 교수자가 학생과 공유한 케이스만 보입니다." : "This list only shows cases your instructor has shared with students.",
+      title: state.locale === "ko" ? "게시된 케이스 선택" : "Open a Published Case",
+      body: state.locale === "ko"
+        ? "이 목록에는 교수자가 학생과 공유한 케이스만 보입니다. 케이스 카드의 파란색 ‘케이스 열기’ 버튼을 눌러 설명요약과 네트워크 맵을 불러오세요."
+        : "Only cases your instructor has published appear in this list. Click the blue Open case pill on any card to load its brief and network map.",
     },
     ...(hasCase
       ? [
           {
-            selector: "#agenda-node-form",
-            title: state.locale === "ko" ? "노드 하나 추가" : "Add One Node",
-            body: state.locale === "ko" ? "자신의 관점에서 질문, 우려, 이슈 하나를 추가하세요. 이것은 개인 학습 레이어의 일부가 됩니다." : "Add one question, concern, or issue from your own point of view. This becomes part of your private learner layer.",
+            selector: "[data-collapsible-panel='intake']",
+            title: state.locale === "ko" ? "수업 설명요약 읽기" : "Read the Case Brief First",
+            body: state.locale === "ko"
+              ? "왼쪽 패널의 수업 설명요약을 읽고, 설계가 해결하려는 문제와 학습자, 제약을 먼저 파악하세요. 읽고 나면 셰브론 버튼으로 패널을 접어 지도를 더 넓게 볼 수 있습니다."
+              : "The left panel holds the instructor's brief — read it before touching the map so you understand the design problem, the learners, and the constraints in play. Collapse this panel with the chevron once you are done to give the map more room.",
             view: "visualizer",
           },
           {
             selector: "#network-stage",
-            title: state.locale === "ko" ? "케이스 맵 읽기" : "Read the Case Map",
-            body: state.locale === "ko" ? "먼저 큰 클러스터를 훑어보세요. 노드에 호버하면 내용을 보고, 이해관계자 노드를 클릭하면 렌즈가 바뀝니다." : "Scan the main clusters first. Hover a node to inspect it, then click a stakeholder node to shift the lens.",
+            title: state.locale === "ko" ? "케이스 맵 탐색" : "Explore the Case Map",
+            body: state.locale === "ko"
+              ? "먼저 큰 클러스터(이해관계자·제약·긴장)를 훑어보세요. 노드에 호버하면 내용을 보고, 이해관계자 노드를 클릭하면 선택된 렌즈가 그들의 시각으로 전환됩니다."
+              : "Scan the main clusters first — stakeholders, constraints, and tensions. Hover any node to read its detail; click a stakeholder node to shift the Selected lens panel into their point of view.",
+            view: "visualizer",
+          },
+          {
+            selector: "#visualizer-form",
+            title: state.locale === "ko" ? "스웜에게 질문하기" : "Ask the Swarm",
+            body: state.locale === "ko"
+              ? "가장 중요한 갈등이나 트레이드오프, 이해관계자의 우려를 한 문장으로 물어보세요. 다섯 개의 AI 에이전트가 한 번의 라운드에서 서로 다른 관점으로 답하고, 동의·반대 연결이 맵에 자동으로 추가됩니다."
+              : "Ask one focused question — a tension you noticed, a tradeoff, or a stakeholder concern. Five AI agents answer in a single round with different stances, and their agreements and disagreements get wired into the map as new edges.",
+            view: "visualizer",
+          },
+          {
+            selector: ".chat-challenge",
+            title: state.locale === "ko" ? "응답에 이의 제기" : "Challenge a Response",
+            body: state.locale === "ko"
+              ? "에이전트 답변 옆의 ‘반박’ 버튼을 누르면 그 답변에 직접 반대 입장을 쓰고 맵에 반대 연결이 그려집니다. 맹목적으로 받아들이지 말고, 설득력이 약한 답에 반드시 이의를 제기하세요."
+              : "Each agent reply has a Challenge button. Use it to push back on a response you find weak — your challenge is logged, a disagreement edge is drawn on the map, and the swarm has to account for your objection next round.",
+            view: "visualizer",
+          },
+          {
+            selector: "#agenda-node-form",
+            title: state.locale === "ko" ? "직접 노드 추가" : "Add Your Own Node",
+            body: state.locale === "ko"
+              ? "자신의 관점에서 질문, 우려, 설계 이슈 하나를 맵에 추가하세요. 이 노드는 개인 학습 레이어에 저장되어 세션 간에도 유지되며, 교수자는 리포트에서 확인할 수 있습니다."
+              : "Add a node for a question or issue you want to track from your own point of view. Your node joins a private learner layer on top of the map — it persists between sessions, and your instructor can see it in the report.",
             view: "visualizer",
           },
           {
             selector: "#chat-form",
-            title: state.locale === "ko" ? "한 관점에서 질문하기" : "Ask from One Perspective",
-            body: state.locale === "ko" ? "특정 이해관계자의 관점에서 답을 듣고 싶을 때 이 입력창을 사용하세요." : "Use this box when you want a response from one stakeholder's point of view.",
+            title: state.locale === "ko" ? "한 이해관계자와 1:1로 대화" : "Go 1-on-1 with a Stakeholder",
+            body: state.locale === "ko"
+              ? "상단의 관점(Perspectives) 뷰로 전환하면 특정 이해관계자의 관점에서 답을 듣는 단일 채널 채팅이 열립니다. 스웜 라운드보다 더 깊이 파고들고 싶을 때 사용하세요."
+              : "Switch to the Perspectives view (top nav) for a single-channel chat that answers from one stakeholder's point of view. Use it to go deeper than the multi-agent swarm round — one voice, follow-up questions, full turn-by-turn.",
             view: "perspectives",
           },
           {
             selector: "#reflection-prompts",
-            title: state.locale === "ko" ? "리플렉션 작성" : "Write Your Reflection",
-            body: state.locale === "ko" ? "이 프롬프트를 활용해 맵에서 찾은 내용을 짧은 리플렉션으로 정리하세요." : "Use these prompts to turn what you found in the map into a short reflection.",
+            title: state.locale === "ko" ? "리플렉션 작성 후 제출" : "Write Your Reflection, Then Submit",
+            body: state.locale === "ko"
+              ? "리포트 뷰를 열고 프롬프트를 활용해 맵에서 발견한 긴장과 근거를 짧은 리플렉션으로 정리하세요. 다운로드 버튼으로 내보내거나 교수자에게 제출할 수 있습니다."
+              : "Open the Report view and use these prompts to turn what you found on the map into a short reflection. When you are ready, use the Download button at the bottom to export your report or submit it to your instructor.",
             view: "report",
           },
         ]
@@ -6598,10 +6634,10 @@ function getTutorialSteps() {
           // Fallback for students who haven't opened a case yet — still give them somewhere to go.
           {
             selector: "#network-stage",
-            title: state.locale === "ko" ? "케이스를 선택하면 지도가 열립니다" : "Pick a Case to Open the Map",
+            title: state.locale === "ko" ? "케이스를 선택하면 지도가 열립니다" : "Pick a Case to Load the Map",
             body: state.locale === "ko"
-              ? "위의 목록에서 게시된 케이스를 하나 고르면 네트워크 지도가 이곳에 나타납니다. 그 뒤 튜토리얼을 다시 실행하면 노드 추가, 리플렉션까지 나머지 단계를 안내합니다."
-              : "Pick one published case above and the network map will appear here. Replay the tutorial after that and it will walk you through adding a node, asking from a perspective, and writing a reflection.",
+              ? "위의 목록에서 게시된 케이스를 하나 고르면 네트워크 지도가 이곳에 나타납니다. 그 뒤 튜토리얼을 다시 실행하면 설명요약 읽기, 스웜에 질문하기, 노드 추가, 리플렉션 작성까지 나머지 단계를 안내합니다."
+              : "Pick one published case from the list above and its network map will load here. Replay the tutorial after you've opened a case — it will walk you through reading the brief, exploring the map, asking the swarm, challenging responses, adding your own node, and writing a reflection.",
             view: "visualizer",
           },
         ]),
