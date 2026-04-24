@@ -372,6 +372,89 @@
       margin-top: 32px;
     }
 
+    /* Slide toggle between profile view and contributors view */
+    .view-stage {
+      overflow: hidden;
+      position: relative;
+    }
+    .view-track {
+      display: flex;
+      width: 200%;
+      transition: transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
+      will-change: transform;
+    }
+    .view-panel {
+      flex: 0 0 50%;
+      min-width: 0;
+    }
+    .view-panel.view-profile { padding-right: 12px; }
+    .view-panel.view-contributors { padding-left: 12px; }
+    .shell.is-contributors-view .view-track {
+      transform: translateX(-50%);
+    }
+
+    .toggle-contributors {
+      border: 1px solid rgba(67, 97, 238, 0.25);
+      background: rgba(67, 97, 238, 0.08);
+      color: var(--primary-dark);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 8px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    }
+    .toggle-contributors:hover {
+      background: rgba(67, 97, 238, 0.15);
+      border-color: rgba(67, 97, 238, 0.4);
+    }
+    .toggle-contributors:active { transform: translateY(1px); }
+    .toggle-contributors .arrow {
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+    .shell.is-contributors-view .toggle-contributors .arrow {
+      transform: rotate(180deg);
+    }
+    .toggle-contributors .label-profile { display: none; }
+    .shell.is-contributors-view .toggle-contributors .label-default { display: none; }
+    .shell.is-contributors-view .toggle-contributors .label-profile { display: inline; }
+
+    .contributors-hero {
+      padding: 36px 32px;
+      border-radius: 28px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 24px 60px rgba(148, 163, 184, 0.18);
+      margin-bottom: 18px;
+    }
+    .contributors-hero .kicker {
+      margin: 0 0 8px;
+      color: var(--primary);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.76rem;
+    }
+    .contributors-hero h1 {
+      margin: 0 0 10px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.9rem;
+      letter-spacing: -0.02em;
+    }
+    .contributors-hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
     @media (max-width: 640px) {
       .hero {
         grid-template-columns: 1fr;
@@ -379,18 +462,26 @@
         justify-items: center;
       }
       .hero-copy h1 { font-size: 1.6rem; }
-      .section, .hero { padding: 22px 20px; }
+      .section, .hero, .contributors-hero { padding: 22px 20px; }
       .timeline-row { grid-template-columns: 1fr; }
+      .contributors-hero h1 { font-size: 1.5rem; }
     }
   </style>
 </head>
 <body>
-  <div class="shell">
+  <div class="shell" id="shell">
     <div class="topbar">
       <a class="back" href="../">← Swarm ID 홈으로</a>
-      <strong>Developer Profile</strong>
+      <button type="button" class="toggle-contributors" id="toggle-contributors" aria-expanded="false" aria-controls="view-contributors">
+        <span class="arrow" aria-hidden="true">▸</span>
+        <span class="label-default">Contributors</span>
+        <span class="label-profile">Profile</span>
+      </button>
     </div>
 
+    <div class="view-stage">
+    <div class="view-track">
+    <div class="view-panel view-profile" id="view-profile">
     <section class="hero">
       <div class="avatar" aria-label="Dr. Jewoong Moon">
         <img src="assets/headshot.jpg" alt="Dr. Jewoong Moon">
@@ -445,71 +536,6 @@
     </section>
 
     <section class="section">
-      <h2>Selected publications</h2>
-      <p>Over 50 peer-reviewed journal articles across learning technologies, XR, and AI-augmented instruction. A short list:</p>
-      <ul class="pub-list">
-        <li>
-          <em>Moon, J.</em> (2024). Designing multi-agent LLM interfaces that surface instructional design tensions.
-          <small>Behaviour &amp; Information Technology</small>
-        </li>
-        <li>
-          <em>Moon, J.</em>, &amp; colleagues. (2024). Immersive learning analytics in XR classrooms: methods and evidence.
-          <small>Computers &amp; Education</small>
-        </li>
-        <li>
-          <em>Moon, J.</em> (2023). Game-based learning and adaptive scaffolding for K–12 computational thinking.
-          <small>British Journal of Educational Technology</small>
-        </li>
-        <li>
-          <em>Moon, J.</em>, &amp; collaborators. (2023). Educational data mining for engineering education: instructor-facing dashboards.
-          <small>Journal of Engineering Education</small>
-        </li>
-        <li>
-          <em>Moon, J.</em> (2022). Teacher presence in virtual worlds: a Community of Inquiry study.
-          <small>International Journal of Computer-Supported Collaborative Learning</small>
-        </li>
-      </ul>
-    </section>
-
-    <section class="section">
-      <h2>Awards &amp; honors</h2>
-      <div class="award-grid">
-        <div class="award-card">
-          <strong>Nellie Rose McCrory Faculty Award</strong>
-          <span>The University of Alabama · 2026</span>
-        </div>
-        <div class="award-card">
-          <strong>Dean's Merit Award</strong>
-          <span>College of Education, UA · 2025</span>
-        </div>
-        <div class="award-card">
-          <strong>Outstanding Paper Award</strong>
-          <span>iLRN · 2024</span>
-        </div>
-        <div class="award-card">
-          <strong>Outstanding Paper Award</strong>
-          <span>iLRN · 2023</span>
-        </div>
-        <div class="award-card">
-          <strong>W.T. Grant Scholars Finalist</strong>
-          <span>William T. Grant Foundation · 2026</span>
-        </div>
-        <div class="award-card">
-          <strong>CIRCLS Featured Emerging Scholar</strong>
-          <span>Center for Integrative Research in Computing and Learning Sciences · 2021</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>Editorial service</h2>
-      <ul>
-        <li><strong>Associate Editor</strong> · <em>Behaviour &amp; Information Technology</em> (Taylor &amp; Francis)</li>
-        <li><strong>Editorial Board</strong> · <em>International Journal of Computer-Supported Collaborative Learning (ijCSCL)</em></li>
-      </ul>
-    </section>
-
-    <section class="section">
       <h2>Swarm ID</h2>
       <p>A multi-agent design-tension visualizer built for real classrooms. Five agents argue the same lesson plan from different lenses so instructors and students can watch the design trade-offs happen instead of receiving a single cleaned-up answer.</p>
       <ul>
@@ -517,29 +543,6 @@
         <li>Student onboarding, agenda-node creation, and a student-specific tutorial branch.</li>
         <li>Active classroom partnerships at IU W200, Ewha EDU-101, and FSU Learner Motivation.</li>
       </ul>
-    </section>
-
-    <section class="section">
-      <h2>Contributors</h2>
-      <p>Swarm ID is shaped by collaborators who pilot the tool in their own classrooms and push back on what it should do.</p>
-      <div class="contributor-grid">
-        <div class="contributor-card">
-          <div class="contributor-avatar">HJ</div>
-          <div class="contributor-info">
-            <strong>Dr. Hyeji Jang</strong>
-            <span>Seoul National University</span>
-            <small>Research collaborator</small>
-          </div>
-        </div>
-        <div class="contributor-card">
-          <div class="contributor-avatar">HK</div>
-          <div class="contributor-info">
-            <strong>Hyojung Kim</strong>
-            <span>Indiana University</span>
-            <small>Research collaborator</small>
-          </div>
-        </div>
-      </div>
     </section>
 
     <section class="section">
@@ -592,6 +595,58 @@
     </section>
 
     <p class="foot">© Dr. Jewoong Moon · The University of Alabama · Made with care for classroom research</p>
+    </div><!-- /.view-profile -->
+
+    <div class="view-panel view-contributors" id="view-contributors" aria-hidden="true">
+      <section class="contributors-hero">
+        <p class="kicker">Contributors</p>
+        <h1>The people behind Swarm ID</h1>
+        <p>Swarm ID is shaped by research collaborators who pilot the tool in their own classrooms, push back on the design, and co-author the decisions that ship.</p>
+      </section>
+
+      <section class="section">
+        <h2>Research collaborators</h2>
+        <div class="contributor-grid">
+          <div class="contributor-card">
+            <div class="contributor-avatar">HJ</div>
+            <div class="contributor-info">
+              <strong>Dr. Hyeji Jang</strong>
+              <span>Seoul National University</span>
+              <small>Research collaborator</small>
+            </div>
+          </div>
+          <div class="contributor-card">
+            <div class="contributor-avatar">HK</div>
+            <div class="contributor-info">
+              <strong>Hyojung Kim</strong>
+              <span>Indiana University</span>
+              <small>Research collaborator</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <p class="foot">© Dr. Jewoong Moon · The University of Alabama · Made with care for classroom research</p>
+    </div><!-- /.view-contributors -->
+    </div><!-- /.view-track -->
+    </div><!-- /.view-stage -->
   </div>
+
+  <script>
+    (function () {
+      var shell = document.getElementById("shell");
+      var toggle = document.getElementById("toggle-contributors");
+      var contributorsPanel = document.getElementById("view-contributors");
+      if (!shell || !toggle) return;
+
+      toggle.addEventListener("click", function () {
+        var showing = shell.classList.toggle("is-contributors-view");
+        toggle.setAttribute("aria-expanded", showing ? "true" : "false");
+        if (contributorsPanel) {
+          contributorsPanel.setAttribute("aria-hidden", showing ? "false" : "true");
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
