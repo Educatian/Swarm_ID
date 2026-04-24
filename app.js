@@ -76,17 +76,14 @@ const translations = {
     landingHeroKicker: "AI + Human Network Visualization",
     landingHeroTitle: "Turn design tension into a living network.",
     landingHeroBody: "Human judgment, institutional friction, and AI reasoning in one responsive field.",
-    landingTutorialsKicker: "Tutorials",
-    landingTutorialsTitle: "First time here? Walk through the guide.",
-    landingTutorialsBody: "Step-by-step tutorials for students and instructors — the whole classroom loop in one page. Each guide has an in-page language toggle.",
+    landingTutorialsKicker: "Guides",
     landingTutorialRoleStudent: "Student",
     landingTutorialRoleInstructor: "Instructor",
-    landingTutorialLangKo: "한국어 가이드",
-    landingTutorialLangEn: "English guide",
+    landingTutorialLangKo: "한국어",
+    landingTutorialLangEn: "English",
     landingDeveloperKicker: "Developer",
-    landingDeveloperTitle: "Built by Designtension Lab",
-    landingDeveloperBody: "Swarm ID is an open instructional-design research platform. Reach out for collaborations, feedback, or bug reports.",
-    landingDeveloperContact: "View developer profile",
+    landingDeveloperContact: "Profile",
+    landingCopyright: "© Designtension Lab · Made with care for classroom research",
     signalTeacherLoad: "Teacher load",
     signalStudentAgency: "Student agency",
     signalGovernance: "Governance",
@@ -389,17 +386,14 @@ const translations = {
     landingHeroKicker: "AI + 인간 네트워크 시각화",
     landingHeroTitle: "설계의 긴장을 살아 있는 네트워크로 바꾸세요.",
     landingHeroBody: "사람의 판단, 제도적 제약, AI 추론을 하나의 화면에서 함께 살펴봅니다.",
-    landingTutorialsKicker: "튜토리얼",
-    landingTutorialsTitle: "처음 오셨나요? 가이드를 따라가 보세요.",
-    landingTutorialsBody: "학생용·교수자용 가이드로 수업의 전 과정을 한 페이지에서 익힐 수 있어요. 가이드 안에서 한국어·영어를 자유롭게 전환할 수 있습니다.",
+    landingTutorialsKicker: "가이드",
     landingTutorialRoleStudent: "학생",
     landingTutorialRoleInstructor: "교수자",
-    landingTutorialLangKo: "한국어 가이드",
-    landingTutorialLangEn: "영어 가이드",
+    landingTutorialLangKo: "한국어",
+    landingTutorialLangEn: "영어",
     landingDeveloperKicker: "개발자",
-    landingDeveloperTitle: "Designtension Lab이 만들었어요",
-    landingDeveloperBody: "Swarm ID는 수업 설계 연구를 위한 오픈 플랫폼이에요. 협업, 피드백, 버그 제보는 언제든 환영합니다.",
-    landingDeveloperContact: "개발자 프로필 보기",
+    landingDeveloperContact: "프로필",
+    landingCopyright: "© Designtension Lab · 수업 연구를 위해 정성껏 만들었습니다",
     signalTeacherLoad: "교수자 부담",
     signalStudentAgency: "학생 주체성",
     signalGovernance: "거버넌스",
@@ -997,31 +991,26 @@ function applyStaticTranslations() {
 
   const tutorialsKicker = document.getElementById("landing-tutorials-kicker");
   if (tutorialsKicker) tutorialsKicker.textContent = t("landingTutorialsKicker");
-  const tutorialsTitle = document.getElementById("landing-tutorials-title");
-  if (tutorialsTitle) tutorialsTitle.textContent = t("landingTutorialsTitle");
-  const tutorialsBody = document.getElementById("landing-tutorials-body");
-  if (tutorialsBody) tutorialsBody.textContent = t("landingTutorialsBody");
-  document.querySelectorAll('.tutorial-link-role[data-role="student"]').forEach((el) => {
+  document.querySelectorAll('.ribbon-chip-role[data-role="student"]').forEach((el) => {
     el.textContent = t("landingTutorialRoleStudent");
   });
-  document.querySelectorAll('.tutorial-link-role[data-role="instructor"]').forEach((el) => {
+  document.querySelectorAll('.ribbon-chip-role[data-role="instructor"]').forEach((el) => {
     el.textContent = t("landingTutorialRoleInstructor");
   });
-  document.querySelectorAll('.tutorial-link-label[data-lang="ko"]').forEach((el) => {
+  document.querySelectorAll('.ribbon-chip-lang[data-lang="ko"]').forEach((el) => {
     el.textContent = t("landingTutorialLangKo");
   });
-  document.querySelectorAll('.tutorial-link-label[data-lang="en"]').forEach((el) => {
+  document.querySelectorAll('.ribbon-chip-lang[data-lang="en"]').forEach((el) => {
     el.textContent = t("landingTutorialLangEn");
   });
 
   const developerKicker = document.getElementById("landing-developer-kicker");
   if (developerKicker) developerKicker.textContent = t("landingDeveloperKicker");
-  const developerTitle = document.getElementById("landing-developer-title");
-  if (developerTitle) developerTitle.textContent = t("landingDeveloperTitle");
-  const developerBody = document.getElementById("landing-developer-body");
-  if (developerBody) developerBody.textContent = t("landingDeveloperBody");
   const developerContact = document.getElementById("landing-developer-contact");
   if (developerContact) developerContact.textContent = t("landingDeveloperContact");
+
+  const copyrightEl = document.querySelector(".landing-copyright");
+  if (copyrightEl) copyrightEl.textContent = t("landingCopyright");
 
   const loginHeads = document.querySelectorAll(".landing-login-head");
   if (loginHeads[0]) {

@@ -3463,6 +3463,116 @@ body {
   }
 }
 
+/* Compact top ribbon: Guides + Developer links above the hero */
+.landing-ribbon {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 12px 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(121, 140, 171, 0.16);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 12px 34px rgba(148, 163, 184, 0.12);
+  margin-top: 4px;
+}
+
+.landing-ribbon-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.landing-ribbon-label {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(67, 97, 238, 0.78);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(67, 97, 238, 0.08);
+  border: 1px solid rgba(67, 97, 238, 0.14);
+  flex-shrink: 0;
+}
+
+.landing-ribbon-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ribbon-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: white;
+  border: 1px solid rgba(121, 140, 171, 0.22);
+  color: #1f2937;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+}
+.ribbon-chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(67, 97, 238, 0.45);
+  background: linear-gradient(135deg, rgba(67, 97, 238, 0.06), rgba(122, 167, 255, 0.06));
+  box-shadow: 0 6px 14px rgba(67, 97, 238, 0.12);
+  text-decoration: none;
+}
+
+.ribbon-chip-role {
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: #4361ee;
+  text-transform: uppercase;
+}
+.ribbon-chip-role[data-role="instructor"] { color: #1b9c85; }
+
+.ribbon-chip-lang {
+  font-weight: 500;
+  color: #334155;
+}
+
+.ribbon-chip-primary {
+  background: linear-gradient(135deg, #4361ee, #3449c8);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 6px 14px rgba(67, 97, 238, 0.28);
+}
+.ribbon-chip-primary:hover {
+  background: linear-gradient(135deg, #3b55e6, #2b3cb0);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 8px 18px rgba(67, 97, 238, 0.35);
+}
+
+@media (max-width: 720px) {
+  .landing-ribbon {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .landing-ribbon-group {
+    justify-content: flex-start;
+  }
+}
+
+.landing-copyright {
+  text-align: center;
+  color: rgba(71, 85, 105, 0.72);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  margin: 24px 0 4px;
+}
+
 .landing-footer-cta p,
 .landing-brand div p {
   color: rgba(71, 85, 105, 0.88);
