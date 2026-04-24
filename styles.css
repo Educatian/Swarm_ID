@@ -3499,16 +3499,11 @@ body {
   flex-direction: column;
   gap: 2px;
   z-index: 40;
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: opacity 0.14s ease, transform 0.14s ease;
-  pointer-events: none;
 }
 
-.header-guides-menu:not([hidden]) {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+/* `hidden` attribute must beat the flex declaration above. */
+.header-guides-menu[hidden] {
+  display: none !important;
 }
 
 .header-guides-item {
