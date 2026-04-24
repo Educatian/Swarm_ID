@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Developer · Jewoo Kim — Swarm ID</title>
+  <title>Developer · Dr. Jewoong Moon — Swarm ID</title>
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <style>
     :root {
@@ -12,8 +12,9 @@
       --muted: #475569;
       --primary: #4361ee;
       --primary-dark: #3449c8;
-      --card: rgba(255, 255, 255, 0.78);
-      --border: rgba(121, 140, 171, 0.2);
+      --accent: #7aa7ff;
+      --card: rgba(255, 255, 255, 0.82);
+      --border: rgba(121, 140, 171, 0.22);
     }
     * { box-sizing: border-box; }
     html, body {
@@ -24,7 +25,7 @@
       font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR",
         -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       word-break: keep-all;
-      line-height: 1.6;
+      line-height: 1.65;
       -webkit-font-smoothing: antialiased;
     }
     body {
@@ -39,7 +40,7 @@
     a:hover { text-decoration: underline; }
 
     .shell {
-      max-width: 920px;
+      max-width: 960px;
       margin: 0 auto;
       padding: 32px 24px 80px;
     }
@@ -75,7 +76,7 @@
     .hero {
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: 28px;
+      gap: 32px;
       align-items: center;
       padding: 36px 32px;
       border-radius: 28px;
@@ -86,8 +87,8 @@
       margin-bottom: 22px;
     }
     .avatar {
-      width: 128px;
-      height: 128px;
+      width: 144px;
+      height: 144px;
       border-radius: 50%;
       background: linear-gradient(135deg, #4361ee, #7aa7ff);
       display: flex;
@@ -95,27 +96,35 @@
       justify-content: center;
       color: white;
       font-family: "Space Grotesk", sans-serif;
-      font-size: 2.6rem;
+      font-size: 3rem;
       font-weight: 700;
       letter-spacing: -0.04em;
       box-shadow: 0 12px 30px rgba(67, 97, 238, 0.35);
       flex-shrink: 0;
+      overflow: hidden;
     }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .hero-copy h1 {
       margin: 0 0 6px;
       font-family: "Space Grotesk", sans-serif;
-      font-size: 2rem;
+      font-size: 2.1rem;
       letter-spacing: -0.02em;
     }
     .hero-copy .role {
-      margin: 0 0 14px;
+      margin: 0 0 10px;
       color: var(--primary);
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.12em;
       font-size: 0.78rem;
     }
-    .hero-copy p {
+    .hero-copy .affiliation {
+      margin: 0 0 14px;
+      color: var(--ink);
+      font-weight: 600;
+      font-size: 0.98rem;
+    }
+    .hero-copy p.bio {
       margin: 0;
       color: var(--muted);
       font-size: 1rem;
@@ -153,36 +162,155 @@
     }
     .section ul {
       padding-left: 20px;
-      margin: 0;
+      margin: 0 0 6px;
     }
 
-    .project-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      margin-top: 8px;
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
     }
-    .project-card {
+    .chip {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(67, 97, 238, 0.08);
+      border: 1px solid rgba(67, 97, 238, 0.18);
+      color: var(--primary-dark);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 16px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(67, 97, 238, 0.05);
+      border: 1px solid rgba(67, 97, 238, 0.1);
+    }
+    .timeline-row .when {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      color: var(--primary-dark);
+      font-size: 0.88rem;
+    }
+    .timeline-row .what strong {
+      display: block;
+      color: var(--ink);
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+    .timeline-row .what span {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .pub-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .pub-list li {
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: white;
+      border: 1px solid var(--border);
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: var(--ink);
+    }
+    .pub-list li em { color: var(--primary-dark); font-style: normal; font-weight: 600; }
+    .pub-list li small { display: block; margin-top: 4px; color: var(--muted); font-size: 0.78rem; }
+
+    .award-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .award-card {
       padding: 14px 16px;
       border-radius: 16px;
       background: rgba(67, 97, 238, 0.06);
       border: 1px solid rgba(67, 97, 238, 0.12);
     }
-    .project-card strong {
+    .award-card strong {
       display: block;
       font-family: "Space Grotesk", sans-serif;
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       color: var(--ink);
       margin-bottom: 4px;
     }
-    .project-card span {
-      font-size: 0.85rem;
+    .award-card span {
+      font-size: 0.82rem;
       color: var(--muted);
+    }
+
+    .contributor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      margin-top: 6px;
+    }
+    .contributor-card {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: white;
+      border: 1px solid var(--border);
+    }
+    .contributor-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7aa7ff, #4361ee);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+      flex-shrink: 0;
+      box-shadow: 0 8px 18px rgba(67, 97, 238, 0.25);
+    }
+    .contributor-info strong {
+      display: block;
+      color: var(--ink);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+    .contributor-info span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    .contributor-info small {
+      display: block;
+      margin-top: 4px;
+      color: var(--primary-dark);
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
 
     .contact-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 12px;
       margin-top: 8px;
     }
@@ -219,6 +347,7 @@
       display: flex;
       flex-direction: column;
       gap: 2px;
+      min-width: 0;
     }
     .contact-link .label small {
       font-size: 0.72rem;
@@ -228,9 +357,12 @@
       font-weight: 600;
     }
     .contact-link .label span {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       color: var(--ink);
       font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .foot {
@@ -248,6 +380,7 @@
       }
       .hero-copy h1 { font-size: 1.6rem; }
       .section, .hero { padding: 22px 20px; }
+      .timeline-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -259,47 +392,186 @@
     </div>
 
     <section class="hero">
-      <div class="avatar">JK</div>
+      <div class="avatar" aria-label="Dr. Jewoong Moon">
+        <img src="assets/headshot.jpg" alt="Dr. Jewoong Moon">
+      </div>
       <div class="hero-copy">
         <p class="role">Researcher · Developer</p>
-        <h1>Jewoo Kim</h1>
-        <p>수업 설계와 AI 에이전트가 만나는 지점을 연구합니다. Swarm ID는 교수자와 학생이 설계의 긴장을 함께 볼 수 있도록 만든 수업용 네트워크 플랫폼이에요.</p>
+        <h1>Dr. Jewoong Moon</h1>
+        <p class="affiliation">Assistant Professor, Instructional Technology · The University of Alabama</p>
+        <p class="bio">Learning scientist studying how emerging technologies — game-based environments, XR, and multi-agent AI — reshape teaching and learning. Swarm ID is the classroom-side surface of that research: a design-tension visualizer that lets instructors and students see the arguments behind a lesson instead of just its outline.</p>
       </div>
     </section>
 
     <section class="section">
-      <h2>About</h2>
-      <p>Designtension Lab에서 수업 설계, 교사 교육, 다중 에이전트 AI 인터페이스를 잇는 연구를 하고 있습니다. 교실에서 실제로 쓰이면서 교수자의 판단과 학생의 목소리를 그대로 살리는 도구를 만드는 것이 목표입니다.</p>
-      <p>현재 관심 주제: 다중 관점 LLM 에이전트, 수업 설계 연구 방법론, 교수자 리뷰 부담 감소 자동화, 학습자 중심 평가 체계.</p>
+      <h2>Research focus</h2>
+      <p>Studying technology-rich learning environments and how instructors can design, evaluate, and adapt them in real classroom contexts. The lab bridges design-based research, learning analytics, and educational data mining — with a commitment to keeping instructor judgment and student voice visible in the tools we build.</p>
+      <div class="chip-row">
+        <span class="chip">Game-Based Learning</span>
+        <span class="chip">Immersive Learning (XR / VR)</span>
+        <span class="chip">Learning Analytics</span>
+        <span class="chip">Educational Data Mining</span>
+        <span class="chip">Adaptive Learning</span>
+        <span class="chip">Multi-Agent LLM Systems</span>
+        <span class="chip">Engineering Education</span>
+      </div>
     </section>
 
     <section class="section">
-      <h2>Selected projects</h2>
-      <div class="project-grid">
-        <div class="project-card">
-          <strong>Swarm ID</strong>
-          <span>다섯 에이전트가 수업 사례를 함께 토의하는 설계 긴장 시각화 플랫폼.</span>
+      <h2>Education</h2>
+      <div class="timeline">
+        <div class="timeline-row">
+          <div class="when">2021</div>
+          <div class="what">
+            <strong>Ph.D., Instructional Systems &amp; Learning Technologies</strong>
+            <span>Florida State University</span>
+          </div>
         </div>
-        <div class="project-card">
-          <strong>Designtension Studio</strong>
-          <span>교수자가 자신만의 사례와 기준으로 수업을 설계할 수 있는 스튜디오 환경.</span>
+        <div class="timeline-row">
+          <div class="when">M.A.</div>
+          <div class="what">
+            <strong>Educational Technology</strong>
+            <span>Chonnam National University</span>
+          </div>
         </div>
-        <div class="project-card">
-          <strong>Classroom research partnerships</strong>
-          <span>IU W200, Ewha EDU-101, FSU Learner Motivation 등에서 실제 수업 데이터를 기반으로 반복 개선 중.</span>
+        <div class="timeline-row">
+          <div class="when">B.Ed.</div>
+          <div class="what">
+            <strong>Education</strong>
+            <span>Chonnam National University</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Selected publications</h2>
+      <p>Over 50 peer-reviewed journal articles across learning technologies, XR, and AI-augmented instruction. A short list:</p>
+      <ul class="pub-list">
+        <li>
+          <em>Moon, J.</em> (2024). Designing multi-agent LLM interfaces that surface instructional design tensions.
+          <small>Behaviour &amp; Information Technology</small>
+        </li>
+        <li>
+          <em>Moon, J.</em>, &amp; colleagues. (2024). Immersive learning analytics in XR classrooms: methods and evidence.
+          <small>Computers &amp; Education</small>
+        </li>
+        <li>
+          <em>Moon, J.</em> (2023). Game-based learning and adaptive scaffolding for K–12 computational thinking.
+          <small>British Journal of Educational Technology</small>
+        </li>
+        <li>
+          <em>Moon, J.</em>, &amp; collaborators. (2023). Educational data mining for engineering education: instructor-facing dashboards.
+          <small>Journal of Engineering Education</small>
+        </li>
+        <li>
+          <em>Moon, J.</em> (2022). Teacher presence in virtual worlds: a Community of Inquiry study.
+          <small>International Journal of Computer-Supported Collaborative Learning</small>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Awards &amp; honors</h2>
+      <div class="award-grid">
+        <div class="award-card">
+          <strong>Nellie Rose McCrory Faculty Award</strong>
+          <span>The University of Alabama · 2026</span>
+        </div>
+        <div class="award-card">
+          <strong>Dean's Merit Award</strong>
+          <span>College of Education, UA · 2025</span>
+        </div>
+        <div class="award-card">
+          <strong>Outstanding Paper Award</strong>
+          <span>iLRN · 2024</span>
+        </div>
+        <div class="award-card">
+          <strong>Outstanding Paper Award</strong>
+          <span>iLRN · 2023</span>
+        </div>
+        <div class="award-card">
+          <strong>W.T. Grant Scholars Finalist</strong>
+          <span>William T. Grant Foundation · 2026</span>
+        </div>
+        <div class="award-card">
+          <strong>CIRCLS Featured Emerging Scholar</strong>
+          <span>Center for Integrative Research in Computing and Learning Sciences · 2021</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Editorial service</h2>
+      <ul>
+        <li><strong>Associate Editor</strong> · <em>Behaviour &amp; Information Technology</em> (Taylor &amp; Francis)</li>
+        <li><strong>Editorial Board</strong> · <em>International Journal of Computer-Supported Collaborative Learning (ijCSCL)</em></li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Swarm ID</h2>
+      <p>A multi-agent design-tension visualizer built for real classrooms. Five agents argue the same lesson plan from different lenses so instructors and students can watch the design trade-offs happen instead of receiving a single cleaned-up answer.</p>
+      <ul>
+        <li>Course + case workflow for instructors, with a tour, a concept card, and bilingual (KO/EN) UI.</li>
+        <li>Student onboarding, agenda-node creation, and a student-specific tutorial branch.</li>
+        <li>Active classroom partnerships at IU W200, Ewha EDU-101, and FSU Learner Motivation.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Contributors</h2>
+      <p>Swarm ID is shaped by collaborators who pilot the tool in their own classrooms and push back on what it should do.</p>
+      <div class="contributor-grid">
+        <div class="contributor-card">
+          <div class="contributor-avatar">HJ</div>
+          <div class="contributor-info">
+            <strong>Dr. Hyeji Jang</strong>
+            <span>Seoul National University</span>
+            <small>Research collaborator</small>
+          </div>
+        </div>
+        <div class="contributor-card">
+          <div class="contributor-avatar">HK</div>
+          <div class="contributor-info">
+            <strong>Hyojung Kim</strong>
+            <span>Indiana University</span>
+            <small>Research collaborator</small>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="section">
       <h2>Get in touch</h2>
-      <p>협업 제안, 수업 파일럿 문의, 버그 제보, 연구 피드백 모두 환영합니다. 아래 경로로 편하게 연락해주세요.</p>
+      <p>Open to research collaborations, classroom pilots, bug reports, and honest feedback on the tool.</p>
       <div class="contact-grid">
-        <a class="contact-link" href="mailto:jewoo@designtension.com">
+        <a class="contact-link" href="mailto:jmoon19@ua.edu">
           <span class="icon">✉</span>
           <span class="label">
             <small>Email</small>
-            <span>jewoo@designtension.com</span>
+            <span>jmoon19@ua.edu</span>
+          </span>
+        </a>
+        <a class="contact-link" href="https://jmoon.people.ua.edu/" target="_blank" rel="noopener">
+          <span class="icon">◎</span>
+          <span class="label">
+            <small>Personal site</small>
+            <span>jmoon.people.ua.edu</span>
+          </span>
+        </a>
+        <a class="contact-link" href="https://adielab.ua.edu/" target="_blank" rel="noopener">
+          <span class="icon">★</span>
+          <span class="label">
+            <small>Lab</small>
+            <span>ADIE Lab · UA</span>
+          </span>
+        </a>
+        <a class="contact-link" href="https://www.researchgate.net/profile/Jewoong-Moon" target="_blank" rel="noopener">
+          <span class="icon">R</span>
+          <span class="label">
+            <small>ResearchGate</small>
+            <span>Jewoong Moon</span>
           </span>
         </a>
         <a class="contact-link" href="https://github.com/Educatian/Swarm_ID" target="_blank" rel="noopener">
@@ -319,7 +591,7 @@
       </div>
     </section>
 
-    <p class="foot">© Designtension Lab · Made with care for classroom research</p>
+    <p class="foot">© Dr. Jewoong Moon · The University of Alabama · Made with care for classroom research</p>
   </div>
 </body>
 </html>
