@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Swarm ID — Student Learning Journey (English)</title>
+  <style>
+    :root {
+      --ink: #0b1538;
+      --ink-soft: #1f2a55;
+      --muted: #4a5578;
+      --muted-2: #6b7498;
+      --accent: #2a3fc8;
+      --accent-soft: rgba(42, 63, 200, 0.08);
+      --accent-border: rgba(42, 63, 200, 0.35);
+      --primary: #1d4ed8;
+      --primary-grad: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      --success: #15803d;
+      --success-soft: rgba(34, 197, 94, 0.12);
+      --success-border: rgba(21, 128, 61, 0.4);
+      --warn: #b45309;
+      --warn-soft: rgba(245, 158, 11, 0.12);
+      --warn-border: rgba(180, 83, 9, 0.45);
+      --danger: #b91c1c;
+      --rule: #e2e6f4;
+      --bg: #f5f7fc;
+      --card: #ffffff;
+      --shadow: 0 1px 2px rgba(11, 21, 56, 0.04), 0 6px 20px rgba(11, 21, 56, 0.06);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.6;
+      padding: 48px 24px 96px;
+      -webkit-font-smoothing: antialiased;
+    }
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    header.doc-header {
+      margin-bottom: 36px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      border-radius: 999px;
+      padding: 3px 10px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 2.05rem;
+      letter-spacing: -0.022em;
+      line-height: 1.15;
+    }
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 720px;
+    }
+    .meta {
+      margin-top: 16px;
+      color: var(--muted-2);
+      font-size: 0.85rem;
+    }
+    .meta code {
+      background: #eef1fb;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+    nav.journey {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      padding: 22px 26px;
+      margin-bottom: 34px;
+      box-shadow: var(--shadow);
+    }
+    nav.journey h2 {
+      margin: 0 0 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .journey-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 720px) {
+      .journey-grid { grid-template-columns: repeat(5, 1fr); }
+    }
+    .journey-card {
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: 12px 14px;
+      background: #fafbff;
+      text-decoration: none;
+      color: var(--ink);
+      transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+    }
+    .journey-card:hover {
+      background: #eef1fb;
+      border-color: var(--accent-border);
+      transform: translateY(-1px);
+    }
+    .journey-card .phase {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .journey-card .phase-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .journey-card .phase-time {
+      font-size: 0.75rem;
+      color: var(--muted-2);
+    }
+    section.intro {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow);
+    }
+    section.intro h2 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+      letter-spacing: -0.01em;
+    }
+    section.intro p {
+      margin: 0 0 12px;
+      color: var(--ink-soft);
+    }
+    section.intro p:last-child { margin-bottom: 0; }
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 4px;
+    }
+    .pill-list span {
+      font-size: 0.78rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .phase-wrap {
+      margin: 52px 0 24px;
+      padding-top: 10px;
+      border-top: 2px solid var(--accent);
+    }
+    .phase-head {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .phase-num {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+    .phase-wrap h2 {
+      margin: 0;
+      font-size: 1.55rem;
+      letter-spacing: -0.02em;
+    }
+    .phase-goal {
+      margin: 4px 0 18px;
+      color: var(--muted);
+      font-size: 0.98rem;
+      max-width: 760px;
+    }
+    ol.tour {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    ol.tour > li {
+      counter-increment: step;
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      margin-bottom: 22px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .step-body {
+      padding: 26px 30px 22px;
+      position: relative;
+      padding-left: 86px;
+    }
+    .step-body::before {
+      content: counter(step);
+      position: absolute;
+      top: 26px;
+      left: 26px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--primary-grad);
+      color: #fff;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      box-shadow: 0 2px 6px rgba(29, 78, 216, 0.28);
+    }
+    .step-body h3 {
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+      letter-spacing: -0.01em;
+    }
+    .target {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      border-radius: 999px;
+      padding: 2px 10px;
+      margin-bottom: 14px;
+    }
+    .step-body p {
+      margin: 0 0 12px;
+      color: var(--ink);
+    }
+    .step-body p:last-child { margin-bottom: 0; }
+    .step-body strong { color: var(--ink); }
+    .callouts {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    @media (min-width: 760px) {
+      .callouts.two { grid-template-columns: 1fr 1fr; }
+    }
+    .callout {
+      border-radius: 10px;
+      padding: 12px 14px;
+      border: 1px solid;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+    .callout .label {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .callout p { margin: 0; color: var(--ink-soft); }
+    .callout.success {
+      background: var(--success-soft);
+      border-color: var(--success-border);
+    }
+    .callout.success .label { color: var(--success); }
+    .callout.warn {
+      background: var(--warn-soft);
+      border-color: var(--warn-border);
+    }
+    .callout.warn .label { color: var(--warn); }
+    .shot {
+      background: #0b1538;
+      border-top: 1px solid var(--rule);
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+    .shot.dual { grid-template-columns: 1fr; }
+    @media (min-width: 760px) {
+      .shot.dual { grid-template-columns: 1fr 1fr; }
+    }
+    .shot figure {
+      margin: 0;
+      background: #0b1538;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .shot img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+    .shot figcaption {
+      margin-top: 8px;
+      font-size: 0.76rem;
+      color: #c4cbea;
+      font-style: italic;
+      text-align: center;
+    }
+    .no-shot {
+      padding: 18px 30px 22px;
+      background: #fafbff;
+      border-top: 1px dashed #c8cfe6;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-style: italic;
+    }
+    .fallback {
+      margin-top: 32px;
+      padding: 22px 28px;
+      border: 1px dashed #c8cfe6;
+      border-radius: 14px;
+      background: #fcfcff;
+    }
+    .fallback h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      color: var(--muted);
+      letter-spacing: -0.01em;
+    }
+    .fallback p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+    section.tips, section.link-learning {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      padding: 26px 30px;
+      margin-top: 32px;
+      box-shadow: var(--shadow);
+    }
+    section.tips h2, section.link-learning h2 {
+      margin: 0 0 14px;
+      font-size: 1.2rem;
+      letter-spacing: -0.01em;
+    }
+    section.tips ul, section.link-learning ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+    section.tips li, section.link-learning li {
+      margin-bottom: 8px;
+      color: var(--ink-soft);
+    }
+    section.link-learning li strong { color: var(--ink); }
+    footer {
+      margin-top: 44px;
+      padding-top: 20px;
+      border-top: 1px solid var(--rule);
+      color: var(--muted-2);
+      font-size: 0.8rem;
+    }
+    @media print {
+      body { background: #fff; padding: 24px; }
+      section.intro, ol.tour > li, .fallback, section.tips, section.link-learning, nav.journey {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+      ol.tour > li { page-break-inside: avoid; }
+      .shot { background: #f2f4fa; }
+      .shot figcaption { color: #4a5578; }
+    }
+  </style>
+</head>
+<body>
+  <div class="locale-toggle-bar" role="navigation" aria-label="Language selector">
+    <div class="locale-toggle-inner">
+      <span class="locale-toggle-label">Language</span>
+      <a href="../student-ko/" class="locale-pill">한국어</a>
+      <a href="../student-en/" class="locale-pill is-active" aria-current="page">English</a>
+    </div>
+  </div>
+  <style>
+    .locale-toggle-bar { position: sticky; top: 0; z-index: 50; background: rgba(245, 247, 252, 0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(121, 140, 171, 0.2); padding: 10px 24px; }
+    .locale-toggle-inner { max-width: 980px; margin: 0 auto; display: flex; align-items: center; gap: 10px; }
+    .locale-toggle-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; color: #6b7498; margin-right: 6px; }
+    .locale-pill { display: inline-flex; align-items: center; padding: 6px 14px; border-radius: 999px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(121, 140, 171, 0.25); background: white; color: #1f2a55; text-decoration: none; transition: transform 0.12s, background 0.12s, border-color 0.12s; }
+    .locale-pill:hover { transform: translateY(-1px); background: rgba(67, 97, 238, 0.08); border-color: rgba(67, 97, 238, 0.45); }
+    .locale-pill.is-active { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border-color: transparent; box-shadow: 0 6px 14px rgba(29, 78, 216, 0.28); }
+    .locale-pill.is-active:hover { transform: translateY(-1px); }
+  </style>
+  <main>
+    <header class="doc-header">
+      <span class="eyebrow">Swarm ID · Classroom Guide</span>
+      <h1>Student Learning Journey</h1>
+      <p class="subtitle">A phase-by-phase walkthrough of how you use Swarm ID to think through an instructional-design decision &mdash; from opening a case to submitting a reflection. Each step shows what to do, what to expect, what success looks like, and where students most often get stuck.</p>
+      <p class="meta">Surface: <code>https://swarmid.vercel.app</code> · Role: student (<code>user</code>) · Locale: English · Course: IU W200 Teaching with Technology</p>
+    </header>
+
+    <nav class="journey" aria-label="Journey overview">
+      <h2>The Five Phases of Your Session</h2>
+      <div class="journey-grid">
+        <a class="journey-card" href="#phase-1">
+          <span class="phase">Phase 1</span>
+          <div class="phase-title">Orient</div>
+          <span class="phase-time">~3 min</span>
+        </a>
+        <a class="journey-card" href="#phase-2">
+          <span class="phase">Phase 2</span>
+          <div class="phase-title">Situate</div>
+          <span class="phase-time">~5&ndash;8 min</span>
+        </a>
+        <a class="journey-card" href="#phase-3">
+          <span class="phase">Phase 3</span>
+          <div class="phase-title">Interrogate</div>
+          <span class="phase-time">~10&ndash;15 min</span>
+        </a>
+        <a class="journey-card" href="#phase-4">
+          <span class="phase">Phase 4</span>
+          <div class="phase-title">Contribute</div>
+          <span class="phase-time">~5&ndash;10 min</span>
+        </a>
+        <a class="journey-card" href="#phase-5">
+          <span class="phase">Phase 5</span>
+          <div class="phase-title">Synthesize</div>
+          <span class="phase-time">~8&ndash;10 min</span>
+        </a>
+      </div>
+    </nav>
+
+    <section class="intro">
+      <h2>Before You Start: What Swarm ID Is (and Isn&rsquo;t)</h2>
+      <p>Swarm ID is a <strong>thinking tool for instructional-design decisions</strong>, not a homework-answer engine. When you open a case, the tool has already parsed the instructor&rsquo;s brief into an interactive map of <em>stakeholders, constraints, and tensions</em>. Your job is to treat that map as a design space you&rsquo;re moving through &mdash; asking questions, pushing back on weak arguments, and adding your own thinking.</p>
+      <p>Five AI agents take different stances on every question you ask, so you&rsquo;ll see disagreement, not consensus. That disagreement is the point. The goal isn&rsquo;t to find &ldquo;the right answer&rdquo; &mdash; it&rsquo;s to surface the trade-offs you&rsquo;d otherwise miss, and then <strong>make a reasoned design decision you can defend</strong> in your reflection.</p>
+      <div class="pill-list">
+        <span>Case map</span>
+        <span>Multi-agent swarm</span>
+        <span>Challenge &amp; rebut</span>
+        <span>Private learner layer</span>
+        <span>Report &amp; export</span>
+      </div>
+    </section>
+
+    <div class="phase-wrap" id="phase-1">
+      <div class="phase-head">
+        <span class="phase-num">Phase 1</span>
+        <h2>Orient &mdash; Find Your Course and Case</h2>
+      </div>
+      <p class="phase-goal">Confirm you&rsquo;re in the right course, pick the case your instructor told you to open, and get a first look at what&rsquo;s inside. Spend <strong>no more than three minutes</strong> here.</p>
+
+      <ol class="tour">
+        <li>
+          <div class="step-body">
+            <h3>Confirm Your Course</h3>
+            <span class="target">Top bar &middot; Course dropdown</span>
+            <p>Start here. Check that the course dropdown shows the course your instructor assigned &mdash; if it doesn&rsquo;t, switch courses before you pick a case. Any work you do is saved under the course you&rsquo;re currently in.</p>
+            <div class="callouts two">
+              <div class="callout success">
+                <span class="label">Success looks like</span>
+                <p>The dropdown reads <em>W200 &middot; Teaching with Technology</em> (or whatever your instructor named it) and the case list below is populated.</p>
+              </div>
+              <div class="callout warn">
+                <span class="label">Most common stumble</span>
+                <p>Students sign in to the wrong course and can&rsquo;t see the case the instructor mentioned in class. If the list looks empty, flip the course dropdown before asking for help.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/01-login.png" alt="Sign-in screen and course selector" />
+              <figcaption>Sign-in screen &mdash; the course dropdown becomes visible once you&rsquo;re in.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>Scan the Case Library</h3>
+            <span class="target">Case list &middot; title, three-line summary, <em>Show more</em></span>
+            <p>The case list shows only cases your instructor has <strong>published</strong> &mdash; drafts stay hidden. Each card shows the case title and the first three lines of the brief. Tap <strong>Show more</strong> to expand the summary without committing to opening the case.</p>
+            <p>Use this moment to get a feel for which case you&rsquo;ve been assigned and what design problem it frames (ADDIE phase, 5E segment, AI/CT lesson, etc.).</p>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/03-pick-case.png" alt="Published cases visible to the student" />
+              <figcaption>Case cards truncate to three lines, with <strong>Show more</strong> and the blue <strong>Open case</strong> pill side by side.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>Open a Published Case</h3>
+            <span class="target">Case card &middot; blue <em>Open case</em> pill</span>
+            <p>Click the blue <strong>Open case</strong> pill on the card your instructor assigned. The app loads the brief on the left, builds the case network map in the middle, and positions the Selected-lens panel on the right.</p>
+            <div class="callouts">
+              <div class="callout success">
+                <span class="label">Success looks like</span>
+                <p>You see three zones on screen: <em>brief</em> (left), <em>network map</em> (center), <em>selected lens</em> (right). Everything updates together when you interact.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/02-onboarding.png" alt="Onboarding card visible after opening a case" />
+              <figcaption>First-time onboarding card nudges you into the three-panel layout.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-2">
+      <div class="phase-head">
+        <span class="phase-num">Phase 2</span>
+        <h2>Situate &mdash; Understand the Design Problem Before You Ask Anything</h2>
+      </div>
+      <p class="phase-goal">Most students skip this phase and jump straight to asking the swarm. Resist that urge. You cannot ask useful questions about a design you don&rsquo;t yet understand &mdash; <strong>read first, ask second</strong>. Budget 5&ndash;8 minutes.</p>
+
+      <ol class="tour" style="counter-reset: step 3;">
+        <li>
+          <div class="step-body">
+            <h3>Read the Case Brief First</h3>
+            <span class="target">Left panel &middot; Intake</span>
+            <p>The left panel holds the instructor&rsquo;s brief &mdash; read it before touching the map so you understand the <em>design problem, the learners, and the constraints</em> in play. You&rsquo;ll come back to this panel often.</p>
+            <p>Once you&rsquo;ve read it, collapse the panel with the chevron to give the network map more room &mdash; the graph will visibly re-spread into the reclaimed space.</p>
+            <div class="callouts two">
+              <div class="callout success">
+                <span class="label">You&rsquo;re ready to continue when</span>
+                <p>You can answer three questions without looking: <em>Who are the learners? What&rsquo;s the goal? What&rsquo;s the main constraint?</em></p>
+              </div>
+              <div class="callout warn">
+                <span class="label">Most common stumble</span>
+                <p>Reading the brief too fast. The map structure &mdash; clusters, edges, tensions &mdash; only makes sense once the brief is already in your head.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/02-onboarding.png" alt="Intake panel with the case brief on the left" />
+              <figcaption>Intake panel on the left &mdash; brief, stakeholders, constraints.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>Explore the Case Map</h3>
+            <span class="target">Network stage &middot; D3 force graph</span>
+            <p>Scan the main clusters first &mdash; stakeholders (teacher, learner, admin, IT), constraints (time, budget, accessibility), and tensions (what&rsquo;s pulling against what). Hover any node to read its detail; click a stakeholder node to <strong>shift the Selected lens panel</strong> into their point of view.</p>
+            <p>Think of this as walking the perimeter of a design space before you start drawing in it. Which cluster is densest? Where are the surprising edges between stakeholders? Which constraints are the non-negotiables?</p>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/04-case-map.png" alt="Case map after opening a case" />
+              <figcaption>The D3 network clusters issue nodes around the stakeholders and constraints pulled from the brief.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-3">
+      <div class="phase-head">
+        <span class="phase-num">Phase 3</span>
+        <h2>Interrogate &mdash; Put the Design Under Pressure</h2>
+      </div>
+      <p class="phase-goal">Now you ask questions &mdash; but not to be answered, to be <em>tested</em>. The swarm is designed to disagree with itself so you can see where the real trade-offs live. Plan 10&ndash;15 minutes across two or three rounds.</p>
+
+      <ol class="tour" style="counter-reset: step 5;">
+        <li>
+          <div class="step-body">
+            <h3>Ask the Swarm</h3>
+            <span class="target">Composer &middot; Ask a question</span>
+            <p>Ask <strong>one focused question</strong> &mdash; a tension you noticed, a tradeoff, or a stakeholder concern. Examples:</p>
+            <p style="margin-left: 14px; border-left: 3px solid var(--accent-border); padding-left: 12px; color: var(--ink-soft); font-style: italic;">&ldquo;How does learner autonomy conflict with teacher review load in this lesson?&rdquo;<br />&ldquo;If accessibility is a hard constraint, which part of the engagement phase do we have to redesign?&rdquo;</p>
+            <p>Five AI agents answer in a single round with different stances, and their agreements and disagreements get wired into the map as new edges.</p>
+          </div>
+          <div class="shot dual">
+            <figure>
+              <img src="assets/05-first-question.png" alt="Composer with the first question typed in" />
+              <figcaption>Typing your first focused question.</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/06-swarm-round.png" alt="Swarm round — five agent responses visible" />
+              <figcaption>One round &rarr; five different stances.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>Compare Stances &mdash; Disagreement Is the Signal</h3>
+            <span class="target">Chat thread &middot; multi-agent replies</span>
+            <p>Read all five replies, not just the first. Where do they agree? Where do they split? The <strong>split points are the actual design decisions</strong> you have to make.</p>
+            <p>A second classifier pass runs automatically and draws disagreement edges on the map &mdash; watch the graph re-layout as the swarm&rsquo;s dissent becomes visible structure.</p>
+            <div class="callouts">
+              <div class="callout success">
+                <span class="label">You&rsquo;re doing it right when</span>
+                <p>You can name at least one pair of agents that disagreed and say what the disagreement was about. If all five agents sound the same, your question was too narrow &mdash; try again.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/07-disagreement-edges.png" alt="Map with disagreement edges drawn after a swarm round" />
+              <figcaption>Disagreement edges get wired into the map after the classifier pass.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>Challenge a Weak Response</h3>
+            <span class="target">Each agent reply &middot; <em>Challenge</em> button</span>
+            <p>Each agent reply has a <strong>Challenge</strong> button. Use it when a response sounds plausible but ignores something you see in the brief. Your challenge is logged, a disagreement edge is drawn from your challenge to the agent&rsquo;s claim, and the swarm has to account for your objection in the next round.</p>
+            <p>This is where Swarm ID stops feeling like a chatbot and starts feeling like a <strong>design-studio critique</strong>. Push back. The tool is built to handle it.</p>
+            <div class="callouts">
+              <div class="callout warn">
+                <span class="label">Most common stumble</span>
+                <p>Accepting the first confident-sounding agent reply as the answer. If you never use Challenge at least once per session, you&rsquo;re missing half of what the tool does.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/08-challenge-button.png" alt="Challenge button on an agent reply" />
+              <figcaption>The <strong>Challenge</strong> button appears on every agent reply.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-4">
+      <div class="phase-head">
+        <span class="phase-num">Phase 4</span>
+        <h2>Contribute &mdash; Make the Map Yours</h2>
+      </div>
+      <p class="phase-goal">Up to here you&rsquo;ve been reacting to the swarm. Now you add <em>your own</em> thinking to the case &mdash; a private learner layer that persists between sessions and that your instructor can see in your report. Spend 5&ndash;10 minutes.</p>
+
+      <ol class="tour" style="counter-reset: step 8;">
+        <li>
+          <div class="step-body">
+            <h3>Add Your Own Node</h3>
+            <span class="target">Selected lens panel &middot; <em>Add a node</em> (green header)</span>
+            <p>Add a node for a question or issue you want to track from your own point of view &mdash; something the swarm didn&rsquo;t raise, a constraint you noticed in the brief, or a design alternative you want to develop.</p>
+            <p>Your node joins a private learner layer on top of the case map. It persists between sessions, and your instructor can see it in the report. You can add several across one session.</p>
+            <div class="callouts">
+              <div class="callout success">
+                <span class="label">This is what makes your work original</span>
+                <p>The swarm generates a lot of surface. Your nodes are the record of <em>what you</em> decided was important.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/09-add-agenda.png" alt="Add-to-map form under the selected lens panel" />
+              <figcaption>The green <strong>Add a node</strong> form is the primary action on the right panel.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>Go 1-on-1 with a Stakeholder</h3>
+            <span class="target">Perspectives view &middot; single-channel chat</span>
+            <p>Switch to the <strong>Perspectives</strong> view (top nav) for a single-channel chat that answers from one stakeholder&rsquo;s point of view. Use it to go deeper than the multi-agent swarm round &mdash; one voice, follow-up questions, full turn-by-turn.</p>
+            <p>This is where you pressure-test a single viewpoint. How would the <em>teacher</em> respond if you pushed them on review load? How would the <em>student</em> respond if you pushed them on autonomy?</p>
+          </div>
+          <div class="no-shot">
+            Screenshot not yet captured for the student-side Perspectives chat. Re-run <code>node scripts/capture-guides.mjs student en</code> after adding a Perspectives step to regenerate.
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-5">
+      <div class="phase-head">
+        <span class="phase-num">Phase 5</span>
+        <h2>Synthesize &mdash; Turn the Session Into a Defensible Decision</h2>
+      </div>
+      <p class="phase-goal">This is where students most often under-invest and where instructors look hardest. The reflection is the difference between &ldquo;I played with a tool&rdquo; and &ldquo;I made a reasoned instructional-design decision.&rdquo; Spend 8&ndash;10 minutes.</p>
+
+      <ol class="tour" style="counter-reset: step 10;">
+        <li>
+          <div class="step-body">
+            <h3>Write Your Reflection, Then Submit</h3>
+            <span class="target">Report view &middot; Reflection prompts</span>
+            <p>Open the <strong>Report</strong> view. The prompts there scaffold the move from exploration to decision: <em>what tension did you surface, what trade-off did you accept, what design choice did you make, and why?</em></p>
+            <p>When you&rsquo;re ready, use the Download button at the bottom to export your report or submit it to your instructor. Your private nodes, your challenges, and your reflection all ride together in the export.</p>
+            <div class="callouts two">
+              <div class="callout success">
+                <span class="label">A strong reflection</span>
+                <p>Names one specific design decision, cites at least one swarm disagreement or challenge as evidence, and connects back to a course concept (ADDIE phase, 5E step, CT strategy, AI integration pattern).</p>
+              </div>
+              <div class="callout warn">
+                <span class="label">A weak reflection</span>
+                <p>Summarizes what the swarm said. If your reflection could be written without having used Swarm ID, you haven&rsquo;t synthesized.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot dual">
+            <figure>
+              <img src="assets/10-report.png" alt="Report view with reflection prompts" />
+              <figcaption>Report view &mdash; reflection prompts scaffold the decision.</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/11-export.png" alt="Report export / download action" />
+              <figcaption>Download / submit the finished report.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="fallback">
+      <h3>Fallback tour step &mdash; shown only when you haven&rsquo;t opened a case yet</h3>
+      <p><strong>Pick a Case to Load the Map.</strong> Pick one published case from the list above and its network map will load here. Replay the tutorial after you&rsquo;ve opened a case &mdash; it will walk you through reading the brief, exploring the map, asking the swarm, challenging responses, adding your own node, and writing a reflection.</p>
+    </div>
+
+    <section class="tips">
+      <h2>Tips for a Productive Session</h2>
+      <ul>
+        <li><strong>One case, two or three rounds.</strong> Don&rsquo;t open four cases and ask one shallow question each. Open one case and ask three progressively sharper questions.</li>
+        <li><strong>Use Challenge at least once.</strong> If every agent reply looks reasonable, your question was too soft. Push back on the one that feels weakest.</li>
+        <li><strong>Add nodes as you go, not at the end.</strong> Capture your thinking as it happens. A node you add in the middle of a swarm round is worth three you try to reconstruct later.</li>
+        <li><strong>Switch to Perspectives when you want depth.</strong> The swarm is wide; Perspectives is deep. Use the swarm to find the trade-off, then Perspectives to pressure-test one side of it.</li>
+        <li><strong>Collapse panels you&rsquo;re not using.</strong> The chevrons on the left and right panels reclaim canvas space for the map. The graph re-spreads when you collapse &mdash; that&rsquo;s a feature, not a glitch.</li>
+        <li><strong>Write your reflection while the session is warm.</strong> Don&rsquo;t close the tab and come back tomorrow. Export while the disagreements are still in your head.</li>
+      </ul>
+    </section>
+
+    <section class="link-learning">
+      <h2>How This Connects to What You&rsquo;re Learning in W200</h2>
+      <ul>
+        <li><strong>ADDIE / 5E framing.</strong> The brief in the left panel is effectively an <em>Analyze</em> output; the map gives you the <em>Design</em> surface; your reflection sits at the transition from Design to Develop.</li>
+        <li><strong>Merrill&rsquo;s First Principles &amp; Gagn&eacute;&rsquo;s Nine Events.</strong> Use the swarm to ask where a specific event (motivation, guidance, practice, feedback) is under-served in the current design.</li>
+        <li><strong>Community of Inquiry.</strong> The three panels roughly mirror the three presences: brief = cognitive, Perspectives = social, your private nodes = teaching presence as you plan the intervention.</li>
+        <li><strong>AI &amp; Computational Thinking.</strong> The swarm itself is an AI artifact you&rsquo;re being asked to critique. Notice when it overgeneralizes, when it confabulates, when it agrees too fast &mdash; those are moments to use Challenge.</li>
+        <li><strong>ARCS + Gamification.</strong> Your reflection is where you connect a design move to an ARCS lever (Attention, Relevance, Confidence, Satisfaction) and say why that lever matters for <em>your</em> learners.</li>
+      </ul>
+    </section>
+
+    <footer>
+      Generated from <code>getTutorialSteps()</code> in <code>app.js</code> &middot; English strings only. Screenshots captured by <code>scripts/capture-guides.mjs</code> against <code>https://swarmid.vercel.app</code>. A parallel Korean version lives in the same function and is kept in sync. Journey framing (Orient &rarr; Situate &rarr; Interrogate &rarr; Contribute &rarr; Synthesize) is pedagogical scaffolding for classroom use and is not enforced by the tool itself.
+    </footer>
+  </main>
+</body>
+</html>

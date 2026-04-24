@@ -78,13 +78,15 @@ const translations = {
     landingHeroBody: "Human judgment, institutional friction, and AI reasoning in one responsive field.",
     landingTutorialsKicker: "Tutorials",
     landingTutorialsTitle: "First time here? Walk through the guide.",
-    landingTutorialsBody: "Step-by-step Korean tutorials for students and instructors — the whole classroom loop in one page.",
-    landingTutorialStudent: "Student guide (KO)",
-    landingTutorialInstructor: "Instructor guide (KO)",
+    landingTutorialsBody: "Step-by-step tutorials for students and instructors — the whole classroom loop in one page. Each guide has an in-page language toggle.",
+    landingTutorialRoleStudent: "Student",
+    landingTutorialRoleInstructor: "Instructor",
+    landingTutorialLangKo: "한국어 가이드",
+    landingTutorialLangEn: "English guide",
     landingDeveloperKicker: "Developer",
     landingDeveloperTitle: "Built by Designtension Lab",
     landingDeveloperBody: "Swarm ID is an open instructional-design research platform. Reach out for collaborations, feedback, or bug reports.",
-    landingDeveloperContact: "Contact the developer",
+    landingDeveloperContact: "View developer profile",
     signalTeacherLoad: "Teacher load",
     signalStudentAgency: "Student agency",
     signalGovernance: "Governance",
@@ -387,13 +389,15 @@ const translations = {
     landingHeroBody: "사람의 판단, 제도적 제약, AI 추론을 하나의 화면에서 함께 살펴봅니다.",
     landingTutorialsKicker: "튜토리얼",
     landingTutorialsTitle: "처음 오셨나요? 가이드를 따라가 보세요.",
-    landingTutorialsBody: "학생용·교수자용 한글 가이드로 수업의 전 과정을 한 페이지에서 익힐 수 있어요.",
-    landingTutorialStudent: "학생 가이드",
-    landingTutorialInstructor: "교수자 가이드",
+    landingTutorialsBody: "학생용·교수자용 가이드로 수업의 전 과정을 한 페이지에서 익힐 수 있어요. 가이드 안에서 한국어·영어를 자유롭게 전환할 수 있습니다.",
+    landingTutorialRoleStudent: "학생",
+    landingTutorialRoleInstructor: "교수자",
+    landingTutorialLangKo: "한국어 가이드",
+    landingTutorialLangEn: "영어 가이드",
     landingDeveloperKicker: "개발자",
     landingDeveloperTitle: "Designtension Lab이 만들었어요",
     landingDeveloperBody: "Swarm ID는 수업 설계 연구를 위한 오픈 플랫폼이에요. 협업, 피드백, 버그 제보는 언제든 환영합니다.",
-    landingDeveloperContact: "개발자에게 연락하기",
+    landingDeveloperContact: "개발자 프로필 보기",
     signalTeacherLoad: "교수자 부담",
     signalStudentAgency: "학생 주체성",
     signalGovernance: "거버넌스",
@@ -993,10 +997,18 @@ function applyStaticTranslations() {
   if (tutorialsTitle) tutorialsTitle.textContent = t("landingTutorialsTitle");
   const tutorialsBody = document.getElementById("landing-tutorials-body");
   if (tutorialsBody) tutorialsBody.textContent = t("landingTutorialsBody");
-  const tutorialStudent = document.getElementById("landing-tutorial-student");
-  if (tutorialStudent) tutorialStudent.textContent = t("landingTutorialStudent");
-  const tutorialInstructor = document.getElementById("landing-tutorial-instructor");
-  if (tutorialInstructor) tutorialInstructor.textContent = t("landingTutorialInstructor");
+  document.querySelectorAll('.tutorial-link-role[data-role="student"]').forEach((el) => {
+    el.textContent = t("landingTutorialRoleStudent");
+  });
+  document.querySelectorAll('.tutorial-link-role[data-role="instructor"]').forEach((el) => {
+    el.textContent = t("landingTutorialRoleInstructor");
+  });
+  document.querySelectorAll('.tutorial-link-label[data-lang="ko"]').forEach((el) => {
+    el.textContent = t("landingTutorialLangKo");
+  });
+  document.querySelectorAll('.tutorial-link-label[data-lang="en"]').forEach((el) => {
+    el.textContent = t("landingTutorialLangEn");
+  });
 
   const developerKicker = document.getElementById("landing-developer-kicker");
   if (developerKicker) developerKicker.textContent = t("landingDeveloperKicker");

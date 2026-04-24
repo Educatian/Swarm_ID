@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Swarm ID — Instructor Session Guide (English)</title>
+  <style>
+    :root {
+      --ink: #0b1538;
+      --ink-soft: #1f2a55;
+      --muted: #4a5578;
+      --muted-2: #6b7498;
+      --accent: #2a3fc8;
+      --accent-soft: rgba(42, 63, 200, 0.08);
+      --accent-border: rgba(42, 63, 200, 0.35);
+      --primary: #1d4ed8;
+      --primary-grad: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      --success: #15803d;
+      --success-soft: rgba(34, 197, 94, 0.12);
+      --success-border: rgba(21, 128, 61, 0.4);
+      --warn: #b45309;
+      --warn-soft: rgba(245, 158, 11, 0.12);
+      --warn-border: rgba(180, 83, 9, 0.45);
+      --danger: #b91c1c;
+      --rule: #e2e6f4;
+      --bg: #f5f7fc;
+      --card: #ffffff;
+      --shadow: 0 1px 2px rgba(11, 21, 56, 0.04), 0 6px 20px rgba(11, 21, 56, 0.06);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.65;
+      padding: 48px 24px 96px;
+      -webkit-font-smoothing: antialiased;
+    }
+    main { max-width: 980px; margin: 0 auto; }
+    header.doc-header { margin-bottom: 36px; padding-bottom: 22px; border-bottom: 1px solid var(--rule); }
+    .eyebrow {
+      display: inline-block; font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent); background: var(--accent-soft);
+      border: 1px solid var(--accent-border); border-radius: 999px;
+      padding: 3px 10px; margin-bottom: 12px;
+    }
+    h1 { margin: 0 0 8px; font-size: 2.05rem; letter-spacing: -0.022em; line-height: 1.2; }
+    .subtitle { margin: 0; color: var(--muted); font-size: 1.05rem; max-width: 720px; }
+    .meta { margin-top: 16px; color: var(--muted-2); font-size: 0.85rem; }
+    .meta code { background: #eef1fb; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+    nav.journey {
+      background: var(--card); border: 1px solid var(--rule);
+      border-radius: 14px; padding: 22px 26px; margin-bottom: 34px; box-shadow: var(--shadow);
+    }
+    nav.journey h2 {
+      margin: 0 0 14px; font-size: 0.82rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    }
+    .journey-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 720px) { .journey-grid { grid-template-columns: repeat(5, 1fr); } }
+    .journey-card {
+      border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px;
+      background: #fafbff; text-decoration: none; color: var(--ink);
+      transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+    }
+    .journey-card:hover { background: #eef1fb; border-color: var(--accent-border); transform: translateY(-1px); }
+    .journey-card .phase {
+      display: block; font-size: 0.72rem; font-weight: 600;
+      color: var(--accent); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px;
+    }
+    .journey-card .phase-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 2px; }
+    .journey-card .phase-time { font-size: 0.75rem; color: var(--muted-2); }
+    section.intro {
+      background: var(--card); border: 1px solid var(--rule);
+      border-radius: 14px; padding: 24px 28px; margin-bottom: 28px; box-shadow: var(--shadow);
+    }
+    section.intro h2 { margin: 0 0 10px; font-size: 1.2rem; letter-spacing: -0.01em; }
+    section.intro p { margin: 0 0 12px; color: var(--ink-soft); }
+    section.intro p:last-child { margin-bottom: 0; }
+    .pill-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
+    .pill-list span {
+      font-size: 0.78rem; padding: 4px 12px; border-radius: 999px;
+      background: var(--accent-soft); border: 1px solid var(--accent-border);
+      color: var(--accent); font-weight: 500;
+    }
+    .phase-wrap { margin: 52px 0 24px; padding-top: 10px; border-top: 2px solid var(--accent); }
+    .phase-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
+    .phase-num {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      color: var(--accent); background: var(--accent-soft);
+      border: 1px solid var(--accent-border); padding: 4px 12px; border-radius: 999px;
+    }
+    .phase-wrap h2 { margin: 0; font-size: 1.55rem; letter-spacing: -0.02em; }
+    .phase-goal { margin: 4px 0 18px; color: var(--muted); font-size: 0.98rem; max-width: 760px; }
+    ol.tour { counter-reset: step; list-style: none; padding: 0; margin: 0; }
+    ol.tour > li {
+      counter-increment: step; background: var(--card); border: 1px solid var(--rule);
+      border-radius: 14px; margin-bottom: 22px; overflow: hidden; box-shadow: var(--shadow);
+    }
+    .step-body { padding: 26px 30px 22px; position: relative; padding-left: 86px; }
+    .step-body::before {
+      content: counter(step); position: absolute; top: 26px; left: 26px;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--primary-grad); color: #fff; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; box-shadow: 0 2px 6px rgba(29, 78, 216, 0.28);
+    }
+    .step-body h3 { margin: 0 0 6px; font-size: 1.15rem; letter-spacing: -0.01em; }
+    .target {
+      display: inline-block; font-size: 0.72rem; font-weight: 600;
+      color: var(--accent); background: var(--accent-soft);
+      border: 1px solid var(--accent-border); border-radius: 999px;
+      padding: 2px 10px; margin-bottom: 14px;
+    }
+    .step-body p { margin: 0 0 12px; color: var(--ink); }
+    .step-body p:last-child { margin-bottom: 0; }
+    .step-body strong { color: var(--ink); }
+    .callouts { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
+    @media (min-width: 760px) { .callouts.two { grid-template-columns: 1fr 1fr; } }
+    .callout { border-radius: 10px; padding: 12px 14px; border: 1px solid; font-size: 0.88rem; line-height: 1.55; }
+    .callout .label {
+      display: block; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.08em; margin-bottom: 6px;
+    }
+    .callout p { margin: 0; color: var(--ink-soft); }
+    .callout.success { background: var(--success-soft); border-color: var(--success-border); }
+    .callout.success .label { color: var(--success); }
+    .callout.warn { background: var(--warn-soft); border-color: var(--warn-border); }
+    .callout.warn .label { color: var(--warn); }
+    .shot { background: #0b1538; border-top: 1px solid var(--rule); padding: 18px; display: grid; gap: 14px; }
+    .shot.dual { grid-template-columns: 1fr; }
+    @media (min-width: 760px) { .shot.dual { grid-template-columns: 1fr 1fr; } }
+    .shot figure { margin: 0; background: #0b1538; border-radius: 8px; overflow: hidden; }
+    .shot img { display: block; width: 100%; height: auto; border-radius: 6px; }
+    .shot figcaption {
+      margin-top: 8px; font-size: 0.76rem; color: #c4cbea;
+      font-style: italic; text-align: center;
+    }
+    .fallback {
+      margin-top: 32px; padding: 22px 28px;
+      border: 1px dashed #c8cfe6; border-radius: 14px; background: #fcfcff;
+    }
+    .fallback h3 { margin: 0 0 10px; font-size: 1rem; color: var(--muted); letter-spacing: -0.01em; }
+    .fallback p { margin: 0; color: var(--muted); font-size: 0.93rem; }
+    section.tips, section.link-learning {
+      background: var(--card); border: 1px solid var(--rule);
+      border-radius: 14px; padding: 26px 30px; margin-top: 32px; box-shadow: var(--shadow);
+    }
+    section.tips h2, section.link-learning h2 { margin: 0 0 14px; font-size: 1.2rem; letter-spacing: -0.01em; }
+    section.tips ul, section.link-learning ul { padding-left: 20px; margin: 0; }
+    section.tips li, section.link-learning li { margin-bottom: 8px; color: var(--ink-soft); }
+    section.link-learning li strong { color: var(--ink); }
+    .accounts-box {
+      margin-top: 18px; padding: 16px 20px; background: #f6f8fe;
+      border: 1px solid var(--rule); border-radius: 12px; font-size: 0.88rem;
+    }
+    .accounts-box strong { color: var(--ink); }
+    .accounts-box code { background: #e8ecf7; padding: 1px 6px; border-radius: 4px; font-size: 0.85em; }
+    footer {
+      margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--rule);
+      color: var(--muted-2); font-size: 0.8rem;
+    }
+    @media print {
+      body { background: #fff; padding: 24px; }
+      section.intro, ol.tour > li, .fallback, section.tips, section.link-learning, nav.journey {
+        box-shadow: none; break-inside: avoid;
+      }
+      ol.tour > li { page-break-inside: avoid; }
+      .shot { background: #f2f4fa; }
+      .shot figcaption { color: #4a5578; }
+    }
+  </style>
+</head>
+<body>
+  <div class="locale-toggle-bar" role="navigation" aria-label="Language selector">
+    <div class="locale-toggle-inner">
+      <span class="locale-toggle-label">Language</span>
+      <a href="../instructor-ko/" class="locale-pill">한국어</a>
+      <a href="../instructor-en/" class="locale-pill is-active" aria-current="page">English</a>
+    </div>
+  </div>
+  <style>
+    .locale-toggle-bar { position: sticky; top: 0; z-index: 50; background: rgba(245, 247, 252, 0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(121, 140, 171, 0.2); padding: 10px 24px; }
+    .locale-toggle-inner { max-width: 980px; margin: 0 auto; display: flex; align-items: center; gap: 10px; }
+    .locale-toggle-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; color: #6b7498; margin-right: 6px; }
+    .locale-pill { display: inline-flex; align-items: center; padding: 6px 14px; border-radius: 999px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(121, 140, 171, 0.25); background: white; color: #1f2a55; text-decoration: none; transition: transform 0.12s, background 0.12s, border-color 0.12s; }
+    .locale-pill:hover { transform: translateY(-1px); background: rgba(67, 97, 238, 0.08); border-color: rgba(67, 97, 238, 0.45); }
+    .locale-pill.is-active { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border-color: transparent; box-shadow: 0 6px 14px rgba(29, 78, 216, 0.28); }
+    .locale-pill.is-active:hover { transform: translateY(-1px); }
+  </style>
+  <main>
+    <header class="doc-header">
+      <span class="eyebrow">Swarm ID · Session Guide</span>
+      <h1>Instructor Session Guide</h1>
+      <p class="subtitle">A step-by-step walkthrough for running a full class session with Swarm ID &mdash; from case prep, to live facilitation during class, to post-session review. At each step we call out what to do, what your students will see on their screens, and where instructors most often get stuck.</p>
+      <p class="meta">URL: <code>https://swarmid.vercel.app</code> · Role: Instructor (<code>admin</code>) · Language: English · Class: FSU Learner Motivation</p>
+    </header>
+
+    <nav class="journey" aria-label="Instructor journey">
+      <h2>Five phases of running a session</h2>
+      <div class="journey-grid">
+        <a class="journey-card" href="#phase-1">
+          <span class="phase">Phase 1</span>
+          <div class="phase-title">Get ready</div>
+          <span class="phase-time">Before class · ~5 min</span>
+        </a>
+        <a class="journey-card" href="#phase-2">
+          <span class="phase">Phase 2</span>
+          <div class="phase-title">Create your case</div>
+          <span class="phase-time">Before class · 10&ndash;15 min</span>
+        </a>
+        <a class="journey-card" href="#phase-3">
+          <span class="phase">Phase 3</span>
+          <div class="phase-title">Class setup</div>
+          <span class="phase-time">Before class · ~5 min</span>
+        </a>
+        <a class="journey-card" href="#phase-4">
+          <span class="phase">Phase 4</span>
+          <div class="phase-title">Run the session</div>
+          <span class="phase-time">During class · 30&ndash;50 min</span>
+        </a>
+        <a class="journey-card" href="#phase-5">
+          <span class="phase">Phase 5</span>
+          <div class="phase-title">Reflect</div>
+          <span class="phase-time">After class · ~10 min</span>
+        </a>
+      </div>
+    </nav>
+
+    <section class="intro">
+      <h2>What makes Swarm ID different</h2>
+      <p>When a student asks a question, Swarm ID doesn't just call an LLM once. Instead, a <strong>swarm round</strong> fires &mdash; five stakeholder agents (Teacher, Student, IT, Administration, Accessibility) answer the <strong>same question in parallel</strong>, and a second classification pass sorts the answer pairs into <em>agree / disagree / partial</em>, drawing them as edges on the map. Students see plurality and points of conflict at a glance, and when an answer doesn't sit right they can hit <strong>Challenge</strong> to get a second-round elaboration from that agent.</p>
+      <p>Your job as instructor is to <em>set the stage</em> so the swarm does meaningful work inside a class activity &mdash; a strong brief, a deliberate publishing strategy, an eye for intervention moments during class, and a lens for interpreting student reports afterward. This guide walks those four skills in order.</p>
+      <div class="pill-list">
+        <span>Structure a brief</span>
+        <span>Manage publishing</span>
+        <span>Live facilitation</span>
+        <span>Trade-off review</span>
+        <span>Interpret reports</span>
+      </div>
+      <div class="accounts-box">
+        <p style="margin: 0 0 6px;"><strong>FSU test accounts (for the preview session)</strong></p>
+        <p style="margin: 0;">Instructor: <code>yujinpark@swarm.io</code> / <code>classfsuyp</code> · Students (examples): <code>fsuclass1@swarm.io</code>&ndash;<code>fsuclass8@swarm.io</code> / <code>classfsu1</code>&ndash;<code>classfsu8</code> · Class join code: <code>FSU-YJPARK</code> · Section: <code>FSU-A</code></p>
+      </div>
+    </section>
+
+    <div class="phase-wrap" id="phase-1">
+      <div class="phase-head">
+        <span class="phase-num">Phase 1</span>
+        <h2>Get ready &mdash; sign in and open the Studio</h2>
+      </div>
+      <p class="phase-goal">Before class, confirm that <strong>you can get into the tool without issues</strong> and that your class and case environment is intact. Five minutes is plenty.</p>
+
+      <ol class="tour">
+        <li>
+          <div class="step-body">
+            <h3>Sign in with your instructor account</h3>
+            <span class="target">Sign-in screen</span>
+            <p>Go to <strong>https://swarmid.vercel.app</strong> and sign in with your instructor account (Supabase auth). If you don't have an account yet, ask your platform administrator &mdash; self sign-up is intentionally disabled so class data stays inside the institution.</p>
+            <p>Use the language toggle in the top right to set <strong>EN</strong>. All UI copy and AI responses will render in English.</p>
+            <div class="callouts">
+              <div class="callout success">
+                <span class="label">What happens under the hood</span>
+                <p>After Supabase authenticates you, the app loads your institution and class context and restores recent cases and tutorial progress from <code>localStorage</code>.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/01-login.png" alt="Sign-in screen" />
+              <figcaption>Sign-in screen &mdash; enter your email and password, then set the language to EN.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>Confirm you've landed in the Studio</h3>
+            <span class="target">Studio · Case Network view</span>
+            <p>Once you're signed in, you'll land on the Studio's <strong>Case Network</strong> view. The left sidebar has navigation (Network · Perspectives · Trade-offs · Sandbox · Report) and a <strong>Current state</strong> health panel; the center holds the D3 network canvas; the right shows the <strong>Selected perspective</strong> and <strong>AI Collaboration Activity</strong> feed.</p>
+            <p>Next to <strong>AI Collaboration Activity</strong> in the top right, a pill reads <code>Cycle N · Round M</code>. <code>Cycle</code> is how many times the graph has re-rendered; <code>Round</code> is how many actual multi-agent turns have run. After class, a <code>Round</code> value well above zero is your evidence that students actually engaged the swarm.</p>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/02-studio-landing.png" alt="Studio right after sign-in" />
+              <figcaption>The Studio view you land on right after sign-in.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-2">
+      <div class="phase-head">
+        <span class="phase-num">Phase 2</span>
+        <h2>Create your case &mdash; structure a brief for class</h2>
+      </div>
+      <p class="phase-goal">Line up the case you'll use in class. Reuse an existing case, or turn a new brief into a case by letting Gemini structure it. Remember: <strong>the quality of the brief is the quality of the swarm</strong>.</p>
+
+      <ol class="tour" style="counter-reset: step 2;">
+        <li>
+          <div class="step-body">
+            <h3>Check your existing case library</h3>
+            <span class="target">Intake panel · case list</span>
+            <p>Scroll the <strong>Get started</strong> (intake) panel and review your <strong>class cases</strong>. Each card shows a title, summary, draft/published status, and Open/Publish buttons. Cards tagged <strong>Published</strong> are visible to students; <strong>Draft</strong> cards are instructor-only.</p>
+            <div class="callouts">
+              <div class="callout warn">
+                <span class="label">Most common admin mistake</span>
+                <p>The top reason students can't find a case: the card is still in <strong>Draft</strong>. One click on the card's <strong>Publish</strong> button fixes it.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/03-case-library.png" alt="Case library" />
+              <figcaption>Case list in the intake panel &mdash; draft/published status visible at a glance.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>Open one case to preview it</h3>
+            <span class="target">Card · <em>Open case</em></span>
+            <p>Click <strong>Open case</strong> on the card you plan to use in class (e.g., <em>Learner Motivation Case 1</em>) and the canvas will re-render: a central <strong>Core</strong> node (the case title), stakeholder nodes around it (Teacher · Student · IT · Admin · Accessibility), and signal nodes (goals · constraints · evidence) linked to each stakeholder. Every key node carries a <strong>source badge</strong> in its upper-right corner &mdash; a <code>Brief</code> badge means that node came from the uploaded brief.</p>
+            <p>Open it once yourself before class. This warms the cache and surfaces any Gemini quota issues ahead of time.</p>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/04-case-open.png" alt="A case opened on the canvas" />
+              <figcaption>The network laid out after opening a case.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>Upload and structure a new brief</h3>
+            <span class="target">Intake · brief upload area</span>
+            <p>Need a fresh case for this session? In the intake panel, paste your brief into the <strong>Paste your class brief</strong> text area and click <strong>Structure case</strong>. The system calls Gemini to extract goals, constraints, stakeholders, and seed evidence, turns them into a case record, and adds it to the list as a <strong>Draft</strong>.</p>
+            <div class="callouts two">
+              <div class="callout success">
+                <span class="label">What a good brief includes</span>
+                <p>Target learners, learning goals (ADDIE/5E-friendly language), constraints (time · tools · policy · workload), and at least one tension point (e.g., "authorship policy vs. AI-assisted drafting"). The more tension the brief encodes, the richer the swarm's disagreement edges.</p>
+              </div>
+              <div class="callout warn">
+                <span class="label">Briefs to avoid</span>
+                <p>Marketing-style copy like "this class is engaging and boosts student participation." There are no stakeholders or constraints to extract, so the map ends up thin.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/05-upload-brief.png" alt="Brief upload area" />
+              <figcaption>Paste your brief and hit the <strong>Structure case</strong> button.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-3">
+      <div class="phase-head">
+        <span class="phase-num">Phase 3</span>
+        <h2>Class setup &mdash; board settings and gates</h2>
+      </div>
+      <p class="phase-goal">Set the board rules before students arrive. These values govern the pace of the session (fast exploration vs. deliberate decisions). Five minutes.</p>
+
+      <ol class="tour" style="counter-reset: step 5;">
+        <li>
+          <div class="step-body">
+            <h3>Adjust board settings</h3>
+            <span class="target">Settings tab</span>
+            <p>Open <strong>Settings</strong> at the top to configure the cohort board. Key knobs:</p>
+            <ul style="margin: 0 0 12px; padding-left: 22px; color: var(--ink);">
+              <li><strong>Max learner nodes</strong> &mdash; cap on the nodes a single student can place on their personal map.</li>
+              <li><strong>Max AI expansions per node</strong> &mdash; cap on the follow-ups Gemini auto-generates under a student node.</li>
+              <li><strong>Governance gate / Accessibility gate</strong> &mdash; optional review gates students must pass before publishing a decision.</li>
+            </ul>
+            <p>The defaults are safe for a 30-student section. For a 50-minute class, we recommend <strong>Max learner nodes &ge; 6</strong>; for a shorter, more deliberate session, dial it down.</p>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/06-board-settings.png" alt="Board settings screen" />
+              <figcaption>Settings &mdash; learner node cap, AI expansion cap, and gates.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-4">
+      <div class="phase-head">
+        <span class="phase-num">Phase 4</span>
+        <h2>Run the session &mdash; live facilitation</h2>
+      </div>
+      <p class="phase-goal">While students run their swarms, you have four places to step in: <em>set context with Perspectives &rarr; check in with Trade-offs &rarr; run "what-if" experiments in the Sandbox &rarr; scan the Report outline</em>. 30&ndash;50 minutes.</p>
+
+      <ol class="tour" style="counter-reset: step 6;">
+        <li>
+          <div class="step-body">
+            <h3>Open with a prompt from Perspectives</h3>
+            <span class="target">Left nav · Perspectives</span>
+            <p>Before students run their own swarm rounds, switch to the <strong>Perspectives</strong> view and skim the top conflicts per stakeholder and their tension scores. This is where a strong opening prompt for the whole class takes shape.</p>
+            <div class="callouts">
+              <div class="callout success">
+                <span class="label">Example prompt</span>
+                <p><em>"If the Teacher score is 74 and the Student score is 58, which stakeholder is carrying more of the load right now, and which constraint put them there?"</em></p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/07-perspectives.png" alt="Perspectives view" />
+              <figcaption>Perspectives &mdash; top conflicts and tension scores per stakeholder.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>Use Trade-offs for a mid-class checkpoint</h3>
+            <span class="target">Left nav · Trade-offs</span>
+            <p>The <strong>Trade-offs</strong> view shows a radar (Personalization / Privacy / Accessibility / Feasibility / Teacher slack) and bar charts. The <strong>Matrix status</strong> label reads either <em>Needs attention / Watch / Balanced</em>.</p>
+            <p>Use it as a metacognitive prompt between activity beats: <em>"Where is conflict spiking right now, and which stakeholder's pressure is driving it?"</em></p>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/08-trade-offs.png" alt="Trade-offs view" />
+              <figcaption>Trade-offs &mdash; radar and the matrix status label.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>Run "what-if" experiments in the Sandbox</h3>
+            <span class="target">Left nav · Sandbox</span>
+            <p>In the <strong>Sandbox</strong>, apply one of the pre-defined scenarios (<em>50% budget cut · Accessibility mandated · Workload pressure</em>) and watch how the metrics redistribute. Turn on <strong>Auto-iterate</strong> to let the system shuffle conflicts until the board reaches a stable state.</p>
+            <p>This is ideal for "what-if" practice. Ask students to write down a prediction before you apply the scenario, reveal the outcome, and then discuss the gap between prediction and result.</p>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/09-sandbox.png" alt="Sandbox view" />
+              <figcaption>Sandbox &mdash; metrics redistribute after a scenario is applied.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-5">
+      <div class="phase-head">
+        <span class="phase-num">Phase 5</span>
+        <h2>Reflect &mdash; the Report and exports</h2>
+      </div>
+      <p class="phase-goal">After class, check the <strong>AI Collaboration Activity</strong> counters and export the report. This becomes your evidence base for designing the next session. Ten minutes.</p>
+
+      <ol class="tour" style="counter-reset: step 9;">
+        <li>
+          <div class="step-body">
+            <h3>Review and export the Report</h3>
+            <span class="target">Left nav · Report</span>
+            <p>The <strong>Report</strong> assembles decisions, evidence, and notes into a single shareable summary. <strong>Download PNG</strong> gives you a network image for slides; <strong>Download HTML</strong> is a standalone snapshot students can keep.</p>
+            <div class="callouts two">
+              <div class="callout success">
+                <span class="label">Signs of strong engagement</span>
+                <p>In a 30-student section, a <code>Round</code> counter of 30+ means most students actually ran the swarm. If personal student nodes average 2&ndash;3 each, the individual layer is working too.</p>
+              </div>
+              <div class="callout warn">
+                <span class="label">Signs you need to intervene</span>
+                <p>If <code>Round</code> is under 5, or you see <code>AI</code> badges everywhere but hardly any <code>Me</code> badges, the next class needs more explicit prompting, paired discussion, or a live demo of a swarm round.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/10-report.png" alt="Report view" />
+              <figcaption>Report &mdash; decisions, evidence, and notes assembled into one document.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <section class="tips">
+      <h2>Pre-flight checklist (5 minutes before class)</h2>
+      <ul>
+        <li><strong>Every case card for this class is "Published."</strong> Drafts won't appear for students.</li>
+        <li><strong>Board settings are configured.</strong> For a 50-minute class, <em>Max learner nodes &ge; 6</em>.</li>
+        <li><strong>Open the case once from your own account.</strong> Warms the cache and surfaces any Gemini quota issues.</li>
+        <li><strong>Set the projector / screen-share window to the Network view.</strong> When demonstrating, collapse the side panels with the chevrons so the map fills the canvas.</li>
+        <li><strong>Skim the student guide.</strong> Knowing the exact screens and wording students see helps you facilitate.</li>
+      </ul>
+    </section>
+
+    <section class="link-learning">
+      <h2>Troubleshooting (common symptoms)</h2>
+      <ul>
+        <li><strong>Students can't see the case.</strong> It's still a draft &mdash; hit <em>Publish</em> on the card.</li>
+        <li><strong>A student asked a question but the network didn't change.</strong> Either they didn't submit, or the Gemini key isn't set &mdash; check the Vercel <code>/api/gemini</code> logs.</li>
+        <li><strong>No disagreement edges anywhere.</strong> The second Gemini pass failed silently &mdash; look for <code>classifySwarmEdges</code> warnings in the console.</li>
+        <li><strong>UI is mixing English and Korean.</strong> Locale switched mid-render &mdash; click the locale button twice to force a full re-render.</li>
+        <li><strong>Left sidebar is clipped.</strong> Viewport too short &mdash; the sidebar scrolls independently, so drag its inner content.</li>
+      </ul>
+    </section>
+
+    <footer>
+      Adapted from the instructor-tutorial branch of <code>app.js</code> · Screenshots captured with Playwright from <code>https://swarmid.vercel.app</code> by <code>scripts/capture-guides.mjs</code>. The Korean and student editions share the same structure. The five phases (Ready &rarr; Case &rarr; Setup &rarr; Run &rarr; Reflect) are a pedagogical frame, not an order the tool itself enforces.
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer · Jewoo Kim — Swarm ID</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --bg: #f4f6fb;
+      --ink: #0f172a;
+      --muted: #475569;
+      --primary: #4361ee;
+      --primary-dark: #3449c8;
+      --card: rgba(255, 255, 255, 0.78);
+      --border: rgba(121, 140, 171, 0.2);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR",
+        -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      word-break: keep-all;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    body {
+      background-image:
+        radial-gradient(circle at 2px 2px, rgba(67, 97, 238, 0.08) 1px, transparent 0),
+        linear-gradient(rgba(215, 224, 238, 0.7) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(215, 224, 238, 0.7) 1px, transparent 1px);
+      background-size: 24px 24px, 24px 24px, 24px 24px;
+      min-height: 100vh;
+    }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .shell {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 22px;
+      border-radius: 22px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 18px 46px rgba(148, 163, 184, 0.14);
+      margin-bottom: 28px;
+    }
+    .topbar a.back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .topbar strong {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 28px;
+      align-items: center;
+      padding: 36px 32px;
+      border-radius: 28px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 24px 60px rgba(148, 163, 184, 0.18);
+      margin-bottom: 22px;
+    }
+    .avatar {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4361ee, #7aa7ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      box-shadow: 0 12px 30px rgba(67, 97, 238, 0.35);
+      flex-shrink: 0;
+    }
+    .hero-copy h1 {
+      margin: 0 0 6px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 2rem;
+      letter-spacing: -0.02em;
+    }
+    .hero-copy .role {
+      margin: 0 0 14px;
+      color: var(--primary);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.78rem;
+    }
+    .hero-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .section {
+      padding: 28px 32px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 18px 46px rgba(148, 163, 184, 0.12);
+      margin-bottom: 18px;
+    }
+    .section h2 {
+      margin: 0 0 16px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+    .section h2::before {
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    .section p, .section li {
+      color: var(--muted);
+      margin: 0 0 8px;
+    }
+    .section ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .project-card {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(67, 97, 238, 0.06);
+      border: 1px solid rgba(67, 97, 238, 0.12);
+    }
+    .project-card strong {
+      display: block;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.98rem;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .project-card span {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: white;
+      border: 1px solid var(--border);
+      transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s;
+      color: var(--ink);
+    }
+    .contact-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(67, 97, 238, 0.15);
+      border-color: rgba(67, 97, 238, 0.4);
+      text-decoration: none;
+    }
+    .contact-link .icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(67, 97, 238, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .contact-link .label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .contact-link .label small {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .contact-link .label span {
+      font-size: 0.92rem;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .foot {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 32px;
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        justify-items: center;
+      }
+      .hero-copy h1 { font-size: 1.6rem; }
+      .section, .hero { padding: 22px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <a class="back" href="../">← Swarm ID 홈으로</a>
+      <strong>Developer Profile</strong>
+    </div>
+
+    <section class="hero">
+      <div class="avatar">JK</div>
+      <div class="hero-copy">
+        <p class="role">Researcher · Developer</p>
+        <h1>Jewoo Kim</h1>
+        <p>수업 설계와 AI 에이전트가 만나는 지점을 연구합니다. Swarm ID는 교수자와 학생이 설계의 긴장을 함께 볼 수 있도록 만든 수업용 네트워크 플랫폼이에요.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>About</h2>
+      <p>Designtension Lab에서 수업 설계, 교사 교육, 다중 에이전트 AI 인터페이스를 잇는 연구를 하고 있습니다. 교실에서 실제로 쓰이면서 교수자의 판단과 학생의 목소리를 그대로 살리는 도구를 만드는 것이 목표입니다.</p>
+      <p>현재 관심 주제: 다중 관점 LLM 에이전트, 수업 설계 연구 방법론, 교수자 리뷰 부담 감소 자동화, 학습자 중심 평가 체계.</p>
+    </section>
+
+    <section class="section">
+      <h2>Selected projects</h2>
+      <div class="project-grid">
+        <div class="project-card">
+          <strong>Swarm ID</strong>
+          <span>다섯 에이전트가 수업 사례를 함께 토의하는 설계 긴장 시각화 플랫폼.</span>
+        </div>
+        <div class="project-card">
+          <strong>Designtension Studio</strong>
+          <span>교수자가 자신만의 사례와 기준으로 수업을 설계할 수 있는 스튜디오 환경.</span>
+        </div>
+        <div class="project-card">
+          <strong>Classroom research partnerships</strong>
+          <span>IU W200, Ewha EDU-101, FSU Learner Motivation 등에서 실제 수업 데이터를 기반으로 반복 개선 중.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Get in touch</h2>
+      <p>협업 제안, 수업 파일럿 문의, 버그 제보, 연구 피드백 모두 환영합니다. 아래 경로로 편하게 연락해주세요.</p>
+      <div class="contact-grid">
+        <a class="contact-link" href="mailto:jewoo@designtension.com">
+          <span class="icon">✉</span>
+          <span class="label">
+            <small>Email</small>
+            <span>jewoo@designtension.com</span>
+          </span>
+        </a>
+        <a class="contact-link" href="https://github.com/Educatian/Swarm_ID" target="_blank" rel="noopener">
+          <span class="icon">◆</span>
+          <span class="label">
+            <small>GitHub</small>
+            <span>Educatian/Swarm_ID</span>
+          </span>
+        </a>
+        <a class="contact-link" href="https://swarmid.vercel.app/" target="_blank" rel="noopener">
+          <span class="icon">◉</span>
+          <span class="label">
+            <small>Live app</small>
+            <span>swarmid.vercel.app</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <p class="foot">© Designtension Lab · Made with care for classroom research</p>
+  </div>
+</body>
+</html>

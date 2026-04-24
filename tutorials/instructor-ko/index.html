@@ -175,6 +175,22 @@
   </style>
 </head>
 <body>
+  <div class="locale-toggle-bar" role="navigation" aria-label="언어 선택">
+    <div class="locale-toggle-inner">
+      <span class="locale-toggle-label">Language</span>
+      <a href="../instructor-ko/" class="locale-pill is-active" aria-current="page">한국어</a>
+      <a href="../instructor-en/" class="locale-pill">English</a>
+    </div>
+  </div>
+  <style>
+    .locale-toggle-bar { position: sticky; top: 0; z-index: 50; background: rgba(245, 247, 252, 0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(121, 140, 171, 0.2); padding: 10px 24px; }
+    .locale-toggle-inner { max-width: 980px; margin: 0 auto; display: flex; align-items: center; gap: 10px; }
+    .locale-toggle-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; color: #6b7498; margin-right: 6px; }
+    .locale-pill { display: inline-flex; align-items: center; padding: 6px 14px; border-radius: 999px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(121, 140, 171, 0.25); background: white; color: #1f2a55; text-decoration: none; transition: transform 0.12s, background 0.12s, border-color 0.12s; }
+    .locale-pill:hover { transform: translateY(-1px); background: rgba(67, 97, 238, 0.08); border-color: rgba(67, 97, 238, 0.45); }
+    .locale-pill.is-active { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border-color: transparent; box-shadow: 0 6px 14px rgba(29, 78, 216, 0.28); }
+    .locale-pill.is-active:hover { transform: translateY(-1px); }
+  </style>
   <main>
     <header class="doc-header">
       <span class="eyebrow">Swarm ID · 수업 진행 가이드</span>
