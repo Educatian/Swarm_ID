@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Swarm ID — 강사 수업 진행 가이드 (한국어)</title>
+  <style>
+    :root {
+      --ink: #0b1538;
+      --ink-soft: #1f2a55;
+      --muted: #4a5578;
+      --muted-2: #6b7498;
+      --accent: #2a3fc8;
+      --accent-soft: rgba(42, 63, 200, 0.08);
+      --accent-border: rgba(42, 63, 200, 0.35);
+      --primary: #1d4ed8;
+      --primary-grad: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      --success: #15803d;
+      --success-soft: rgba(34, 197, 94, 0.12);
+      --success-border: rgba(21, 128, 61, 0.4);
+      --warn: #b45309;
+      --warn-soft: rgba(245, 158, 11, 0.12);
+      --warn-border: rgba(180, 83, 9, 0.45);
+      --danger: #b91c1c;
+      --rule: #e2e6f4;
+      --bg: #f5f7fc;
+      --card: #ffffff;
+      --shadow: 0 1px 2px rgba(11, 21, 56, 0.04), 0 6px 20px rgba(11, 21, 56, 0.06);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.65;
+      padding: 48px 24px 96px;
+      -webkit-font-smoothing: antialiased;
+      word-break: keep-all;
+    }
+    main { max-width: 980px; margin: 0 auto; }
+    header.doc-header { margin-bottom: 36px; padding-bottom: 22px; border-bottom: 1px solid var(--rule); }
+    .eyebrow {
+      display: inline-block; font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent); background: var(--accent-soft);
+      border: 1px solid var(--accent-border); border-radius: 999px;
+      padding: 3px 10px; margin-bottom: 12px;
+    }
+    h1 { margin: 0 0 8px; font-size: 2.05rem; letter-spacing: -0.022em; line-height: 1.2; }
+    .subtitle { margin: 0; color: var(--muted); font-size: 1.05rem; max-width: 720px; }
+    .meta { margin-top: 16px; color: var(--muted-2); font-size: 0.85rem; }
+    .meta code { background: #eef1fb; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+    nav.journey {
+      background: var(--card); border: 1px solid var(--rule);
+      border-radius: 14px; padding: 22px 26px; margin-bottom: 34px; box-shadow: var(--shadow);
+    }
+    nav.journey h2 {
+      margin: 0 0 14px; font-size: 0.82rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    }
+    .journey-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 720px) { .journey-grid { grid-template-columns: repeat(5, 1fr); } }
+    .journey-card {
+      border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px;
+      background: #fafbff; text-decoration: none; color: var(--ink);
+      transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+    }
+    .journey-card:hover { background: #eef1fb; border-color: var(--accent-border); transform: translateY(-1px); }
+    .journey-card .phase {
+      display: block; font-size: 0.72rem; font-weight: 600;
+      color: var(--accent); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px;
+    }
+    .journey-card .phase-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 2px; }
+    .journey-card .phase-time { font-size: 0.75rem; color: var(--muted-2); }
+    section.intro {
+      background: var(--card); border: 1px solid var(--rule);
+      border-radius: 14px; padding: 24px 28px; margin-bottom: 28px; box-shadow: var(--shadow);
+    }
+    section.intro h2 { margin: 0 0 10px; font-size: 1.2rem; letter-spacing: -0.01em; }
+    section.intro p { margin: 0 0 12px; color: var(--ink-soft); }
+    section.intro p:last-child { margin-bottom: 0; }
+    .pill-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
+    .pill-list span {
+      font-size: 0.78rem; padding: 4px 12px; border-radius: 999px;
+      background: var(--accent-soft); border: 1px solid var(--accent-border);
+      color: var(--accent); font-weight: 500;
+    }
+    .phase-wrap { margin: 52px 0 24px; padding-top: 10px; border-top: 2px solid var(--accent); }
+    .phase-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
+    .phase-num {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      color: var(--accent); background: var(--accent-soft);
+      border: 1px solid var(--accent-border); padding: 4px 12px; border-radius: 999px;
+    }
+    .phase-wrap h2 { margin: 0; font-size: 1.55rem; letter-spacing: -0.02em; }
+    .phase-goal { margin: 4px 0 18px; color: var(--muted); font-size: 0.98rem; max-width: 760px; }
+    ol.tour { counter-reset: step; list-style: none; padding: 0; margin: 0; }
+    ol.tour > li {
+      counter-increment: step; background: var(--card); border: 1px solid var(--rule);
+      border-radius: 14px; margin-bottom: 22px; overflow: hidden; box-shadow: var(--shadow);
+    }
+    .step-body { padding: 26px 30px 22px; position: relative; padding-left: 86px; }
+    .step-body::before {
+      content: counter(step); position: absolute; top: 26px; left: 26px;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--primary-grad); color: #fff; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; box-shadow: 0 2px 6px rgba(29, 78, 216, 0.28);
+    }
+    .step-body h3 { margin: 0 0 6px; font-size: 1.15rem; letter-spacing: -0.01em; }
+    .target {
+      display: inline-block; font-size: 0.72rem; font-weight: 600;
+      color: var(--accent); background: var(--accent-soft);
+      border: 1px solid var(--accent-border); border-radius: 999px;
+      padding: 2px 10px; margin-bottom: 14px;
+    }
+    .step-body p { margin: 0 0 12px; color: var(--ink); }
+    .step-body p:last-child { margin-bottom: 0; }
+    .step-body strong { color: var(--ink); }
+    .callouts { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
+    @media (min-width: 760px) { .callouts.two { grid-template-columns: 1fr 1fr; } }
+    .callout { border-radius: 10px; padding: 12px 14px; border: 1px solid; font-size: 0.88rem; line-height: 1.55; }
+    .callout .label {
+      display: block; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.08em; margin-bottom: 6px;
+    }
+    .callout p { margin: 0; color: var(--ink-soft); }
+    .callout.success { background: var(--success-soft); border-color: var(--success-border); }
+    .callout.success .label { color: var(--success); }
+    .callout.warn { background: var(--warn-soft); border-color: var(--warn-border); }
+    .callout.warn .label { color: var(--warn); }
+    .shot { background: #0b1538; border-top: 1px solid var(--rule); padding: 18px; display: grid; gap: 14px; }
+    .shot.dual { grid-template-columns: 1fr; }
+    @media (min-width: 760px) { .shot.dual { grid-template-columns: 1fr 1fr; } }
+    .shot figure { margin: 0; background: #0b1538; border-radius: 8px; overflow: hidden; }
+    .shot img { display: block; width: 100%; height: auto; border-radius: 6px; }
+    .shot figcaption {
+      margin-top: 8px; font-size: 0.76rem; color: #c4cbea;
+      font-style: italic; text-align: center;
+    }
+    .fallback {
+      margin-top: 32px; padding: 22px 28px;
+      border: 1px dashed #c8cfe6; border-radius: 14px; background: #fcfcff;
+    }
+    .fallback h3 { margin: 0 0 10px; font-size: 1rem; color: var(--muted); letter-spacing: -0.01em; }
+    .fallback p { margin: 0; color: var(--muted); font-size: 0.93rem; }
+    section.tips, section.link-learning {
+      background: var(--card); border: 1px solid var(--rule);
+      border-radius: 14px; padding: 26px 30px; margin-top: 32px; box-shadow: var(--shadow);
+    }
+    section.tips h2, section.link-learning h2 { margin: 0 0 14px; font-size: 1.2rem; letter-spacing: -0.01em; }
+    section.tips ul, section.link-learning ul { padding-left: 20px; margin: 0; }
+    section.tips li, section.link-learning li { margin-bottom: 8px; color: var(--ink-soft); }
+    section.link-learning li strong { color: var(--ink); }
+    .accounts-box {
+      margin-top: 18px; padding: 16px 20px; background: #f6f8fe;
+      border: 1px solid var(--rule); border-radius: 12px; font-size: 0.88rem;
+    }
+    .accounts-box strong { color: var(--ink); }
+    .accounts-box code { background: #e8ecf7; padding: 1px 6px; border-radius: 4px; font-size: 0.85em; }
+    footer {
+      margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--rule);
+      color: var(--muted-2); font-size: 0.8rem;
+    }
+    @media print {
+      body { background: #fff; padding: 24px; }
+      section.intro, ol.tour > li, .fallback, section.tips, section.link-learning, nav.journey {
+        box-shadow: none; break-inside: avoid;
+      }
+      ol.tour > li { page-break-inside: avoid; }
+      .shot { background: #f2f4fa; }
+      .shot figcaption { color: #4a5578; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="doc-header">
+      <span class="eyebrow">Swarm ID · 수업 진행 가이드</span>
+      <h1>강사 수업 진행 가이드</h1>
+      <p class="subtitle">Swarm ID로 수업 하나를 처음부터 끝까지 운영하는 방법을 단계별로 안내합니다 &mdash; 케이스 준비부터, 수업 중 라이브 퍼실리테이션, 세션 뒤 리뷰까지. 각 단계에서 무엇을 해야 하는지, 학생 화면에서 어떻게 보이는지, 그리고 어디서 가장 자주 막히는지를 짚어드립니다.</p>
+      <p class="meta">주소: <code>https://swarmid.vercel.app</code> · 역할: 강사 (<code>admin</code>) · 언어: 한국어 · 수업: FSU Learner Motivation</p>
+    </header>
+
+    <nav class="journey" aria-label="강사 진행 여정">
+      <h2>수업 하나를 운영하는 5단계</h2>
+      <div class="journey-grid">
+        <a class="journey-card" href="#phase-1">
+          <span class="phase">Phase 1</span>
+          <div class="phase-title">준비하기</div>
+          <span class="phase-time">수업 전 · 약 5분</span>
+        </a>
+        <a class="journey-card" href="#phase-2">
+          <span class="phase">Phase 2</span>
+          <div class="phase-title">케이스 만들기</div>
+          <span class="phase-time">수업 전 · 10&ndash;15분</span>
+        </a>
+        <a class="journey-card" href="#phase-3">
+          <span class="phase">Phase 3</span>
+          <div class="phase-title">수업 설정</div>
+          <span class="phase-time">수업 전 · 약 5분</span>
+        </a>
+        <a class="journey-card" href="#phase-4">
+          <span class="phase">Phase 4</span>
+          <div class="phase-title">수업 진행</div>
+          <span class="phase-time">수업 중 · 30&ndash;50분</span>
+        </a>
+        <a class="journey-card" href="#phase-5">
+          <span class="phase">Phase 5</span>
+          <div class="phase-title">되돌아보기</div>
+          <span class="phase-time">수업 후 · 약 10분</span>
+        </a>
+      </div>
+    </nav>
+
+    <section class="intro">
+      <h2>Swarm ID가 다른 이유</h2>
+      <p>학생이 질문을 하면 Swarm ID는 LLM을 한 번만 부르지 않습니다. 대신 <strong>스웜 라운드</strong>가 돕니다 &mdash; 다섯 명의 이해관계자 에이전트(교사·학생·IT·행정·접근성)가 같은 질문에 <strong>동시에</strong> 답하고, 2차 분류 패스가 답변 쌍을 <em>동의 / 이견 / 부분일치</em>로 나눠 맵 위에 엣지로 그려 줍니다. 학생은 다원성과 충돌 지점을 한눈에 보게 되고, 어떤 답이 납득이 안 되면 <strong>도전(Challenge)</strong>을 눌러 그 에이전트에게 2라운드 정교화를 받아냅니다.</p>
+      <p>강사로서 여러분의 일은 이 스웜이 수업 활동 안에서 의미 있게 돌아가도록 <em>무대를 설계</em>하는 것입니다 &mdash; 좋은 설명요약, 신중한 게시 전략, 수업 중에는 개입 포인트를 알아보는 눈, 세션 뒤에는 학생 리포트를 해석하는 안목. 이 가이드가 그 네 가지를 순서대로 잡아드립니다.</p>
+      <div class="pill-list">
+        <span>설명요약 구조화</span>
+        <span>게시 관리</span>
+        <span>라이브 퍼실리테이션</span>
+        <span>트레이드오프 리뷰</span>
+        <span>리포트 해석</span>
+      </div>
+      <div class="accounts-box">
+        <p style="margin: 0 0 6px;"><strong>FSU 수업 테스트 계정 (프리뷰 세션용)</strong></p>
+        <p style="margin: 0;">강사: <code>yujinpark@swarm.io</code> / <code>classfsuyp</code> · 학생 (예시): <code>fsuclass1@swarm.io</code> ~ <code>fsuclass8@swarm.io</code> / <code>classfsu1</code>~<code>classfsu8</code> · 수업 참여 코드: <code>FSU-YJPARK</code> · 섹션: <code>FSU-A</code></p>
+      </div>
+    </section>
+
+    <div class="phase-wrap" id="phase-1">
+      <div class="phase-head">
+        <span class="phase-num">Phase 1</span>
+        <h2>준비하기 &mdash; 로그인, 스튜디오 진입</h2>
+      </div>
+      <p class="phase-goal">수업 전에 <strong>도구에 문제없이 들어갈 수 있고</strong>, 내 수업·케이스 환경이 그대로 있는지를 확인합니다. 5분이면 충분합니다.</p>
+
+      <ol class="tour">
+        <li>
+          <div class="step-body">
+            <h3>강사 계정으로 로그인</h3>
+            <span class="target">로그인 화면</span>
+            <p><strong>https://swarmid.vercel.app</strong>에 접속해 강사 계정으로 로그인합니다(Supabase 인증). 계정이 아직 없으면 플랫폼 관리자에게 요청하세요 &mdash; 자가 가입은 수업 데이터를 기관 내부에 묶어두기 위해 의도적으로 비활성화돼 있습니다.</p>
+            <p>오른쪽 상단 언어 토글에서 <strong>KO</strong>로 맞춰 두세요. 모든 UI 문구와 AI 응답 언어가 한국어로 전환됩니다.</p>
+            <div class="callouts">
+              <div class="callout success">
+                <span class="label">내부에서 일어나는 일</span>
+                <p>Supabase에 인증한 뒤 기관·수업 컨텍스트를 불러오고, 최근 케이스와 튜토리얼 진행 상태를 <code>localStorage</code>에서 복원합니다.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/01-login.png" alt="로그인 화면" />
+              <figcaption>로그인 화면 &mdash; 이메일/비밀번호 입력 후 KO 토글로 언어를 맞추세요.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>스튜디오에 진입했는지 확인</h3>
+            <span class="target">스튜디오 · 케이스 네트워크 뷰</span>
+            <p>로그인이 끝나면 스튜디오의 <strong>케이스 네트워크</strong> 뷰로 진입합니다. 왼쪽 사이드바에는 네비게이션(네트워크 · 관점 · 트레이드오프 · 샌드박스 · 리포트)과 <strong>현재 상태</strong> 건강 패널이, 가운데에는 D3 네트워크 캔버스가, 오른쪽에는 <strong>선택된 관점</strong>과 <strong>AI 협력 활동</strong> 피드가 보입니다.</p>
+            <p>우측 상단 <strong>AI 협력 활동</strong> 옆의 알약 라벨은 <code>사이클 N · 라운드 M</code> 으로 뜹니다. <code>사이클</code>은 그래프 리렌더 횟수, <code>라운드</code>는 실제 다중 에이전트 턴 수입니다. 수업이 끝난 뒤 <code>라운드</code> 값이 0보다 충분히 커야 학생이 스웜에 실제로 개입했다는 증거입니다.</p>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/02-studio-landing.png" alt="로그인 직후 스튜디오" />
+              <figcaption>로그인 직후 들어가는 스튜디오 뷰.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-2">
+      <div class="phase-head">
+        <span class="phase-num">Phase 2</span>
+        <h2>케이스 만들기 &mdash; 수업용 설명요약을 구조화</h2>
+      </div>
+      <p class="phase-goal">수업에서 쓸 케이스를 확보합니다. 기존 케이스를 재활용하거나, 새 설명요약을 Gemini로 구조화해 케이스를 생성합니다. <strong>설명요약의 품질이 곧 스웜의 품질</strong>이라는 점을 기억하세요.</p>
+
+      <ol class="tour" style="counter-reset: step 2;">
+        <li>
+          <div class="step-body">
+            <h3>기존 케이스 라이브러리 점검</h3>
+            <span class="target">인테이크 패널 · 케이스 목록</span>
+            <p><strong>시작하기</strong>(인테이크) 패널을 스크롤해 <strong>수업 케이스</strong> 목록을 확인하세요. 카드마다 제목·요약·초안/공개 상태·열기/공개 버튼이 보입니다. <strong>공개</strong> 태그가 붙은 카드는 학생에게 노출되고, <strong>초안</strong> 카드는 강사 전용입니다.</p>
+            <div class="callouts">
+              <div class="callout warn">
+                <span class="label">가장 흔한 관리 실수</span>
+                <p>학생이 케이스를 못 찾는 가장 큰 원인은 카드가 <strong>초안</strong> 상태로 남아 있어서입니다. 카드의 <strong>공개</strong> 버튼을 한 번만 누르면 해결됩니다.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/03-case-library.png" alt="케이스 라이브러리" />
+              <figcaption>인테이크 패널의 케이스 목록 &mdash; 초안/공개 상태 한눈에 확인.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>수업용 케이스 한 장 열어 예습</h3>
+            <span class="target">카드 · <em>케이스 열기</em></span>
+            <p>수업에 사용할 카드(예: <em>Learner Motivation 사례 1</em>)의 <strong>케이스 열기</strong>를 누르면 캔버스가 재렌더됩니다: 중앙 <strong>코어</strong> 노드(케이스 제목), 그 둘레의 이해관계자 노드(교사·학생·IT·행정·접근성), 각 이해관계자에 연결된 시그널 노드(목표·제약·증거). 모든 주요 노드에는 오른쪽 위에 <strong>출처 배지</strong>가 붙습니다 &mdash; <code>설명</code> 배지는 업로드된 설명요약에서 나온 노드라는 뜻.</p>
+            <p>수업 전에 강사가 직접 한 번 열어 보세요. 캐시를 데우고, Gemini 쿼터 이슈가 있는지 미리 걸러내는 용도입니다.</p>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/04-case-open.png" alt="케이스를 연 상태" />
+              <figcaption>케이스 하나를 연 뒤 네트워크가 펼쳐진 모습.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>새 설명요약 업로드 &amp; 구조화</h3>
+            <span class="target">인테이크 · 설명요약 업로드 영역</span>
+            <p>이번 수업에 새 케이스가 필요하면 인테이크 패널의 <strong>수업 설명요약을 붙여 넣으세요</strong> 텍스트 영역에 설명요약을 넣고 <strong>케이스 구조화</strong>를 누르세요. 시스템이 Gemini를 호출해 목표·제약·이해관계자·시드 증거를 뽑아낸 뒤 케이스 레코드로 만들고, 목록에 <strong>초안</strong> 상태로 올려 둡니다.</p>
+            <div class="callouts two">
+              <div class="callout success">
+                <span class="label">좋은 설명요약이 담는 요소</span>
+                <p>대상 학습자, 학습 목표(ADDIE/5E 친화적 언어), 제약(시간·도구·정책·워크로드), 최소 한 가지 긴장 지점(예: "저작 정책 vs AI 보조 드래프팅"). 긴장이 많이 인코딩될수록 스웜의 이견 엣지가 풍부해집니다.</p>
+              </div>
+              <div class="callout warn">
+                <span class="label">피해야 할 설명요약</span>
+                <p>"이 수업은 흥미롭고 학생 참여를 높입니다" 같은 마케팅 문구. 이해관계자·제약이 추출되지 않아 맵이 얇아집니다.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/05-upload-brief.png" alt="설명요약 업로드 영역" />
+              <figcaption>설명요약을 붙여 넣고 <strong>케이스 구조화</strong> 버튼.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-3">
+      <div class="phase-head">
+        <span class="phase-num">Phase 3</span>
+        <h2>수업 설정 &mdash; 보드 설정과 게이트</h2>
+      </div>
+      <p class="phase-goal">학생이 들어오기 전에 보드 룰을 정해 둡니다. 이 값들이 수업의 호흡(빠른 탐색 vs 신중한 결정)을 결정합니다. 5분.</p>
+
+      <ol class="tour" style="counter-reset: step 5;">
+        <li>
+          <div class="step-body">
+            <h3>보드 설정 조정</h3>
+            <span class="target">설정 탭</span>
+            <p>상단 <strong>설정</strong>을 열어 코호트 보드를 구성하세요. 핵심 노브:</p>
+            <ul style="margin: 0 0 12px; padding-left: 22px; color: var(--ink);">
+              <li><strong>학습자 노드 최대 개수</strong> &mdash; 학생 한 명이 개인 맵에 올릴 수 있는 노드 상한.</li>
+              <li><strong>노드당 AI 확장 최대 개수</strong> &mdash; Gemini가 학생 노드 아래에 자동 생성할 후속 개수 상한.</li>
+              <li><strong>거버넌스 게이트 / 접근성 게이트</strong> &mdash; 학생이 결정을 공개하기 전 리뷰 게이트(선택).</li>
+            </ul>
+            <p>기본값은 30명 섹션에 안전합니다. 50분 수업이면 <strong>학습자 노드 최대 개수 ≥ 6</strong>을 권장하고, 더 짧고 신중한 수업이면 값을 낮추세요.</p>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/06-board-settings.png" alt="보드 설정 화면" />
+              <figcaption>설정 &mdash; 학습자 노드 상한, AI 확장 상한, 게이트.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-4">
+      <div class="phase-head">
+        <span class="phase-num">Phase 4</span>
+        <h2>수업 진행 &mdash; 라이브 퍼실리테이션</h2>
+      </div>
+      <p class="phase-goal">학생이 스웜을 돌리는 동안 강사가 개입할 지점은 네 곳: <em>관점 요약으로 맥락 잡기 → 트레이드오프로 체크포인트 → 샌드박스로 "만약에" 실험 → 리포트 윤곽 확인</em>. 30&ndash;50분.</p>
+
+      <ol class="tour" style="counter-reset: step 6;">
+        <li>
+          <div class="step-body">
+            <h3>관점(Perspectives)으로 수업 여는 발문</h3>
+            <span class="target">왼쪽 내비 · 관점</span>
+            <p>학생이 각자 스웜 라운드를 돌리기 전에, <strong>관점</strong> 뷰로 전환해 이해관계자별 상위 충돌 요약과 긴장 점수를 훑으세요. 전체 수업에 던질 좋은 첫 발문이 여기서 만들어집니다.</p>
+            <div class="callouts">
+              <div class="callout success">
+                <span class="label">발문 예시</span>
+                <p><em>"교사 점수가 74이고 학생 점수가 58이라면, 지금 어느 이해관계자가 더 부담을 짊어지고 있고 어떤 제약이 그렇게 만들었을까요?"</em></p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/07-perspectives.png" alt="관점 뷰" />
+              <figcaption>관점 뷰 &mdash; 이해관계자별 상위 충돌과 긴장 점수.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>트레이드오프로 중간 체크포인트</h3>
+            <span class="target">왼쪽 내비 · 트레이드오프</span>
+            <p><strong>트레이드오프</strong> 뷰는 레이더(개인화 / 프라이버시 / 접근성 / 실현가능성 / 교사 여유)와 바 차트를 보여 줍니다. <strong>매트릭스 상태</strong> 라벨이 <em>주의 필요 / 경계 / 균형</em> 중 하나로 표시됩니다.</p>
+            <p>활동 단계 사이의 메타인지 프롬프트로 활용하세요: <em>"지금 어디서 충돌이 튀어오르고 있고, 그게 어느 이해관계자의 압력인가요?"</em></p>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/08-trade-offs.png" alt="트레이드오프 뷰" />
+              <figcaption>트레이드오프 &mdash; 레이더와 매트릭스 상태 라벨.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>샌드박스로 "만약에" 실험</h3>
+            <span class="target">왼쪽 내비 · 샌드박스</span>
+            <p><strong>샌드박스</strong>에서 사전 정의된 시나리오(<em>예산 50% 삭감 · 접근성 강제 · 워크로드 압박</em>)를 적용해 지표가 어떻게 재분배되는지 관찰할 수 있습니다. <strong>자율 반복</strong>을 켜면 시스템이 안정 상태에 이를 때까지 충돌을 셔플합니다.</p>
+            <p>"만약에" 연습에 가장 적합합니다. 시나리오 적용 전에 학생에게 예측을 쓰게 한 뒤 공개 → 실제 결과와 비교하며 토의하는 순서가 효과적입니다.</p>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/09-sandbox.png" alt="샌드박스 뷰" />
+              <figcaption>샌드박스 &mdash; 시나리오 적용 후 지표 재분배.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-5">
+      <div class="phase-head">
+        <span class="phase-num">Phase 5</span>
+        <h2>되돌아보기 &mdash; 리포트와 내보내기</h2>
+      </div>
+      <p class="phase-goal">수업이 끝난 뒤 <strong>AI 협력 활동</strong> 카운터를 확인하고 리포트를 내보냅니다. 이게 다음 수업 설계의 근거가 됩니다. 10분.</p>
+
+      <ol class="tour" style="counter-reset: step 9;">
+        <li>
+          <div class="step-body">
+            <h3>리포트 확인 &amp; 내보내기</h3>
+            <span class="target">왼쪽 내비 · 리포트</span>
+            <p><strong>리포트</strong>는 결정·증거·메모를 하나의 공유 가능한 요약으로 조립합니다. <strong>PNG 다운로드</strong>는 슬라이드용 네트워크 이미지, <strong>HTML 다운로드</strong>는 학생이 간직할 수 있는 독립형 스냅샷입니다.</p>
+            <div class="callouts two">
+              <div class="callout success">
+                <span class="label">활발한 참여의 신호</span>
+                <p>30명 섹션에서 <code>라운드</code> 카운터가 30 이상이라면 학생 대부분이 스웜을 실제로 돌렸다는 뜻. 학생 개인 노드도 평균 2&ndash;3개씩 붙어 있으면 개인 레이어까지 작동한 겁니다.</p>
+              </div>
+              <div class="callout warn">
+                <span class="label">개입이 필요한 신호</span>
+                <p><code>라운드</code>가 5 미만이거나 `AI` 배지만 가득하고 `나` 배지가 거의 없다면 다음 수업엔 더 명시적인 프롬프팅, 짝 토의, 또는 스웜 라운드 시연이 필요합니다.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/10-report.png" alt="리포트 뷰" />
+              <figcaption>리포트 &mdash; 결정·증거·메모가 한 문서로 조립됩니다.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <section class="tips">
+      <h2>수업 직전 프리플라이트 (5분 체크)</h2>
+      <ul>
+        <li><strong>모든 수업용 케이스 카드가 "공개" 상태.</strong> 초안으로 남아 있으면 학생이 못 봅니다.</li>
+        <li><strong>보드 설정 완료.</strong> 50분 수업이면 <em>학습자 노드 최대 개수 ≥ 6</em>.</li>
+        <li><strong>본인 계정으로 케이스를 최소 한 번 열어 예습.</strong> 캐시 워밍 + Gemini 쿼터 이슈 선검출.</li>
+        <li><strong>프로젝터/화면 공유 창을 네트워크 뷰로.</strong> 시연 시 좌우 패널을 쉐브론으로 접으면 맵이 캔버스를 꽉 채웁니다.</li>
+        <li><strong>학생 가이드를 미리 훑기.</strong> 학생이 보게 될 화면과 용어를 정확히 기억해 둡니다.</li>
+      </ul>
+    </section>
+
+    <section class="link-learning">
+      <h2>문제 해결 (자주 나오는 증상)</h2>
+      <ul>
+        <li><strong>학생이 케이스를 못 봄.</strong> 초안 상태 &mdash; 카드의 <em>공개</em>를 누르세요.</li>
+        <li><strong>질문했는데 네트워크가 그대로.</strong> 학생이 제출 안 했거나 Gemini 키 미설정 &mdash; Vercel의 <code>/api/gemini</code> 로그 확인.</li>
+        <li><strong>이견 엣지가 전혀 안 보임.</strong> 2차 Gemini 패스가 조용히 실패 &mdash; 콘솔에서 <code>classifySwarmEdges</code> 경고 확인.</li>
+        <li><strong>UI에 한/영이 섞임.</strong> 렌더 중 로케일 전환 &mdash; 로케일 버튼을 두 번 눌러 전체 리렌더 강제.</li>
+        <li><strong>왼쪽 사이드바 내용 잘림.</strong> 뷰포트 높이 부족 &mdash; 사이드바는 독립 스크롤이니 내부 콘텐츠를 드래그.</li>
+      </ul>
+    </section>
+
+    <footer>
+      <code>app.js</code>의 강사 튜토리얼 브랜치를 바탕으로 정리 · 스크린샷은 <code>scripts/capture-guides.mjs</code>가 <code>https://swarmid.vercel.app</code>에서 Playwright로 캡처. 영어판과 학생판이 같은 구조를 공유합니다. 5단계(준비 → 케이스 → 설정 → 진행 → 리뷰)는 교수학습 틀이며 도구 자체가 강제하는 순서는 아닙니다.
+    </footer>
+  </main>
+</body>
+</html>

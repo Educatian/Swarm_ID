@@ -131,36 +131,44 @@ async function runInstructor(browser, locale) {
   }
   await shot(page, role, 6, "board-settings");
 
-  // 07 · Perspectives
-  const perspectivesNav = page.locator('[data-view="perspectives"], a:has-text("Perspectives"), a:has-text("관점")').first();
-  if (await perspectivesNav.count()) {
-    await perspectivesNav.click();
-    await wait(page, 900);
-  }
+  // 07 · Perspectives — tolerate hidden nav on courses without published cases
+  try {
+    const perspectivesNav = page.locator('[data-view="perspectives"], a:has-text("Perspectives"), a:has-text("관점")').first();
+    if (await perspectivesNav.count()) {
+      await perspectivesNav.click({ timeout: 3000 }).catch(() => {});
+      await wait(page, 900);
+    }
+  } catch (e) {}
   await shot(page, role, 7, "perspectives");
 
   // 08 · Trade-offs
-  const tradeoffsNav = page.locator('[data-view="matrix"], a:has-text("Trade-offs"), a:has-text("트레이드")').first();
-  if (await tradeoffsNav.count()) {
-    await tradeoffsNav.click();
-    await wait(page, 900);
-  }
+  try {
+    const tradeoffsNav = page.locator('[data-view="matrix"], a:has-text("Trade-offs"), a:has-text("트레이드")').first();
+    if (await tradeoffsNav.count()) {
+      await tradeoffsNav.click({ timeout: 3000 }).catch(() => {});
+      await wait(page, 900);
+    }
+  } catch (e) {}
   await shot(page, role, 8, "trade-offs");
 
   // 09 · Sandbox
-  const sandboxNav = page.locator('[data-view="sandbox"], a:has-text("Sandbox"), a:has-text("샌드박스")').first();
-  if (await sandboxNav.count()) {
-    await sandboxNav.click();
-    await wait(page, 900);
-  }
+  try {
+    const sandboxNav = page.locator('[data-view="sandbox"], a:has-text("Sandbox"), a:has-text("샌드박스")').first();
+    if (await sandboxNav.count()) {
+      await sandboxNav.click({ timeout: 3000 }).catch(() => {});
+      await wait(page, 900);
+    }
+  } catch (e) {}
   await shot(page, role, 9, "sandbox");
 
   // 10 · Report
-  const reportNav = page.locator('[data-view="report"], a:has-text("Report"), a:has-text("리포트")').first();
-  if (await reportNav.count()) {
-    await reportNav.click();
-    await wait(page, 900);
-  }
+  try {
+    const reportNav = page.locator('[data-view="report"], a:has-text("Report"), a:has-text("리포트")').first();
+    if (await reportNav.count()) {
+      await reportNav.click({ timeout: 3000 }).catch(() => {});
+      await wait(page, 900);
+    }
+  } catch (e) {}
   await shot(page, role, 10, "report");
 
   await ctx.close();
@@ -238,11 +246,15 @@ async function runStudent(browser, locale) {
   await wait(page, 600);
   await shot(page, role, 8, "challenge-button");
 
-  // 09 · Add-to-map form
-  const agendaTrigger = page.locator('button:has-text("Add to map"), button:has-text("맵에 추가")').first();
-  if (await agendaTrigger.count()) {
-    await agendaTrigger.scrollIntoViewIfNeeded();
-    await wait(page, 500);
+  // 09 · Add-to-map form — tolerate DOM churn from ongoing swarm renders
+  try {
+    const agendaTrigger = page.locator('button:has-text("Add to map"), button:has-text("맵에 추가")').first();
+    if (await agendaTrigger.count()) {
+      await agendaTrigger.scrollIntoViewIfNeeded({ timeout: 3000 }).catch(() => {});
+      await wait(page, 500);
+    }
+  } catch (e) {
+    // ignore — grab current viewport instead
   }
   await shot(page, role, 9, "add-agenda");
 

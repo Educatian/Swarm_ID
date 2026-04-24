@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Swarm ID — 학생 학습 여정 (한국어)</title>
+  <style>
+    :root {
+      --ink: #0b1538;
+      --ink-soft: #1f2a55;
+      --muted: #4a5578;
+      --muted-2: #6b7498;
+      --accent: #2a3fc8;
+      --accent-soft: rgba(42, 63, 200, 0.08);
+      --accent-border: rgba(42, 63, 200, 0.35);
+      --primary: #1d4ed8;
+      --primary-grad: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      --success: #15803d;
+      --success-soft: rgba(34, 197, 94, 0.12);
+      --success-border: rgba(21, 128, 61, 0.4);
+      --warn: #b45309;
+      --warn-soft: rgba(245, 158, 11, 0.12);
+      --warn-border: rgba(180, 83, 9, 0.45);
+      --danger: #b91c1c;
+      --rule: #e2e6f4;
+      --bg: #f5f7fc;
+      --card: #ffffff;
+      --shadow: 0 1px 2px rgba(11, 21, 56, 0.04), 0 6px 20px rgba(11, 21, 56, 0.06);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.65;
+      padding: 48px 24px 96px;
+      -webkit-font-smoothing: antialiased;
+      word-break: keep-all;
+    }
+    main { max-width: 980px; margin: 0 auto; }
+    header.doc-header { margin-bottom: 36px; padding-bottom: 22px; border-bottom: 1px solid var(--rule); }
+    .eyebrow {
+      display: inline-block; font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent); background: var(--accent-soft);
+      border: 1px solid var(--accent-border); border-radius: 999px;
+      padding: 3px 10px; margin-bottom: 12px;
+    }
+    h1 { margin: 0 0 8px; font-size: 2.05rem; letter-spacing: -0.022em; line-height: 1.2; }
+    .subtitle { margin: 0; color: var(--muted); font-size: 1.05rem; max-width: 720px; }
+    .meta { margin-top: 16px; color: var(--muted-2); font-size: 0.85rem; }
+    .meta code { background: #eef1fb; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
+    nav.journey {
+      background: var(--card); border: 1px solid var(--rule);
+      border-radius: 14px; padding: 22px 26px; margin-bottom: 34px; box-shadow: var(--shadow);
+    }
+    nav.journey h2 {
+      margin: 0 0 14px; font-size: 0.82rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    }
+    .journey-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 720px) { .journey-grid { grid-template-columns: repeat(5, 1fr); } }
+    .journey-card {
+      border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px;
+      background: #fafbff; text-decoration: none; color: var(--ink);
+      transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+    }
+    .journey-card:hover { background: #eef1fb; border-color: var(--accent-border); transform: translateY(-1px); }
+    .journey-card .phase {
+      display: block; font-size: 0.72rem; font-weight: 600;
+      color: var(--accent); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px;
+    }
+    .journey-card .phase-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 2px; }
+    .journey-card .phase-time { font-size: 0.75rem; color: var(--muted-2); }
+    section.intro {
+      background: var(--card); border: 1px solid var(--rule);
+      border-radius: 14px; padding: 24px 28px; margin-bottom: 28px; box-shadow: var(--shadow);
+    }
+    section.intro h2 { margin: 0 0 10px; font-size: 1.2rem; letter-spacing: -0.01em; }
+    section.intro p { margin: 0 0 12px; color: var(--ink-soft); }
+    section.intro p:last-child { margin-bottom: 0; }
+    .pill-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
+    .pill-list span {
+      font-size: 0.78rem; padding: 4px 12px; border-radius: 999px;
+      background: var(--accent-soft); border: 1px solid var(--accent-border);
+      color: var(--accent); font-weight: 500;
+    }
+    .phase-wrap { margin: 52px 0 24px; padding-top: 10px; border-top: 2px solid var(--accent); }
+    .phase-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
+    .phase-num {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      color: var(--accent); background: var(--accent-soft);
+      border: 1px solid var(--accent-border); padding: 4px 12px; border-radius: 999px;
+    }
+    .phase-wrap h2 { margin: 0; font-size: 1.55rem; letter-spacing: -0.02em; }
+    .phase-goal { margin: 4px 0 18px; color: var(--muted); font-size: 0.98rem; max-width: 760px; }
+    ol.tour { counter-reset: step; list-style: none; padding: 0; margin: 0; }
+    ol.tour > li {
+      counter-increment: step; background: var(--card); border: 1px solid var(--rule);
+      border-radius: 14px; margin-bottom: 22px; overflow: hidden; box-shadow: var(--shadow);
+    }
+    .step-body { padding: 26px 30px 22px; position: relative; padding-left: 86px; }
+    .step-body::before {
+      content: counter(step); position: absolute; top: 26px; left: 26px;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--primary-grad); color: #fff; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; box-shadow: 0 2px 6px rgba(29, 78, 216, 0.28);
+    }
+    .step-body h3 { margin: 0 0 6px; font-size: 1.15rem; letter-spacing: -0.01em; }
+    .target {
+      display: inline-block; font-size: 0.72rem; font-weight: 600;
+      color: var(--accent); background: var(--accent-soft);
+      border: 1px solid var(--accent-border); border-radius: 999px;
+      padding: 2px 10px; margin-bottom: 14px;
+    }
+    .step-body p { margin: 0 0 12px; color: var(--ink); }
+    .step-body p:last-child { margin-bottom: 0; }
+    .step-body strong { color: var(--ink); }
+    .callouts { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
+    @media (min-width: 760px) { .callouts.two { grid-template-columns: 1fr 1fr; } }
+    .callout { border-radius: 10px; padding: 12px 14px; border: 1px solid; font-size: 0.88rem; line-height: 1.55; }
+    .callout .label {
+      display: block; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.08em; margin-bottom: 6px;
+    }
+    .callout p { margin: 0; color: var(--ink-soft); }
+    .callout.success { background: var(--success-soft); border-color: var(--success-border); }
+    .callout.success .label { color: var(--success); }
+    .callout.warn { background: var(--warn-soft); border-color: var(--warn-border); }
+    .callout.warn .label { color: var(--warn); }
+    .shot { background: #0b1538; border-top: 1px solid var(--rule); padding: 18px; display: grid; gap: 14px; }
+    .shot.dual { grid-template-columns: 1fr; }
+    @media (min-width: 760px) { .shot.dual { grid-template-columns: 1fr 1fr; } }
+    .shot figure { margin: 0; background: #0b1538; border-radius: 8px; overflow: hidden; }
+    .shot img { display: block; width: 100%; height: auto; border-radius: 6px; }
+    .shot figcaption {
+      margin-top: 8px; font-size: 0.76rem; color: #c4cbea;
+      font-style: italic; text-align: center;
+    }
+    .no-shot {
+      padding: 18px 30px 22px; background: #fafbff; border-top: 1px dashed #c8cfe6;
+      color: var(--muted); font-size: 0.88rem; font-style: italic;
+    }
+    .fallback {
+      margin-top: 32px; padding: 22px 28px;
+      border: 1px dashed #c8cfe6; border-radius: 14px; background: #fcfcff;
+    }
+    .fallback h3 { margin: 0 0 10px; font-size: 1rem; color: var(--muted); letter-spacing: -0.01em; }
+    .fallback p { margin: 0; color: var(--muted); font-size: 0.93rem; }
+    section.tips, section.link-learning {
+      background: var(--card); border: 1px solid var(--rule);
+      border-radius: 14px; padding: 26px 30px; margin-top: 32px; box-shadow: var(--shadow);
+    }
+    section.tips h2, section.link-learning h2 { margin: 0 0 14px; font-size: 1.2rem; letter-spacing: -0.01em; }
+    section.tips ul, section.link-learning ul { padding-left: 20px; margin: 0; }
+    section.tips li, section.link-learning li { margin-bottom: 8px; color: var(--ink-soft); }
+    section.link-learning li strong { color: var(--ink); }
+    footer {
+      margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--rule);
+      color: var(--muted-2); font-size: 0.8rem;
+    }
+    @media print {
+      body { background: #fff; padding: 24px; }
+      section.intro, ol.tour > li, .fallback, section.tips, section.link-learning, nav.journey {
+        box-shadow: none; break-inside: avoid;
+      }
+      ol.tour > li { page-break-inside: avoid; }
+      .shot { background: #f2f4fa; }
+      .shot figcaption { color: #4a5578; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="doc-header">
+      <span class="eyebrow">Swarm ID · 수업용 가이드</span>
+      <h1>학생 학습 여정 가이드</h1>
+      <p class="subtitle">Swarm ID로 하나의 교수설계 결정을 단계별로 깊이 있게 탐구하는 방법을 안내합니다. 케이스를 여는 순간부터 회고를 제출하기까지, 각 단계에서 무엇을 하고, 무엇을 기대할 수 있으며, 어디서 가장 많이 막히는지를 짚어드립니다.</p>
+      <p class="meta">주소: <code>https://swarmid.vercel.app</code> · 역할: 학생 (<code>user</code>) · 언어: 한국어 · 수업: FSU Learner Motivation</p>
+    </header>
+
+    <nav class="journey" aria-label="학습 여정 개요">
+      <h2>한 세션의 5단계</h2>
+      <div class="journey-grid">
+        <a class="journey-card" href="#phase-1">
+          <span class="phase">Phase 1</span>
+          <div class="phase-title">파악하기</div>
+          <span class="phase-time">약 3분</span>
+        </a>
+        <a class="journey-card" href="#phase-2">
+          <span class="phase">Phase 2</span>
+          <div class="phase-title">맥락 잡기</div>
+          <span class="phase-time">5&ndash;8분</span>
+        </a>
+        <a class="journey-card" href="#phase-3">
+          <span class="phase">Phase 3</span>
+          <div class="phase-title">검토·도전</div>
+          <span class="phase-time">10&ndash;15분</span>
+        </a>
+        <a class="journey-card" href="#phase-4">
+          <span class="phase">Phase 4</span>
+          <div class="phase-title">기여하기</div>
+          <span class="phase-time">5&ndash;10분</span>
+        </a>
+        <a class="journey-card" href="#phase-5">
+          <span class="phase">Phase 5</span>
+          <div class="phase-title">종합·결정</div>
+          <span class="phase-time">8&ndash;10분</span>
+        </a>
+      </div>
+    </nav>
+
+    <section class="intro">
+      <h2>시작 전에: Swarm ID는 무엇이고, 무엇이 아닌가</h2>
+      <p>Swarm ID는 <strong>교수설계 결정을 돕는 사고 도구</strong>입니다. 과제 답을 찍어주는 AI가 아닙니다. 케이스를 열면 Swarm ID가 강사의 설명요약을 이미 분석해 <em>이해관계자·제약·긴장 관계</em>가 얽혀 있는 네트워크 맵으로 만들어 둡니다. 여러분이 할 일은 그 맵을 하나의 설계 공간으로 보고 돌아다니는 것입니다 — 질문을 던지고, 설득력이 약한 답에 반박하고, 자기 생각을 얹어가면서요.</p>
+      <p>질문 하나당 다섯 명의 AI 에이전트가 <strong>서로 다른 입장</strong>에서 답합니다. 그래서 합의가 아니라 충돌이 보입니다. 그 충돌이 핵심입니다. 목표는 "정답"을 찾는 게 아니라, 안 보이던 트레이드오프를 드러내고 거기서 <strong>스스로 방어할 수 있는 설계 결정</strong>을 내리는 겁니다. 회고에서 바로 그 결정을 쓰게 됩니다.</p>
+      <div class="pill-list">
+        <span>케이스 맵</span>
+        <span>다중 에이전트 스웜</span>
+        <span>도전·반박</span>
+        <span>개인 레이어</span>
+        <span>리포트·내보내기</span>
+      </div>
+    </section>
+
+    <div class="phase-wrap" id="phase-1">
+      <div class="phase-head">
+        <span class="phase-num">Phase 1</span>
+        <h2>파악하기 &mdash; 내 수업과 케이스 찾기</h2>
+      </div>
+      <p class="phase-goal">지금 맞는 수업에 들어와 있는지 확인하고, 강사가 지정한 케이스를 열고, 첫 인상을 잡습니다. 여기에 <strong>3분을 넘기지 마세요</strong>.</p>
+
+      <ol class="tour">
+        <li>
+          <div class="step-body">
+            <h3>내 수업이 맞는지 확인</h3>
+            <span class="target">상단바 · 수업 드롭다운</span>
+            <p>제일 먼저 상단바의 수업 드롭다운이 <strong>강사가 알려준 수업</strong>으로 설정돼 있는지 확인하세요. 아니라면 케이스를 고르기 전에 수업을 먼저 바꿉니다. 여러분이 한 모든 작업은 현재 선택된 수업 아래에 저장됩니다.</p>
+            <div class="callouts two">
+              <div class="callout success">
+                <span class="label">이렇게 보이면 정상</span>
+                <p>드롭다운에 <em>Learner Motivation</em>(또는 강사가 지은 이름)이 뜨고, 아래 케이스 목록에 카드가 몇 장 보입니다.</p>
+              </div>
+              <div class="callout warn">
+                <span class="label">가장 흔한 실수</span>
+                <p>엉뚱한 수업에 로그인해서 "케이스가 안 보여요"라고 손을 듭니다. 목록이 비어 있으면 먼저 드롭다운을 확인하세요.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/01-login.png" alt="로그인 화면" />
+              <figcaption>로그인 화면 &mdash; 로그인이 완료되면 수업 드롭다운이 활성화됩니다.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>케이스 목록 훑어보기</h3>
+            <span class="target">케이스 목록 · 제목, 3줄 요약, <em>더보기</em></span>
+            <p>케이스 목록에는 강사가 <strong>공개</strong>한 카드만 보입니다 — 초안은 숨겨져 있습니다. 카드마다 제목과 설명요약의 첫 세 줄이 뜹니다. <strong>더보기</strong>를 누르면 카드를 굳이 열지 않고도 요약을 더 펼쳐 볼 수 있어요.</p>
+            <p>이 시점에서 "내가 받을 케이스가 어떤 설계 문제(ADDIE 단계, 5E 구간, AI/CT 수업 등)를 다루는지" 감만 잡으면 됩니다.</p>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/03-pick-case.png" alt="학생에게 보이는 공개 케이스 목록" />
+              <figcaption>카드는 3줄로 잘리고, <strong>더보기</strong>와 파란 <strong>케이스 열기</strong> 버튼이 나란히 놓입니다.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>지정된 케이스 열기</h3>
+            <span class="target">카드 · 파란 <em>케이스 열기</em> 버튼</span>
+            <p>강사가 지정한 카드의 <strong>케이스 열기</strong> 버튼을 누르세요. 왼쪽에 설명요약이 뜨고, 가운데에 네트워크 맵이 그려지며, 오른쪽에 선택된 관점 패널이 자리 잡습니다.</p>
+            <div class="callouts">
+              <div class="callout success">
+                <span class="label">이렇게 보이면 정상</span>
+                <p>화면이 세 영역으로 나뉩니다: <em>설명요약</em>(왼쪽), <em>네트워크 맵</em>(가운데), <em>선택된 관점</em>(오른쪽). 어느 한 곳을 건드리면 나머지도 같이 업데이트됩니다.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/02-onboarding.png" alt="케이스를 처음 연 뒤 보이는 온보딩 카드" />
+              <figcaption>첫 접속 시 안내 카드가 3패널 레이아웃을 짚어줍니다.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-2">
+      <div class="phase-head">
+        <span class="phase-num">Phase 2</span>
+        <h2>맥락 잡기 &mdash; 질문 던지기 전에 설계 문제부터 이해하기</h2>
+      </div>
+      <p class="phase-goal">대부분의 학생이 이 단계를 건너뛰고 바로 스웜에 질문부터 던집니다. 참으세요. 아직 이해하지 못한 설계에 대해 쓸모 있는 질문을 던질 수 없습니다 &mdash; <strong>먼저 읽고, 다음에 질문</strong>하세요. 5&ndash;8분을 잡으세요.</p>
+
+      <ol class="tour" style="counter-reset: step 3;">
+        <li>
+          <div class="step-body">
+            <h3>설명요약부터 꼼꼼히 읽기</h3>
+            <span class="target">왼쪽 패널 · 인테이크</span>
+            <p>왼쪽 패널에는 강사가 올린 설명요약이 있습니다. 맵을 만지기 전에 이걸 먼저 읽어야 <em>설계 문제, 대상 학습자, 제약</em>이 머리에 들어옵니다. 이 패널은 세션 내내 자주 돌아오게 됩니다.</p>
+            <p>다 읽었으면 좌측 쉐브론으로 패널을 접으세요 &mdash; 그래프가 남는 공간으로 확 퍼지면서 맵이 더 크게 보입니다.</p>
+            <div class="callouts two">
+              <div class="callout success">
+                <span class="label">다음으로 넘어갈 준비가 됐다는 신호</span>
+                <p>설명요약을 다시 안 보고도 세 가지를 답할 수 있다: <em>누가 학습자인가? 목표는 무엇인가? 주된 제약은 무엇인가?</em></p>
+              </div>
+              <div class="callout warn">
+                <span class="label">가장 흔한 실수</span>
+                <p>설명요약을 대충 훑는 것. 맵의 클러스터·엣지·긴장 관계는 설명요약이 머리에 들어와 있어야 비로소 의미가 읽힙니다.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/02-onboarding.png" alt="왼쪽 인테이크 패널에 보이는 설명요약" />
+              <figcaption>왼쪽 인테이크 패널 &mdash; 설명요약, 이해관계자, 제약 조건이 정리돼 있습니다.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>케이스 맵 훑어보기</h3>
+            <span class="target">중앙 캔버스 · D3 네트워크 맵</span>
+            <p>먼저 큰 덩어리(클러스터)부터 보세요 &mdash; 이해관계자(교사·학생·관리자·IT), 제약(시간·예산·접근성), 긴장(무엇이 무엇과 팽팽히 맞서고 있는지). 노드에 마우스를 올리면 상세 내용이 뜨고, 이해관계자 노드를 누르면 오른쪽 <strong>선택된 관점</strong> 패널이 그 사람의 시선으로 바뀝니다.</p>
+            <p>설계 공간 안으로 들어가기 전에 그 둘레를 한 바퀴 도는 느낌으로 살펴보세요. 어느 클러스터가 가장 빽빽한가요? 이해관계자 사이에 의외로 팽팽한 엣지는 어디인가요? 절대 타협 불가능해 보이는 제약은 무엇인가요?</p>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/04-case-map.png" alt="케이스를 연 직후의 네트워크 맵" />
+              <figcaption>D3 네트워크가 설명요약에서 뽑아낸 이해관계자·제약 주위로 이슈 노드를 배치합니다.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-3">
+      <div class="phase-head">
+        <span class="phase-num">Phase 3</span>
+        <h2>검토·도전 &mdash; 설계에 압력을 걸어보기</h2>
+      </div>
+      <p class="phase-goal">이제 질문을 던질 차례입니다 &mdash; 정답을 얻으려는 게 아니라 설계를 <em>압박</em>하기 위해서요. 스웜은 자기들끼리 일부러 의견이 갈리게 만들어져 있어서, 진짜 트레이드오프가 어디에 있는지 드러내 줍니다. 2&ndash;3라운드 걸쳐 10&ndash;15분을 잡으세요.</p>
+
+      <ol class="tour" style="counter-reset: step 5;">
+        <li>
+          <div class="step-body">
+            <h3>스웜에 질문하기</h3>
+            <span class="target">하단 컴포저 · 질문하기</span>
+            <p><strong>하나의 뾰족한 질문</strong>을 던지세요 &mdash; 방금 본 긴장, 어떤 트레이드오프, 특정 이해관계자가 느낄 걱정 같은 것들. 예를 들어:</p>
+            <p style="margin-left: 14px; border-left: 3px solid var(--accent-border); padding-left: 12px; color: var(--ink-soft); font-style: italic;">&ldquo;이 수업에서 학생 자율성이 교사 검토 부담과 어떻게 충돌하나요?&rdquo;<br />&ldquo;접근성이 절대 조건이라면 참여(engage) 단계 중 어느 부분을 다시 설계해야 하죠?&rdquo;</p>
+            <p>한 번 보내면 다섯 명의 AI 에이전트가 각자 다른 입장에서 한 라운드에 동시에 답합니다. 그들이 동의한 지점과 갈라진 지점은 맵의 새 엣지로 그려집니다.</p>
+          </div>
+          <div class="shot dual">
+            <figure>
+              <img src="assets/05-first-question.png" alt="첫 질문을 타이핑한 컴포저" />
+              <figcaption>첫 번째 뾰족한 질문을 입력하는 모습.</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/06-swarm-round.png" alt="스웜 라운드 — 5명의 에이전트 응답" />
+              <figcaption>한 번 보내면 → 다섯 가지 입장이 동시에 도착합니다.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>다섯 답을 비교하기 &mdash; 이견이 신호다</h3>
+            <span class="target">채팅 스레드 · 다중 에이전트 응답</span>
+            <p>첫 답만 읽고 끝내지 말고 다섯 답을 다 읽으세요. 어디서 서로 동의하고, 어디서 갈라지나요? <strong>갈라지는 지점이 여러분이 실제로 결정해야 할 설계 지점</strong>입니다.</p>
+            <p>응답이 도착하고 몇 초 뒤 2차 분류 패스가 자동으로 돌면서 맵 위에 <span style="color: var(--success); font-weight: 600;">초록 실선(동의)</span>, <span style="color: var(--danger); font-weight: 600;">빨강 점선(이견)</span>, 회색 점점선(부분일치) 엣지가 그려집니다. 스웜의 의견 차이가 구조로 변하는 순간이에요 &mdash; <strong>빨강 점선에 집중하세요</strong>.</p>
+            <div class="callouts">
+              <div class="callout success">
+                <span class="label">제대로 하고 있다는 신호</span>
+                <p>"어떤 에이전트 A와 B가 X 지점에서 갈렸고, 이견은 Y 때문이었다"고 최소 한 쌍은 말할 수 있다. 다섯 답이 다 비슷하게 들린다면 질문이 너무 좁았다는 뜻이니 다시 던져보세요.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/07-disagreement-edges.png" alt="스웜 라운드 이후 맵에 그려진 이견 엣지" />
+              <figcaption>2차 분류 패스가 끝나면 맵에 이견 엣지가 나타납니다.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>약한 응답에 도전(Challenge)하기</h3>
+            <span class="target">각 에이전트 응답 · <em>도전</em> 버튼</span>
+            <p>에이전트 응답마다 <strong>도전</strong> 버튼이 붙어 있습니다. 그럴듯해 보이지만 설명요약의 어떤 부분을 빠뜨리고 있는 답에 사용하세요. 여러분의 도전이 로그에 남고, 도전에서 해당 에이전트 주장으로 이견 엣지가 그려지며, 다음 라운드에서 에이전트는 여러분의 반박을 반영해 다시 답해야 합니다.</p>
+            <p>바로 이 지점에서 Swarm ID가 챗봇 같은 느낌을 벗고 <strong>설계 스튜디오의 크리틱</strong>처럼 움직이기 시작합니다. 세게 반박하세요. 이 도구는 그러라고 만들어졌습니다.</p>
+            <div class="callouts">
+              <div class="callout warn">
+                <span class="label">가장 흔한 실수</span>
+                <p>자신 있게 말하는 첫 에이전트의 답을 그대로 답으로 받아들이는 것. 세션당 한 번도 <strong>도전</strong>을 안 눌렀다면, 이 도구의 절반을 안 쓴 겁니다.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/08-challenge-button.png" alt="에이전트 응답에 붙은 도전 버튼" />
+              <figcaption><strong>도전</strong> 버튼은 모든 에이전트 응답 옆에 나타납니다.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-4">
+      <div class="phase-head">
+        <span class="phase-num">Phase 4</span>
+        <h2>기여하기 &mdash; 맵을 내 것으로 만들기</h2>
+      </div>
+      <p class="phase-goal">지금까지는 스웜에 반응만 했다면, 이제는 <em>내 생각</em>을 케이스에 얹을 차례입니다. 세션을 넘어 저장되고, 강사가 리포트에서 보는 개인 학습자 레이어예요. 5&ndash;10분을 쓰세요.</p>
+
+      <ol class="tour" style="counter-reset: step 8;">
+        <li>
+          <div class="step-body">
+            <h3>내 노드 추가하기</h3>
+            <span class="target">선택된 관점 패널 · <em>맵에 추가</em> (초록 헤더)</span>
+            <p>내 관점에서 추적하고 싶은 질문이나 이슈를 노드로 추가하세요 &mdash; 스웜이 안 건드린 지점, 설명요약에서 내가 본 제약, 내가 발전시키고 싶은 대안 설계 같은 것들이요.</p>
+            <p>추가한 노드는 케이스 맵 위의 개인 학습자 레이어에 얹힙니다. 세션 사이에도 보존되고, 강사가 리포트에서 볼 수 있습니다. 한 세션에 여러 개를 올려도 좋습니다.</p>
+            <div class="callouts">
+              <div class="callout success">
+                <span class="label">여러분의 작업을 고유하게 만드는 부분</span>
+                <p>스웜은 면적을 넓게 만들어 주지만, <em>여러분의 노드</em>는 <strong>무엇이 중요한지 내가 결정했다</strong>는 기록입니다.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot">
+            <figure>
+              <img src="assets/09-add-agenda.png" alt="선택된 관점 패널 아래의 맵에 추가 폼" />
+              <figcaption>초록 헤더의 <strong>맵에 추가</strong> 폼이 오른쪽 패널의 주요 액션입니다.</figcaption>
+            </figure>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-body">
+            <h3>한 이해관계자와 1:1로 파고들기</h3>
+            <span class="target">관점(Perspectives) 뷰 · 단일 채널 대화</span>
+            <p>상단 내비게이션의 <strong>관점</strong>으로 전환하면, 한 이해관계자 시점으로만 답하는 단일 채널 대화가 열립니다. 다섯 답 동시에 받는 스웜 라운드보다 더 깊게 파고들 때 씁니다 &mdash; 한 목소리, 꼬리 질문, 턴 바이 턴 대화.</p>
+            <p>여기서는 한 시점을 압박해 보세요. 검토 부담을 파고들면 <em>교사</em>는 뭐라고 답할까요? 자율성을 밀어붙이면 <em>학생</em>은 어떻게 반응할까요?</p>
+          </div>
+          <div class="no-shot">
+            학생 화면의 관점 뷰 스크린샷은 아직 캡처하지 않았습니다. 관점 스텝이 추가된 뒤 <code>node scripts/capture-guides.mjs student ko</code>를 다시 돌리면 재생성됩니다.
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="phase-wrap" id="phase-5">
+      <div class="phase-head">
+        <span class="phase-num">Phase 5</span>
+        <h2>종합·결정 &mdash; 세션을 방어 가능한 결정으로 바꾸기</h2>
+      </div>
+      <p class="phase-goal">학생이 가장 덜 투자하고, 강사가 가장 꼼꼼히 보는 단계입니다. 회고가 "도구를 만져봤다"와 "근거 있는 교수설계 결정을 내렸다"를 가르는 지점이에요. 8&ndash;10분을 확보하세요.</p>
+
+      <ol class="tour" style="counter-reset: step 10;">
+        <li>
+          <div class="step-body">
+            <h3>회고 작성 후 제출</h3>
+            <span class="target">리포트 뷰 · 회고 프롬프트</span>
+            <p><strong>리포트</strong> 뷰를 여세요. 거기 있는 프롬프트가 탐색을 결정으로 바꿔 주는 발판입니다: <em>어떤 긴장을 발견했는가? 어떤 트레이드오프를 받아들였는가? 어떤 설계 결정을 내렸고, 왜인가?</em></p>
+            <p>다 쓰면 아래쪽 다운로드 버튼으로 리포트를 내보내거나 강사에게 제출하세요. 내 개인 노드, 내가 건 도전, 내 회고가 모두 한 파일에 같이 담겨 나갑니다.</p>
+            <div class="callouts two">
+              <div class="callout success">
+                <span class="label">좋은 회고</span>
+                <p>구체적인 설계 결정 하나를 짚고, 스웜의 이견이나 내 도전을 근거로 최소 하나 인용하며, 수업 개념(ADDIE 단계, 5E 구간, CT 전략, AI 통합 패턴)으로 연결합니다.</p>
+              </div>
+              <div class="callout warn">
+                <span class="label">약한 회고</span>
+                <p>스웜이 뭐라고 했는지 요약만 한 글. 회고가 Swarm ID 없이도 쓸 수 있는 수준이라면, 아직 종합이 안 된 겁니다.</p>
+              </div>
+            </div>
+          </div>
+          <div class="shot dual">
+            <figure>
+              <img src="assets/10-report.png" alt="회고 프롬프트가 있는 리포트 뷰" />
+              <figcaption>리포트 뷰 &mdash; 회고 프롬프트가 결정을 향한 발판이 됩니다.</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/11-export.png" alt="리포트 내보내기/다운로드" />
+              <figcaption>완성된 리포트를 다운로드하거나 제출합니다.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="fallback">
+      <h3>예비 안내 &mdash; 아직 케이스를 안 열었을 때만 표시</h3>
+      <p><strong>케이스를 하나 고르면 맵이 로드됩니다.</strong> 위 목록에서 공개된 케이스 하나를 고르면 그 네트워크 맵이 여기 그려집니다. 케이스를 연 뒤 튜토리얼을 다시 실행하세요 &mdash; 설명요약 읽기, 맵 탐색, 스웜에 질문하기, 응답에 도전하기, 내 노드 추가, 회고 쓰기까지 단계별로 안내됩니다.</p>
+    </div>
+
+    <section class="tips">
+      <h2>세션을 알차게 보내는 팁</h2>
+      <ul>
+        <li><strong>케이스 하나, 2&ndash;3라운드로.</strong> 케이스 네 개를 열고 얕은 질문 하나씩 던지지 마세요. 하나만 열고 점점 뾰족해지는 질문 세 개를 던지세요.</li>
+        <li><strong>세션당 최소 한 번은 도전.</strong> 모든 응답이 그럴듯해 보인다면 질문이 너무 무른 겁니다. 가장 약해 보이는 답에 반박해 보세요.</li>
+        <li><strong>노드는 마지막 말고 그때그때.</strong> 생각이 스쳐 지나갈 때 바로 잡으세요. 스웜 라운드 중에 올린 노드 하나가 나중에 재구성해서 쓰는 세 개보다 낫습니다.</li>
+        <li><strong>깊이가 필요하면 관점으로.</strong> 스웜은 넓게, 관점은 깊게. 스웜으로 트레이드오프를 찾고, 관점으로 한쪽을 압박하세요.</li>
+        <li><strong>안 쓰는 패널은 접기.</strong> 좌우 패널의 쉐브론으로 캔버스를 더 넓게 쓸 수 있습니다. 패널을 접으면 그래프가 넓어진 공간으로 퍼지는데, 이건 버그가 아니라 의도된 동작입니다.</li>
+        <li><strong>세션이 식기 전에 회고.</strong> 탭을 닫고 다음 날 돌아오지 마세요. 이견이 머릿속에 살아 있을 때 내보내세요.</li>
+      </ul>
+    </section>
+
+    <section class="link-learning">
+      <h2>이 활동이 수업에서 배운 이론과 연결되는 지점</h2>
+      <ul>
+        <li><strong>ADDIE / 5E 프레임.</strong> 왼쪽 설명요약은 사실상 <em>Analyze</em> 결과물이고, 맵은 <em>Design</em> 공간을 보여주며, 회고는 Design에서 Develop로 넘어가는 지점에 놓입니다.</li>
+        <li><strong>Merrill의 First Principles &amp; Gagne의 9가지 사건.</strong> 현재 설계에서 특정 사건(동기 유발, 안내, 연습, 피드백 등)이 덜 구현된 지점을 스웜에 물어 찾아보세요.</li>
+        <li><strong>Community of Inquiry.</strong> 세 패널이 세 가지 현존감에 대충 대응합니다: 설명요약 = 인지적, 관점 = 사회적, 내 개인 노드 = 개입을 계획하는 교수적 현존감.</li>
+        <li><strong>AI &amp; 컴퓨팅 사고.</strong> 스웜 자체가 여러분이 비평해야 할 AI 산출물입니다. 과잉 일반화하는 순간, 지어내는 순간, 너무 빨리 동의하는 순간을 포착하세요 &mdash; 바로 <strong>도전</strong>을 쓸 타이밍입니다.</li>
+        <li><strong>ARCS + 게이미피케이션.</strong> 회고는 내 설계 선택과 ARCS 레버(주의·관련성·자신감·만족)를 연결해 "왜 그 레버가 우리 학습자에게 중요한가"를 쓰는 자리입니다.</li>
+      </ul>
+    </section>
+
+    <footer>
+      <code>app.js</code>의 <code>getTutorialSteps()</code> 한국어 브랜치에서 생성 · 스크린샷은 <code>scripts/capture-guides.mjs</code>가 <code>https://swarmid.vercel.app</code>에서 캡처. 영어판이 같은 폴더에 있고 내용이 연동됩니다. 5단계 여정(파악 → 맥락 → 검토 → 기여 → 종합)은 수업용 교수학습 틀이며 도구 자체가 강제하는 흐름은 아닙니다.
+    </footer>
+  </main>
+</body>
+</html>

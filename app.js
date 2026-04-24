@@ -76,6 +76,15 @@ const translations = {
     landingHeroKicker: "AI + Human Network Visualization",
     landingHeroTitle: "Turn design tension into a living network.",
     landingHeroBody: "Human judgment, institutional friction, and AI reasoning in one responsive field.",
+    landingTutorialsKicker: "Tutorials",
+    landingTutorialsTitle: "First time here? Walk through the guide.",
+    landingTutorialsBody: "Step-by-step Korean tutorials for students and instructors — the whole classroom loop in one page.",
+    landingTutorialStudent: "Student guide (KO)",
+    landingTutorialInstructor: "Instructor guide (KO)",
+    landingDeveloperKicker: "Developer",
+    landingDeveloperTitle: "Built by Designtension Lab",
+    landingDeveloperBody: "Swarm ID is an open instructional-design research platform. Reach out for collaborations, feedback, or bug reports.",
+    landingDeveloperContact: "Contact the developer",
     signalTeacherLoad: "Teacher load",
     signalStudentAgency: "Student agency",
     signalGovernance: "Governance",
@@ -376,6 +385,15 @@ const translations = {
     landingHeroKicker: "AI + 인간 네트워크 시각화",
     landingHeroTitle: "설계의 긴장을 살아 있는 네트워크로 바꾸세요.",
     landingHeroBody: "사람의 판단, 제도적 제약, AI 추론을 하나의 화면에서 함께 살펴봅니다.",
+    landingTutorialsKicker: "튜토리얼",
+    landingTutorialsTitle: "처음 오셨나요? 가이드를 따라가 보세요.",
+    landingTutorialsBody: "학생용·교수자용 한글 가이드로 수업의 전 과정을 한 페이지에서 익힐 수 있어요.",
+    landingTutorialStudent: "학생 가이드",
+    landingTutorialInstructor: "교수자 가이드",
+    landingDeveloperKicker: "개발자",
+    landingDeveloperTitle: "Designtension Lab이 만들었어요",
+    landingDeveloperBody: "Swarm ID는 수업 설계 연구를 위한 오픈 플랫폼이에요. 협업, 피드백, 버그 제보는 언제든 환영합니다.",
+    landingDeveloperContact: "개발자에게 연락하기",
     signalTeacherLoad: "교수자 부담",
     signalStudentAgency: "학생 주체성",
     signalGovernance: "거버넌스",
@@ -968,6 +986,26 @@ function applyStaticTranslations() {
   [t("signalTeacherLoad"), t("signalStudentAgency"), t("signalGovernance"), t("signalAccessibility")].forEach((text, index) => {
     if (signalSpans[index]) signalSpans[index].textContent = text;
   });
+
+  const tutorialsKicker = document.getElementById("landing-tutorials-kicker");
+  if (tutorialsKicker) tutorialsKicker.textContent = t("landingTutorialsKicker");
+  const tutorialsTitle = document.getElementById("landing-tutorials-title");
+  if (tutorialsTitle) tutorialsTitle.textContent = t("landingTutorialsTitle");
+  const tutorialsBody = document.getElementById("landing-tutorials-body");
+  if (tutorialsBody) tutorialsBody.textContent = t("landingTutorialsBody");
+  const tutorialStudent = document.getElementById("landing-tutorial-student");
+  if (tutorialStudent) tutorialStudent.textContent = t("landingTutorialStudent");
+  const tutorialInstructor = document.getElementById("landing-tutorial-instructor");
+  if (tutorialInstructor) tutorialInstructor.textContent = t("landingTutorialInstructor");
+
+  const developerKicker = document.getElementById("landing-developer-kicker");
+  if (developerKicker) developerKicker.textContent = t("landingDeveloperKicker");
+  const developerTitle = document.getElementById("landing-developer-title");
+  if (developerTitle) developerTitle.textContent = t("landingDeveloperTitle");
+  const developerBody = document.getElementById("landing-developer-body");
+  if (developerBody) developerBody.textContent = t("landingDeveloperBody");
+  const developerContact = document.getElementById("landing-developer-contact");
+  if (developerContact) developerContact.textContent = t("landingDeveloperContact");
 
   const loginHeads = document.querySelectorAll(".landing-login-head");
   if (loginHeads[0]) {
@@ -2533,20 +2571,43 @@ function normalizeStakeholderKey(value, fallback = "teacher") {
   return inferStakeholderFromText(candidate, fallback);
 }
 
+const EVIDENCE_LENS_ORDER = ["teacher", "student", "administrator", "it"];
+const EVIDENCE_LENS_SUBTITLES = {
+  teacher: "classroom practice",
+  student: "learner experience",
+  administrator: "program and policy",
+  it: "platform and data",
+};
+
+function evidenceLensTitle(stakeholderKey, subtitle) {
+  const label = stakeholders[stakeholderKey]?.label || "Stakeholder";
+  const tail = String(subtitle || EVIDENCE_LENS_SUBTITLES[stakeholderKey] || "perspective").trim();
+  return `${label} lens: ${tail}`;
+}
+
+function isPlaceholderEvidenceTitle(title) {
+  const trimmed = String(title || "").trim();
+  if (!trimmed) return true;
+  if (/^evidence\s+\d+$/i.test(trimmed)) return true;
+  if (/^(teacher|student|administrator|it systems?|accessibility)\s+evidence\s+\d+$/i.test(trimmed)) return true;
+  return false;
+}
+
 function normalizeEvidenceList(value, fallback = []) {
   const items = asArray(value)
     .map((item, index) => {
       const evidence = asObject(item);
       const body = String(evidence.body || "").trim();
       if (!body) return null;
-      return {
-        stakeholder: normalizeStakeholderKey(
-          evidence.stakeholder,
-          ["teacher", "student", "administrator", "it", "accessibility"][index % 5]
-        ),
-        title: String(evidence.title || `Evidence ${index + 1}`).trim(),
-        body,
-      };
+      const stakeholder = normalizeStakeholderKey(
+        evidence.stakeholder,
+        EVIDENCE_LENS_ORDER[index] || EVIDENCE_LENS_ORDER[EVIDENCE_LENS_ORDER.length - 1]
+      );
+      const rawTitle = String(evidence.title || "").trim();
+      const title = isPlaceholderEvidenceTitle(rawTitle)
+        ? evidenceLensTitle(stakeholder)
+        : rawTitle;
+      return { stakeholder, title, body };
     })
     .filter(Boolean);
   return items.length ? items : fallback;
@@ -2738,7 +2799,18 @@ async function structureCaseFromDocumentWithAi(input) {
         "Rules:",
         "- learningGoals: 3 to 5 short strings",
         "- constraints: 3 to 6 short strings",
-        "- evidence: up to 4 objects with stakeholder, title, body",
+        "- evidence: EXACTLY 4 objects, one per stakeholder, in this order: teacher, student, administrator, it.",
+        "    Each object has { stakeholder, title, body }.",
+        "    stakeholder: one of \"teacher\", \"student\", \"administrator\", \"it\" (lowercase).",
+        "    title: must follow the pattern \"<Label> lens: <short subtitle>\" where Label is \"Teacher\", \"Student\", \"Administrator\", or \"IT Systems\".",
+        "        The subtitle is a 3 to 8 word phrase specific to that stakeholder's concern with THIS document.",
+        "    body: 2 to 4 sentences that reframe the document's core idea through that stakeholder's lens.",
+        "        Do NOT quote the document verbatim. Write fresh prose in that stakeholder's voice/concern.",
+        "        Teacher lens: how a classroom instructor actually uses or applies the idea in practice.",
+        "        Student lens: what the learner experiences, why they care, often from a first-person angle.",
+        "        Administrator lens: program quality, consistency across sections, equity, policy trade-offs at scale.",
+        "        IT Systems lens: concrete LMS or platform features, data capture, integrations, or affordances required.",
+        "    All four items must stay on the document's actual topic. Do not label unrelated content with a stakeholder name.",
         "- stakeholderProfiles: optional object keyed by teacher, administrator, student, it, accessibility with summary/status",
         "- matrixInsights: up to 4 objects with title and body",
         "- sandboxFeed: up to 4 objects with label, value, optional note",
@@ -2746,6 +2818,14 @@ async function structureCaseFromDocumentWithAi(input) {
         "- networkMeta: up to 3 objects with label and value",
         "- uiCopy: optional object with short copy strings",
         "- caseSubtitle: one short sentence",
+        "",
+        "Example of a correctly framed evidence array (for a document about Merrill's First Principles of Instruction):",
+        "[",
+        "  {\"stakeholder\":\"teacher\",\"title\":\"Teacher lens: task-centered lesson design\",\"body\":\"For teachers, Merrill reframes planning around a whole real-world task rather than a chain of isolated skills. Design backwards from the task students will perform, then layer in activation, demonstration, application, and integration.\"},",
+        "  {\"stakeholder\":\"student\",\"title\":\"Student lens: I learn by doing the real thing\",\"body\":\"From the student perspective, Merrill means less passive reading and more doing. Learners expect to see the skill demonstrated, try it with guidance, and end with something they produced.\"},",
+        "  {\"stakeholder\":\"administrator\",\"title\":\"Administrator lens: consistency across instructors\",\"body\":\"For program leads, Merrill gives a checklist that makes instructional quality auditable across sections. Every module can be rated on task-centeredness and coverage of the four phases regardless of subject.\"},",
+        "  {\"stakeholder\":\"it\",\"title\":\"IT Systems lens: what the LMS must support\",\"body\":\"For the LMS, Merrill asks for authoring patterns that bind a module to a single anchor task, surface worked-example videos near practice, capture student artifacts, and track the four phases separately.\"}",
+        "]",
         "",
         `Title: ${input.title}`,
         `Publish to learners: ${input.publish ? "yes" : "no"}`,
@@ -2869,15 +2949,22 @@ function structuredCaseFromDocument({ title, text, publish = true }) {
     keywords.it ? "Institutional data and LMS integration must stay auditable" : "System fit must be documented",
     "Students must be able to explain why a recommendation was made",
   ];
-  const evidence = sentences.slice(0, 4).map((sentence, index) => {
-    const stakeholderOrder = ["teacher", "student", "administrator", "it", "accessibility"];
-    const stakeholder = stakeholderOrder[index % stakeholderOrder.length];
-    return {
-      stakeholder,
-      title: `${stakeholders[stakeholder].label} evidence ${index + 1}`,
-      body: sentence,
-    };
-  });
+  const documentGist = sentences[0] || cleanText.slice(0, 240);
+  const lensPreambles = {
+    teacher:
+      "For teachers, the document points at a classroom move: translate the idea into lesson structure and in-the-moment facilitation choices.",
+    student:
+      "For students, the document implies a different learning experience: what they encounter, practice, and produce should feel tied to a real outcome.",
+    administrator:
+      "For administrators, the document raises a program-level question: can this be applied consistently across sections while keeping quality and equity in check?",
+    it:
+      "For IT and the LMS, the document implies platform requirements: the features, data, and affordances needed for this approach to work at scale.",
+  };
+  const evidence = EVIDENCE_LENS_ORDER.map((stakeholder) => ({
+    stakeholder,
+    title: evidenceLensTitle(stakeholder),
+    body: `${lensPreambles[stakeholder]} Document excerpt: ${documentGist}`,
+  }));
   // Sentinel keys — resolved at render time via resolveTimelineEntry() so the
   // timeline flips language when the user toggles KO/EN, regardless of the
   // locale the case was originally created in.
