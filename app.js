@@ -177,6 +177,8 @@ const translations = {
     noActivity: "No activity",
     checking: "Checking...",
     noCourseLinkedYet: "No course linked yet.",
+    signedInReadyOne: "Signed in — 1 course available. Continue to enter.",
+    signedInReadyMany: "Signed in — {count} courses available. Continue to pick one.",
     studentJoinHelper: "Sign in as a student, then enter your course code.",
     tutorialBack: "Back",
     tutorialNext: "Next",
@@ -488,6 +490,8 @@ const translations = {
     noActivity: "활동 기록이 없습니다",
     checking: "확인 중...",
     noCourseLinkedYet: "아직 연결된 코스가 없습니다.",
+    signedInReadyOne: "로그인 완료 — 참여 중인 코스 1개가 있어요. 계속 진행하세요.",
+    signedInReadyMany: "로그인 완료 — 참여 중인 코스가 {count}개 있어요. 앱에서 코스를 선택해 주세요.",
     studentJoinHelper: "학생으로 로그인한 다음 수업 참여 코드를 입력하세요.",
     tutorialBack: "이전",
     tutorialNext: "다음",
@@ -6571,14 +6575,20 @@ function renderLandingLogin() {
   dom.landingJoinPassword.disabled = state.auth.loading;
   dom.landingJoinCode.disabled = state.auth.loading;
   dom.landingAuthStatus.textContent = state.auth.loading ? t("checking") : state.auth.message;
+  const totalCourseCount = (state.platform?.institutions || []).reduce(
+    (sum, inst) => sum + ((inst.courses || []).length),
+    0,
+  );
   dom.landingLoginHelper.textContent =
-    state.auth.source === "supabase" && activeInstitution && activeCourse
-      ? `${activeInstitution.name} - ${activeCourse.code} ${activeCourse.name}`
-      : state.auth.source === "supabase"
-        ? t("noCourseLinkedYet")
-        : configured
-        ? ""
-        : "";
+    state.auth.source === "supabase" && totalCourseCount > 1
+      ? t("signedInReadyMany").replace("{count}", String(totalCourseCount))
+      : state.auth.source === "supabase" && totalCourseCount === 1
+        ? t("signedInReadyOne")
+        : state.auth.source === "supabase"
+          ? t("noCourseLinkedYet")
+          : configured
+            ? ""
+            : "";
   dom.landingJoinHelper.textContent = configured
     ? t("studentJoinHelper")
     : "";
