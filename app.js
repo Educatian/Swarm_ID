@@ -955,6 +955,84 @@ function stakeholderStatusKey(status) {
   );
 }
 
+// ---- Hero typewriter ----
+let heroTypeTimer = null;
+let heroTypeLastText = null;
+function typeHeroTitle(el, text) {
+  if (!el) return;
+  const normalized = String(text ?? "");
+  // Skip if we're already displaying the same text and animation has completed.
+  if (!heroTypeTimer && heroTypeLastText === normalized && el.textContent === normalized) {
+    return;
+  }
+  const prefersReduced =
+    typeof window !== "undefined" &&
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (heroTypeTimer) {
+    clearInterval(heroTypeTimer);
+    heroTypeTimer = null;
+  }
+  heroTypeLastText = normalized;
+  const caret = el.parentElement?.querySelector(".hero-type-caret");
+  if (caret) caret.classList.remove("is-idle");
+  if (prefersReduced || !normalized) {
+    el.textContent = normalized;
+    if (caret) caret.classList.add("is-idle");
+    return;
+  }
+  el.textContent = "";
+  const chars = Array.from(normalized);
+  let i = 0;
+  heroTypeTimer = setInterval(() => {
+    if (i >= chars.length) {
+      clearInterval(heroTypeTimer);
+      heroTypeTimer = null;
+      if (caret) caret.classList.add("is-idle");
+      return;
+    }
+    const ch = chars[i++];
+    el.textContent += ch;
+  }, 42);
+}
+
+// ---- Header Guides dropdown ----
+function wireHeaderGuidesDropdown() {
+  const root = document.getElementById("header-guides");
+  const trigger = document.getElementById("header-guides-trigger");
+  const menu = document.getElementById("header-guides-menu");
+  if (!root || !trigger || !menu || root.dataset.wired === "1") return;
+  root.dataset.wired = "1";
+  const close = () => {
+    root.classList.remove("is-open");
+    menu.hidden = true;
+    trigger.setAttribute("aria-expanded", "false");
+  };
+  const open = () => {
+    root.classList.add("is-open");
+    menu.hidden = false;
+    trigger.setAttribute("aria-expanded", "true");
+  };
+  trigger.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    if (menu.hidden) open();
+    else close();
+  });
+  document.addEventListener("click", (ev) => {
+    if (!root.contains(ev.target)) close();
+  });
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key === "Escape" && !menu.hidden) {
+      close();
+      trigger.focus();
+    }
+  });
+  menu.addEventListener("click", (ev) => {
+    const item = ev.target.closest(".header-guides-item");
+    if (item) close();
+  });
+}
+
 function applyStaticTranslations() {
   document.title = "Design Tension Studio";
   document.documentElement.lang = state.locale;
@@ -977,10 +1055,10 @@ function applyStaticTranslations() {
   const landingCopy = document.querySelector(".landing-copy");
   if (landingCopy) {
     const kicker = landingCopy.querySelector(".landing-kicker");
-    const title = landingCopy.querySelector("h2");
+    const titleTextEl = landingCopy.querySelector(".hero-type-text") || landingCopy.querySelector("h2");
     const body = landingCopy.querySelector(".landing-body");
     if (kicker) kicker.textContent = t("landingHeroKicker");
-    if (title) title.textContent = t("landingHeroTitle");
+    if (titleTextEl) typeHeroTitle(titleTextEl, t("landingHeroTitle"));
     if (body) body.textContent = t("landingHeroBody");
   }
 
@@ -989,25 +1067,25 @@ function applyStaticTranslations() {
     if (signalSpans[index]) signalSpans[index].textContent = text;
   });
 
-  const tutorialsKicker = document.getElementById("landing-tutorials-kicker");
-  if (tutorialsKicker) tutorialsKicker.textContent = t("landingTutorialsKicker");
-  document.querySelectorAll('.ribbon-chip-role[data-role="student"]').forEach((el) => {
+  const headerGuidesLabel = document.getElementById("header-guides-label");
+  if (headerGuidesLabel) headerGuidesLabel.textContent = t("landingTutorialsKicker");
+  document.querySelectorAll('.header-guides-item-role[data-role="student"]').forEach((el) => {
     el.textContent = t("landingTutorialRoleStudent");
   });
-  document.querySelectorAll('.ribbon-chip-role[data-role="instructor"]').forEach((el) => {
+  document.querySelectorAll('.header-guides-item-role[data-role="instructor"]').forEach((el) => {
     el.textContent = t("landingTutorialRoleInstructor");
   });
-  document.querySelectorAll('.ribbon-chip-lang[data-lang="ko"]').forEach((el) => {
+  document.querySelectorAll('.header-guides-item-lang[data-lang="ko"]').forEach((el) => {
     el.textContent = t("landingTutorialLangKo");
   });
-  document.querySelectorAll('.ribbon-chip-lang[data-lang="en"]').forEach((el) => {
+  document.querySelectorAll('.header-guides-item-lang[data-lang="en"]').forEach((el) => {
     el.textContent = t("landingTutorialLangEn");
   });
 
   const developerKicker = document.getElementById("landing-developer-kicker");
   if (developerKicker) developerKicker.textContent = t("landingDeveloperKicker");
-  const developerContact = document.getElementById("landing-developer-contact");
-  if (developerContact) developerContact.textContent = t("landingDeveloperContact");
+  const developerLabel = document.getElementById("landing-developer-label");
+  if (developerLabel) developerLabel.textContent = t("landingDeveloperContact");
 
   const copyrightEl = document.querySelector(".landing-copyright");
   if (copyrightEl) copyrightEl.textContent = t("landingCopyright");
@@ -8243,6 +8321,8 @@ document.addEventListener("keydown", (event) => {
 dom.landingLocaleToggle?.addEventListener("click", () => {
   setLocale(state.locale === "en" ? "ko" : "en");
 });
+
+wireHeaderGuidesDropdown();
 
 dom.workspaceLocaleToggle?.addEventListener("click", () => {
   setLocale(state.locale === "en" ? "ko" : "en");

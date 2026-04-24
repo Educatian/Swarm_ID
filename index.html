@@ -26,46 +26,39 @@
         </div>
       </div>
       <div class="landing-header-actions">
+        <div class="header-guides" id="header-guides">
+          <button class="toolbar-button toolbar-button-quiet header-guides-trigger" id="header-guides-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="header-guides-menu">
+            <span id="header-guides-label">Guides</span>
+            <span class="header-guides-caret" aria-hidden="true">▾</span>
+          </button>
+          <div class="header-guides-menu" id="header-guides-menu" role="menu" hidden>
+            <a class="header-guides-item" role="menuitem" href="tutorials/student-ko/" target="_blank" rel="noopener" id="landing-tutorial-student-ko">
+              <span class="header-guides-item-role" data-role="student">Student</span>
+              <span class="header-guides-item-lang" data-lang="ko">한국어</span>
+            </a>
+            <a class="header-guides-item" role="menuitem" href="tutorials/student-en/" target="_blank" rel="noopener" id="landing-tutorial-student-en">
+              <span class="header-guides-item-role" data-role="student">Student</span>
+              <span class="header-guides-item-lang" data-lang="en">English</span>
+            </a>
+            <a class="header-guides-item" role="menuitem" href="tutorials/instructor-ko/" target="_blank" rel="noopener" id="landing-tutorial-instructor-ko">
+              <span class="header-guides-item-role" data-role="instructor">Instructor</span>
+              <span class="header-guides-item-lang" data-lang="ko">한국어</span>
+            </a>
+            <a class="header-guides-item" role="menuitem" href="tutorials/instructor-en/" target="_blank" rel="noopener" id="landing-tutorial-instructor-en">
+              <span class="header-guides-item-role" data-role="instructor">Instructor</span>
+              <span class="header-guides-item-lang" data-lang="en">English</span>
+            </a>
+          </div>
+        </div>
         <button class="toolbar-button toolbar-button-quiet" id="landing-locale-toggle" type="button">KO</button>
         <button class="toolbar-button toolbar-button-primary" id="landing-enter-button" type="button">Sign In</button>
       </div>
     </header>
 
-    <section class="landing-ribbon" id="landing-support" aria-label="Guides and developer">
-      <div class="landing-ribbon-group" id="landing-tutorials-card">
-        <span class="landing-ribbon-label" id="landing-tutorials-kicker">Guides</span>
-        <div class="landing-ribbon-chips">
-          <a class="ribbon-chip" href="tutorials/student-ko/" target="_blank" rel="noopener" id="landing-tutorial-student-ko">
-            <span class="ribbon-chip-role" data-role="student">Student</span>
-            <span class="ribbon-chip-lang" data-lang="ko">한국어</span>
-          </a>
-          <a class="ribbon-chip" href="tutorials/student-en/" target="_blank" rel="noopener" id="landing-tutorial-student-en">
-            <span class="ribbon-chip-role" data-role="student">Student</span>
-            <span class="ribbon-chip-lang" data-lang="en">English</span>
-          </a>
-          <a class="ribbon-chip" href="tutorials/instructor-ko/" target="_blank" rel="noopener" id="landing-tutorial-instructor-ko">
-            <span class="ribbon-chip-role" data-role="instructor">Instructor</span>
-            <span class="ribbon-chip-lang" data-lang="ko">한국어</span>
-          </a>
-          <a class="ribbon-chip" href="tutorials/instructor-en/" target="_blank" rel="noopener" id="landing-tutorial-instructor-en">
-            <span class="ribbon-chip-role" data-role="instructor">Instructor</span>
-            <span class="ribbon-chip-lang" data-lang="en">English</span>
-          </a>
-        </div>
-      </div>
-      <div class="landing-ribbon-group" id="landing-developer-card">
-        <span class="landing-ribbon-label" id="landing-developer-kicker">Developer</span>
-        <div class="landing-ribbon-chips">
-          <a class="ribbon-chip ribbon-chip-primary" href="developer/" id="landing-developer-contact">Profile</a>
-          <a class="ribbon-chip" href="https://github.com/Educatian/Swarm_ID" target="_blank" rel="noopener">GitHub</a>
-        </div>
-      </div>
-    </section>
-
     <section class="landing-hero">
       <div class="landing-copy">
         <p class="landing-kicker">AI + Human Network Visualization</p>
-        <h2>Turn design tension into a living network.</h2>
+        <h2 class="hero-type-h2"><span class="hero-type-text" id="landing-hero-title"></span><span class="hero-type-caret" aria-hidden="true"></span></h2>
         <p class="landing-body">Human judgment, institutional friction, and AI reasoning in one responsive field.</p>
         <div class="landing-signal-row">
           <span>Teacher load</span>
@@ -141,7 +134,17 @@
       </div>
     </section>
 
-    <p class="landing-copyright">© Designtension Lab · Made with care for classroom research</p>
+    <footer class="landing-footer">
+      <div class="landing-footer-links">
+        <a class="landing-footer-link" href="developer/" id="landing-developer-contact">
+          <span id="landing-developer-kicker">Developer</span>
+          <span class="landing-footer-sep" aria-hidden="true">·</span>
+          <span id="landing-developer-label">Profile</span>
+        </a>
+        <a class="landing-footer-link landing-footer-link-subtle" href="https://github.com/Educatian/Swarm_ID" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <p class="landing-copyright">© Designtension Lab · Made with care for classroom research</p>
+    </footer>
   </section>
 
   <div class="app-shell is-hidden" id="app-shell">
