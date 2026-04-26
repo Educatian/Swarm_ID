@@ -197,6 +197,30 @@ const translations = {
     workspaceRole: "Workspace",
     stageD3: "D3 force graph",
     processStep: "Process step",
+    nodeGoal: "Goal",
+    nodeConstraint: "Constraint",
+    nodeEvidence: "Evidence",
+    nodeAgenda: "Agenda",
+    nodeAiIssue: "AI issue",
+    nodeNote: "Note",
+    nodeNoteSuffix: "note",
+    nodeCaseSummary: "Case summary",
+    nodeLearnerAgenda: "Learner agenda",
+    nodeLearnerNote: "Learner note",
+    nodeRelatedIssue: "Related issue",
+    coreNodeFallback: "Design Proposal",
+    nodeTitleProposal: "Systemwide design conflict",
+    nodeTitleTeacher: "Teacher load hotspot",
+    nodeTitleAdministrator: "Policy adoption checkpoint",
+    nodeTitleStudent: "Learner agency signal",
+    nodeTitleIt: "Integration risk cluster",
+    nodeTitleAccessibility: "Accessibility review flag",
+    nodeTitleAdaptivePathing: "Pathway personalization spike",
+    nodeTitleModerationBurden: "Moderation overload",
+    nodeTitleGovernance: "Governance friction",
+    nodeTitleEvidenceTrace: "Evidence continuity gap",
+    nodeTitleCaptionParity: "Caption parity concern",
+    nodeTitleTelemetryScope: "Telemetry scope watch",
     showMore: "Show more",
     showLess: "Show less",
     tlUploadParsed: "Uploaded source document parsed into issue fragments and design signals.",
@@ -384,7 +408,7 @@ const translations = {
     signIn: "로그인",
     signInSubmit: "계속",
     landingHeroKicker: "AI + 인간 네트워크 시각화",
-    landingHeroTitle: "설계의 긴장을 살아 있는 네트워크로 바꾸세요.",
+    landingHeroTitle: "설계의 갈등을 살아 있는 네트워크로 바꾸세요.",
     landingHeroBody: "사람의 판단, 제도적 제약, AI 추론을 하나의 화면에서 함께 살펴봅니다.",
     landingTutorialsKicker: "가이드",
     landingTutorialRoleStudent: "학생",
@@ -507,6 +531,30 @@ const translations = {
     workspaceRole: "워크스페이스",
     stageD3: "D3 포스 그래프",
     processStep: "단계",
+    nodeGoal: "목표",
+    nodeConstraint: "제약",
+    nodeEvidence: "근거",
+    nodeAgenda: "안건",
+    nodeAiIssue: "AI 제안 이슈",
+    nodeNote: "메모",
+    nodeNoteSuffix: "메모",
+    nodeCaseSummary: "케이스 요약",
+    nodeLearnerAgenda: "학습자 안건",
+    nodeLearnerNote: "학습자 메모",
+    nodeRelatedIssue: "관련 이슈",
+    coreNodeFallback: "설계 제안",
+    nodeTitleProposal: "시스템 전반의 설계 갈등",
+    nodeTitleTeacher: "교수자 부담 핫스팟",
+    nodeTitleAdministrator: "정책 도입 체크포인트",
+    nodeTitleStudent: "학습자 주체성 신호",
+    nodeTitleIt: "통합 위험 군집",
+    nodeTitleAccessibility: "접근성 검토 플래그",
+    nodeTitleAdaptivePathing: "경로 개인화 급증",
+    nodeTitleModerationBurden: "조정 부담 과부하",
+    nodeTitleGovernance: "거버넌스 마찰",
+    nodeTitleEvidenceTrace: "근거 연속성 공백",
+    nodeTitleCaptionParity: "자막 동등성 우려",
+    nodeTitleTelemetryScope: "텔레메트리 범위 감시",
     showMore: "더보기",
     showLess: "접기",
     tlUploadParsed: "업로드한 문서를 이슈와 설계 신호로 분석했어요.",
@@ -3820,7 +3868,7 @@ function buildCaseIssueEntries(activeCase) {
   goals.forEach((goal, index) => {
     issueEntries.push({
       issueType: "goal",
-      title: `Goal ${index + 1}`,
+      title: `${t("nodeGoal")} ${index + 1}`,
       body: goal,
       stakeholder: inferStakeholderFromText(goal, index === 0 ? "student" : state.activeStakeholder),
       origin: "brief",
@@ -3830,7 +3878,7 @@ function buildCaseIssueEntries(activeCase) {
   constraints.forEach((constraint, index) => {
     issueEntries.push({
       issueType: "constraint",
-      title: `Constraint ${index + 1}`,
+      title: `${t("nodeConstraint")} ${index + 1}`,
       body: constraint,
       stakeholder: inferStakeholderFromText(constraint, index === 0 ? "teacher" : state.activeStakeholder),
       origin: "brief",
@@ -3838,7 +3886,7 @@ function buildCaseIssueEntries(activeCase) {
   });
 
   evidence.forEach((item, index) => {
-    const title = item.title || `Evidence ${index + 1}`;
+    const title = item.title || `${t("nodeEvidence")} ${index + 1}`;
     const body = item.body || title;
     issueEntries.push({
       issueType: "evidence",
@@ -3865,8 +3913,8 @@ function buildCaseIssueEntries(activeCase) {
   agendaNodes.forEach((item, index) => {
     issueEntries.push({
       issueType: "agenda",
-      title: item.title || `Agenda ${index + 1}`,
-      body: item.body || item.title || "Learner agenda",
+      title: item.title || `${t("nodeAgenda")} ${index + 1}`,
+      body: item.body || item.title || t("nodeLearnerAgenda"),
       stakeholder: item.stakeholder || inferStakeholderFromText(`${item.title} ${item.body}`, "student"),
       origin: "me",
     });
@@ -3875,8 +3923,8 @@ function buildCaseIssueEntries(activeCase) {
   aiGeneratedNodes.forEach((item, index) => {
     issueEntries.push({
       issueType: "expansion",
-      title: item.title || `AI issue ${index + 1}`,
-      body: item.body || item.title || "Related issue",
+      title: item.title || `${t("nodeAiIssue")} ${index + 1}`,
+      body: item.body || item.title || t("nodeRelatedIssue"),
       stakeholder: item.stakeholder || inferStakeholderFromText(`${item.title} ${item.body}`, state.activeStakeholder),
       origin: "ai",
     });
@@ -3885,8 +3933,10 @@ function buildCaseIssueEntries(activeCase) {
   annotations.forEach((item, index) => {
     issueEntries.push({
       issueType: annotationIssueType(item.noteType),
-      title: item.targetLabel ? `${item.targetLabel} note ${index + 1}` : `Note ${index + 1}`,
-      body: item.body || "Learner note",
+      title: item.targetLabel
+        ? `${item.targetLabel} ${t("nodeNoteSuffix")} ${index + 1}`
+        : `${t("nodeNote")} ${index + 1}`,
+      body: item.body || t("nodeLearnerNote"),
       stakeholder: inferStakeholderFromText(`${item.targetLabel || ""} ${item.body || ""}`, item.stakeholder || "student"),
       origin: "me",
     });
@@ -3899,7 +3949,7 @@ function buildCaseIssueEntries(activeCase) {
   if (!issueEntries.length && activeCase?.summary) {
     issueEntries.push({
       issueType: "summary",
-      title: "Case summary",
+      title: t("nodeCaseSummary"),
       body: activeCase.summary,
       stakeholder: inferStakeholderFromText(activeCase.summary, state.activeStakeholder),
     });
@@ -5044,7 +5094,7 @@ function buildRenderableGraph() {
   const uiCopy = getCaseUiCopy();
   const proposalNode = {
     id: "proposal",
-    label: uiCopy.graphCoreLabel || activeCase?.title || "Design Proposal",
+    label: uiCopy.graphCoreLabel || activeCase?.title || t("coreNodeFallback"),
     meta: `cycle ${state.graph.iteration}`,
     type: "core",
     tone: "primary",
@@ -5101,18 +5151,18 @@ function describeNodeIssue(node) {
   const scores = computeScores();
   const conflict = stakeholder ? stakeholderConflicts(node.stakeholder)[0] : null;
   const titles = {
-    proposal: "Systemwide design tension",
-    teacher: "Teacher load hotspot",
-    administrator: "Policy adoption checkpoint",
-    student: "Learner agency signal",
-    it: "Integration risk cluster",
-    accessibility: "Accessibility review flag",
-    "adaptive-pathing": "Pathway personalization spike",
-    "moderation-burden": "Moderation overload",
-    governance: "Governance friction",
-    "evidence-trace": "Evidence continuity gap",
-    "caption-parity": "Caption parity concern",
-    "telemetry-scope": "Telemetry scope watch",
+    proposal: t("nodeTitleProposal"),
+    teacher: t("nodeTitleTeacher"),
+    administrator: t("nodeTitleAdministrator"),
+    student: t("nodeTitleStudent"),
+    it: t("nodeTitleIt"),
+    accessibility: t("nodeTitleAccessibility"),
+    "adaptive-pathing": t("nodeTitleAdaptivePathing"),
+    "moderation-burden": t("nodeTitleModerationBurden"),
+    governance: t("nodeTitleGovernance"),
+    "evidence-trace": t("nodeTitleEvidenceTrace"),
+    "caption-parity": t("nodeTitleCaptionParity"),
+    "telemetry-scope": t("nodeTitleTelemetryScope"),
   };
 
   if (node.type === "core") {
@@ -6091,6 +6141,7 @@ function ensureGraphCurrent() {
   const signature = JSON.stringify({
     role: state.activeRole,
     layer: state.activeMapLayer,
+    locale: state.locale,
     caseId: activeCase?.id || "",
     learnerId: state.activeLearnerId || "",
     stakeholder: state.activeStakeholder,
@@ -7813,7 +7864,10 @@ function toggleCasePublish(caseId) {
 }
 
 dom.viewButtons.forEach((button) => {
-  button.addEventListener("click", () => setView(button.dataset.view));
+  button.addEventListener("click", () => {
+    if (tutorialState.active) endTutorial(true);
+    setView(button.dataset.view);
+  });
 });
 
 dom.roleSelect.addEventListener("change", (event) => {
