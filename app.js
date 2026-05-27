@@ -1486,6 +1486,10 @@ function defaultBoardSettings(overrides = {}) {
     maxAiExpansionsPerNode: 3,
     layoutMode: "force",
     sharingMode: "cohort",
+    // "full" = students get every view; "network-only" = students are locked to
+    // the Case Network view (node exploration / add / annotate) and the other
+    // views (Perspectives, Trade-offs, Test Changes, Report) are hidden.
+    studentView: "full",
     ...overrides,
   };
 }
@@ -3593,6 +3597,11 @@ function isViewAllowed(view) {
     return view === "visualizer";
   }
   if (state.activeRole === "admin") return true;
+  if (view === "sandbox") return false;
+  // Per-case lockdown: keep students on the Case Network (node interaction) only.
+  if (getCaseBoardSettings().studentView === "network-only") {
+    return view === "visualizer";
+  }
   return view !== "sandbox";
 }
 
