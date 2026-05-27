@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAT 100 · Design Tension Studio</title>
+  <link rel="icon" href="./favicon.svg" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #141b30;
+      --panel-2: #1b2440;
+      --ink: #eef2ff;
+      --muted: #9aa6c6;
+      --accent: #6ea8fe;
+      --accent-ink: #07122b;
+      --danger: #ff8a8a;
+      --border: #283256;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 80% -10%, #1c2c5a55, transparent),
+        radial-gradient(900px 500px at -10% 110%, #15325a44, transparent),
+        var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .card {
+      width: 100%;
+      max-width: 460px;
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 32px 30px;
+      box-shadow: 0 30px 80px -30px #000a, 0 1px 0 #ffffff10 inset;
+    }
+    .kicker {
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 8px;
+      font-weight: 700;
+    }
+    h1 { margin: 0 0 6px; font-size: 24px; line-height: 1.2; }
+    .sub { margin: 0 0 22px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+    label { display: block; font-size: 13px; color: var(--muted); margin: 0 0 6px; }
+    input[type="text"], select {
+      width: 100%;
+      padding: 13px 14px;
+      font-size: 16px;
+      color: var(--ink);
+      background: #0e1530;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+    }
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239aa6c6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+    select option { color: #0b1020; }
+    input[type="text"]:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px #6ea8fe33; }
+    button {
+      width: 100%;
+      margin-top: 14px;
+      padding: 13px 16px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent-ink);
+      background: var(--accent);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      font-weight: 600;
+    }
+    button:disabled { opacity: .6; cursor: progress; }
+    .status { margin: 14px 2px 0; min-height: 18px; font-size: 13px; color: var(--muted); }
+    .status.error { color: var(--danger); }
+    .returning {
+      background: #0e1530;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+    .returning strong { color: var(--ink); }
+    .hint { margin-top: 18px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+    a { color: var(--accent); }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./supabase-config.js"></script>
+</head>
+<body>
+  <main class="card">
+    <p class="kicker">CAT 100 · The University of Alabama</p>
+    <h1>Design Tension Studio</h1>
+    <p class="sub">Pick your name from the list to begin. No password needed. Your work saves under your name and continues on any device or browser.</p>
+
+    <div class="returning" id="returning" hidden>
+      <p style="margin:0 0 10px;">You already have a session in progress: <strong id="returning-name">Student</strong></p>
+      <button id="continue-btn" type="button">Continue</button>
+      <button class="secondary" id="switch-btn" type="button" style="margin-top:8px;">Start over as someone else</button>
+    </div>
+
+    <form id="name-form">
+      <label for="name">Select your name</label>
+      <select id="name" name="name" required>
+        <option value="" disabled selected>— Select your name —</option>
+      </select>
+      <button id="start-btn" type="submit">Start</button>
+    </form>
+
+    <p class="status" id="status"></p>
+
+    <p class="hint">Having trouble? Let your instructor know. · <a href="./index.html">Standard sign-in</a></p>
+  </main>
+
+  <script>
+    const JOIN_CODE = "UA-CAT100-SUMMER26";
+
+    // TODO: paste the real CAT 100 roster here. Keep IDENTICAL to STUDENT_NAMES
+    // in scripts/create-cat100-accounts.mjs (same names = same derived accounts).
+    const ROSTER = [
+      // "First Last",
+      // "First Last",
+    ];
+
+    const cfg = window.SUPABASE_CONFIG || {};
+    const client = (window.supabase && cfg.url && cfg.anonKey)
+      ? window.supabase.createClient(cfg.url, cfg.anonKey, {
+          auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+        })
+      : null;
+
+    const $ = (id) => document.getElementById(id);
+    const statusEl = $("status");
+    const startBtn = $("start-btn");
+
+    function setStatus(msg, isError = false) {
+      statusEl.textContent = msg || "";
+      statusEl.classList.toggle("error", Boolean(isError));
+    }
+
+    // Populate the dropdown with the roster.
+    (function fillRoster() {
+      const sel = $("name");
+      ROSTER.forEach((name) => {
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.textContent = name;
+        sel.appendChild(opt);
+      });
+    })();
+
+    const normName = (s) => String(s || "").toLowerCase().replace(/\s+/g, " ").trim();
+    function canonicalName(input) {
+      const match = ROSTER.find((n) => normName(n) === normName(input));
+      return match || String(input || "").trim();
+    }
+
+    // Derive the student's stable account credentials from their name. MUST stay
+    // identical to scripts/create-cat100-accounts.mjs so the same name always maps
+    // to the same Supabase account (history follows the student across devices).
+    const alnum = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const lastNameOf = (s) => alnum(String(s || "").trim().split(/\s+/).slice(-1)[0]);
+    function credsFor(name) {
+      return { email: `${alnum(name)}@cat100.swarm.io`, password: `cat100-${lastNameOf(name)}` };
+    }
+
+    function friendlyError(err) {
+      const msg = String(err && (err.message || err) || "");
+      if (/invalid login|invalid.?credential|email not confirmed|user not found|invalid_grant/i.test(msg)) {
+        return "We couldn't open your account yet. Please let your instructor know so they can set it up.";
+      }
+      if (/join.?code|not.?found|course/i.test(msg)) {
+        return "Course not found. Your instructor may not have opened the CAT 100 course yet.";
+      }
+      return "Couldn't start: " + msg;
+    }
+
+    // Sign in to the student's STABLE named account (created ahead of time by
+    // scripts/create-cat100-accounts.mjs) so the same name always resolves to the
+    // same Supabase user id. History follows the student on any device/browser,
+    // not just the one they first used. Then enroll + hand off to the main app.
+    async function enterApp(name) {
+      if (!client) throw new Error("Sign-in is not ready yet.");
+
+      const { email, password } = credsFor(name);
+
+      let { data: sessionData } = await client.auth.getSession();
+      let current = sessionData?.session?.user;
+
+      // If a different student's session is cached in this browser, switch out.
+      if (current && current.email && current.email.toLowerCase() !== email) {
+        try { await client.auth.signOut(); } catch (_) {}
+        current = null;
+      }
+
+      if (!current) {
+        const { data, error } = await client.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        current = data?.user;
+      }
+      const uid = current?.id;
+      if (!uid) throw new Error("Could not start a session.");
+
+      // Profile must exist before the membership FK (course_memberships -> profiles).
+      const { error: profileErr } = await client
+        .from("profiles")
+        .upsert({ id: uid, full_name: name }, { onConflict: "id" });
+      if (profileErr) throw profileErr;
+
+      // Self-enroll via the same SECURITY DEFINER RPC the student UI uses.
+      const { error: enrollErr } = await client.rpc("enroll_in_course_by_code", {
+        p_join_code: JOIN_CODE,
+        p_display_name: name,
+        p_section: null,
+      });
+      // 23505 = already enrolled; treat as success (idempotent re-entry).
+      if (enrollErr && enrollErr.code !== "23505" && !/already/i.test(enrollErr.message || "")) {
+        throw enrollErr;
+      }
+
+      // Force the main app into English for CAT 100 students, even if a prior
+      // user on this browser switched the locale to Korean.
+      try { window.localStorage.setItem("swarm-id-locale-v1", "en"); } catch (_) {}
+
+      window.location.href = "./index.html";
+    }
+
+    $("name-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = canonicalName($("name").value);
+      if (!name) { setStatus("Please select your name from the list.", true); return; }
+      startBtn.disabled = true;
+      setStatus("Starting...");
+      try {
+        await enterApp(name);
+      } catch (err) {
+        startBtn.disabled = false;
+        setStatus(friendlyError(err), true);
+      }
+    });
+
+    // Returning session: offer to continue (preserves history) or switch identity.
+    (async function checkExisting() {
+      if (!client) {
+        setStatus("Sign-in is not ready yet. Please let your instructor know.", true);
+        return;
+      }
+      const { data } = await client.auth.getSession();
+      const user = data?.session?.user;
+      if (!user) return;
+      const name = user.user_metadata?.display_name || "Student";
+      $("returning-name").textContent = name;
+      $("returning").hidden = false;
+
+      $("continue-btn").addEventListener("click", async () => {
+        $("continue-btn").disabled = true;
+        setStatus("Opening...");
+        try { await enterApp(name); }
+        catch (err) { $("continue-btn").disabled = false; setStatus(friendlyError(err), true); }
+      });
+      $("switch-btn").addEventListener("click", async () => {
+        setStatus("Signing out...");
+        try { await client.auth.signOut(); } catch (_) {}
+        $("returning").hidden = true;
+        setStatus("");
+        $("name").focus();
+      });
+    })();
+  </script>
+</body>
+</html>
