@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -111,25 +111,25 @@
   <main class="card">
     <p class="kicker">CAT 531 · The University of Alabama</p>
     <h1>Design Tension Studio</h1>
-    <p class="sub">목록에서 본인 이름을 골라 시작하세요. 계정이나 비밀번호를 만들 필요가 없어요. 같은 브라우저에서 다시 열면 작업이 이어집니다.</p>
+    <p class="sub">Pick your name from the list to begin. No account or password needed. Reopen in the same browser and your work continues.</p>
 
     <div class="returning" id="returning" hidden>
-      <p style="margin:0 0 10px;">이미 시작한 세션이 있습니다: <strong id="returning-name">학생</strong></p>
-      <button id="continue-btn" type="button">이어서 계속하기</button>
-      <button class="secondary" id="switch-btn" type="button" style="margin-top:8px;">다른 이름으로 새로 시작</button>
+      <p style="margin:0 0 10px;">You already have a session in progress: <strong id="returning-name">Student</strong></p>
+      <button id="continue-btn" type="button">Continue</button>
+      <button class="secondary" id="switch-btn" type="button" style="margin-top:8px;">Start over as someone else</button>
     </div>
 
     <form id="name-form">
-      <label for="name">이름을 선택하세요</label>
+      <label for="name">Select your name</label>
       <select id="name" name="name" required>
-        <option value="" disabled selected>— 본인 이름 선택 —</option>
+        <option value="" disabled selected>— Select your name —</option>
       </select>
-      <button id="start-btn" type="submit">시작하기</button>
+      <button id="start-btn" type="submit">Start</button>
     </form>
 
     <p class="status" id="status"></p>
 
-    <p class="hint">문제가 생기면 강사에게 알려주세요. · <a href="./index.html">일반 로그인 화면</a></p>
+    <p class="hint">Having trouble? Let your instructor know. · <a href="./index.html">Standard sign-in</a></p>
   </main>
 
   <script>
@@ -181,18 +181,18 @@
     function friendlyError(err) {
       const msg = String(err && (err.message || err) || "");
       if (/anonymous.*disabl|signups? not allowed|anonymous_provider_disabled/i.test(msg)) {
-        return "익명 로그인이 비활성화돼 있습니다. 강사에게 알려주세요. (Supabase: Authentication → Sign In / Providers → Anonymous → 활성화)";
+        return "Anonymous sign-in is turned off. Please let your instructor know. (Supabase: Authentication → Sign In / Providers → Anonymous → enable)";
       }
       if (/join.?code|not.?found|course/i.test(msg)) {
-        return "코스를 찾을 수 없습니다. 강사가 CAT531 코스를 아직 안 열었을 수 있어요.";
+        return "Course not found. Your instructor may not have opened the CAT 531 course yet.";
       }
-      return "시작하지 못했습니다: " + msg;
+      return "Couldn't start: " + msg;
     }
 
     // Sign in anonymously (no account creation), attach the name, enroll, then
     // hand off to the main app, which restores the session on load.
     async function enterApp(name) {
-      if (!client) throw new Error("로그인 구성이 준비되지 않았습니다.");
+      if (!client) throw new Error("Sign-in is not ready yet.");
 
       let { data: sessionData } = await client.auth.getSession();
       let uid = sessionData?.session?.user?.id;
@@ -204,7 +204,7 @@
         if (error) throw error;
         uid = data?.user?.id;
       }
-      if (!uid) throw new Error("세션을 만들지 못했습니다.");
+      if (!uid) throw new Error("Could not create a session.");
 
       // Profile must exist before the membership FK (course_memberships -> profiles).
       const { error: profileErr } = await client
@@ -223,15 +223,19 @@
         throw enrollErr;
       }
 
+      // Force the main app into English for CAT 531 students, even if a prior
+      // user on this browser switched the locale to Korean.
+      try { window.localStorage.setItem("swarm-id-locale-v1", "en"); } catch (_) {}
+
       window.location.href = "./index.html";
     }
 
     $("name-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const name = canonicalName($("name").value);
-      if (!name) { setStatus("목록에서 본인 이름을 선택해 주세요.", true); return; }
+      if (!name) { setStatus("Please select your name from the list.", true); return; }
       startBtn.disabled = true;
-      setStatus("시작하는 중...");
+      setStatus("Starting...");
       try {
         await enterApp(name);
       } catch (err) {
@@ -243,24 +247,24 @@
     // Returning session: offer to continue (preserves history) or switch identity.
     (async function checkExisting() {
       if (!client) {
-        setStatus("로그인 구성이 준비되지 않았습니다. 강사에게 알려주세요.", true);
+        setStatus("Sign-in is not ready yet. Please let your instructor know.", true);
         return;
       }
       const { data } = await client.auth.getSession();
       const user = data?.session?.user;
       if (!user) return;
-      const name = user.user_metadata?.display_name || "학생";
+      const name = user.user_metadata?.display_name || "Student";
       $("returning-name").textContent = name;
       $("returning").hidden = false;
 
       $("continue-btn").addEventListener("click", async () => {
         $("continue-btn").disabled = true;
-        setStatus("이어서 여는 중...");
+        setStatus("Opening...");
         try { await enterApp(name); }
         catch (err) { $("continue-btn").disabled = false; setStatus(friendlyError(err), true); }
       });
       $("switch-btn").addEventListener("click", async () => {
-        setStatus("로그아웃 중...");
+        setStatus("Signing out...");
         try { await client.auth.signOut(); } catch (_) {}
         $("returning").hidden = true;
         setStatus("");
