@@ -1760,18 +1760,34 @@ async function syncLearnerRunToSupabase(runRecord, caseId = state.activeCaseId, 
   }
 }
 
+// Stable per-session id (one studio session = one page load) + a monotonic seq,
+// embedded in every event payload so log-mining can sessionize and strictly
+// order events even when client_ts collides — no DB migration required.
+// Extract via payload->>'session_id' and (payload->>'seq')::int.
+let analyticsSessionId = null;
+let analyticsSeq = 0;
+function getAnalyticsSessionId() {
+  if (!analyticsSessionId) {
+    analyticsSessionId =
+      (typeof crypto !== "undefined" && crypto.randomUUID && crypto.randomUUID()) ||
+      `sess-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+  }
+  return analyticsSessionId;
+}
+
 function logEvent(eventType, payload = {}) {
   if (!isSupabaseSessionActive()) return;
   const client = initializeSupabase();
   if (!client) return;
   const course = getActiveCourse();
+  const basePayload = payload && typeof payload === "object" ? payload : { value: payload };
   const row = {
     user_id: state.auth.userId,
     course_id: course?.id || null,
     case_id: state.activeCaseId || null,
     role: state.activeRole || null,
     event_type: String(eventType || "unknown"),
-    payload: payload && typeof payload === "object" ? payload : { value: payload },
+    payload: { ...basePayload, session_id: getAnalyticsSessionId(), seq: ++analyticsSeq },
     client_ts: new Date().toISOString(),
   };
   try {
@@ -7261,6 +7277,14 @@ function addNodeAnnotation(noteType, visibility, body) {
     ...state.evidence,
   ].slice(0, 8);
   regenerateGraph(`annotation ${selected.label}`);
+  logEvent("annotation.add", {
+    target_id: selected.id,
+    target_label: String(selected.label || "").slice(0, 200),
+    stakeholder: annotation.stakeholder,
+    note_type: annotation.noteType,
+    visibility: annotation.visibility,
+    body_length: annotation.body.length,
+  });
   if (isSupabaseSessionActive()) {
     syncLearnerRunToSupabase(getActiveLearnerRun()).catch((error) => {
       console.error(error);
