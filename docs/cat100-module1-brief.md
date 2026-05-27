@@ -1,5 +1,7 @@
 # CAT 100 · Module 1 DTS Topic — Personal Digital Tension Map (DTS lite)
 
+> **STATUS: DORMANT / PROPOSED — NOT IN USE (2026-05-26).** The live CAT 100 course does **not** currently include DTS; this activity exists only in CAT100 revision *proposal* docs (`02_Reference-Docs/cat100-summer2026-schedule.html`), not the actual course package. Kept ready in case DTS-lite is adopted later. Only CAT531 actively uses DTS.
+
 Authored topic for **Activity C0 — Personal Digital Tension Map (DTS lite)** (CAT-100, Digital Citizenship, Summer 2026). Seeded into Supabase by `scripts/seed-cat100-module1-case.mjs`. Human-readable source / paste-fallback.
 
 - **Course:** CAT 100, University of Alabama (join code `UA-CAT100-SUMMER26`)
