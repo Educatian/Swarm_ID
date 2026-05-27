@@ -111,7 +111,7 @@
   <main class="card">
     <p class="kicker">CAT 531 · The University of Alabama</p>
     <h1>Design Tension Studio</h1>
-    <p class="sub">Pick your name from the list to begin. No account or password needed. Reopen in the same browser and your work continues.</p>
+    <p class="sub">Pick your name from the list to begin. No password needed. Your work saves under your name and continues on any device or browser.</p>
 
     <div class="returning" id="returning" hidden>
       <p style="margin:0 0 10px;">You already have a session in progress: <strong id="returning-name">Student</strong></p>
@@ -178,10 +178,19 @@
       return match || String(input || "").trim();
     }
 
+    // Derive the student's stable account credentials from their name. MUST stay
+    // identical to scripts/create-cat531-accounts.mjs so the same name always maps
+    // to the same Supabase account (history follows the student across devices).
+    const alnum = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const lastNameOf = (s) => alnum(String(s || "").trim().split(/\s+/).slice(-1)[0]);
+    function credsFor(name) {
+      return { email: `${alnum(name)}@swarm.io`, password: `cat531-${lastNameOf(name)}` };
+    }
+
     function friendlyError(err) {
       const msg = String(err && (err.message || err) || "");
-      if (/anonymous.*disabl|signups? not allowed|anonymous_provider_disabled/i.test(msg)) {
-        return "Anonymous sign-in is turned off. Please let your instructor know. (Supabase: Authentication → Sign In / Providers → Anonymous → enable)";
+      if (/invalid login|invalid.?credential|email not confirmed|user not found|invalid_grant/i.test(msg)) {
+        return "We couldn't open your account yet. Please let your instructor know so they can set it up.";
       }
       if (/join.?code|not.?found|course/i.test(msg)) {
         return "Course not found. Your instructor may not have opened the CAT 531 course yet.";
@@ -189,22 +198,31 @@
       return "Couldn't start: " + msg;
     }
 
-    // Sign in anonymously (no account creation), attach the name, enroll, then
-    // hand off to the main app, which restores the session on load.
+    // Sign in to the student's STABLE named account (created ahead of time by
+    // scripts/create-cat531-accounts.mjs) so the same name always resolves to the
+    // same Supabase user id. History follows the student on any device/browser,
+    // not just the one they first used. Then enroll + hand off to the main app.
     async function enterApp(name) {
       if (!client) throw new Error("Sign-in is not ready yet.");
 
-      let { data: sessionData } = await client.auth.getSession();
-      let uid = sessionData?.session?.user?.id;
+      const { email, password } = credsFor(name);
 
-      if (!uid) {
-        const { data, error } = await client.auth.signInAnonymously({
-          options: { data: { display_name: name, cohort: "ua-cat531", course: "CAT 531" } },
-        });
-        if (error) throw error;
-        uid = data?.user?.id;
+      let { data: sessionData } = await client.auth.getSession();
+      let current = sessionData?.session?.user;
+
+      // If a different student's session is cached in this browser, switch out.
+      if (current && current.email && current.email.toLowerCase() !== email) {
+        try { await client.auth.signOut(); } catch (_) {}
+        current = null;
       }
-      if (!uid) throw new Error("Could not create a session.");
+
+      if (!current) {
+        const { data, error } = await client.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        current = data?.user;
+      }
+      const uid = current?.id;
+      if (!uid) throw new Error("Could not start a session.");
 
       // Profile must exist before the membership FK (course_memberships -> profiles).
       const { error: profileErr } = await client
