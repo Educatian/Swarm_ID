@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAT 531 · Design Tension Studio — Student Guide</title>
+  <link rel="icon" href="./favicon.svg" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #141b30;
+      --panel-2: #1b2440;
+      --ink: #eef2ff;
+      --muted: #9aa6c6;
+      --accent: #6ea8fe;
+      --accent-ink: #07122b;
+      --good: #7ee0a8;
+      --warn: #ffd479;
+      --danger: #ff8a8a;
+      --border: #283256;
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+      color: var(--ink);
+      line-height: 1.6;
+      background:
+        radial-gradient(1200px 600px at 85% -10%, #1c2c5a55, transparent),
+        radial-gradient(900px 500px at -10% 100%, #15325a44, transparent),
+        var(--bg);
+    }
+    a { color: var(--accent); }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 22px; }
+
+    /* Hero */
+    header.hero {
+      padding: 56px 0 34px;
+      border-bottom: 1px solid var(--border);
+    }
+    .kicker {
+      font-size: 12px; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--accent); font-weight: 700; margin: 0 0 10px;
+    }
+    h1 { margin: 0 0 12px; font-size: clamp(28px, 5vw, 44px); line-height: 1.12; }
+    .lede { color: var(--muted); font-size: 18px; max-width: 60ch; margin: 0; }
+    .hero-cta { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-block; padding: 12px 20px; border-radius: 12px;
+      font-weight: 700; font-size: 15px; text-decoration: none; cursor: pointer;
+      border: 1px solid var(--border);
+    }
+    .btn-primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+    .btn-ghost { background: transparent; color: var(--ink); }
+
+    /* Layout with sticky nav */
+    .grid { display: grid; grid-template-columns: 220px 1fr; gap: 40px; padding: 36px 0 80px; }
+    nav.toc {
+      position: sticky; top: 22px; align-self: start;
+      font-size: 14px;
+    }
+    nav.toc p { color: var(--muted); text-transform: uppercase; letter-spacing: .1em; font-size: 11px; margin: 0 0 10px; }
+    nav.toc a {
+      display: block; padding: 6px 10px; border-radius: 8px;
+      color: var(--muted); text-decoration: none; margin-bottom: 2px;
+    }
+    nav.toc a:hover { color: var(--ink); background: #ffffff0c; }
+    @media (max-width: 820px) {
+      .grid { grid-template-columns: 1fr; }
+      nav.toc { position: static; margin-bottom: 8px; }
+      nav.toc .toc-inner { display: flex; flex-wrap: wrap; gap: 6px; }
+      nav.toc a { background: var(--panel); border: 1px solid var(--border); }
+    }
+
+    section { margin-bottom: 40px; scroll-margin-top: 22px; }
+    h2 { font-size: 24px; margin: 0 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    h3 { font-size: 18px; margin: 24px 0 8px; }
+
+    .card {
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 22px 24px; margin: 16px 0;
+    }
+
+    /* Callouts */
+    .callout { border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 18px; margin: 16px 0; background: #6ea8fe14; }
+    .callout.good { border-color: var(--good); background: #7ee0a814; }
+    .callout.warn { border-color: var(--warn); background: #ffd47914; }
+    .callout.danger { border-color: var(--danger); background: #ff8a8a14; }
+    .callout strong { color: var(--ink); }
+    .callout .tag { display:inline-block; font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; margin-bottom:4px; }
+    .callout.good .tag { color: var(--good); }
+    .callout.warn .tag { color: var(--warn); }
+    .callout.danger .tag { color: var(--danger); }
+    .callout .tag.acc { color: var(--accent); }
+
+    /* Steps */
+    ol.steps { list-style: none; counter-reset: step; padding: 0; margin: 8px 0; }
+    ol.steps > li {
+      counter-increment: step; position: relative;
+      padding: 16px 18px 16px 64px; margin-bottom: 12px;
+      background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    }
+    ol.steps > li::before {
+      content: counter(step); position: absolute; left: 16px; top: 16px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--accent); color: var(--accent-ink);
+      display: grid; place-items: center; font-weight: 800; font-size: 15px;
+    }
+    ol.steps > li b { color: var(--ink); }
+
+    kbd {
+      background: #0e1530; border: 1px solid var(--border); border-bottom-width: 2px;
+      border-radius: 6px; padding: 1px 7px; font-size: 13px; font-family: inherit; color: var(--ink);
+      white-space: nowrap;
+    }
+
+    /* FAQ */
+    details {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 12px; padding: 0; margin-bottom: 10px; overflow: hidden;
+    }
+    details[open] { background: var(--panel-2); }
+    summary {
+      cursor: pointer; padding: 16px 20px; font-weight: 600; list-style: none;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--accent); font-size: 22px; font-weight: 400; }
+    details[open] summary::after { content: "–"; }
+    details .answer { padding: 0 20px 18px; color: #d4dcf5; }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 15px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: .05em; }
+
+    .axes li { margin-bottom: 8px; }
+    .axes b { color: var(--accent); }
+
+    /* Figures / screenshots */
+    figure.shot { margin: 18px 0; }
+    figure.shot img {
+      width: 100%; display: block; border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px -28px #000c;
+    }
+    figure.shot figcaption {
+      color: var(--muted); font-size: 13px; margin-top: 8px; text-align: center;
+    }
+    figure.shot.framed img { background: #0e1530; }
+
+    footer { border-top: 1px solid var(--border); padding: 28px 0 60px; color: var(--muted); font-size: 14px; }
+
+    @media print {
+      body { background: #fff; color: #111; }
+      nav.toc, .hero-cta { display: none; }
+      .grid { grid-template-columns: 1fr; }
+      .card, details, ol.steps > li { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="wrap">
+      <p class="kicker">CAT 531 · Computer-Based Instruction · The University of Alabama</p>
+      <h1>Design Tension Studio — Student Guide</h1>
+      <p class="lede">Everything you need to complete the Module 1 activity, written to answer the questions students have actually been asking. If you're short on time, read the 60-second version, then come back for the rest.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="./cat531.html">Open the Studio →</a>
+        <a class="btn btn-ghost" href="#video">▶ Watch the walkthrough</a>
+        <a class="btn btn-ghost" href="#tldr">60-second version</a>
+        <a class="btn btn-ghost" href="#faq">Jump to FAQ</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="grid">
+
+      <nav class="toc">
+        <p>On this page</p>
+        <div class="toc-inner">
+          <a href="#video">▶ Walkthrough video</a>
+          <a href="#tldr">60-second version</a>
+          <a href="#what">What DTS is</a>
+          <a href="#login">1 · Log in</a>
+          <a href="#open">2 · Open the case</a>
+          <a href="#given">3 · The case is given</a>
+          <a href="#lenses">4 · Switch lenses</a>
+          <a href="#node">5 · Add a node</a>
+          <a href="#note">6 · Save a note</a>
+          <a href="#rationale">7 · Your rationale</a>
+          <a href="#axes">The tension axes</a>
+          <a href="#faq">FAQ</a>
+          <a href="#trouble">Troubleshooting</a>
+        </div>
+      </nav>
+
+      <main>
+
+        <!-- TL;DR -->
+        <section id="tldr">
+          <h2>The 60-second version</h2>
+          <div class="card">
+            <ol class="steps">
+              <li>Go to <a href="./cat531.html"><b>the Studio link</b></a>, pick <b>your name</b> from the dropdown, click <kbd>Start</kbd>. No password.</li>
+              <li>Open the published <b>Module 1 case</b> and read its brief. The classroom scenario is already written for you.</li>
+              <li>Switch the <b>lenses</b> (Teacher → IT → Students → Administration) to see the same situation from each side.</li>
+              <li><b>Add a node</b> for any design tension the case misses, and use the <b>Save note</b> box to annotate a node you've selected.</li>
+              <li>Decide which tension matters most and write your <b>rationale</b>. That carries into the Module 1 Assess assignment.</li>
+            </ol>
+          </div>
+          <div class="callout good">
+            <span class="tag">The #1 thing to know</span><br>
+            <strong>You do not write a paragraph describing a classroom, and you do not make one up.</strong> The classroom is the case that's already published in the Studio. Your job is to explore it and reason about it, not to invent it. <a href="#given">More below →</a>
+          </div>
+        </section>
+
+        <!-- Video -->
+        <section id="video">
+          <h2>Watch the walkthrough</h2>
+          <p>Under a minute, captioned, no sound needed. It shows the whole flow: logging in, opening the case, switching lenses, and adding a node.</p>
+          <figure class="shot framed">
+            <video controls preload="metadata" poster="./guide-img/03-case-network.png" style="width:100%;display:block;border-radius:12px;">
+              <source src="./cat531-tutorial.mp4" type="video/mp4" />
+              Your browser can't play this video. <a href="./cat531-tutorial.mp4">Download it here</a>.
+            </video>
+            <figcaption>Prefer reading? The same steps are written out below.</figcaption>
+          </figure>
+        </section>
+
+        <!-- What it is -->
+        <section id="what">
+          <h2>What the Design Tension Studio is</h2>
+          <p>Design Tension Studio (DTS) is the interactive tool we use for the <b>Module 1 Explore</b> activity. It shows an instructional-design situation as a <b>network map</b>: a real-world case sits in the center, surrounded by the concerns of the people affected by it (teachers, students, IT, administration).</p>
+          <p>Instead of reading a flat case study, you explore it from multiple sides, spot the <b>design tensions</b> (places where two good goals pull against each other), add your own thinking to the map, and build a defensible rationale. It's practice for exactly the kind of trade-off reasoning that good instructional designers do every day.</p>
+          <div class="callout">
+            <span class="tag acc">Your view</span><br>
+            For CAT 531, your screen is intentionally focused on <strong>one view: the Case Network</strong>. You won't see extra panels (Perspectives, Trade-offs, Test Changes, Report). That's by design, so you can concentrate on mapping and reasoning. Nothing is missing or broken.
+          </div>
+          <figure class="shot framed">
+            <img src="./guide-img/03-case-network.png" alt="The Design Tension Studio with a case open: a network map of stakeholder nodes in the center, the case sidebar on the left, and the lens panel on the right." />
+            <figcaption>The Studio with the Module 1 case open. Nodes in the center, case info on the left, lens panel on the right.</figcaption>
+          </figure>
+        </section>
+
+        <!-- Step 1 -->
+        <section id="login">
+          <h2>Step 1 · Log in (no password)</h2>
+          <ol class="steps">
+            <li>Open the Studio: <a href="./cat531.html"><b>the CAT 531 link</b></a> (also posted in Blackboard).</li>
+            <li>From the <b>"Select your name"</b> dropdown, choose <b>your own name</b>.</li>
+            <li>Click <kbd>Start</kbd>. You're in. There is no password to remember.</li>
+          </ol>
+          <figure class="shot">
+            <img src="./guide-img/01-login.png" alt="The CAT 531 login card: a 'Select your name' dropdown and a Start button. No password field." />
+            <figcaption>The login screen. Pick your name, click Start.</figcaption>
+          </figure>
+          <div class="callout good">
+            <span class="tag">Your work follows you</span><br>
+            Your name is tied to your own saved space. You can log in from <strong>any device or browser</strong> (laptop, lab computer, phone) by picking your name again, and your previous work will be there. You don't type the course join code anywhere; that happens automatically.
+          </div>
+          <div class="callout warn">
+            <span class="tag">If it says it "couldn't open your account"</span><br>
+            That just means your account isn't set up on the roster yet. Email me (Mr. Moon) and I'll fix it the same day. It's not something you did wrong.
+          </div>
+        </section>
+
+        <!-- Step 2 -->
+        <section id="open">
+          <h2>Step 2 · Open the published case</h2>
+          <p>After you log in, you'll see a short <b>"First steps"</b> panel and a list of available cases. Click the <b>Module 1 case</b> to open it. A guided walkthrough is built in: click <kbd>Show Tutorial</kbd> at the top (or <kbd>Take the guided tour</kbd> in the First steps panel) and the tool will walk you through the screen.</p>
+          <p>Once the case is open, the network map fills the canvas: the case in the middle, stakeholder concern clusters arranged around it. A <b>"How to read this map"</b> panel explains what nodes and edges mean.</p>
+          <figure class="shot framed">
+            <img src="./guide-img/02-app-landing.png" alt="The Studio landing view showing the course dropdowns at the top, the 'How to read this map' panel, and the case sidebar." />
+            <figcaption>After login: the "How to read this map" panel, plus a "Show Tutorial" button up top for the guided tour.</figcaption>
+          </figure>
+        </section>
+
+        <!-- Step 3 -->
+        <section id="given">
+          <h2>Step 3 · Read the brief — the case is already written for you</h2>
+          <p>At the top of the open case is the <b>brief</b>. Read it first. This is the scenario you'll be working with for the whole activity:</p>
+          <div class="card" style="font-style: italic; color:#d4dcf5;">
+            "A school is adopting computer-based instruction (CBI) across its classrooms. Pre-service teachers are asked to integrate it without losing pedagogical intent, widening equity gaps, or handing instructional control to the system. The work is not only instructional: it is also organizational, infrastructural, and ethical. Before proposing any redesign, map where the design tensions live and decide which one matters most."
+          </div>
+          <div class="callout danger">
+            <span class="tag">Common confusion, cleared up</span><br>
+            <strong>"Where do I write the paragraph describing the classroom? Am I making it up from my own experience?"</strong><br>
+            Neither. There is <strong>no step where you describe or invent a classroom</strong>. The classroom situation is the case above, and it's the same for everyone. You don't author the context; you <strong>read it, explore it, and respond to it</strong>. Your original contribution is the tensions you identify and the rationale you write, not a fictional classroom.
+          </div>
+          <div class="callout">
+            <span class="tag acc">"Where do I click to frame the context?"</span><br>
+            You don't frame it; it's already framed in the brief you just read. The only things you'll click to add your own content are <strong>Add a node</strong> and <strong>Save note</strong>, covered in Steps 5 and 6.
+          </div>
+        </section>
+
+        <!-- Step 4 -->
+        <section id="lenses">
+          <h2>Step 4 · Switch lenses</h2>
+          <p>The same case looks different depending on who you ask. In the <b>Selected lens</b> panel on the right, click each lens chip to re-read the network from that stakeholder's side:</p>
+          <ul>
+            <li><b>Teacher</b> — pedagogy, pacing, professional judgment</li>
+            <li><b>Administrator</b> — adoption pressure, accountability, cost</li>
+            <li><b>Student</b> — access, equity, experience</li>
+            <li><b>IT Systems</b> — infrastructure, data, devices, connectivity</li>
+            <li><b>Accessibility</b> — captioning, assistive needs, who gets left out</li>
+          </ul>
+          <p>Spend a minute in each lens before you start adding anything. The tensions usually become obvious once you notice that what helps one stakeholder strains another. The panel also surfaces the <b>Top tensions</b> it currently sees.</p>
+        </section>
+
+        <!-- Step 5 -->
+        <section id="node">
+          <h2>Step 5 · Add a node</h2>
+          <p>When you spot a design tension the case doesn't already capture, add it to the map:</p>
+          <ol class="steps">
+            <li>Use the <b>Add a node</b> control on the canvas.</li>
+            <li>Give it a short, specific title (for example, <em>"CBI pacing overrides reteaching"</em>).</li>
+            <li>Save it. Your node joins the network and is stored under your name.</li>
+          </ol>
+          <p>Aim for tensions across <b>pedagogy, equity, and control</b>, the three areas the activity focuses on. See the <a href="#axes">tension axes</a> for prompts if you get stuck.</p>
+          <figure class="shot framed">
+            <img src="./guide-img/04-lenses-and-add.png" alt="The left panel showing the green 'Add a node' button, with the lens panel and swarm activity log visible." />
+            <figcaption>The green <b>Add a node</b> button. The lens panel and activity log sit alongside the map.</figcaption>
+          </figure>
+        </section>
+
+        <!-- Step 6 -->
+        <section id="note">
+          <h2>Step 6 · Save a note (annotate)</h2>
+          <p>To add your thinking to a node, <b>click the node to select it</b>, then use the note box on the side. You'll see the prompt <em>"Add a note to the selected node..."</em>. Type your comment or question and click <kbd>Save note</kbd>.</p>
+          <p>You can mark a note as a <b>question</b> or a <b>comment</b>. Use questions for things you're genuinely unsure about; they're useful evidence of your reasoning, not a sign you're behind.</p>
+        </section>
+
+        <!-- Step 7 -->
+        <section id="rationale">
+          <h2>Step 7 · Write your rationale</h2>
+          <p>This is the heart of the assignment. After mapping the tensions, <b>decide which single tension matters most</b> for this school's CBI rollout, and explain why. Ground your reasoning in the case and the Module 1 readings, not just personal preference.</p>
+          <div class="callout good">
+            <span class="tag">How this connects to your grade</span><br>
+            This Explore activity bridges directly into <strong>Module 1 Assess — Design Tension Rationale</strong>. The tensions you mapped and the reasoning you developed here are what you'll formalize there. Doing thoughtful work in the Studio makes the Assess submission much easier.
+          </div>
+        </section>
+
+        <!-- Axes reference -->
+        <section id="axes">
+          <h2>Reference · The five tension axes</h2>
+          <p>These are the friction points built into the case. Use them as thinking prompts when adding nodes:</p>
+          <ul class="axes">
+            <li><b>Pedagogy vs. automation</b> — CBI pacing can override a teacher's judgment about when to slow down or reteach.</li>
+            <li><b>Equity vs. standardization</b> — a uniform tool can widen gaps for learners who need different access (captioning, pace, devices, connectivity).</li>
+            <li><b>Control vs. convenience</b> — data flows and adaptive logic shift instructional control toward the platform.</li>
+            <li><b>Teacher workload vs. fidelity</b> — keeping CBI pathways pedagogically coherent adds hidden labor.</li>
+            <li><b>Evidence vs. adoption pressure</b> — tools are often adopted before there's evidence they fit the classroom.</li>
+          </ul>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq">
+          <h2>FAQ — your questions, answered</h2>
+
+          <details open>
+            <summary>Do I write a paragraph describing the classroom? Do I make it up from my own experience?</summary>
+            <div class="answer">No on both counts. The classroom scenario is the published case (the school adopting CBI), and it's the same for everyone. You don't describe or invent a classroom. What you contribute is the design tensions you identify (Step 5), your notes (Step 6), and your rationale about which tension matters most (Step 7).</div>
+          </details>
+
+          <details>
+            <summary>Where do I click to frame the context for the assignment?</summary>
+            <div class="answer">There's no "frame the context" step for students; the context is already set in the case brief. Open the Module 1 case, read the brief at the top, then add your own content with <b>Add a node</b> and <b>Save note</b>. That's everything you need to click.</div>
+          </details>
+
+          <details>
+            <summary>Is there a tutorial video? Technology isn't my strong suit.</summary>
+            <div class="answer">You don't need to be a tech person for this. There's a built-in walkthrough: after you log in, click <kbd>Show Tutorial</kbd> at the top of the screen (or <kbd>Take the guided tour</kbd> in the "First steps" panel) and it will point out each part of the screen. This guide plus that tour covers the whole activity. If you'd still like a short screen-recording, let me know and I'll post one for the class.</div>
+          </details>
+
+          <details>
+            <summary>How do I log in? Which name do I pick?</summary>
+            <div class="answer">Open <a href="./cat531.html">the Studio link</a>, choose <b>your own name</b> from the dropdown, and click <kbd>Start</kbd>. No password. If your name isn't in the list or login fails, email me and I'll add you the same day.</div>
+          </details>
+
+          <details>
+            <summary>Will my work save? What if I switch computers?</summary>
+            <div class="answer">Yes. Your work saves under your name automatically. Log in with the same name on any device or browser and your previous nodes and notes will be there. On a shared/lab computer, if it shows someone else's session, use <b>"Start over as someone else"</b> and pick your name.</div>
+          </details>
+
+          <details>
+            <summary>The Chat Bytes community discussion board isn't working.</summary>
+            <div class="answer">Thanks for flagging it. That board lives in Blackboard, separate from the Design Tension Studio, and I'm looking into why it isn't loading. It does not block the Module 1 Studio activity; you can complete everything in this guide without it. I'll post in the course once it's fixed.</div>
+          </details>
+
+          <details>
+            <summary>I'm confused by the schedule / when is this due?</summary>
+            <div class="answer">The Module 1 Explore (Design Tension Studio) activity is due <b>Saturday, May 30, 2026</b>, and it leads into the Module 1 Assess (Design Tension Rationale). If a date in the schedule looks off or contradicts another posting, email me and I'll confirm and correct it.</div>
+          </details>
+
+          <details>
+            <summary>How much do I need to add to be "done"?</summary>
+            <div class="answer">Explore all four lenses, add at least a few nodes that span pedagogy, equity, and control, annotate them with your reasoning, and identify the one tension you think matters most with a short justification. Quality of reasoning matters more than the number of nodes. Refer to the rubric in the Module 1 Assess instructions for the graded write-up.</div>
+          </details>
+
+        </section>
+
+        <!-- Troubleshooting -->
+        <section id="trouble">
+          <h2>Troubleshooting quick table</h2>
+          <table>
+            <thead>
+              <tr><th>Symptom</th><th>What to do</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>"We couldn't open your account yet."</td><td>Your roster account isn't set up. Email Mr. Moon; fixed same day.</td></tr>
+              <tr><td>"Course not found."</td><td>The course may not be open yet, or you used the wrong link. Use the link in Step 1 and let me know if it persists.</td></tr>
+              <tr><td>It shows another student's name.</td><td>Click <b>"Start over as someone else"</b> and pick your own name.</td></tr>
+              <tr><td>I don't see Perspectives / Trade-offs / Report.</td><td>Expected. CAT 531 is focused on the Case Network view only. Nothing is broken.</td></tr>
+              <tr><td>My nodes disappeared.</td><td>Make sure you logged in with the same name. Work is saved per name, not per device.</td></tr>
+              <tr><td>Chat Bytes board won't load.</td><td>That's a Blackboard item, not DTS. It doesn't block this activity; I'm fixing it.</td></tr>
+              <tr><td>Still stuck.</td><td>Email me with a screenshot. Happy to do a quick call.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <p><strong>Questions?</strong> Email Mr. Jewoong Moon (jmoon19@ua.edu). Include a screenshot if something looks off, it helps me help you faster.</p>
+      <p style="margin-top:6px;">CAT 531 · Design Tension Studio · The University of Alabama, Summer 2026.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
