@@ -1,4 +1,9 @@
-# Design Tension Studio
+# Design Tension Studio (디자인 텐션 스튜디오) — 한국어판
+
+> **이 `ko` 브랜치는 한국어 기본(Korean-default) 버전입니다.** 앱 UI는 처음부터 한국어로 표시되며,
+> 헤더의 `EN` 버튼으로 영어로 전환할 수 있습니다. 영어 원본은 `main` 브랜치를 참고하세요.
+> 변경 범위: 기본 로케일을 `ko`로 전환, 정적 랜딩/제목/브랜드명 한국어화(`디자인 텐션 스튜디오`),
+> CAT 100 참여 페이지(`cat100.html`) 한국어화. CAT 531(미국 강의)은 영어를 유지합니다.
 
 <p align="left">
   <strong>An instructional design systems lab for seeing educational design as a sociotechnical problem.</strong>

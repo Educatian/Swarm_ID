@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html class="dark" lang="ko">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Design Tension Studio</title>
+  <title>디자인 텐션 스튜디오</title>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a class="skip-link" href="#main-content">본문으로 바로가기</a>
   <div class="background-layer"></div>
   <section class="landing-shell" id="landing-shell">
     <header class="landing-header">
@@ -21,14 +21,14 @@
           <span class="material-symbols-outlined">hub</span>
         </div>
         <div>
-          <p class="landing-brand-kicker">Instructional design systems lab</p>
-          <h1>Design Tension Studio</h1>
+          <p class="landing-brand-kicker">수업설계 시스템 연구실</p>
+          <h1>디자인 텐션 스튜디오</h1>
         </div>
       </div>
       <div class="landing-header-actions">
         <div class="header-guides" id="header-guides">
           <button class="toolbar-button toolbar-button-quiet header-guides-trigger" id="header-guides-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="header-guides-menu">
-            <span id="header-guides-label">Guides</span>
+            <span id="header-guides-label">가이드</span>
             <span class="header-guides-caret" aria-hidden="true">▾</span>
           </button>
           <div class="header-guides-menu" id="header-guides-menu" role="menu" hidden>
@@ -50,40 +50,40 @@
             </a>
           </div>
         </div>
-        <button class="toolbar-button toolbar-button-quiet" id="landing-locale-toggle" type="button">KO</button>
-        <button class="toolbar-button toolbar-button-primary" id="landing-enter-button" type="button">Sign In</button>
+        <button class="toolbar-button toolbar-button-quiet" id="landing-locale-toggle" type="button">EN</button>
+        <button class="toolbar-button toolbar-button-primary" id="landing-enter-button" type="button">로그인</button>
       </div>
     </header>
 
     <section class="landing-hero">
       <div class="landing-copy">
-        <p class="landing-kicker">AI + Human Network Visualization</p>
-        <h2 class="hero-type-h2"><span class="hero-type-text" id="landing-hero-title">Turn design tension into a living network.</span><span class="hero-type-caret" aria-hidden="true"></span></h2>
-        <p class="landing-body">Human judgment, institutional friction, and AI reasoning in one responsive field.</p>
+        <p class="landing-kicker">AI + 인간 네트워크 시각화</p>
+        <h2 class="hero-type-h2"><span class="hero-type-text" id="landing-hero-title">설계의 갈등을 살아 있는 네트워크로 바꾸세요.</span><span class="hero-type-caret" aria-hidden="true"></span></h2>
+        <p class="landing-body">사람의 판단, 제도적 제약, AI 추론을 하나의 화면에서 함께 살펴봅니다.</p>
         <div class="landing-signal-row">
-          <span>Teacher load</span>
-          <span>Student agency</span>
-          <span>Governance</span>
-          <span>Accessibility</span>
+          <span>교수자 부담</span>
+          <span>학생 주체성</span>
+          <span>거버넌스</span>
+          <span>접근성</span>
         </div>
         <article class="landing-login-card" id="landing-login-card">
           <div class="landing-login-head">
-            <p class="landing-kicker">Sign In</p>
-              <strong>Open your workspace</strong>
+            <p class="landing-kicker">로그인</p>
+              <strong>워크스페이스 열기</strong>
           </div>
           <form class="landing-login-form" id="landing-login-form">
             <div class="landing-login-grid auth-grid">
               <label class="mini-control">
-                <span>Email</span>
+                <span>이메일</span>
                 <input id="landing-login-email" name="email" type="email" placeholder="you@school.edu" autocomplete="username" spellcheck="false" required>
               </label>
               <label class="mini-control">
-                <span>Password</span>
-                <input id="landing-login-password" name="password" type="password" placeholder="Password" autocomplete="current-password" required>
+                <span>비밀번호</span>
+                <input id="landing-login-password" name="password" type="password" placeholder="비밀번호" autocomplete="current-password" required>
               </label>
             </div>
             <div class="landing-login-row">
-              <button class="toolbar-button toolbar-button-primary" id="landing-login-submit" type="submit">Sign In</button>
+              <button class="toolbar-button toolbar-button-primary" id="landing-login-submit" type="submit">계속</button>
             </div>
             <p class="landing-login-helper" id="landing-login-helper"></p>
             <p class="landing-auth-status" id="landing-auth-status" aria-live="polite"></p>
@@ -91,27 +91,27 @@
 
           <form class="landing-join-form" id="landing-join-form">
             <div class="landing-login-head">
-              <p class="landing-kicker">Student join</p>
-              <strong>Join a course</strong>
+              <p class="landing-kicker">학생 참여</p>
+              <strong>코스 참여하기</strong>
             </div>
             <div class="landing-login-grid auth-grid">
               <label class="mini-control">
-                <span>Email</span>
+                <span>이메일</span>
                 <input id="landing-join-email" name="joinEmail" type="email" placeholder="student@school.edu" autocomplete="username" spellcheck="false" required>
               </label>
               <label class="mini-control">
-                <span>Password</span>
-                <input id="landing-join-password" name="joinPassword" type="password" placeholder="Password" autocomplete="current-password" required>
+                <span>비밀번호</span>
+                <input id="landing-join-password" name="joinPassword" type="password" placeholder="비밀번호" autocomplete="current-password" required>
               </label>
             </div>
             <div class="landing-login-grid auth-grid">
               <label class="mini-control">
-                <span>Course code</span>
-                <input id="landing-join-code" name="joinCode" type="text" placeholder="Course join code" autocomplete="off" autocapitalize="characters" spellcheck="false">
+                <span>코스 코드</span>
+                <input id="landing-join-code" name="joinCode" type="text" placeholder="코스 참여 코드" autocomplete="off" autocapitalize="characters" spellcheck="false">
               </label>
             </div>
             <div class="landing-login-row">
-              <button class="toolbar-button" id="landing-join-submit" type="submit">Join with Code</button>
+              <button class="toolbar-button" id="landing-join-submit" type="submit">코드로 참여</button>
             </div>
             <p class="landing-join-helper" id="landing-join-helper"></p>
           </form>
@@ -124,12 +124,12 @@
         <div class="landing-orb landing-orb-c"></div>
         <svg class="landing-network" id="landing-network" aria-label="AI human network visualization"></svg>
         <div class="landing-annotation landing-annotation-left">
-          <p class="landing-annotation-label">Human</p>
-          <strong>Teachers, students, critique, workload</strong>
+          <p class="landing-annotation-label">인간</p>
+          <strong>교수자, 학생, 비평, 업무 부담</strong>
         </div>
         <div class="landing-annotation landing-annotation-right">
-          <p class="landing-annotation-label">System</p>
-          <strong>Policy, platform, evidence, scale</strong>
+          <p class="landing-annotation-label">시스템</p>
+          <strong>정책, 플랫폼, 근거, 확장성</strong>
         </div>
       </div>
     </section>
@@ -137,13 +137,13 @@
     <footer class="landing-footer">
       <div class="landing-footer-links">
         <a class="landing-footer-link" href="developer/" id="landing-developer-contact">
-          <span id="landing-developer-kicker">Developer</span>
+          <span id="landing-developer-kicker">개발자</span>
           <span class="landing-footer-sep" aria-hidden="true">·</span>
-          <span id="landing-developer-label">Profile</span>
+          <span id="landing-developer-label">프로필</span>
         </a>
         <a class="landing-footer-link landing-footer-link-subtle" href="https://github.com/Educatian/Swarm_ID" target="_blank" rel="noopener">GitHub</a>
       </div>
-      <p class="landing-copyright">© Designtension Lab · Made with care for classroom research</p>
+      <p class="landing-copyright">© Designtension Lab · 수업 연구를 위해 정성껏 만들었습니다</p>
     </footer>
   </section>
 
@@ -154,8 +154,8 @@
           <span class="material-symbols-outlined">hub</span>
         </div>
         <div>
-          <h1>Design Tension Studio</h1>
-          <p>Instructional design systems lab</p>
+          <h1>디자인 텐션 스튜디오</h1>
+          <p>수업설계 시스템 연구실</p>
         </div>
       </div>
 

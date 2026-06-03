@@ -69,6 +69,7 @@ const emptyMetrics = {
 const translations = {
   en: {
     languageToggle: "KO",
+    appName: "Design Tension Studio",
     skipToMain: "Skip to main content",
     labName: "Instructional design systems lab",
     signIn: "Sign In",
@@ -403,6 +404,7 @@ const translations = {
   },
   ko: {
     languageToggle: "EN",
+    appName: "디자인 텐션 스튜디오",
     skipToMain: "본문으로 바로가기",
     labName: "수업설계 시스템 연구실",
     signIn: "로그인",
@@ -754,7 +756,7 @@ const DEFAULT_SUPABASE_CONFIG = window.SUPABASE_CONFIG || { url: "", anonKey: ""
 const DEFAULT_GEMINI_CONFIG = window.GEMINI_CONFIG || { apiKey: "", model: "gemini-2.5-flash" };
 
 const state = {
-  locale: window.localStorage.getItem(LOCALE_STORAGE_KEY) || "en",
+  locale: window.localStorage.getItem(LOCALE_STORAGE_KEY) || "ko",
   activeView: "visualizer",
   activeStakeholder: "teacher",
   activeMapLayer: "base",
@@ -1082,7 +1084,7 @@ function wireHeaderGuidesDropdown() {
 }
 
 function applyStaticTranslations() {
-  document.title = "Design Tension Studio";
+  document.title = t("appName");
   document.documentElement.lang = state.locale;
   const skipLink = document.querySelector(".skip-link");
   if (skipLink) skipLink.textContent = t("skipToMain");
@@ -1090,6 +1092,9 @@ function applyStaticTranslations() {
   const brandKickers = document.querySelectorAll(".landing-brand-kicker, .brand-block p");
   brandKickers.forEach((node) => {
     node.textContent = t("labName");
+  });
+  document.querySelectorAll(".landing-brand h1, .brand-block h1").forEach((node) => {
+    node.textContent = t("appName");
   });
 
   if (dom.landingLocaleToggle) dom.landingLocaleToggle.textContent = t("languageToggle");
