@@ -754,7 +754,7 @@ const DEFAULT_SUPABASE_CONFIG = window.SUPABASE_CONFIG || { url: "", anonKey: ""
 const DEFAULT_GEMINI_CONFIG = window.GEMINI_CONFIG || { apiKey: "", model: "gemini-2.5-flash" };
 
 const state = {
-  locale: window.localStorage.getItem(LOCALE_STORAGE_KEY) || "en",
+  locale: "en",
   activeView: "visualizer",
   activeStakeholder: "teacher",
   activeMapLayer: "base",
@@ -970,15 +970,6 @@ function renderCaseSummary(text, openCaseId) {
   `;
 }
 
-function setLocale(nextLocale) {
-  state.locale = nextLocale === "ko" ? "ko" : "en";
-  window.localStorage.setItem(LOCALE_STORAGE_KEY, state.locale);
-  document.documentElement.lang = state.locale;
-  applyStaticTranslations();
-  renderAll();
-  renderLandingLogin();
-}
-
 function stakeholderLabelKey(key) {
   return (
     {
@@ -1092,8 +1083,6 @@ function applyStaticTranslations() {
     node.textContent = t("labName");
   });
 
-  if (dom.landingLocaleToggle) dom.landingLocaleToggle.textContent = t("languageToggle");
-  if (dom.workspaceLocaleToggle) dom.workspaceLocaleToggle.textContent = t("languageToggle");
   if (dom.startTutorialButton) dom.startTutorialButton.textContent = t("showTutorial");
   if (dom.returnToLanding) dom.returnToLanding.textContent = t("switchAccount");
   if (document.getElementById("landing-enter-button")) document.getElementById("landing-enter-button").textContent = t("signIn");
@@ -2151,7 +2140,6 @@ const dom = {
   landingLoginPassword: document.getElementById("landing-login-password"),
   landingLoginHelper: document.getElementById("landing-login-helper"),
   landingAuthStatus: document.getElementById("landing-auth-status"),
-  landingLocaleToggle: document.getElementById("landing-locale-toggle"),
   landingJoinForm: document.getElementById("landing-join-form"),
   landingJoinEmail: document.getElementById("landing-join-email"),
   landingJoinPassword: document.getElementById("landing-join-password"),
@@ -2174,7 +2162,6 @@ const dom = {
   topbar: document.querySelector(".topbar"),
   topbarCollapseToggle: document.getElementById("topbar-collapse-toggle"),
   topbarCompactSummary: document.getElementById("topbar-compact-summary"),
-  workspaceLocaleToggle: document.getElementById("workspace-locale-toggle"),
   visualizerLayout: document.getElementById("visualizer-layout"),
   intakeTitle: document.getElementById("intake-title"),
   intakeBadge: document.getElementById("intake-badge"),
@@ -8405,15 +8392,7 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-dom.landingLocaleToggle?.addEventListener("click", () => {
-  setLocale(state.locale === "en" ? "ko" : "en");
-});
-
 wireHeaderGuidesDropdown();
-
-dom.workspaceLocaleToggle?.addEventListener("click", () => {
-  setLocale(state.locale === "en" ? "ko" : "en");
-});
 
 window.addEventListener("resize", () => {
   if (tutorialState.active) {
