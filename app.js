@@ -424,6 +424,10 @@ const translations = {
     homeAdvancedTradeoffs: "Trade-off comparison",
     homeAdvancedSandbox: "Affect sandbox",
     homeSubtitle: "Exploring tensions in class",
+    densityLabel: "View",
+    densitySimple: "Simple",
+    densityDetailed: "Detailed",
+    densitySimpleHint: "A clean map view — advanced panels are tucked away.",
   },
   ko: {
     languageToggle: "EN",
@@ -781,6 +785,10 @@ const translations = {
     homeAdvancedTradeoffs: "상충 관계 비교",
     homeAdvancedSandbox: "감성 실험실",
     homeSubtitle: "수업 시간 긴장 탐구",
+    densityLabel: "보기",
+    densitySimple: "간단히",
+    densityDetailed: "자세히",
+    densitySimpleHint: "꼭 필요한 것만 보이는 깔끔한 맵이에요. 고급 패널은 접어 두었어요.",
     perspectiveAdminShort: "행정: 어떤 정책과 자원이 이를 좌우하는지.",
   },
 };
@@ -797,12 +805,14 @@ const STORAGE_KEY = "swarm-id-platform-v2";
 const SESSION_STORAGE_KEY = "swarm-id-session-v1";
 const TUTORIAL_STORAGE_KEY = "swarm-id-tutorial-v1";
 const LOCALE_STORAGE_KEY = "swarm-id-locale-v1";
+const DENSITY_STORAGE_KEY = "swarm-id-density-v1";
 const PLATFORM_ADMIN_EMAIL = "admin@swarm.io";
 const DEFAULT_SUPABASE_CONFIG = window.SUPABASE_CONFIG || { url: "", anonKey: "" };
 const DEFAULT_GEMINI_CONFIG = window.GEMINI_CONFIG || { apiKey: "", model: "gemini-2.5-flash" };
 
 const state = {
   locale: window.localStorage.getItem(LOCALE_STORAGE_KEY) || "ko",
+  density: window.localStorage.getItem(DENSITY_STORAGE_KEY) || "",
   activeView: "visualizer",
   activeStakeholder: "teacher",
   activeMapLayer: "base",
@@ -6875,6 +6885,7 @@ function renderAll() {
   renderConstraints();
   renderNavigation();
   renderHome();
+  applyDensity();
   renderSidebar();
   renderGraph();
   renderExportActions();
@@ -7682,6 +7693,38 @@ function setView(nextView) {
   }
 }
 
+function resolveDensity() {
+  // Explicit user choice wins; otherwise students start in the clean "simple" map
+  // (hyeji: the tool feels complex) and instructors keep the full "detailed" view.
+  if (state.density === "simple" || state.density === "detailed") return state.density;
+  return state.activeRole === "user" ? "simple" : "detailed";
+}
+
+function applyDensity() {
+  const d = resolveDensity();
+  dom.appShell?.classList.toggle("density-simple", d === "simple");
+  const simpleBtn = document.getElementById("density-simple-btn");
+  const detailBtn = document.getElementById("density-detailed-btn");
+  if (simpleBtn) {
+    simpleBtn.textContent = t("densitySimple");
+    simpleBtn.classList.toggle("is-active", d === "simple");
+    simpleBtn.setAttribute("aria-pressed", d === "simple" ? "true" : "false");
+  }
+  if (detailBtn) {
+    detailBtn.textContent = t("densityDetailed");
+    detailBtn.classList.toggle("is-active", d === "detailed");
+    detailBtn.setAttribute("aria-pressed", d === "detailed" ? "true" : "false");
+  }
+}
+
+function setDensity(next) {
+  const value = next === "simple" ? "simple" : "detailed";
+  state.density = value;
+  try { localStorage.setItem(DENSITY_STORAGE_KEY, value); } catch (_) {}
+  applyDensity();
+  if (typeof logEvent === "function") logEvent("density.change", { to: value });
+}
+
 function setStakeholder(nextStakeholder) {
   const previous = state.activeStakeholder;
   state.activeStakeholder = nextStakeholder;
@@ -8098,6 +8141,13 @@ document.getElementById("home-view")?.addEventListener("click", (event) => {
   if (!trigger || trigger.disabled) return;
   if (tutorialState.active) endTutorial(true);
   setView(trigger.dataset.homeGoto);
+});
+
+// 간단히 / 자세히 (simple / detailed) map-density toggle.
+document.getElementById("density-toggle")?.addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-density-set]");
+  if (!btn) return;
+  setDensity(btn.dataset.densitySet);
 });
 
 dom.roleSelect.addEventListener("change", (event) => {

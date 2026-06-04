@@ -330,6 +330,10 @@
                   </div>
                 </div>
                 <div class="canvas-stats">
+                  <div class="density-toggle" id="density-toggle" role="group" aria-label="View density">
+                    <button type="button" class="density-option" data-density-set="simple" id="density-simple-btn">Simple</button>
+                    <button type="button" class="density-option" data-density-set="detailed" id="density-detailed-btn">Detailed</button>
+                  </div>
                   <label class="mini-control mini-control-inline" id="map-layer-control">
                     <span>Map layer</span>
                     <select id="map-layer-select">
@@ -413,7 +417,7 @@
                 <button class="toolbar-button" id="download-html-button" type="button">Download HTML Snapshot</button>
               </div>
 
-              <div class="subsection swarm-activity-panel">
+              <div class="subsection swarm-activity-panel" data-density="advanced">
                 <div class="subsection-head">
                   <h4>Swarm activity</h4>
                   <div class="subsection-head-right">
@@ -473,7 +477,7 @@
                 <div id="top-tensions" class="tension-list"></div>
               </div>
 
-              <div class="subsection">
+              <div class="subsection" data-density="advanced">
                 <div class="subsection-head">
                   <h4>Evidence queue</h4>
                   <span class="badge badge-neutral">Live</span>
@@ -490,7 +494,7 @@
                   <strong id="selected-node-title">No node selected</strong>
                   <p id="selected-node-copy">Hover or click a node in the network to inspect it here.</p>
                 </div>
-                <div class="selected-node-related">
+                <div class="selected-node-related" data-density="advanced">
                   <div class="subsection-head">
                     <h4>Related activity</h4>
                   </div>

@@ -4492,3 +4492,31 @@ body {
   .home-task-grid { grid-template-columns: 1fr; }
   .home-bottom { grid-template-columns: 1fr; }
 }
+
+/* ===== 간단히 / 자세히 (simple / detailed) map density (slide-5 direction) ===== */
+.density-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.density-option {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 999px;
+  color: rgba(246, 246, 252, 0.6);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.density-option:hover { color: rgba(246, 246, 252, 0.92); }
+.density-option.is-active { background: rgba(67, 97, 238, 0.92); color: #fff; }
+
+/* In simple mode, tuck away the dense "process" panels — keep map, lenses,
+   selected node, annotate, and the question composer. */
+.density-simple [data-density="advanced"] { display: none !important; }
