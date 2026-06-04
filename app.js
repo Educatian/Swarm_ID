@@ -428,6 +428,7 @@ const translations = {
     densitySimple: "Simple",
     densityDetailed: "Detailed",
     densitySimpleHint: "A clean map view — advanced panels are tucked away.",
+    homeTaskFraming: "Design tensions don't resolve cleanly. On the map, find where the tensions live, choose the one that matters most, and build a rationale for it.",
   },
   ko: {
     languageToggle: "EN",
@@ -789,6 +790,7 @@ const translations = {
     densitySimple: "간단히",
     densityDetailed: "자세히",
     densitySimpleHint: "꼭 필요한 것만 보이는 깔끔한 맵이에요. 고급 패널은 접어 두었어요.",
+    homeTaskFraming: "긴장은 깔끔하게 풀리지 않아요. 지도에서 긴장이 어디 있는지 살피고, 가장 중요한 하나를 골라 그 근거를 세우는 게 이 활동의 목표예요.",
     perspectiveAdminShort: "행정: 어떤 정책과 자원이 이를 좌우하는지.",
   },
 };
@@ -6786,34 +6788,19 @@ function renderHome() {
   const activeCase = getCaseById(state.activeCaseId, course);
   const courseLine = course ? `${course.code} · ${course.name}` : "";
 
+  // The home is a quiet launcher into the case map — NOT a step-by-step checklist.
+  // (README: "see design work as a network of tensions rather than a linear checklist".)
   const continueBlock = activeCase
     ? `<p class="home-continue-eyebrow">${t("homeContinueEyebrow")}</p>
        <h2 class="home-continue-title">${escapeHtml(activeCase.title)}</h2>
        <p class="home-continue-sub">${escapeHtml(courseLine)}</p>
+       <p class="home-task-framing">${t("homeTaskFraming")}</p>
        <button class="toolbar-button toolbar-button-primary home-continue-cta" type="button" data-home-goto="visualizer">
          <span class="material-symbols-outlined" aria-hidden="true">play_arrow</span>${t("homeContinueCta")}
        </button>`
     : `<p class="home-continue-eyebrow">${t("homeContinueEyebrow")}</p>
-       <p class="home-continue-sub home-continue-empty">${t("homeContinueEmpty")}</p>`;
-
-  const tasks = [
-    { goto: "visualizer", icon: "hub", title: t("homeTaskMapTitle"), body: t("homeTaskMapBody") },
-    { goto: "perspectives", icon: "visibility", title: t("homeTaskPerspTitle"), body: t("homeTaskPerspBody") },
-    { goto: "report", icon: "note_stack", title: t("homeTaskReflectTitle"), body: t("homeTaskReflectBody") },
-  ];
-  const taskCards = tasks
-    .map((task) => {
-      const allowed = isViewAllowed(task.goto);
-      return `<article class="home-task-card${allowed ? "" : " is-disabled"}">
-        <span class="home-task-icon material-symbols-outlined" aria-hidden="true">${task.icon}</span>
-        <h3 class="home-task-title">${task.title}</h3>
-        <p class="home-task-body">${task.body}</p>
-        <button class="home-task-open" type="button" data-home-goto="${task.goto}"${allowed ? "" : " disabled"}>
-          ${t("homeTaskOpen")}<span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-        </button>
-      </article>`;
-    })
-    .join("");
+       <p class="home-continue-sub home-continue-empty">${t("homeContinueEmpty")}</p>
+       <p class="home-task-framing">${t("homeTaskFraming")}</p>`;
 
   const recent = getHomeRecentItems();
   const recentList = recent.length
@@ -6849,10 +6836,6 @@ function renderHome() {
       <section class="home-continue panel-soft">
         <p class="home-greeting">${escapeHtml(t("homeGreeting", { name }))}</p>
         ${continueBlock}
-      </section>
-      <section class="home-tasks">
-        <p class="home-section-eyebrow">${t("homeTasksTitle")}</p>
-        <div class="home-task-grid">${taskCards}</div>
       </section>
       <div class="home-bottom">
         <section class="home-recent panel-soft">
