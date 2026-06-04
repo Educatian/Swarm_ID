@@ -382,10 +382,11 @@ const translations = {
     constraintFrictionDesc: "Where real constraints — time, tools, policies, workload — collide with that intent.",
     alignedEvidenceDesc: "Evidence from teachers, students, or IT systems that supports (or challenges) a design move.",
     conceptHelpTitle: "How to read this map",
-    conceptHelpBody: "Each case is a design problem viewed through three stakeholders. Switch lenses (Teacher → IT Systems → Students) to see how the same tension looks from each side — they pull on each other, so no single view is enough.",
+    conceptHelpBody: "Each case is a design problem viewed through four stakeholders. Switch lenses (Teacher → Student → IT → Administration) to see how the same tension looks from each side — they pull on each other, so no single view is enough.",
     perspectiveTeacherShort: "Teacher: what they plan and decide.",
     perspectiveItShort: "IT Systems: what the tools allow or block.",
     perspectiveStudentShort: "Students: what learners actually experience.",
+    perspectiveAdminShort: "Administration: what policy and resources allow.",
     visualizerIntroTitle: "Visualizer — map the case",
     visualizerIntroBody: "Every node is a stakeholder concern, constraint, or design move. Edges show which concerns pull on each other. Click a node to read it; add a new node to extend the case with a worry the original doesn't capture.",
     thinking: "Thinking...",
@@ -401,6 +402,28 @@ const translations = {
     mobileMap: "Map",
     mobilePeople: "People",
     mobileTest: "Test",
+    shareToClass: "Share with class",
+    navHome: "Home",
+    homeGreeting: "Hello, {name}",
+    homeContinueEyebrow: "Continue your case",
+    homeContinueCta: "Resume",
+    homeContinueEmpty: "No open case yet. Pick one below to start.",
+    homeStepProgress: "Step {step} · {case}",
+    homeTasksTitle: "What you can do today",
+    homeTaskMapTitle: "Explore the map",
+    homeTaskMapBody: "Switch lenses to see which tension is sharpest, and add nodes for what's missing.",
+    homeTaskPerspTitle: "Compare perspectives",
+    homeTaskPerspBody: "Compare the same problem across Teacher, Student, IT, and Administration.",
+    homeTaskReflectTitle: "Write your reflection",
+    homeTaskReflectBody: "Turn what you read and noticed into a report and submit it.",
+    homeTaskOpen: "Open",
+    homeRecentTitle: "Recent activity",
+    homeRecentEmpty: "No activity yet. Click a node on the map to begin.",
+    homeAdvancedTitle: "Go deeper (optional)",
+    homeAdvancedBody: "Advanced tools you open only when needed. Hidden by default to keep things clean.",
+    homeAdvancedTradeoffs: "Trade-off comparison",
+    homeAdvancedSandbox: "Affect sandbox",
+    homeSubtitle: "Exploring tensions in class",
   },
   ko: {
     languageToggle: "EN",
@@ -437,9 +460,9 @@ const translations = {
     landingSystemBody: "정책, 플랫폼, 근거, 확장성",
     selectedCase: "선택된 케이스",
     case: "케이스",
-    noActiveCase: "열린 케이스 없음",
+    noActiveCase: "열린 케이스가 없어요",
     waitingForCourseData: "수업 정보를 불러오는 중이에요.",
-    caseTension: "케이스 긴장 수준",
+    caseTension: "케이스 긴장도",
     navNetwork: "네트워크",
     navPerspectives: "관점",
     navTradeoffs: "상충 관계",
@@ -460,10 +483,10 @@ const translations = {
     proposalNetwork: "제안 네트워크",
     mapLayer: "지도 레이어",
     baseMap: "기본 지도",
-    myView: "내 화면",
-    classView: "전체 화면",
+    myView: "내 보기",
+    classView: "학급 보기",
     selectedLens: "선택한 관점",
-    topTensions: "주요 쟁점",
+    topTensions: "주요 긴장",
     evidenceQueue: "근거 목록",
     selectedNode: "선택한 노드",
     hoverOrClick: "마우스를 올리거나 눌러보세요",
@@ -482,13 +505,13 @@ const translations = {
     saveNote: "메모 저장",
     askQuestionPlaceholder: "이 케이스에서 가장 중요한 갈등은 무엇일지 물어보세요...",
     askQuestion: "질문하기",
-    askQuestionHint: "질문은 전체 네트워크에 추가되어 교수자와 같은 반 학생들이 볼 수 있습니다.",
-    tensionScaleHint: "0–100 · 숫자가 클수록 이해관계자 사이의 갈등이 큽니다",
+    askQuestionHint: "질문은 전체 네트워크에 추가되어 교수자와 같은 반 학생들이 볼 수 있어요.",
+    tensionScaleHint: "0–100 · 숫자가 클수록 이해관계자 사이의 긴장이 커요",
     downloadPng: "PNG로 내려받기",
     downloadHtmlSnapshot: "HTML 스냅샷 내려받기",
     swarmActivity: "AI 협력 활동",
     peopleInCase: "케이스 안의 인물들",
-    keyConcerns: "주요 쟁점",
+    keyConcerns: "주요 우려",
     currentFocus: "지금 보고 있는 관점",
     questions: "질문",
     askAboutPerspective: "이 관점에 질문하기",
@@ -500,16 +523,16 @@ const translations = {
     privacyResilience: "프라이버시 안정성",
     accessibilityCoverage: "접근성 수준",
     budgetCut: "예산 50% 삭감",
-    noSummary: "요약이 아직 없습니다",
-    noTensions: "표시할 긴장 요소가 없습니다",
-    noRecommendations: "추천 항목이 없습니다",
-    noEvidence: "근거가 없습니다",
-    noScores: "점수가 없습니다",
+    noSummary: "아직 요약이 없어요",
+    noTensions: "아직 긴장이 없어요",
+    noRecommendations: "추천할 내용이 없어요",
+    noEvidence: "근거가 없어요",
+    noScores: "점수가 없어요",
     instructorView: "교수자 화면",
-    noPrompts: "프롬프트가 없습니다",
-    noActivity: "활동 기록이 없습니다",
+    noPrompts: "질문 안내가 없어요",
+    noActivity: "활동 기록이 없어요",
     checking: "확인 중...",
-    noCourseLinkedYet: "아직 연결된 코스가 없습니다.",
+    noCourseLinkedYet: "아직 연결된 코스가 없어요.",
     signedInReadyOne: "로그인 완료 — 참여 중인 코스 1개가 있어요. 계속 진행하세요.",
     signedInReadyMany: "로그인 완료 — 참여 중인 코스가 {count}개 있어요. 앱에서 코스를 선택해 주세요.",
     studentJoinHelper: "학생으로 로그인한 다음 수업 참여 코드를 입력하세요.",
@@ -518,7 +541,7 @@ const translations = {
     tutorialSkip: "건너뛰기",
     tutorialFinish: "완료",
     createFirstCase: "첫 케이스 만들기",
-    noPublishedCasesYet: "게시된 케이스가 아직 없습니다",
+    noPublishedCasesYet: "공개된 케이스가 아직 없어요",
     currentCase: "현재 케이스",
     publishedCase: "게시된 케이스",
     currentCourse: "현재 코스",
@@ -562,8 +585,8 @@ const translations = {
     tlUploadParsed: "업로드한 문서를 이슈와 설계 신호로 분석했어요.",
     tlOntologyExtracted: "설명요약에서 이해관계자와 제약 구조를 뽑아냈어요.",
     tlSynced: "그래프와 리포트를 최신 공개 케이스에 맞춰 동기화했어요.",
-    stakeholderTeacher: "교수자",
-    stakeholderAdministrator: "관리자",
+    stakeholderTeacher: "교사",
+    stakeholderAdministrator: "행정",
     stakeholderStudent: "학생",
     stakeholderIt: "IT 시스템",
     stakeholderAccessibility: "접근성",
@@ -580,13 +603,13 @@ const translations = {
     wfCreateCase: "케이스 만들기",
     wfPasteBrief: "아래에 수업 설명 요약을 붙여넣으면 스튜디오가 자동으로 케이스로 구성합니다.",
     wfPublishedToStudents: "학생에게 공개됨",
-    wfStudentsCanOpen: "이제 학생들이 자신의 작업 공간에서 이 케이스를 열어볼 수 있습니다.",
+    wfStudentsCanOpen: "이제 학생들이 자기 작업 공간에서 이 케이스를 열어볼 수 있어요.",
     wfPublishWhenReady: "준비되면 공개하세요",
     wfKeepDraftPrivate: "학생들이 사용할 시점 전까지는 초안을 비공개로 두세요.",
     wfStartInCourse: "교수자가 케이스를 공개한 수업에서 시작해주세요.",
     wfOpenPublishedCase: "공개된 케이스 열기",
     wfSelectPublishedCase: "공개된 케이스 선택",
-    wfSelectedCaseLoaded: "선택한 케이스가 내 학습 세션에 열렸습니다.",
+    wfSelectedCaseLoaded: "선택한 케이스가 내 학습 세션에 열렸어요.",
     wfUseSelectorPublished: "위의 케이스 선택기에서 공개된 케이스 하나를 골라주세요.",
     wfWaitInstructorPublish: "교수자가 이 수업에 케이스를 공개할 때까지 기다려주세요.",
     wfAskQuestionsReflect: "질문하고 되돌아보기",
@@ -607,8 +630,8 @@ const translations = {
     keepAsDraft: "초안으로 두기 (공유 전 검토)",
     pasteBriefPlaceholder: "설명 요약을 붙여넣으세요 — 학습 대상, 학습 목표, 제약 조건, 활용 자원을 포함해주세요...",
     createCaseBtn: "케이스 만들기",
-    createCourseFirst: "먼저 수업을 만들어주세요.",
-    noCourseAssigned: "배정된 수업이 없습니다.",
+    createCourseFirst: "먼저 수업을 만들어 주세요.",
+    noCourseAssigned: "배정된 수업이 없어요.",
     boardSettings: "보드 설정",
     mainQuestionPlaceholder: "중심 질문을 입력하세요...",
     dueDate: "마감일",
@@ -626,7 +649,7 @@ const translations = {
     openCase: "케이스 열기",
     publishVerb: "공개",
     unpublishVerb: "공개 취소",
-    noCasesYet: "아직 만든 케이스가 없습니다.",
+    noCasesYet: "아직 만든 케이스가 없어요.",
     yourCopy: "내 작업 사본",
     readyToStart: "시작 준비 완료",
     availableCases: "참여 가능한 케이스",
@@ -635,40 +658,40 @@ const translations = {
     agendaBodyPlaceholder: "이 점이 수업 재설계에 왜 중요한가요?",
     addToMap: "지도에 추가하기",
     addNodeDefaultPrompt: "노드를 추가해주세요.",
-    noNodes: "노드가 없습니다",
+    noNodes: "노드가 없어요",
     aiAdditionsTitle: "AI가 제안한 노드",
     aiSuggested: "AI 제안",
-    noAdditions: "추가된 노드가 없습니다",
-    classViewTitle: "전체 화면",
+    noAdditions: "추가된 노드가 없어요",
+    classViewTitle: "학급 보기",
     off: "끔",
     sharedPatterns: "공통 패턴",
     sharedClustersCount: "공통 군집 {count}개",
     studentRunsCount: "학생 참여 {count}건",
-    noInstitutionSelected: "선택된 기관이 없습니다",
-    noCourseSelected: "선택된 수업이 없습니다",
+    noInstitutionSelected: "선택된 기관이 없어요",
+    noCourseSelected: "선택된 수업이 없어요",
     createBaseBoardNote: "여기서 기본 보드를 만들고, 학생이 얼마나 노드를 추가할 수 있을지 정한 뒤, 준비가 되면 참여 코드를 공유해주세요.",
     choosePublishedBoardNote: "공개된 보드를 하나 선택하고, 교수자가 만든 기본 지도를 살펴본 뒤, 내 화면에서 노드와 메모를 추가해보세요.",
     caseCount: "케이스 {count}개",
     publishedCount: "공개 {count}개",
     publishedCasesCount: "공개된 케이스 {count}개",
-    statusCasePublished: "이 케이스는 공개되었습니다. 이제 학생들이 각자의 화면에서 열어볼 수 있습니다.",
+    statusCasePublished: "이 케이스는 공개되었어요. 이제 학생들이 각자의 화면에서 열어볼 수 있어요.",
     statusCaseDraft: "이 케이스는 아직 초안입니다. 학생이 사용할 시점에 공개해주세요.",
     statusCreateChoose: "시작하려면 케이스를 만들거나 선택해주세요.",
-    statusLearnerExploring: "{name}님이 선택한 케이스를 개인 메모에서 살펴보고 있습니다.",
+    statusLearnerExploring: "{name}님이 선택한 케이스를 개인 메모에서 살펴보고 있어요.",
     statusChoosePublished: "페이지의 나머지 부분을 열려면 공개된 케이스를 선택해주세요.",
     noCasePick: "선택된 케이스 없음",
     pickCase: "케이스 선택",
     start: "시작",
-    startWithCase: "먼저 케이스를 선택해주세요.",
+    startWithCase: "먼저 케이스를 선택해 주세요.",
     casePreview: "케이스 미리보기",
-    panelUpdatesWhenCaseOpen: "케이스를 열면 이 내용이 업데이트됩니다.",
+    panelUpdatesWhenCaseOpen: "케이스를 열면 이 내용이 업데이트돼요.",
     noLens: "선택된 관점 없음",
-    openCaseShort: "케이스를 열어주세요.",
+    openCaseShort: "케이스를 열어 주세요.",
     selectNode: "노드 선택",
-    noRelatedQuestionsYet: "아직 관련 질문이 없습니다.",
-    openLearnerRun: "학습 세션을 열어주세요.",
-    noSharedPatternsYet: "아직 공통 패턴이 없습니다.",
-    noDialogueYet: "아직 오간 대화가 없습니다.",
+    noRelatedQuestionsYet: "아직 관련 질문이 없어요.",
+    openLearnerRun: "학습 세션을 열어 주세요.",
+    noSharedPatternsYet: "아직 공통 패턴이 없어요.",
+    noDialogueYet: "아직 오간 대화가 없어요.",
     youLabel: "나",
     matrixNeedsAttention: "주의 필요",
     matrixBalanced: "균형 상태",
@@ -676,8 +699,8 @@ const translations = {
     personalization: "개인화",
     feasibility: "실행 가능성",
     teacherSlack: "교수자 여유 시간",
-    noInsights: "분석 결과 없음",
-    noHistory: "기록 없음",
+    noInsights: "분석 결과가 없어요",
+    noHistory: "기록이 없어요",
     veryHigh: "매우 높음",
     high: "높음",
     moderate: "보통",
@@ -685,7 +708,7 @@ const translations = {
     sandboxStable: "안정적",
     sandboxNeedsTuning: "조정 필요",
     instructorOnly: "교수자 전용",
-    noNotes: "메모 없음",
+    noNotes: "메모가 없어요",
     autoIteration: "자율 수정 제안",
     autoIterationBody: "교수자가 검토하기 전에 시스템이 수정 방향을 먼저 제안하도록 합니다.",
     stressScenarios: "부담 시나리오",
@@ -700,7 +723,7 @@ const translations = {
     draftSummary: "요약 초안 작성",
     refreshSummary: "요약 다시 만들기",
     executiveSummary: "핵심 요약",
-    priorityTensions: "우선 쟁점",
+    priorityTensions: "우선 긴장",
     recommendedRedesignMoves: "권장하는 수정 방향",
     evidenceTrace: "근거 연결",
     reflection: "생각 정리",
@@ -708,8 +731,8 @@ const translations = {
     reflectionPromptsLabel: "생각 정리 질문",
     recentDialogue: "최근 대화",
     exampleView: "예시 화면",
-    caseMapAppears: "여기에 케이스 지도가 표시됩니다.",
-    caseMapAppearsBody: "케이스를 선택하면 이 지도에 관련 인물, 제약 조건, 주요 쟁점이 나타납니다.",
+    caseMapAppears: "여기에 케이스 지도가 표시돼요.",
+    caseMapAppearsBody: "케이스를 선택하면 이 지도에 관련 인물, 제약 조건, 주요 긴장이 나타나요.",
     instructionalSignals: "수업 설계 신호",
     constraintFriction: "제약 충돌",
     alignedEvidence: "관련 근거",
@@ -717,25 +740,48 @@ const translations = {
     constraintFrictionDesc: "시간·도구·정책·업무 부담 같은 현실 제약이 수업 의도와 충돌하는 지점입니다.",
     alignedEvidenceDesc: "교사·학생·IT 시스템 관점에서 설계 선택을 뒷받침하거나 반박하는 근거입니다.",
     conceptHelpTitle: "이 지도를 읽는 법",
-    conceptHelpBody: "모든 케이스는 세 주체(교사 · IT 시스템 · 학생)의 관점으로 바라본 설계 문제입니다. 관점을 바꿔 보면 같은 긴장이 어떻게 달라 보이는지 확인할 수 있습니다. 세 관점은 서로를 잡아당기기 때문에 한 면만 봐서는 충분하지 않습니다.",
-    perspectiveTeacherShort: "교사: 무엇을 계획하고 결정하는가.",
-    perspectiveItShort: "IT 시스템: 도구가 무엇을 허용하고 막는가.",
-    perspectiveStudentShort: "학생: 학습자가 실제로 무엇을 경험하는가.",
+    conceptHelpBody: "모든 케이스는 네 주체(교사 · 학생 · IT · 행정)의 관점으로 바라본 설계 문제예요. 관점을 바꿔 보면 같은 긴장이 어떻게 달라 보이는지 알 수 있어요. 네 관점은 서로를 잡아당기기 때문에 한 면만 봐서는 충분하지 않아요.",
+    perspectiveTeacherShort: "교사: 무엇을 계획하고 결정하는지.",
+    perspectiveItShort: "IT 시스템: 도구가 무엇을 허용하고 막는지.",
+    perspectiveStudentShort: "학생: 학습자가 실제로 무엇을 경험하는지.",
     visualizerIntroTitle: "시각화 도구 — 케이스를 지도로 펼치기",
-    visualizerIntroBody: "각 노드는 관계자의 우려, 제약, 설계 결정입니다. 선은 어떤 요소들이 서로 맞물리는지를 보여줍니다. 노드를 눌러 내용을 확인하고, 원본에서 빠진 걱정거리는 새 노드로 추가해 보세요.",
-    thinking: "생각 중입니다...",
-    questionCouldNotBeProcessed: "질문을 처리하지 못했습니다.",
+    visualizerIntroBody: "각 노드는 관계자의 우려, 제약, 설계 결정이에요. 선은 어떤 요소들이 서로 맞물리는지 보여줘요. 노드를 눌러 내용을 확인하고, 원래 케이스에서 빠진 걱정거리는 새 노드로 추가해 보세요.",
+    thinking: "생각 중이에요...",
+    questionCouldNotBeProcessed: "질문을 처리하지 못했어요.",
     studentOnboardingTitle: "무엇부터 해볼까요",
     studentOnboardingStep1: "아래 목록에서 공개된 케이스를 하나 골라 열어 보세요.",
-    studentOnboardingStep2: "설명 요약을 읽고, 지도에서 노드들이 어떻게 연결되는지 살펴 보세요.",
-    studentOnboardingStep3: "관점을 바꿔가며(교사 → IT 시스템 → 학생) 같은 케이스가 어떻게 달라 보이는지 확인해 보세요.",
-    studentOnboardingStep4: "질문을 남기거나, 원본 케이스에 없는 관점을 새 노드로 추가해 보세요.",
+    studentOnboardingStep2: "설명을 읽고, 지도에서 노드들이 어떻게 연결되는지 살펴보세요.",
+    studentOnboardingStep3: "관점을 바꿔 가며(교사 → 학생 → IT → 행정) 같은 케이스가 어떻게 달라 보이는지 살펴보세요.",
+    studentOnboardingStep4: "질문을 남기거나, 원래 케이스에 없는 관점을 새 노드로 추가해 보세요.",
     studentOnboardingTourButton: "가이드 투어 시작하기",
     expandStartHere: "시작하기",
     expandSelectedLens: "선택한 관점",
     mobileMap: "지도",
     mobilePeople: "인물",
     mobileTest: "테스트",
+    shareToClass: "학급에 공개",
+    navHome: "홈",
+    homeGreeting: "안녕하세요, {name}님",
+    homeContinueEyebrow: "이어서 할 케이스",
+    homeContinueCta: "이어하기",
+    homeContinueEmpty: "아직 열린 케이스가 없어요. 아래에서 케이스를 선택해 시작하세요.",
+    homeStepProgress: "{step}단계 진행 중 · {case}",
+    homeTasksTitle: "오늘 할 수 있는 일",
+    homeTaskMapTitle: "맵 살펴보기",
+    homeTaskMapBody: "관점을 바꿔 가며 어떤 긴장이 가장 큰지 살펴보고, 빠진 점은 새 노드로 더해요.",
+    homeTaskPerspTitle: "관점 비교하기",
+    homeTaskPerspBody: "같은 문제를 교사·학생·IT·행정의 입장에서 비교해요.",
+    homeTaskReflectTitle: "생각 정리하기",
+    homeTaskReflectBody: "읽고 느낀 점을 리포트로 정리해 제출해요.",
+    homeTaskOpen: "열기",
+    homeRecentTitle: "최근 활동",
+    homeRecentEmpty: "아직 활동 기록이 없어요. 맵에서 노드를 눌러 시작해 보세요.",
+    homeAdvancedTitle: "더 깊이 (선택)",
+    homeAdvancedBody: "필요할 때만 여는 고급 도구예요. 평소엔 숨겨 두어 화면을 깔끔하게 유지해요.",
+    homeAdvancedTradeoffs: "상충 관계 비교",
+    homeAdvancedSandbox: "감성 실험실",
+    homeSubtitle: "수업 시간 긴장 탐구",
+    perspectiveAdminShort: "행정: 어떤 정책과 자원이 이를 좌우하는지.",
   },
 };
 
@@ -1191,6 +1237,7 @@ function applyStaticTranslations() {
   }
 
   const navMap = {
+    home: "navHome",
     visualizer: "navNetwork",
     perspectives: "navPerspectives",
     matrix: "navTradeoffs",
@@ -1263,7 +1310,7 @@ function applyStaticTranslations() {
   if (noteTypeOptions[2]) noteTypeOptions[2].textContent = t("concern");
   const shareOptions = document.querySelectorAll('#quick-annotation-form select[name="visibility"] option');
   if (shareOptions[0]) shareOptions[0].textContent = t("onlyMe");
-  if (shareOptions[1]) shareOptions[1].textContent = t("classView");
+  if (shareOptions[1]) shareOptions[1].textContent = t("shareToClass");
   if (dom.quickAnnotationSubmit) dom.quickAnnotationSubmit.textContent = t("saveNote");
   if (dom.downloadPngButton) dom.downloadPngButton.textContent = t("downloadPng");
   if (dom.downloadHtmlButton) dom.downloadHtmlButton.textContent = t("downloadHtmlSnapshot");
@@ -1333,6 +1380,13 @@ function applyStaticTranslations() {
     const parts = t("perspectiveStudentShort").split(":");
     perspectiveStudentLabel.textContent = parts[0] || "";
     const body = document.getElementById("perspective-student-body");
+    if (body) body.textContent = parts.slice(1).join(":").trim();
+  }
+  const perspectiveAdminLabel = document.getElementById("perspective-admin-label");
+  if (perspectiveAdminLabel) {
+    const parts = t("perspectiveAdminShort").split(":");
+    perspectiveAdminLabel.textContent = parts[0] || "";
+    const body = document.getElementById("perspective-admin-body");
     if (body) body.textContent = parts.slice(1).join(":").trim();
   }
 
@@ -3614,6 +3668,9 @@ function persistActiveWorkspaceState() {
 }
 
 function isViewAllowed(view) {
+  // Home dashboard is always reachable — it is the clean entry point that routes
+  // into whatever the student is allowed to open.
+  if (view === "home") return true;
   if (!hasActiveCase()) {
     return view === "visualizer";
   }
@@ -6680,6 +6737,127 @@ function renderReport() {
     : emptyNoteMarkup(t("noActivity"));
 }
 
+function getHomeRecentItems() {
+  const ko = state.locale === "ko";
+  const items = [];
+  try {
+    const run = typeof getActiveLearnerRun === "function" ? getActiveLearnerRun() : null;
+    const anns = run && Array.isArray(run.annotations) ? run.annotations : [];
+    anns.slice(-3).reverse().forEach((a) => {
+      const title = a && (a.body || a.title || a.text);
+      if (title) items.push({ title, meta: ko ? "내 메모" : "My note" });
+    });
+  } catch (_) {}
+  try {
+    const chat = Array.isArray(state.chat) ? state.chat : [];
+    chat
+      .filter((m) => m && (m.role === "user" || m.from === "user"))
+      .slice(-3)
+      .reverse()
+      .forEach((m) => {
+        const title = m.text || m.body || m.content;
+        if (title && items.length < 4) items.push({ title, meta: ko ? "내 질문" : "My question" });
+      });
+  } catch (_) {}
+  return items.slice(0, 4).filter((i) => i.title);
+}
+
+function renderHome() {
+  const host = document.getElementById("home-view");
+  if (!host) return;
+  const learner = getActiveLearner();
+  const name =
+    learner && learner.name && learner.name.trim()
+      ? learner.name.trim()
+      : state.activeRole === "user"
+        ? t("student")
+        : t("instructor");
+  const course = getActiveCourse();
+  const activeCase = getCaseById(state.activeCaseId, course);
+  const courseLine = course ? `${course.code} · ${course.name}` : "";
+
+  const continueBlock = activeCase
+    ? `<p class="home-continue-eyebrow">${t("homeContinueEyebrow")}</p>
+       <h2 class="home-continue-title">${escapeHtml(activeCase.title)}</h2>
+       <p class="home-continue-sub">${escapeHtml(courseLine)}</p>
+       <button class="toolbar-button toolbar-button-primary home-continue-cta" type="button" data-home-goto="visualizer">
+         <span class="material-symbols-outlined" aria-hidden="true">play_arrow</span>${t("homeContinueCta")}
+       </button>`
+    : `<p class="home-continue-eyebrow">${t("homeContinueEyebrow")}</p>
+       <p class="home-continue-sub home-continue-empty">${t("homeContinueEmpty")}</p>`;
+
+  const tasks = [
+    { goto: "visualizer", icon: "hub", title: t("homeTaskMapTitle"), body: t("homeTaskMapBody") },
+    { goto: "perspectives", icon: "visibility", title: t("homeTaskPerspTitle"), body: t("homeTaskPerspBody") },
+    { goto: "report", icon: "note_stack", title: t("homeTaskReflectTitle"), body: t("homeTaskReflectBody") },
+  ];
+  const taskCards = tasks
+    .map((task) => {
+      const allowed = isViewAllowed(task.goto);
+      return `<article class="home-task-card${allowed ? "" : " is-disabled"}">
+        <span class="home-task-icon material-symbols-outlined" aria-hidden="true">${task.icon}</span>
+        <h3 class="home-task-title">${task.title}</h3>
+        <p class="home-task-body">${task.body}</p>
+        <button class="home-task-open" type="button" data-home-goto="${task.goto}"${allowed ? "" : " disabled"}>
+          ${t("homeTaskOpen")}<span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+        </button>
+      </article>`;
+    })
+    .join("");
+
+  const recent = getHomeRecentItems();
+  const recentList = recent.length
+    ? `<ul class="home-recent-list">${recent
+        .map(
+          (r) =>
+            `<li class="home-recent-item"><strong>${escapeHtml(String(r.title).slice(0, 80))}</strong><span>${escapeHtml(r.meta)}</span></li>`,
+        )
+        .join("")}</ul>`
+    : `<p class="muted home-recent-empty">${t("homeRecentEmpty")}</p>`;
+
+  const advTradeoffs = isViewAllowed("matrix");
+  const advSandbox = isViewAllowed("sandbox");
+  const advanced = `
+    <button class="home-adv-item" type="button" data-home-goto="matrix"${advTradeoffs ? "" : " disabled"}>
+      <span class="material-symbols-outlined" aria-hidden="true">leaderboard</span>${t("homeAdvancedTradeoffs")}
+    </button>
+    <button class="home-adv-item" type="button" data-home-goto="sandbox"${advSandbox ? "" : " disabled"}>
+      <span class="material-symbols-outlined" aria-hidden="true">science</span>${t("homeAdvancedSandbox")}
+    </button>`;
+
+  host.innerHTML = `
+    <div class="home-wrap">
+      <header class="home-head">
+        <div class="home-brand">
+          <span class="home-brand-mark material-symbols-outlined" aria-hidden="true">hub</span>
+          <div>
+            <h1 class="home-brand-title">Design Tension Studio</h1>
+            <p class="home-brand-sub">${t("homeSubtitle")}</p>
+          </div>
+        </div>
+      </header>
+      <section class="home-continue panel-soft">
+        <p class="home-greeting">${escapeHtml(t("homeGreeting", { name }))}</p>
+        ${continueBlock}
+      </section>
+      <section class="home-tasks">
+        <p class="home-section-eyebrow">${t("homeTasksTitle")}</p>
+        <div class="home-task-grid">${taskCards}</div>
+      </section>
+      <div class="home-bottom">
+        <section class="home-recent panel-soft">
+          <p class="home-section-eyebrow">${t("homeRecentTitle")}</p>
+          ${recentList}
+        </section>
+        <section class="home-advanced panel-soft">
+          <p class="home-section-eyebrow">${t("homeAdvancedTitle")}</p>
+          <p class="home-advanced-body">${t("homeAdvancedBody")}</p>
+          <div class="home-adv-grid">${advanced}</div>
+        </section>
+      </div>
+    </div>`;
+}
+
 function renderAll() {
   if (dom.visualizerInput) {
     dom.visualizerInput.placeholder = t("askQuestionPlaceholder");
@@ -6696,6 +6874,7 @@ function renderAll() {
   renderPipelineConsole();
   renderConstraints();
   renderNavigation();
+  renderHome();
   renderSidebar();
   renderGraph();
   renderExportActions();
@@ -7310,6 +7489,11 @@ function openStudio() {
   dom.landingShell?.classList.add("is-hidden");
   dom.appShell?.classList.remove("is-hidden");
   window.location.hash = "studio";
+  // Students enter on the clean Home dashboard (slide-4 direction); instructors keep
+  // their existing workspace entry.
+  if (state.activeRole === "user") {
+    state.activeView = "home";
+  }
   persistSessionState();
   renderAll();
   startTutorial(false);
@@ -7906,6 +8090,14 @@ dom.viewButtons.forEach((button) => {
     if (tutorialState.active) endTutorial(true);
     setView(button.dataset.view);
   });
+});
+
+// Delegated routing for the Home dashboard cards (rendered dynamically).
+document.getElementById("home-view")?.addEventListener("click", (event) => {
+  const trigger = event.target.closest("[data-home-goto]");
+  if (!trigger || trigger.disabled) return;
+  if (tutorialState.active) endTutorial(true);
+  setView(trigger.dataset.homeGoto);
 });
 
 dom.roleSelect.addEventListener("change", (event) => {

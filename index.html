@@ -183,6 +183,10 @@
       </div>
 
       <nav class="primary-nav" aria-label="Primary">
+        <button class="nav-item" data-view="home">
+          <span class="material-symbols-outlined">home</span>
+          <span>Home</span>
+        </button>
         <button class="nav-item is-active" data-view="visualizer">
           <span class="material-symbols-outlined">hub</span>
           <span>Network</span>
@@ -268,6 +272,7 @@
       </header>
 
       <main class="main-content" id="main-content">
+        <section class="view home-view" data-view-panel="home" id="home-view"></section>
         <section class="view is-active" data-view-panel="visualizer">
           <div class="view-intro" data-view-intro="visualizer">
             <button class="view-intro-close" type="button" data-view-intro-dismiss="visualizer" aria-label="Dismiss">×</button>
@@ -278,8 +283,9 @@
               <p class="concept-help-body" id="concept-help-body">Each case is a design problem viewed through three stakeholders. Switch lenses (Teacher → IT Systems → Students) to see how the same tension looks from each side — they pull on each other, so no single view is enough.</p>
               <ul class="concept-help-list">
                 <li><strong id="perspective-teacher-label">Teacher</strong><span id="perspective-teacher-body">what they plan and decide.</span></li>
-                <li><strong id="perspective-it-label">IT Systems</strong><span id="perspective-it-body">what the tools allow or block.</span></li>
                 <li><strong id="perspective-student-label">Students</strong><span id="perspective-student-body">what learners actually experience.</span></li>
+                <li><strong id="perspective-it-label">IT Systems</strong><span id="perspective-it-body">what the tools allow or block.</span></li>
+                <li><strong id="perspective-admin-label">Administration</strong><span id="perspective-admin-body">what policy and resources allow.</span></li>
               </ul>
             </div>
           </div>
