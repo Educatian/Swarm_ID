@@ -4527,3 +4527,37 @@ body {
 /* In simple mode, tuck away the dense "process" panels — keep map, lenses,
    selected node, annotate, and the question composer. */
 .density-simple [data-density="advanced"] { display: none !important; }
+
+/* ===== You ↔ Team comparison layer (personal vs cohort overlay) ===== */
+.compare-summary {
+  margin-bottom: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(23, 26, 31, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.compare-summary-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.compare-summary-title { font-size: 0.92rem; font-weight: 600; color: #fff; }
+.compare-summary-counts { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.compare-chip {
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+.compare-chip-shared { background: rgba(27, 156, 133, 0.18); color: #5fe3c4; border-color: rgba(27, 156, 133, 0.35); }
+.compare-chip-mine   { background: rgba(67, 97, 238, 0.18);  color: #9ab2ff; border-color: rgba(67, 97, 238, 0.35); }
+.compare-chip-team   { background: rgba(231, 111, 81, 0.18); color: #ffb59e; border-color: rgba(231, 111, 81, 0.38); }
+.compare-summary-prompt {
+  margin: 10px 0 0;
+  font-size: 0.83rem;
+  line-height: 1.5;
+  color: rgba(246, 246, 252, 0.66);
+}

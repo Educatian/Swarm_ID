@@ -429,6 +429,12 @@ const translations = {
     densityDetailed: "Detailed",
     densitySimpleHint: "A clean map view — advanced panels are tucked away.",
     homeTaskFraming: "Design tensions don't resolve cleanly. On the map, find where the tensions live, choose the one that matters most, and build a rationale for it.",
+    compareView: "Compare",
+    compareTitle: "You ↔ Team",
+    compareShared: "Shared",
+    compareMineOnly: "Only you",
+    compareTeamOnly: "Team (blind spots)",
+    comparePrompt: "Compare the tensions you saw with the team's. \"Team\" marks blind spots you missed; \"Only you\" is your distinctive contribution.",
   },
   ko: {
     languageToggle: "EN",
@@ -791,6 +797,12 @@ const translations = {
     densityDetailed: "자세히",
     densitySimpleHint: "꼭 필요한 것만 보이는 깔끔한 맵이에요. 고급 패널은 접어 두었어요.",
     homeTaskFraming: "긴장은 깔끔하게 풀리지 않아요. 지도에서 긴장이 어디 있는지 살피고, 가장 중요한 하나를 골라 그 근거를 세우는 게 이 활동의 목표예요.",
+    compareView: "비교 보기",
+    compareTitle: "나 ↔ 팀",
+    compareShared: "공유",
+    compareMineOnly: "나만",
+    compareTeamOnly: "팀만(사각지대)",
+    comparePrompt: "내가 본 긴장과 팀이 본 긴장을 견줘 보세요. '팀만'은 내가 놓친 사각지대, '나만'은 나의 고유한 기여예요.",
     perspectiveAdminShort: "행정: 어떤 정책과 자원이 이를 좌우하는지.",
   },
 };
@@ -1298,6 +1310,7 @@ function applyStaticTranslations() {
       if (option.value === "base") option.textContent = t("baseMap");
       if (option.value === "personal") option.textContent = t("myView");
       if (option.value === "cohort") option.textContent = t("classView");
+      if (option.value === "compare") option.textContent = t("compareView");
     });
   }
 
@@ -2667,6 +2680,20 @@ function slugify(value) {
     .slice(0, 40);
 }
 
+// Aggregation key that survives non-ASCII (Korean) text — slugify() strips all
+// non-[a-z0-9], which would collapse every Korean tension title to the same key.
+// Use this for cohort/comparison bucketing, NOT for DOM ids (those need slugify).
+function tensionBucketKey(text) {
+  return (
+    String(text || "")
+      .toLowerCase()
+      .normalize("NFC")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 80) || "tension"
+  );
+}
+
 function buildJoinCode(seed = "") {
   const base = String(seed || "COURSE").replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 6) || "COURSE";
   const suffix = Math.random().toString(36).slice(2, 6).toUpperCase();
@@ -2681,6 +2708,10 @@ function getAllowedMapLayers(caseRecord = getActiveCaseRecord()) {
   }
   if (settings.sharingMode !== "private") {
     layers.push({ value: "cohort", label: t("classView") });
+    // Students get a true You↔Team comparison layer (overlay/diff of personal vs cohort).
+    if (state.activeRole === "user") {
+      layers.push({ value: "compare", label: t("compareView") });
+    }
   }
   return layers;
 }
@@ -3825,7 +3856,7 @@ function buildCohortIssueEntries(activeCase = getActiveCaseRecord(), course = ge
 
   runs.forEach((run) => {
     asArray(run.agendaNodes).forEach((item) => {
-      const key = slugify(item.title || item.body || "agenda");
+      const key = tensionBucketKey(item.title || item.body || "agenda");
       if (!agendaBuckets.has(key)) {
         agendaBuckets.set(key, {
           title: item.title || "Shared agenda",
@@ -3842,7 +3873,7 @@ function buildCohortIssueEntries(activeCase = getActiveCaseRecord(), course = ge
     asArray(run.annotations)
       .filter((item) => item.visibility === "cohort")
       .forEach((item) => {
-        const key = `${item.targetId || slugify(item.targetLabel || "target")}-${item.noteType || "note"}`;
+        const key = `${item.targetId || tensionBucketKey(item.targetLabel || "target")}-${item.noteType || "note"}`;
         if (!annotationBuckets.has(key)) {
           annotationBuckets.set(key, {
             title: item.targetLabel || "Shared note",
@@ -3884,6 +3915,56 @@ function buildCohortIssueEntries(activeCase = getActiveCaseRecord(), course = ge
     });
 
   return cohortEntries;
+}
+
+// You ↔ Team comparison: classify every agenda tension across the cohort into
+// shared (I + others raised it), mine-only (my distinctive contribution), and
+// team-only (a tension others raised that I missed — my blind spot).
+function buildComparisonEntries(activeCase = getActiveCaseRecord(), course = getActiveCourse()) {
+  const runs = getVisibleLearnerRunsForCase(activeCase, course);
+  const myId = state.activeLearnerId;
+  const buckets = new Map();
+  runs.forEach((run) => {
+    const isMine = run.learnerId === myId;
+    asArray(run.agendaNodes).forEach((item) => {
+      const key = tensionBucketKey(item.title || item.body || "agenda");
+      if (!buckets.has(key)) {
+        buckets.set(key, {
+          title: item.title || "Shared agenda",
+          body: item.body || "",
+          count: 0,
+          mine: false,
+          stakeholder: item.stakeholder || "student",
+        });
+      }
+      const bucket = buckets.get(key);
+      bucket.count += 1;
+      if (isMine) {
+        bucket.mine = true;
+        if (item.body && !bucket.body) bucket.body = item.body;
+      }
+    });
+  });
+
+  const entries = [];
+  let shared = 0;
+  let mineOnly = 0;
+  let teamOnly = 0;
+  buckets.forEach((bucket) => {
+    let origin;
+    if (bucket.mine && bucket.count >= 2) { origin = "shared"; shared += 1; }
+    else if (bucket.mine) { origin = "mineonly"; mineOnly += 1; }
+    else { origin = "teamonly"; teamOnly += 1; }
+    entries.push({
+      issueType: "agenda",
+      title: origin === "teamonly" ? `${bucket.title} (${bucket.count})` : bucket.title,
+      body: bucket.body || "",
+      stakeholder: bucket.stakeholder,
+      origin,
+    });
+  });
+  state.comparisonSummary = { shared, mineOnly, teamOnly };
+  return entries;
 }
 
 function tokenizeForMatch(value) {
@@ -3963,6 +4044,7 @@ function buildCaseIssueEntries(activeCase) {
       ? asArray(activeRun?.annotations).slice(0, boardSettings.maxLearnerNodes * 2)
       : [];
   const cohortEntries = state.activeMapLayer === "cohort" ? buildCohortIssueEntries(activeCase) : [];
+  const comparisonEntries = state.activeMapLayer === "compare" ? buildComparisonEntries(activeCase) : [];
 
   goals.forEach((goal, index) => {
     issueEntries.push({
@@ -4043,6 +4125,10 @@ function buildCaseIssueEntries(activeCase) {
 
   cohortEntries.forEach((item) => {
     issueEntries.push({ ...item, origin: item.origin || "peer" });
+  });
+
+  comparisonEntries.forEach((item) => {
+    issueEntries.push({ ...item });
   });
 
   if (!issueEntries.length && activeCase?.summary) {
@@ -5086,6 +5172,12 @@ function originBadgeText(origin, locale) {
       return ko ? "나" : "Me";
     case "peer":
       return ko ? "동료" : "Peer";
+    case "shared":
+      return ko ? "공유" : "Shared";
+    case "mineonly":
+      return ko ? "나만" : "Only you";
+    case "teamonly":
+      return ko ? "팀만" : "Team";
     case "brief":
     default:
       return ko ? "설명" : "Brief";
@@ -6774,6 +6866,26 @@ function getHomeRecentItems() {
   return items.slice(0, 4).filter((i) => i.title);
 }
 
+function renderCompareSummary() {
+  const el = document.getElementById("compare-summary");
+  if (!el) return;
+  const on = state.activeMapLayer === "compare" && state.activeRole === "user" && hasActiveCase();
+  el.hidden = !on;
+  if (!on) return;
+  buildComparisonEntries(); // refresh state.comparisonSummary
+  const s = state.comparisonSummary || { shared: 0, mineOnly: 0, teamOnly: 0 };
+  el.innerHTML = `
+    <div class="compare-summary-head">
+      <span class="compare-summary-title">${t("compareTitle")}</span>
+      <div class="compare-summary-counts">
+        <span class="compare-chip compare-chip-shared">${t("compareShared")} ${s.shared}</span>
+        <span class="compare-chip compare-chip-mine">${t("compareMineOnly")} ${s.mineOnly}</span>
+        <span class="compare-chip compare-chip-team">${t("compareTeamOnly")} ${s.teamOnly}</span>
+      </div>
+    </div>
+    <p class="compare-summary-prompt">${t("comparePrompt")}</p>`;
+}
+
 function renderHome() {
   const host = document.getElementById("home-view");
   if (!host) return;
@@ -6872,6 +6984,7 @@ function renderAll() {
   renderSidebar();
   renderGraph();
   renderExportActions();
+  renderCompareSummary();
   renderStakeholderFocus();
   renderChat();
   renderMatrix();
