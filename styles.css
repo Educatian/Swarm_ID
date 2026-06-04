@@ -4392,8 +4392,8 @@ body {
   color: #fff;
   font-size: 26px;
 }
-.home-brand-title { margin: 0; font-size: 1.15rem; color: #fff; letter-spacing: -0.01em; }
-.home-brand-sub { margin: 2px 0 0; font-size: 0.82rem; color: rgba(246,246,252,0.55); }
+.home-brand-title { margin: 0; font-size: 1.15rem; color: var(--on-surface); letter-spacing: -0.01em; }
+.home-brand-sub { margin: 2px 0 0; font-size: 0.82rem; color: var(--on-surface-variant); }
 
 .home-continue {
   border-radius: 22px;
@@ -4420,6 +4420,8 @@ body {
   margin: 0 0 12px; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em;
   color: rgba(246,246,252,0.5);
 }
+/* The tasks eyebrow sits on the light page (not inside a dark panel) — needs dark ink. */
+.home-tasks > .home-section-eyebrow { color: var(--on-surface-variant); }
 .home-task-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
