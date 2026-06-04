@@ -1,5 +1,5 @@
 /**
- * Enroll the 22 CAT 531 student accounts into Jewoong Moon's CAT 531 course
+ * Enroll the 23 CAT 531 student accounts into Jewoong Moon's CAT 531 course
  * (join code UA-CAT531-SUMMER26) on Swarm ID / Design Tension Studio.
  *
  * Runs the SAME path the student UI uses: sign in as each student, then call
@@ -8,6 +8,8 @@
  *
  * Prerequisite: `node scripts/create-cat531-accounts.mjs` must have been run
  * first (creates the students, institution, course, and join code).
+ *
+ * Roster note: 23 students as of 2026-06-04 (Samantha Winn added).
  *
  * Run (PowerShell):
  *   $env:SUPABASE_URL = "https://wvbvexiwyjifatrvdsnv.supabase.co"
@@ -55,6 +57,7 @@ const STUDENT_NAMES = [
   "Kailey Smith",
   "Crystal Thomas",
   "Tyler White",
+  "Samantha Winn",
 ];
 
 const alnum = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");

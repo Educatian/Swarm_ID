@@ -4,7 +4,7 @@
  *
  * Creates:
  *   - Instructor account: jmoon19@ua.edu / cat531-instructor  (role=admin)
- *   - 22 student accounts derived from the real class roster
+ *   - 23 student accounts derived from the real class roster
  *       email    = <firstlast>@swarm.io        (lowercased, alnum only)
  *       password = cat531-<lastname>            (lowercased, alnum only)
  *   - Institution:  University of Alabama
@@ -87,6 +87,7 @@ const STUDENT_NAMES = [
   "Kailey Smith",
   "Crystal Thomas",
   "Tyler White",
+  "Samantha Winn",
 ];
 
 const alnum = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -284,6 +285,6 @@ async function upsertInstructorMembership({
   });
   console.log(`  ✓ membership ${membershipStatus.padEnd(8)} ${INSTRUCTOR.email} → ${COURSE_CODE} (admin)`);
 
-  console.log("\nNext step: run  `node scripts/enroll-cat531-class.mjs`  to enroll the 22 students.");
+  console.log("\nNext step: run  `node scripts/enroll-cat531-class.mjs`  to enroll the 23 students.");
   console.log("Done.");
 })();
