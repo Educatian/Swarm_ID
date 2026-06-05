@@ -26,6 +26,7 @@ const stakeholders = {
     label: "Teacher",
     icon: "school",
     status: "Needs attention",
+    summaryKey: "stakeholderSummaryTeacher",
     summary:
       "The teaching lens sees immediate pressure on facilitation time, formative feedback quality, and the practical overhead required to keep AI-generated pathways pedagogically coherent.",
   },
@@ -33,6 +34,7 @@ const stakeholders = {
     label: "Administrator",
     icon: "corporate_fare",
     status: "Looking stable",
+    summaryKey: "stakeholderSummaryAdministrator",
     summary:
       "The administrator lens cares about adoption, policy fit, and whether the design can scale across sections without producing uneven implementation quality.",
   },
@@ -40,6 +42,7 @@ const stakeholders = {
     label: "Student",
     icon: "person",
     status: "Mixed signals",
+    summaryKey: "stakeholderSummaryStudent",
     summary:
       "The student lens responds to relevance and feedback speed, but also questions whether automation compresses agency or obscures why a redesign choice matters.",
   },
@@ -47,6 +50,7 @@ const stakeholders = {
     label: "IT Systems",
     icon: "terminal",
     status: "At risk",
+    summaryKey: "stakeholderSummaryIt",
     summary:
       "The IT lens tracks interoperability, data movement, vendor dependencies, and whether the design can survive the realities of campus systems and support capacity.",
   },
@@ -54,6 +58,7 @@ const stakeholders = {
     label: "Accessibility",
     icon: "universal_local",
     status: "Needs review",
+    summaryKey: "stakeholderSummaryAccessibility",
     summary:
       "The accessibility lens focuses on modality parity, cognitive load, transparency, and whether personalization logic preserves equitable participation.",
   },
@@ -435,6 +440,11 @@ const translations = {
     compareMineOnly: "Only you",
     compareTeamOnly: "Team (blind spots)",
     comparePrompt: "Compare the tensions you saw with the team's. \"Team\" marks blind spots you missed; \"Only you\" is your distinctive contribution.",
+    stakeholderSummaryTeacher: "The teaching lens sees pressure on facilitation time, formative feedback quality, and the overhead of keeping AI-generated pathways pedagogically coherent.",
+    stakeholderSummaryAdministrator: "The administration lens cares about adoption, policy fit, and whether the design scales across sections without uneven implementation.",
+    stakeholderSummaryStudent: "The student lens responds to relevance and feedback speed, but questions whether automation compresses agency or hides why a choice matters.",
+    stakeholderSummaryIt: "The IT lens tracks interoperability, data movement, vendor dependencies, and whether the design survives real campus systems and support capacity.",
+    stakeholderSummaryAccessibility: "The accessibility lens focuses on modality parity, cognitive load, transparency, and whether personalization preserves equitable participation.",
   },
   ko: {
     languageToggle: "EN",
@@ -804,6 +814,11 @@ const translations = {
     compareTeamOnly: "팀만(사각지대)",
     comparePrompt: "내가 본 긴장과 팀이 본 긴장을 견줘 보세요. '팀만'은 내가 놓친 사각지대, '나만'은 나의 고유한 기여예요.",
     perspectiveAdminShort: "행정: 어떤 정책과 자원이 이를 좌우하는지.",
+    stakeholderSummaryTeacher: "교사 관점은 수업 진행 시간, 형성평가 피드백의 질, 그리고 AI가 만든 학습 경로를 교육적으로 일관되게 유지하는 부담을 봅니다.",
+    stakeholderSummaryAdministrator: "행정 관점은 도입, 정책 적합성, 그리고 이 설계가 여러 분반에서 고르게 확장될 수 있는지를 살핍니다.",
+    stakeholderSummaryStudent: "학생 관점은 관련성과 피드백 속도에 반응하지만, 자동화가 주체성을 줄이거나 선택의 이유를 가리지 않는지 묻습니다.",
+    stakeholderSummaryIt: "IT 관점은 상호운용성, 데이터 이동, 벤더 의존성, 그리고 이 설계가 실제 교내 시스템과 지원 역량에서 버틸 수 있는지를 추적합니다.",
+    stakeholderSummaryAccessibility: "접근성 관점은 양식 동등성, 인지 부하, 투명성, 그리고 개인화가 공평한 참여를 지키는지에 집중합니다.",
   },
 };
 
@@ -1345,6 +1360,8 @@ function applyStaticTranslations() {
   if (visualizerSubmit && !visualizerSubmit.disabled) visualizerSubmit.textContent = t("askQuestion");
   const visualizerHint = document.getElementById("visualizer-hint");
   if (visualizerHint) visualizerHint.textContent = t("askQuestionHint");
+  const composerToggleLabel = document.getElementById("composer-toggle-label");
+  if (composerToggleLabel) composerToggleLabel.textContent = t("askQuestion");
 
   const stageLegendItems = document.querySelectorAll(".stage-overlay-bottom .legend-item");
   stageLegendItems.forEach((item) => {
@@ -2635,7 +2652,7 @@ function getCaseStakeholderMeta(key) {
     label: overrides.label || (labelKey ? t(labelKey) : base.label),
     icon: overrides.icon || base.icon,
     status: statusKey ? t(statusKey) : overrides.status || base.status,
-    summary: overrides.summary || base.summary,
+    summary: overrides.summary || (base.summaryKey ? t(base.summaryKey) : base.summary),
   };
 }
 
@@ -6524,7 +6541,8 @@ function renderStakeholderFocus() {
     dom.relatedClassActivity.innerHTML = renderRelatedActivityList(classItems, t("noSharedPatternsYet"));
   }
   if (dom.quickAnnotationForm) {
-    dom.quickAnnotationForm.hidden = state.activeRole !== "user";
+    // Annotate only appears once a node is actually selected (no node = no form).
+    dom.quickAnnotationForm.hidden = state.activeRole !== "user" || !state.selectedGraphNodeId;
     const visibilitySelect = dom.quickAnnotationForm.querySelector('select[name="visibility"]');
     if (visibilitySelect) {
       const cohortOption = visibilitySelect.querySelector('option[value="cohort"]');
@@ -7813,18 +7831,11 @@ function resolveDensity() {
 function applyDensity() {
   const d = resolveDensity();
   dom.appShell?.classList.toggle("density-simple", d === "simple");
-  const simpleBtn = document.getElementById("density-simple-btn");
-  const detailBtn = document.getElementById("density-detailed-btn");
-  if (simpleBtn) {
-    simpleBtn.textContent = t("densitySimple");
-    simpleBtn.classList.toggle("is-active", d === "simple");
-    simpleBtn.setAttribute("aria-pressed", d === "simple" ? "true" : "false");
-  }
-  if (detailBtn) {
-    detailBtn.textContent = t("densityDetailed");
-    detailBtn.classList.toggle("is-active", d === "detailed");
-    detailBtn.setAttribute("aria-pressed", d === "detailed" ? "true" : "false");
-  }
+  // Single toggle button shows the CURRENT mode; clicking flips it.
+  const label = document.getElementById("density-toggle-label");
+  if (label) label.textContent = d === "simple" ? t("densitySimple") : t("densityDetailed");
+  const btn = document.getElementById("density-toggle-btn");
+  if (btn) btn.classList.toggle("is-detailed", d === "detailed");
 }
 
 function setDensity(next) {
@@ -8253,11 +8264,15 @@ document.getElementById("home-view")?.addEventListener("click", (event) => {
   setView(trigger.dataset.homeGoto);
 });
 
-// 간단히 / 자세히 (simple / detailed) map-density toggle.
-document.getElementById("density-toggle")?.addEventListener("click", (event) => {
-  const btn = event.target.closest("[data-density-set]");
-  if (!btn) return;
-  setDensity(btn.dataset.densitySet);
+// 간단히 / 자세히 (simple / detailed) map-density — single toggle button.
+document.getElementById("density-toggle-btn")?.addEventListener("click", () => {
+  setDensity(resolveDensity() === "simple" ? "detailed" : "simple");
+});
+
+// Collapsible question composer — opens on demand, not always on screen.
+document.getElementById("composer-toggle")?.addEventListener("click", () => {
+  document.querySelector(".canvas-panel")?.classList.add("composer-open");
+  document.getElementById("visualizer-input")?.focus();
 });
 
 dom.roleSelect.addEventListener("change", (event) => {

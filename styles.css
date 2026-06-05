@@ -4832,3 +4832,33 @@ body {
 /* Simple mode: the lone open add-node card needs no collapse chevron */
 .density-simple [data-pipeline-key="addNode"] .pipeline-card-header .chevron { display: none; }
 .density-simple [data-pipeline-key="addNode"] .pipeline-card-header { cursor: default; }
+
+/* Single density toggle button (간단히/자세히) */
+.density-toggle-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 34px; padding: 0 12px; border-radius: var(--r-sm, 9px);
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: rgba(246, 246, 252, 0.82);
+  font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+.density-toggle-btn:hover { background: rgba(255, 255, 255, 0.09); border-color: rgba(255, 255, 255, 0.16); }
+.density-toggle-btn .material-symbols-outlined { font-size: 17px; color: rgba(150, 175, 255, 0.9); }
+
+/* Collapsible question composer */
+.composer-toggle {
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 36px; padding: 0 14px; border-radius: var(--r-sm, 9px);
+  background: rgba(67, 97, 238, 0.14);
+  border: 1px solid rgba(67, 97, 238, 0.28);
+  color: #cdd8ff; font-size: 0.83rem; font-weight: 600; cursor: pointer;
+  transition: background 150ms ease;
+}
+.composer-toggle:hover { background: rgba(67, 97, 238, 0.22); }
+.composer-toggle .material-symbols-outlined { font-size: 18px; }
+.canvas-panel:not(.composer-open) #visualizer-form { display: none; }
+.canvas-panel.composer-open #composer-toggle { display: none; }
+
+/* Honour the hidden attribute on the annotate form (its display:flex overrode it) */
+.quick-note-form[hidden] { display: none !important; }

@@ -330,10 +330,10 @@
                   </div>
                 </div>
                 <div class="canvas-stats">
-                  <div class="density-toggle" id="density-toggle" role="group" aria-label="View density">
-                    <button type="button" class="density-option" data-density-set="simple" id="density-simple-btn">Simple</button>
-                    <button type="button" class="density-option" data-density-set="detailed" id="density-detailed-btn">Detailed</button>
-                  </div>
+                  <button type="button" class="density-toggle-btn" id="density-toggle-btn" data-density-toggle title="보기 전환" aria-label="보기 전환">
+                    <span class="material-symbols-outlined" aria-hidden="true">tune</span>
+                    <span id="density-toggle-label">간단히</span>
+                  </button>
                   <label class="mini-control mini-control-inline" id="map-layer-control">
                     <span>Map layer</span>
                     <select id="map-layer-select">
@@ -405,6 +405,10 @@
                 </button>
               </div>
 
+              <button type="button" class="composer-toggle" id="composer-toggle">
+                <span class="material-symbols-outlined" aria-hidden="true">psychology</span>
+                <span id="composer-toggle-label">질문하기</span>
+              </button>
               <form class="composer" id="visualizer-form">
                 <label class="composer-input">
                   <span class="material-symbols-outlined">psychology</span>
