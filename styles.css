@@ -4714,3 +4714,12 @@ body {
   color: rgba(246, 246, 252, 0.55);
 }
 .network-link { stroke: rgba(180, 195, 220, 0.28); }
+
+/* Simple-mode map proportions: slim side rails, dominant map (the workspace). */
+.density-simple .visualizer-layout,
+.density-simple .visualizer-layout.is-focused {
+  grid-template-columns: minmax(230px, 264px) minmax(0, 1.9fr) minmax(250px, 290px);
+}
+.density-simple .intake-panel { padding-top: 18px; }
+/* Give the map real presence in simple mode. */
+.density-simple .network-stage { min-height: 560px; }

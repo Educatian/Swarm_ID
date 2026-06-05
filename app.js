@@ -973,7 +973,7 @@ function t(key, vars = {}) {
 // Per-pipeline-card collapsed state for the student view's "Add a node",
 // "AI additions", and "Class view" cards. Defaults to collapsed so the student
 // lands on a quieter panel and expands the one they actually need.
-const PIPELINE_CARD_DEFAULTS_COLLAPSED = new Set(["addNode", "aiAdditions", "classView"]);
+const PIPELINE_CARD_DEFAULTS_COLLAPSED = new Set(["aiAdditions", "classView"]);
 const pipelineCardCollapsed = new Set();
 (function restorePipelineCardCollapsed() {
   try {
@@ -5087,7 +5087,7 @@ function renderPipelineConsole() {
         </div>
       </div>
     </article>
-    <article class="pipeline-card pipeline-card-collapsible ${isPipelineCardCollapsed("aiAdditions") ? "is-collapsed" : ""}" data-pipeline-key="aiAdditions">
+    <article class="pipeline-card pipeline-card-collapsible ${isPipelineCardCollapsed("aiAdditions") ? "is-collapsed" : ""}" data-pipeline-key="aiAdditions" data-density="advanced">
       <button type="button" class="pipeline-card-header" data-pipeline-toggle aria-expanded="${isPipelineCardCollapsed("aiAdditions") ? "false" : "true"}">
         <strong>${t("aiAdditionsTitle")}</strong>
         <span class="chevron" aria-hidden="true">▾</span>
@@ -5115,7 +5115,7 @@ function renderPipelineConsole() {
         </div>
       </div>
     </article>
-    <article class="pipeline-card pipeline-card-collapsible ${isPipelineCardCollapsed("classView") ? "is-collapsed" : ""}" data-pipeline-key="classView">
+    <article class="pipeline-card pipeline-card-collapsible ${isPipelineCardCollapsed("classView") ? "is-collapsed" : ""}" data-pipeline-key="classView" data-density="advanced">
       <button type="button" class="pipeline-card-header" data-pipeline-toggle aria-expanded="${isPipelineCardCollapsed("classView") ? "false" : "true"}">
         <strong>${t("classViewTitle")}</strong>
         <span class="chevron" aria-hidden="true">▾</span>
