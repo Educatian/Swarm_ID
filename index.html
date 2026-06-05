@@ -274,7 +274,7 @@
       <main class="main-content" id="main-content">
         <section class="view home-view" data-view-panel="home" id="home-view"></section>
         <section class="view is-active" data-view-panel="visualizer">
-          <div class="view-intro" data-view-intro="visualizer">
+          <div class="view-intro" data-view-intro="visualizer" data-density="advanced">
             <button class="view-intro-close" type="button" data-view-intro-dismiss="visualizer" aria-label="Dismiss">×</button>
             <p class="view-intro-title" id="visualizer-intro-title">Visualizer — map the case</p>
             <p class="view-intro-body" id="visualizer-intro-body">Every node is a stakeholder concern, constraint, or design move. Edges show which concerns pull on each other. Click a node to read it; add a new node to extend the case with a worry the original doesn't capture. Nodes connected by an edge are the ones you need to think about <em>together</em>.</p>
@@ -291,7 +291,7 @@
           </div>
           <div class="visualizer-layout" id="visualizer-layout">
             <section class="panel intake-panel" data-collapsible-panel="intake">
-              <div class="section-header">
+              <div class="section-header" data-density="advanced">
                 <div>
                   <p class="eyebrow">Start here</p>
                   <h3 id="intake-title">Create or Choose a Case</h3>
@@ -301,7 +301,7 @@
                                   </div>
               </div>
 
-              <div class="student-onboarding" id="student-onboarding" hidden>
+              <div class="student-onboarding" id="student-onboarding" data-density="advanced" hidden>
                 <button class="view-intro-close" type="button" data-view-intro-dismiss="student-onboarding" aria-label="Dismiss">×</button>
                 <p class="student-onboarding-title" id="student-onboarding-title">First steps</p>
                 <ol class="student-onboarding-list">
@@ -315,8 +315,8 @@
                 </div>
               </div>
 
-              <div class="workflow-guide" id="workflow-guide"></div>
-              <div class="platform-context" id="platform-context"></div>
+              <div class="workflow-guide" id="workflow-guide" data-density="advanced"></div>
+              <div class="platform-context" id="platform-context" data-density="advanced"></div>
               <div class="pipeline-console" id="pipeline-console"></div>
             </section>
 
@@ -367,7 +367,7 @@
                     <span class="preview-token">Accessibility</span>
                   </div>
                 </div>
-                <div class="stage-overlay stage-overlay-top" id="stage-note" data-collapsed="false">
+                <div class="stage-overlay stage-overlay-top" id="stage-note" data-collapsed="false" data-density="advanced">
                   <button type="button" class="legend-close" id="stage-note-close" aria-label="Hide info" title="Hide info">
                     <span class="material-symbols-outlined" aria-hidden="true">close</span>
                   </button>
@@ -414,7 +414,7 @@
                 <p class="composer-hint" id="visualizer-hint">Your question will be added to the cohort graph. Your instructor and classmates can see it.</p>
               </form>
 
-              <div class="export-actions" id="student-export-actions" hidden>
+              <div class="export-actions" id="student-export-actions" data-density="advanced" hidden>
                 <button class="toolbar-button" id="download-png-button" type="button">Download PNG</button>
                 <button class="toolbar-button" id="download-html-button" type="button">Download HTML Snapshot</button>
               </div>

@@ -4749,7 +4749,7 @@ function pipelineStatusMarkup(activeCase) {
   }
 
   return `
-    <article class="pipeline-card pipeline-card-highlight">
+    <article class="pipeline-card pipeline-card-highlight" data-density="advanced">
       <strong>${activeCase.title}</strong>
       <p>${activeCase.summary}</p>
       <div class="pipeline-chip-row">
@@ -5009,7 +5009,7 @@ function renderPipelineConsole() {
 
   dom.pipelineConsole.innerHTML = `
     ${pipelineStatusMarkup(activeCase)}
-    <article class="pipeline-card">
+    <article class="pipeline-card" data-density="advanced">
       <strong>${t("yourCopy")}</strong>
       <p></p>
       ${
@@ -5024,7 +5024,7 @@ function renderPipelineConsole() {
           : ""
       }
     </article>
-    <article class="pipeline-card">
+    <article class="pipeline-card" data-density="advanced">
       <strong>${t("availableCases")}</strong>
       <div class="case-list">
         ${
