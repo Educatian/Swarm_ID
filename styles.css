@@ -5036,3 +5036,50 @@ body {
 #legend-close .material-symbols-outlined,
 #stage-note-close .material-symbols-outlined,
 #swarm-info-toggle .material-symbols-outlined { color: rgba(246, 246, 252, 0.82); }
+
+/* Matrix / report / perspectives metric + label contrast (>=4.5) */
+.metric-bar header span,
+.metric-bar header strong,
+.metric-bar span,
+.metric-bar strong,
+.radar-label,
+.bar-label,
+.reaction-feed strong { color: rgba(246, 246, 252, 0.82); }
+.orbit-satellite { color: rgba(246, 246, 252, 0.82); }
+.chat-message,
+.chat-message strong,
+.chat-message .chat-meta { color: rgba(246, 246, 252, 0.85); }
+
+/* Report rubric, orbit satellites, chat labels — contrast */
+.rubric-item,
+.rubric-item strong,
+.rubric-item span,
+.rubric-item .label { color: rgba(246, 246, 252, 0.82); }
+.orbit-satellite,
+.orbit-satellite-a,
+.orbit-satellite-b,
+.orbit-satellite-c {
+  background: rgba(67, 97, 238, 0.22);
+  color: rgba(246, 246, 252, 0.92);
+  border-color: rgba(67, 97, 238, 0.4);
+}
+.chat-message span,
+.chat-message strong,
+.chat-message b { color: rgba(246, 246, 252, 0.9); }
+
+/* Orbit satellites: opaque dark chips (avoid compositing over light ancestor) */
+.orbit-satellite,
+.orbit-satellite-a,
+.orbit-satellite-b,
+.orbit-satellite-c {
+  background: #20283f;
+  color: #e9ecf6;
+  border: 1px solid rgba(120, 150, 255, 0.35);
+}
+/* Chat bubbles read on dark */
+.chat-message,
+.chat-message * { color: rgba(246, 246, 252, 0.9); }
+
+/* Chat author <small> label */
+.chat-message small,
+.chat-thread small { color: rgba(246, 246, 252, 0.78); }

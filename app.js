@@ -344,6 +344,7 @@ const translations = {
     matrixBalanced: "Balanced",
     matrixWatchClosely: "Watch closely",
     personalization: "Personalization",
+    accessibility: "Accessibility",
     feasibility: "Feasibility",
     teacherSlack: "Teacher slack",
     noInsights: "No insights",
@@ -445,6 +446,17 @@ const translations = {
     stakeholderSummaryStudent: "The student lens responds to relevance and feedback speed, but questions whether automation compresses agency or hides why a choice matters.",
     stakeholderSummaryIt: "The IT lens tracks interoperability, data movement, vendor dependencies, and whether the design survives real campus systems and support capacity.",
     stakeholderSummaryAccessibility: "The accessibility lens focuses on modality parity, cognitive load, transparency, and whether personalization preserves equitable participation.",
+    perspectivesIntroTitle: "Perspectives — read the case through one person's eyes",
+    perspectivesIntroBody: "Pick a stakeholder (teacher, student, IT, administration) and the page re-reads the case as that person: the left lists their worries, the orbit shows what circles their attention, the chat answers in their voice. Switching the lens changes all three at once.",
+    matrixIntroTitle: "Trade-offs — what moves together",
+    matrixIntroBody: "Design moves are rarely free. Push personalization up and teacher load usually rises; tighten privacy and personalization drops. This radar shows the five dimensions locked together, and the decision log records what you changed and what shifted as a result.",
+    sandboxIntroTitle: "Sandbox — test a what-if",
+    sandboxIntroBody: "Drag a slider to push one dimension and see what breaks elsewhere. Turn autonomy on to let the system propose moves. Changes here are exploratory — nothing is committed until you confirm.",
+    reportIntroTitle: "Report — write up what you learned",
+    reportIntroBody: "Pull the whole case together here. The summary, evidence, and reflection prompts are generated from the nodes and decisions you made. Your reflections are submitted to your instructor.",
+    orbitSatPeerReview: "Peer review",
+    orbitSatAssessment: "Assessment",
+    savedLabel: "Saved",
   },
   ko: {
     languageToggle: "EN",
@@ -718,6 +730,7 @@ const translations = {
     matrixBalanced: "균형 상태",
     matrixWatchClosely: "자세히 살피기",
     personalization: "개인화",
+    accessibility: "접근성",
     feasibility: "실행 가능성",
     teacherSlack: "교수자 여유 시간",
     noInsights: "분석 결과가 없어요",
@@ -819,6 +832,17 @@ const translations = {
     stakeholderSummaryStudent: "학생 관점은 관련성과 피드백 속도에 반응하지만, 자동화가 주체성을 줄이거나 선택의 이유를 가리지 않는지 묻습니다.",
     stakeholderSummaryIt: "IT 관점은 상호운용성, 데이터 이동, 벤더 의존성, 그리고 이 설계가 실제 교내 시스템과 지원 역량에서 버틸 수 있는지를 추적합니다.",
     stakeholderSummaryAccessibility: "접근성 관점은 양식 동등성, 인지 부하, 투명성, 그리고 개인화가 공평한 참여를 지키는지에 집중합니다.",
+    perspectivesIntroTitle: "관점 — 한 사람의 눈으로 케이스 읽기",
+    perspectivesIntroBody: "이해관계자(교사·학생·IT·행정)를 고르면 이 화면이 그 사람의 입장으로 케이스를 다시 읽어요. 왼쪽엔 그 사람의 우려, 가운데엔 관심이 도는 쟁점, 아래 대화창에선 그 사람 목소리로 답을 들을 수 있어요. 렌즈를 바꾸면 셋이 한꺼번에 바뀝니다.",
+    matrixIntroTitle: "상충 관계 — 무엇이 함께 움직이나",
+    matrixIntroBody: "설계 결정엔 공짜가 없어요. 개인화를 높이면 교사 부담이 같이 오르고, 프라이버시를 조이면 개인화가 떨어져요. 이 레이더는 다섯 차원이 어떻게 맞물리는지 보여주고, 의사결정 로그엔 당신이 바꾼 것과 그 결과 움직인 차원이 기록돼요.",
+    sandboxIntroTitle: "샌드박스 — 가정해 보기",
+    sandboxIntroBody: "슬라이더로 한 차원을 밀면 다른 데서 무엇이 깨지는지 보여요. 자율 모드를 켜면 시스템이 재설계안을 먼저 제안해요. 여기 변경은 탐색용이라, 확정 전엔 케이스에 반영되지 않아요.",
+    reportIntroTitle: "리포트 — 배운 것 정리하기",
+    reportIntroBody: "여기서 케이스를 하나로 모아요. 요약·근거·성찰 질문은 다른 화면에서 만든 노드와 결정으로부터 생성돼요. 당신의 성찰은 교수자에게 제출돼요.",
+    orbitSatPeerReview: "또래 평가",
+    orbitSatAssessment: "평가",
+    savedLabel: "저장됨",
   },
 };
 
@@ -1377,6 +1401,24 @@ function applyStaticTranslations() {
   if (visualizerIntroTitle) visualizerIntroTitle.textContent = t("visualizerIntroTitle");
   const visualizerIntroBody = document.getElementById("visualizer-intro-body");
   if (visualizerIntroBody) visualizerIntroBody.textContent = t("visualizerIntroBody");
+  [
+    ["perspectives-intro-title", "perspectivesIntroTitle"],
+    ["perspectives-intro-body", "perspectivesIntroBody"],
+    ["matrix-intro-title", "matrixIntroTitle"],
+    ["matrix-intro-body", "matrixIntroBody"],
+    ["sandbox-intro-title", "sandboxIntroTitle"],
+    ["sandbox-intro-body", "sandboxIntroBody"],
+    ["report-intro-title", "reportIntroTitle"],
+    ["report-intro-body", "reportIntroBody"],
+    ["orbit-sat-b", "orbitSatPeerReview"],
+    ["orbit-sat-c", "orbitSatAssessment"],
+    ["recent-dialogue-label", "recentDialogue"],
+    ["intake-eyebrow", "expandStartHere"],
+    ["decision-saved-badge", "savedLabel"],
+  ].forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t(key);
+  });
 
   const onboardingCard = document.getElementById("student-onboarding");
   if (onboardingCard) {
@@ -4220,14 +4262,13 @@ function buildGraphSnapshot(reason) {
             : entry.issueType === "timeline"
               ? "schedule"
               : "target",
-      meta:
-        entry.issueType === "constraint"
-          ? "constraint"
-          : entry.issueType === "evidence"
-            ? "evidence"
-            : entry.issueType === "timeline"
-              ? "process"
-              : "goal",
+      meta: (() => {
+        const ko = state.locale === "ko";
+        if (entry.issueType === "constraint") return ko ? "제약" : "constraint";
+        if (entry.issueType === "evidence") return ko ? "근거" : "evidence";
+        if (entry.issueType === "timeline") return ko ? "과정" : "process";
+        return ko ? "목표" : "goal";
+      })(),
       issueType: entry.issueType,
       detail: entry.body,
       clusterSlot,
@@ -5302,7 +5343,7 @@ function buildRenderableGraph() {
   const proposalNode = {
     id: "proposal",
     label: uiCopy.graphCoreLabel || activeCase?.title || t("coreNodeFallback"),
-    meta: `cycle ${state.graph.iteration}`,
+    meta: state.locale === "ko" ? `사이클 ${state.graph.iteration}` : `cycle ${state.graph.iteration}`,
     type: "core",
     tone: "primary",
     icon: "auto_awesome",
@@ -5496,7 +5537,7 @@ function describeNodeIssue(node) {
     return {
       kicker: `${node.issueType[0].toUpperCase()}${node.issueType.slice(1)} · ${stakeholder?.label || "Issue"}`,
       title: node.label,
-      body: node.detail || node.meta || "This node was generated from the active case structure.",
+      body: node.detail || node.meta || (state.locale === "ko" ? "이 노드는 현재 케이스 구조에서 생성됐어요." : "This node was generated from the active case structure."),
     };
   }
 
@@ -5549,9 +5590,9 @@ function describeNodeIssue(node) {
   }
 
   return {
-    kicker: node.meta || "Issue detected",
+    kicker: node.meta || (state.locale === "ko" ? "쟁점" : "Issue detected"),
     title: titles[node.id] || node.label,
-    body: stakeholder ? stakeholder.summary : "This node represents a live issue cluster in the swarm graph.",
+    body: stakeholder ? stakeholder.summary : (state.locale === "ko" ? "이 노드는 그래프 속 살아있는 쟁점 군집이에요." : "This node represents a live issue cluster in the swarm graph."),
   };
 }
 
