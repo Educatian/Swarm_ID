@@ -20,7 +20,7 @@ window.__DTS_PREVIEW__ = true;
       id: "ca",
       title: "AI 개인화 학습 도입",
       published: true,
-      summary: "학교가 컴퓨터 기반 수업(CBI)을 도입하는 상황의 설계 긴장을 지도화합니다.",
+      summary: "학교가 컴퓨터 기반 수업(CBI)을 도입하는 상황의 설계 쟁점을 지도화합니다.",
       pipeline: { graphStatus: "동기화됨" },
       learningGoals: ["CBI를 교육적 의도를 잃지 않고 통합하기"],
       constraints: ["페다고지 vs 자동화", "형평성 vs 표준화", "통제 vs 편의"],

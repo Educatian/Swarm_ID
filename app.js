@@ -466,7 +466,7 @@ const translations = {
     signIn: "로그인",
     signInSubmit: "계속",
     landingHeroKicker: "AI + 인간 네트워크 시각화",
-    landingHeroTitle: "설계의 갈등을 살아 있는 네트워크로 바꾸세요.",
+    landingHeroTitle: "설계의 쟁점을 살아 있는 네트워크로 바꾸세요.",
     landingHeroBody: "사람의 판단, 제도적 제약, AI 추론을 하나의 화면에서 함께 살펴봅니다.",
     landingTutorialsKicker: "가이드",
     landingTutorialRoleStudent: "학생",
@@ -476,7 +476,7 @@ const translations = {
     landingDeveloperKicker: "개발자",
     landingDeveloperContact: "프로필",
     landingCopyright: "© Designtension Lab · 수업 연구를 위해 정성껏 만들었습니다",
-    signalTeacherLoad: "교수자 부담",
+    signalTeacherLoad: "교사 부담",
     signalStudentAgency: "학생 주체성",
     signalGovernance: "거버넌스",
     signalAccessibility: "접근성",
@@ -488,14 +488,14 @@ const translations = {
     courseCode: "코스 코드",
     joinWithCode: "코드로 참여",
     landingHuman: "인간",
-    landingHumanBody: "교수자, 학생, 비평, 업무 부담",
+    landingHumanBody: "교사, 학생, 비평, 업무 부담",
     landingSystem: "시스템",
     landingSystemBody: "정책, 플랫폼, 근거, 확장성",
     selectedCase: "선택된 케이스",
     case: "케이스",
     noActiveCase: "열린 케이스가 없어요",
     waitingForCourseData: "수업 정보를 불러오는 중이에요.",
-    caseTension: "케이스 긴장도",
+    caseTension: "케이스 쟁점도",
     navNetwork: "네트워크",
     navPerspectives: "관점",
     navTradeoffs: "상충 관계",
@@ -514,12 +514,12 @@ const translations = {
     instructor: "교수자",
     systemTopology: "시스템 구조",
     proposalNetwork: "제안 네트워크",
-    mapLayer: "지도 레이어",
-    baseMap: "기본 지도",
+    mapLayer: "맵 레이어",
+    baseMap: "기본 맵",
     myView: "내 보기",
     classView: "학급 보기",
     selectedLens: "선택한 관점",
-    topTensions: "주요 긴장",
+    topTensions: "주요 쟁점",
     evidenceQueue: "근거 목록",
     selectedNode: "선택한 노드",
     hoverOrClick: "마우스를 올리거나 눌러보세요",
@@ -536,10 +536,10 @@ const translations = {
     onlyMe: "나만 보기",
     addNotePlaceholder: "선택한 노드에 메모를 남겨보세요...",
     saveNote: "메모 저장",
-    askQuestionPlaceholder: "이 케이스에서 가장 중요한 갈등은 무엇일지 물어보세요...",
+    askQuestionPlaceholder: "이 케이스에서 가장 중요한 쟁점은 무엇일지 물어보세요...",
     askQuestion: "질문하기",
     askQuestionHint: "질문은 전체 네트워크에 추가되어 교수자와 같은 반 학생들이 볼 수 있어요.",
-    tensionScaleHint: "0–100 · 숫자가 클수록 이해관계자 사이의 긴장이 커요",
+    tensionScaleHint: "0–100 · 숫자가 클수록 이해관계자 사이의 쟁점이 커요",
     downloadPng: "PNG로 내려받기",
     downloadHtmlSnapshot: "HTML 스냅샷 내려받기",
     swarmActivity: "AI 협력 활동",
@@ -552,12 +552,12 @@ const translations = {
     ask: "질문하기",
     tradeoffRadar: "상충 관계 레이더 차트",
     personalizationDepth: "개인화 수준",
-    teacherLoadLabel: "교수자 업무 부담",
+    teacherLoadLabel: "교사 업무 부담",
     privacyResilience: "프라이버시 안정성",
     accessibilityCoverage: "접근성 수준",
     budgetCut: "예산 50% 삭감",
     noSummary: "아직 요약이 없어요",
-    noTensions: "아직 긴장이 없어요",
+    noTensions: "아직 쟁점이 없어요",
     noRecommendations: "추천할 내용이 없어요",
     noEvidence: "근거가 없어요",
     noScores: "점수가 없어요",
@@ -601,8 +601,8 @@ const translations = {
     nodeLearnerNote: "학습자 메모",
     nodeRelatedIssue: "관련 이슈",
     coreNodeFallback: "설계 제안",
-    nodeTitleProposal: "시스템 전반의 설계 갈등",
-    nodeTitleTeacher: "교수자 부담 핫스팟",
+    nodeTitleProposal: "시스템 전반의 설계 쟁점",
+    nodeTitleTeacher: "교사 부담 핫스팟",
     nodeTitleAdministrator: "정책 도입 체크포인트",
     nodeTitleStudent: "학습자 주체성 신호",
     nodeTitleIt: "통합 위험 군집",
@@ -621,7 +621,7 @@ const translations = {
     stakeholderTeacher: "교사",
     stakeholderAdministrator: "행정",
     stakeholderStudent: "학생",
-    stakeholderIt: "IT 시스템",
+    stakeholderIt: "에듀테크",
     stakeholderAccessibility: "접근성",
     statusNeedsAttention: "주의 필요",
     statusLookingStable: "안정적",
@@ -689,7 +689,7 @@ const translations = {
     ready: "준비 완료",
     addNode: "노드 추가하기",
     agendaBodyPlaceholder: "이 점이 수업 재설계에 왜 중요한가요?",
-    addToMap: "지도에 추가하기",
+    addToMap: "맵에 추가하기",
     addNodeDefaultPrompt: "노드를 추가해주세요.",
     noNodes: "노드가 없어요",
     aiAdditionsTitle: "AI가 제안한 노드",
@@ -703,7 +703,7 @@ const translations = {
     noInstitutionSelected: "선택된 기관이 없어요",
     noCourseSelected: "선택된 수업이 없어요",
     createBaseBoardNote: "여기서 기본 보드를 만들고, 학생이 얼마나 노드를 추가할 수 있을지 정한 뒤, 준비가 되면 참여 코드를 공유해주세요.",
-    choosePublishedBoardNote: "공개된 보드를 하나 선택하고, 교수자가 만든 기본 지도를 살펴본 뒤, 내 화면에서 노드와 메모를 추가해보세요.",
+    choosePublishedBoardNote: "공개된 보드를 하나 선택하고, 교수자가 만든 기본 맵을 살펴본 뒤, 내 화면에서 노드와 메모를 추가해보세요.",
     caseCount: "케이스 {count}개",
     publishedCount: "공개 {count}개",
     publishedCasesCount: "공개된 케이스 {count}개",
@@ -732,7 +732,7 @@ const translations = {
     personalization: "개인화",
     accessibility: "접근성",
     feasibility: "실행 가능성",
-    teacherSlack: "교수자 여유 시간",
+    teacherSlack: "교사 여유 시간",
     noInsights: "분석 결과가 없어요",
     noHistory: "기록이 없어요",
     veryHigh: "매우 높음",
@@ -757,7 +757,7 @@ const translations = {
     draftSummary: "요약 초안 작성",
     refreshSummary: "요약 다시 만들기",
     executiveSummary: "핵심 요약",
-    priorityTensions: "우선 긴장",
+    priorityTensions: "우선 쟁점",
     recommendedRedesignMoves: "권장하는 수정 방향",
     evidenceTrace: "근거 연결",
     reflection: "생각 정리",
@@ -765,32 +765,32 @@ const translations = {
     reflectionPromptsLabel: "생각 정리 질문",
     recentDialogue: "최근 대화",
     exampleView: "예시 화면",
-    caseMapAppears: "여기에 케이스 지도가 표시돼요.",
-    caseMapAppearsBody: "케이스를 선택하면 이 지도에 관련 인물, 제약 조건, 주요 긴장이 나타나요.",
+    caseMapAppears: "여기에 케이스 맵이 표시돼요.",
+    caseMapAppearsBody: "케이스를 선택하면 이 맵에 관련 인물, 제약 조건, 주요 쟁점이 나타나요.",
     instructionalSignals: "수업 설계 신호",
     constraintFriction: "제약 충돌",
     alignedEvidence: "관련 근거",
     instructionalSignalsDesc: "교사가 의도한 것 — 학습 목표, 수업 전략, 교수 설계 의도입니다.",
     constraintFrictionDesc: "시간·도구·정책·업무 부담 같은 현실 제약이 수업 의도와 충돌하는 지점입니다.",
-    alignedEvidenceDesc: "교사·학생·IT 시스템 관점에서 설계 선택을 뒷받침하거나 반박하는 근거입니다.",
-    conceptHelpTitle: "이 지도를 읽는 법",
-    conceptHelpBody: "모든 케이스는 네 주체(교사 · 학생 · IT · 행정)의 관점으로 바라본 설계 문제예요. 관점을 바꿔 보면 같은 긴장이 어떻게 달라 보이는지 알 수 있어요. 네 관점은 서로를 잡아당기기 때문에 한 면만 봐서는 충분하지 않아요.",
+    alignedEvidenceDesc: "교사·학생·에듀테크 관점에서 설계 선택을 뒷받침하거나 반박하는 근거입니다.",
+    conceptHelpTitle: "이 맵을 읽는 법",
+    conceptHelpBody: "모든 케이스는 네 주체(교사 · 학생 · 에듀테크 · 행정)의 관점으로 바라본 설계 문제예요. 관점을 바꿔 보면 같은 쟁점이 어떻게 달라 보이는지 알 수 있어요. 네 관점은 서로를 잡아당기기 때문에 한 면만 봐서는 충분하지 않아요.",
     perspectiveTeacherShort: "교사: 무엇을 계획하고 결정하는지.",
-    perspectiveItShort: "IT 시스템: 도구가 무엇을 허용하고 막는지.",
+    perspectiveItShort: "에듀테크: 도구가 무엇을 허용하고 막는지.",
     perspectiveStudentShort: "학생: 학습자가 실제로 무엇을 경험하는지.",
-    visualizerIntroTitle: "시각화 도구 — 케이스를 지도로 펼치기",
+    visualizerIntroTitle: "시각화 도구 — 케이스를 맵으로 펼치기",
     visualizerIntroBody: "각 노드는 관계자의 우려, 제약, 설계 결정이에요. 선은 어떤 요소들이 서로 맞물리는지 보여줘요. 노드를 눌러 내용을 확인하고, 원래 케이스에서 빠진 걱정거리는 새 노드로 추가해 보세요.",
     thinking: "생각 중이에요...",
     questionCouldNotBeProcessed: "질문을 처리하지 못했어요.",
     studentOnboardingTitle: "무엇부터 해볼까요",
     studentOnboardingStep1: "아래 목록에서 공개된 케이스를 하나 골라 열어 보세요.",
-    studentOnboardingStep2: "설명을 읽고, 지도에서 노드들이 어떻게 연결되는지 살펴보세요.",
-    studentOnboardingStep3: "관점을 바꿔 가며(교사 → 학생 → IT → 행정) 같은 케이스가 어떻게 달라 보이는지 살펴보세요.",
+    studentOnboardingStep2: "설명을 읽고, 맵에서 노드들이 어떻게 연결되는지 살펴보세요.",
+    studentOnboardingStep3: "관점을 바꿔 가며(교사 → 학생 → 에듀테크 → 행정) 같은 케이스가 어떻게 달라 보이는지 살펴보세요.",
     studentOnboardingStep4: "질문을 남기거나, 원래 케이스에 없는 관점을 새 노드로 추가해 보세요.",
     studentOnboardingTourButton: "가이드 투어 시작하기",
     expandStartHere: "시작하기",
     expandSelectedLens: "선택한 관점",
-    mobileMap: "지도",
+    mobileMap: "맵",
     mobilePeople: "인물",
     mobileTest: "테스트",
     shareToClass: "학급에 공개",
@@ -802,9 +802,9 @@ const translations = {
     homeStepProgress: "{step}단계 진행 중 · {case}",
     homeTasksTitle: "오늘 할 수 있는 일",
     homeTaskMapTitle: "맵 살펴보기",
-    homeTaskMapBody: "관점을 바꿔 가며 어떤 긴장이 가장 큰지 살펴보고, 빠진 점은 새 노드로 더해요.",
+    homeTaskMapBody: "관점을 바꿔 가며 어떤 쟁점이 가장 큰지 살펴보고, 빠진 점은 새 노드로 더해요.",
     homeTaskPerspTitle: "관점 비교하기",
-    homeTaskPerspBody: "같은 문제를 교사·학생·IT·행정의 입장에서 비교해요.",
+    homeTaskPerspBody: "같은 문제를 교사·학생·에듀테크·행정의 입장에서 비교해요.",
     homeTaskReflectTitle: "생각 정리하기",
     homeTaskReflectBody: "읽고 느낀 점을 리포트로 정리해 제출해요.",
     homeTaskOpen: "열기",
@@ -814,26 +814,26 @@ const translations = {
     homeAdvancedBody: "필요할 때만 여는 고급 도구예요. 평소엔 숨겨 두어 화면을 깔끔하게 유지해요.",
     homeAdvancedTradeoffs: "상충 관계 비교",
     homeAdvancedSandbox: "감성 실험실",
-    homeSubtitle: "수업 시간 긴장 탐구",
+    homeSubtitle: "수업 시간 쟁점 탐구",
     densityLabel: "보기",
     densitySimple: "간단히",
     densityDetailed: "자세히",
     densitySimpleHint: "꼭 필요한 것만 보이는 깔끔한 맵이에요. 고급 패널은 접어 두었어요.",
-    homeTaskFraming: "긴장은 깔끔하게 풀리지 않아요. 지도에서 긴장이 어디 있는지 살피고, 가장 중요한 하나를 골라 그 근거를 세우는 게 이 활동의 목표예요.",
+    homeTaskFraming: "쟁점은 깔끔하게 풀리지 않아요. 맵에서 쟁점이 어디 있는지 살피고, 가장 중요한 하나를 골라 그 근거를 세우는 게 이 활동의 목표예요.",
     compareView: "비교 보기",
     compareTitle: "나 ↔ 팀",
     compareShared: "공유",
     compareMineOnly: "나만",
     compareTeamOnly: "팀만(사각지대)",
-    comparePrompt: "내가 본 긴장과 팀이 본 긴장을 견줘 보세요. '팀만'은 내가 놓친 사각지대, '나만'은 나의 고유한 기여예요.",
+    comparePrompt: "내가 본 쟁점과 팀이 본 쟁점을 비교해 보세요. '팀만'은 내가 놓친 사각지대, '나만'은 나의 고유한 기여예요.",
     perspectiveAdminShort: "행정: 어떤 정책과 자원이 이를 좌우하는지.",
     stakeholderSummaryTeacher: "교사 관점은 수업 진행 시간, 형성평가 피드백의 질, 그리고 AI가 만든 학습 경로를 교육적으로 일관되게 유지하는 부담을 봅니다.",
     stakeholderSummaryAdministrator: "행정 관점은 도입, 정책 적합성, 그리고 이 설계가 여러 분반에서 고르게 확장될 수 있는지를 살핍니다.",
     stakeholderSummaryStudent: "학생 관점은 관련성과 피드백 속도에 반응하지만, 자동화가 주체성을 줄이거나 선택의 이유를 가리지 않는지 묻습니다.",
-    stakeholderSummaryIt: "IT 관점은 상호운용성, 데이터 이동, 벤더 의존성, 그리고 이 설계가 실제 교내 시스템과 지원 역량에서 버틸 수 있는지를 추적합니다.",
+    stakeholderSummaryIt: "에듀테크 관점은 상호운용성, 데이터 이동, 벤더 의존성, 그리고 이 설계가 실제 학교 현장 시스템과 지원 역량에서 버틸 수 있는지를 살펴봅니다.",
     stakeholderSummaryAccessibility: "접근성 관점은 양식 동등성, 인지 부하, 투명성, 그리고 개인화가 공평한 참여를 지키는지에 집중합니다.",
     perspectivesIntroTitle: "관점 — 한 사람의 눈으로 케이스 읽기",
-    perspectivesIntroBody: "이해관계자(교사·학생·IT·행정)를 고르면 이 화면이 그 사람의 입장으로 케이스를 다시 읽어요. 왼쪽엔 그 사람의 우려, 가운데엔 관심이 도는 쟁점, 아래 대화창에선 그 사람 목소리로 답을 들을 수 있어요. 렌즈를 바꾸면 셋이 한꺼번에 바뀝니다.",
+    perspectivesIntroBody: "이해관계자(교사·학생·에듀테크·행정)를 고르면 이 화면이 그 사람의 입장으로 케이스를 다시 읽어요. 왼쪽엔 그 사람의 우려, 가운데엔 관심이 도는 쟁점, 아래 대화창에선 그 사람 목소리로 답을 들을 수 있어요. 렌즈를 바꾸면 셋이 한꺼번에 바뀝니다.",
     matrixIntroTitle: "상충 관계 — 무엇이 함께 움직이나",
     matrixIntroBody: "설계 결정엔 공짜가 없어요. 개인화를 높이면 교사 부담이 같이 오르고, 프라이버시를 조이면 개인화가 떨어져요. 이 레이더는 다섯 차원이 어떻게 맞물리는지 보여주고, 의사결정 로그엔 당신이 바꾼 것과 그 결과 움직인 차원이 기록돼요.",
     sandboxIntroTitle: "샌드박스 — 가정해 보기",
@@ -1558,7 +1558,7 @@ function applyStaticTranslations() {
     if (radarLabels[1]) radarLabels[1].textContent = state.locale === "ko" ? "프라이버시" : "Privacy";
     if (radarLabels[2]) radarLabels[2].textContent = t("accessibility");
     if (radarLabels[3]) radarLabels[3].textContent = t("feasibility");
-    if (radarLabels[4]) radarLabels[4].textContent = t("teacherLoadLabel");
+    if (radarLabels[4]) radarLabels[4].textContent = t("teacherSlack");
   }
 
   const sandboxView = document.querySelector('[data-view-panel="sandbox"]');
@@ -1627,7 +1627,7 @@ function defaultBoardSettings(overrides = {}) {
   return {
     agendaPrompt:
       state.locale === "ko"
-        ? "재설계에 들어가기 전에, 가장 중요한 설계 긴장을 짚어 보세요."
+        ? "재설계에 들어가기 전에, 가장 중요한 설계 쟁점을 짚어 보세요."
         : "Identify the most important instructional tension before redesigning.",
     dueAt: "",
     maxLearnerNodes: 6,
@@ -3230,7 +3230,7 @@ async function generateAgentReplyWithAi(stakeholderKey, question) {
         `Constraints: ${normalizeStringList(activeCase?.constraints).join(" | ")}`,
         `Question: ${question}`,
         isKorean
-          ? "한국어로 2~3문장 이내의 자연스러운 답변을 작성하세요. 설계 관점의 긴장 요소 한 가지와 실무에서 점검할 다음 단계 한 가지를 포함하세요."
+          ? "한국어로 2~3문장 이내의 자연스러운 답변을 작성하세요. 설계 관점의 쟁점 요소 한 가지와 실무에서 점검할 다음 단계 한 가지를 포함하세요."
           : "Answer in 2 or 3 concise sentences. Mention one design tension and one practical next check.",
       ].join("\n"),
       responseMimeType: "text/plain",
@@ -3343,7 +3343,7 @@ function syncActiveCaseState() {
   const course = getActiveCourse();
   const activeCase = getCaseById(state.activeCaseId, course);
   dom.caseSummaryLabel.textContent = state.activeRole === "admin" ? (state.locale === "ko" ? "선택된 교수자 케이스" : "Selected Instructor Case") : (state.locale === "ko" ? "선택된 게시 케이스" : "Selected Published Case");
-  dom.sidebarTensionLabel.textContent = state.activeRole === "admin" ? t("caseTension") : (state.locale === "ko" ? "학습 런 긴장도" : "Learner run tension");
+  dom.sidebarTensionLabel.textContent = state.activeRole === "admin" ? t("caseTension") : (state.locale === "ko" ? "학습 런 쟁점도" : "Learner run tension");
   if (dom.sidebarTensionHint) dom.sidebarTensionHint.textContent = t("tensionScaleHint");
   if (!activeCase) {
     state.metrics = { ...emptyMetrics };
@@ -4372,6 +4372,15 @@ function tensionLevel(score) {
   return "Low";
 }
 
+// Turn a 0–100 metric into a plain-language band so students read a phrase, not a bare number.
+function koBandWord(v) {
+  if (v >= 80) return "매우 높은";
+  if (v >= 60) return "다소 높은";
+  if (v >= 40) return "보통인";
+  if (v >= 20) return "다소 낮은";
+  return "매우 낮은";
+}
+
 function stakeholderConflicts(key) {
   const { personalization, teacherLoad, privacy, accessibility } = state.metrics;
   const { feasibility } = computeScores();
@@ -4379,24 +4388,24 @@ function stakeholderConflicts(key) {
   const map = ko
     ? {
         teacher: [
-          { level: "critical", title: "수동 피드백 부담 증가", body: `교사 업무 부하가 현재 ${teacherLoad}이에요. 또래 피드백 과정에서 조정과 예외 처리가 여전히 너무 무겁다는 뜻이에요.`, num: teacherLoad, mk: "teacherLoad" },
-          { level: "medium", title: "교육적 일관성 이탈 위험", body: `개인화 깊이가 ${personalization}이에요. 교사가 근거를 들여다볼 수 없으면 비계가 효율적이어도 교육적으로 불투명하게 느껴질 수 있어요.`, num: personalization, mk: "personalization" },
+          { level: "critical", title: "수동 피드백 부담 증가", body: `지금 교사 업무 부담이 ${koBandWord(teacherLoad)} 편이에요(100점 만점에 ${teacherLoad}점). 또래 피드백 과정에서 조정과 예외 처리가 여전히 무겁다는 뜻이에요.`, num: teacherLoad, mk: "teacherLoad" },
+          { level: "medium", title: "교육적 일관성 이탈 위험", body: `지금 개인화(맞춤) 깊이가 ${koBandWord(personalization)} 편이에요(100점 만점에 ${personalization}점). 교사가 근거를 들여다볼 수 없으면 비계가 효율적이어도 교육적으로 불투명하게 느껴질 수 있어요.`, num: personalization, mk: "personalization" },
         ],
         administrator: [
-          { level: "medium", title: "분반 간 일관성 격차", body: `현재 실행 가능성은 ${feasibility}이에요. 교수자와 코호트마다 도입 품질이 고르지 않을 수 있어요.`, num: feasibility, mk: "feasibility" },
-          { level: "critical", title: "정책 감독 필요", body: `프라이버시 회복력이 ${privacy}이에요. 거버넌스가 암묵적으로 남으면 행정 승인이 지연돼요.`, num: privacy, mk: "privacy" },
+          { level: "medium", title: "분반 간 일관성 격차", body: `현재 실행 가능성이 ${koBandWord(feasibility)} 편이에요(100점 만점에 ${feasibility}점). 교수자와 코호트마다 도입 품질이 고르지 않을 수 있어요.`, num: feasibility, mk: "feasibility" },
+          { level: "critical", title: "정책 감독 필요", body: `프라이버시 안정성이 ${koBandWord(privacy)} 편이에요(100점 만점에 ${privacy}점). 거버넌스가 암묵적으로 남으면 행정 승인이 지연돼요.`, num: privacy, mk: "privacy" },
         ],
         student: [
-          { level: "critical", title: "주체성 위축", body: `학생은 맞춤 경로에서 이점을 얻지만, 개인화 점수 ${personalization}은 선택이 설명되지 않으면 지시적으로 느껴질 수 있어요.`, num: personalization, mk: "personalization" },
-          { level: "medium", title: "피드백 신뢰가 고르지 않음", body: `접근성 보장 수준이 ${accessibility}이에요. 지원 요구가 다른 학생은 같은 명료성이나 속도를 경험하지 못할 수 있어요.`, num: accessibility, mk: "accessibility" },
+          { level: "critical", title: "주체성 위축", body: `학생은 맞춤 경로에서 이점을 얻지만, 개인화가 ${koBandWord(personalization)} 편이라(100점 만점에 ${personalization}점) 선택이 설명되지 않으면 지시적으로 느껴질 수 있어요.`, num: personalization, mk: "personalization" },
+          { level: "medium", title: "피드백 신뢰가 고르지 않음", body: `접근성 보장 수준이 ${koBandWord(accessibility)} 편이에요(100점 만점에 ${accessibility}점). 지원 요구가 다른 학생은 같은 명료성이나 속도를 경험하지 못할 수 있어요.`, num: accessibility, mk: "accessibility" },
         ],
         it: [
-          { level: "critical", title: "통합 복잡도 상승", body: "교사 업무 부하와 개인화가 서로 반대 방향으로 움직이고 있어요. 보통 LMS가 깔끔히 흡수하기 어려운 오케스트레이션 로직을 뜻해요." },
-          { level: "medium", title: "지원 역량 압박", body: "프라이버시가 70 아래로 떨어지면 교내 IT의 예외 처리와 벤더 검토 부담이 커지는 경향이 있어요.", num: 70, mk: "threshold" },
+          { level: "critical", title: "통합 복잡도 상승", body: "교사 업무 부담과 개인화가 서로 반대 방향으로 움직이고 있어요. 보통 LMS가 깔끔히 흡수하기 어려운 오케스트레이션 로직을 뜻해요." },
+          { level: "medium", title: "지원 역량 압박", body: "프라이버시가 낮아지면(대략 70점 아래) 에듀테크 연동의 예외 처리와 벤더 검토 부담이 커지는 경향이 있어요.", num: 70, mk: "threshold" },
         ],
         accessibility: [
-          { level: "critical", title: "다중양식 동등성 미흡", body: `접근성 보장 수준이 ${accessibility}이에요. 대체 텍스트, 읽기 순서, 설명 명료성에 대한 더 강한 보장이 필요해요.`, num: accessibility, mk: "accessibility" },
-          { level: "medium", title: "인지 부하 급증 가능", body: "학생이 인간의 프레이밍 없이 너무 많은 자동 신호를 해석해야 할 때 갈등이 커져요." },
+          { level: "critical", title: "다중양식 동등성 미흡", body: `접근성 보장 수준이 ${koBandWord(accessibility)} 편이에요(100점 만점에 ${accessibility}점). 대체 텍스트, 읽기 순서, 설명 명료성에 대한 더 강한 보장이 필요해요.`, num: accessibility, mk: "accessibility" },
+          { level: "medium", title: "인지 부하 급증 가능", body: "학생이 인간의 프레이밍 없이 너무 많은 자동 신호를 해석해야 할 때 쟁점이 커져요." },
         ],
       }
     : {
@@ -4434,7 +4443,7 @@ function scoreTipText(kind) {
         privacy: "0–100 점수예요. 높을수록 프라이버시가 견고해요.",
         accessibility: "0–100 점수예요. 높을수록 접근성 보장이 좋아요.",
         feasibility: "0–100 점수예요. 높을수록 도입 현실성이 높아요 (업무 부하 낮고 프라이버시·접근성 높을수록 올라가요).",
-        threshold: "0–100 척도의 권장 하한선이에요. 이 아래로 내려가면 IT 부담이 커지는 경향이 있어요.",
+        threshold: "0–100 척도의 권장 하한선이에요. 이 아래로 내려가면 에듀테크 연동 부담이 커지는 경향이 있어요.",
       }
     : {
         teacherLoad: "Score out of 100. Higher means more teacher burden (lower is better).",
@@ -5438,6 +5447,14 @@ function describeNodeIssue(node) {
   const stakeholder = stakeholders[node.stakeholder];
   const scores = computeScores();
   const conflict = stakeholder ? stakeholderConflicts(node.stakeholder)[0] : null;
+  const ko = state.locale === "ko";
+  const { personalization, teacherLoad, privacy, accessibility } = state.metrics;
+  // describeNodeIssue reads the raw English `stakeholders` const, so localize label/status/summary here.
+  const stakeLabelKey = { teacher: "stakeholderTeacher", administrator: "stakeholderAdministrator", student: "stakeholderStudent", it: "stakeholderIt", accessibility: "stakeholderAccessibility" };
+  const stakeLabel = stakeholder ? (stakeLabelKey[node.stakeholder] ? t(stakeLabelKey[node.stakeholder]) : stakeholder.label) : null;
+  const stakeStatusKo = { "Needs attention": "주의 필요", "Looking stable": "안정적", "Mixed signals": "신호 혼재", "At risk": "위험", "Needs review": "검토 필요" };
+  const stakeStatus = stakeholder ? (ko ? stakeStatusKo[stakeholder.status] || stakeholder.status : stakeholder.status) : null;
+  const stakeSummary = stakeholder ? (ko && stakeholder.summaryKey ? t(stakeholder.summaryKey) : stakeholder.summary) : null;
   const titles = {
     proposal: t("nodeTitleProposal"),
     teacher: t("nodeTitleTeacher"),
@@ -5455,10 +5472,11 @@ function describeNodeIssue(node) {
 
   if (node.type === "core") {
     return {
-      kicker: `Conflict ${scores.conflict}%`,
+      kicker: ko ? `쟁점 강도 · ${koBandWord(scores.conflict)}(${scores.conflict}%)` : `Conflict ${scores.conflict}%`,
       title: titles[node.id] || node.label,
-      body:
-        "This core node aggregates the current swarm frame. When nearby clusters tighten, the proposal is absorbing more unresolved instructional trade-offs.",
+      body: ko
+        ? "이 코어 노드는 지금의 스웜 프레임을 한데 모아요. 주변 군집이 조여올수록, 제안이 아직 풀리지 않은 수업 상충을 더 많이 끌어안고 있다는 뜻이에요."
+        : "This core node aggregates the current swarm frame. When nearby clusters tighten, the proposal is absorbing more unresolved instructional trade-offs.",
     };
   }
 
@@ -5519,7 +5537,7 @@ function describeNodeIssue(node) {
           { t: "SSO·명단 동기화", b: "시스템 간 신원 연동이 취약하고, 오래된 명단이 유령 계정을 만듭니다." },
           { t: "데이터 보존 모호함", b: "보존 정책이 이 도구의 기본 저장 기간과 깔끔하게 맞아떨어지지 않습니다." },
           { t: "외부 업체 개인정보 검토", b: "벤더 DPA 승인이 지연되어 배포가 법무 확인 단계에서 멈춰 있습니다." },
-          { t: "통합 유지보수 부담", b: "새 커넥터마다 IT가 말없이 떠안는 온콜 표면이 늘어납니다." },
+          { t: "통합 유지보수 부담", b: "새 커넥터마다 에듀테크 연동을 맡은 쪽이 말없이 떠안는 온콜 표면이 늘어납니다." },
           { t: "네트워크 수준 접근성", b: "지연이나 방화벽 규칙이 교외 학습자의 경험을 조용히 떨어뜨립니다." },
         ],
       },
@@ -5574,65 +5592,77 @@ function describeNodeIssue(node) {
   }
 
   if (node.issueType) {
+    const issueTypeKo = { concern: "우려", alignment: "정렬", aligned: "정렬", conflict: "충돌", divergent: "이견", tension: "쟁점", partial: "부분일치" };
+    const typeWord = ko ? issueTypeKo[node.issueType] || node.issueType : `${node.issueType[0].toUpperCase()}${node.issueType.slice(1)}`;
     return {
-      kicker: `${node.issueType[0].toUpperCase()}${node.issueType.slice(1)} · ${stakeholder?.label || "Issue"}`,
+      kicker: `${typeWord} · ${stakeLabel || (ko ? "쟁점" : "Issue")}`,
       title: node.label,
-      body: node.detail || node.meta || (state.locale === "ko" ? "이 노드는 현재 케이스 구조에서 생성됐어요." : "This node was generated from the active case structure."),
+      body: node.detail || node.meta || (ko ? "이 노드는 현재 케이스 구조에서 생성됐어요." : "This node was generated from the active case structure."),
     };
   }
 
   if (node.id === "moderation-burden") {
     return {
-      kicker: `Teacher load ${state.metrics.teacherLoad}`,
+      kicker: ko ? `교사 업무 부담 · ${koBandWord(teacherLoad)}(${teacherLoad}점)` : `Teacher load ${teacherLoad}`,
       title: titles[node.id],
-      body: "The swarm is detecting that facilitation, exception handling, and review workload are accumulating faster than the current instructional flow can absorb.",
+      body: ko
+        ? "퍼실리테이션, 예외 처리, 검토 업무가 지금의 수업 흐름이 흡수할 수 있는 속도보다 빠르게 쌓이고 있다고 스웜이 감지하고 있어요."
+        : "The swarm is detecting that facilitation, exception handling, and review workload are accumulating faster than the current instructional flow can absorb.",
     };
   }
 
   if (node.id === "governance" || node.id === "telemetry-scope") {
     return {
-      kicker: `Privacy ${state.metrics.privacy}`,
+      kicker: ko ? `프라이버시 · ${koBandWord(privacy)}(${privacy}점)` : `Privacy ${privacy}`,
       title: titles[node.id] || node.label,
-      body: "This issue cluster points to data handling ambiguity. If it keeps growing, adoption risk increases for both IT and administrative reviewers.",
+      body: ko
+        ? "이 쟁점 군집은 데이터 처리의 모호함을 가리켜요. 계속 커지면 에듀테크와 행정 검토 양쪽에서 도입 위험이 커져요."
+        : "This issue cluster points to data handling ambiguity. If it keeps growing, adoption risk increases for both IT and administrative reviewers.",
     };
   }
 
   if (node.id === "adaptive-pathing") {
     return {
-      kicker: `Personalization ${state.metrics.personalization}`,
+      kicker: ko ? `개인화 · ${koBandWord(personalization)}(${personalization}점)` : `Personalization ${personalization}`,
       title: titles[node.id],
-      body: "The swarm sees strong personalization potential here, but it may over-direct learner decisions if the rationale remains hidden.",
+      body: ko
+        ? "스웜은 여기서 개인화 잠재력이 크다고 보지만, 근거가 드러나지 않으면 학습자의 선택을 과도하게 몰아갈 수 있어요."
+        : "The swarm sees strong personalization potential here, but it may over-direct learner decisions if the rationale remains hidden.",
     };
   }
 
   if (node.id === "evidence-trace") {
     return {
-      kicker: `Evidence ${state.evidence.length}`,
+      kicker: ko ? `근거 ${state.evidence.length}건` : `Evidence ${state.evidence.length}`,
       title: titles[node.id],
-      body: "This node reflects whether redesign decisions are leaving a usable trail of evidence that can support memo writing, critique, and reflection.",
+      body: ko
+        ? "이 노드는 재설계 결정이 메모 작성·비평·성찰을 뒷받침할 근거의 흔적을 남기고 있는지를 보여줘요."
+        : "This node reflects whether redesign decisions are leaving a usable trail of evidence that can support memo writing, critique, and reflection.",
     };
   }
 
   if (node.id === "caption-parity") {
     return {
-      kicker: `Accessibility ${state.metrics.accessibility}`,
+      kicker: ko ? `접근성 · ${koBandWord(accessibility)}(${accessibility}점)` : `Accessibility ${accessibility}`,
       title: titles[node.id],
-      body: "The swarm is flagging that equivalent access across captions, alt text, pacing, and explanation layers is still fragile.",
+      body: ko
+        ? "자막, 대체 텍스트, 속도, 설명 계층에 걸친 동등한 접근이 아직 취약하다고 스웜이 신호하고 있어요."
+        : "The swarm is flagging that equivalent access across captions, alt text, pacing, and explanation layers is still fragile.",
     };
   }
 
   if (conflict) {
     return {
-      kicker: stakeholder ? stakeholder.status : "Issue detected",
+      kicker: stakeStatus || (ko ? "쟁점 감지됨" : "Issue detected"),
       title: titles[node.id] || conflict.title,
       body: conflict.body,
     };
   }
 
   return {
-    kicker: node.meta || (state.locale === "ko" ? "쟁점" : "Issue detected"),
+    kicker: node.meta || (ko ? "쟁점" : "Issue detected"),
     title: titles[node.id] || node.label,
-    body: stakeholder ? stakeholder.summary : (state.locale === "ko" ? "이 노드는 그래프 속 살아있는 쟁점 군집이에요." : "This node represents a live issue cluster in the swarm graph."),
+    body: stakeSummary || (ko ? "이 노드는 그래프 속 살아있는 쟁점 군집이에요." : "This node represents a live issue cluster in the swarm graph."),
   };
 }
 
@@ -6319,7 +6349,7 @@ function renderGraph() {
           ? "이해관계자 노드를 클릭하면 관점이 바뀝니다. 케이스가 바뀌거나 새 질문이 들어오면 네트워크도 함께 갱신됩니다."
           : "Click a stakeholder node to change perspective. The network updates when the case changes or a new question is asked."
     : state.locale === "ko"
-      ? "케이스가 준비되면 이 맵에 이해관계자, 긴장, 근거 연결이 나타납니다."
+      ? "케이스가 준비되면 이 맵에 이해관계자, 쟁점, 근거 연결이 나타납니다."
       : "Once a case is available, this map will show stakeholders, tensions, and evidence links.";
 
   const metaItems = activeCase
@@ -6583,7 +6613,7 @@ function renderStakeholderFocus() {
     )
     .join("");
 
-  // Four stakeholder lenses only (교사·학생·IT·행정), localized — not all 5 stakeholders.
+  // Four stakeholder lenses only (교사·학생·에듀테크·행정), localized — not all 5 stakeholders.
   const LENS_KEYS = ["teacher", "student", "it", "administrator"];
   const stakeholderPillMarkup = LENS_KEYS
     .filter((key) => stakeholders[key])
@@ -7180,13 +7210,13 @@ function getTutorialSteps() {
       {
         selector: "#network-stage",
         title: state.locale === "ko" ? "케이스 맵 읽기" : "Read the Case Map",
-        body: state.locale === "ko" ? "이 맵은 설계 결정을 형성하는 사람, 제약, 긴장을 보여줍니다." : "This map shows the people, constraints, and tensions that shape the design decision.",
+        body: state.locale === "ko" ? "이 맵은 설계 결정을 형성하는 사람, 제약, 쟁점을 보여줍니다." : "This map shows the people, constraints, and tensions that shape the design decision.",
         view: "visualizer",
       },
       {
         selector: "#visualizer-form",
         title: state.locale === "ko" ? "질문하기" : "Ask a Question",
-        body: state.locale === "ko" ? "가장 중요한 갈등이나 특정 이해관계자의 우려를 물어 맵의 해석을 더해보세요." : "Ask about the most important conflict or a stakeholder concern to add more insight to the map.",
+        body: state.locale === "ko" ? "가장 중요한 쟁점이나 특정 이해관계자의 우려를 물어 맵의 해석을 더해보세요." : "Ask about the most important conflict or a stakeholder concern to add more insight to the map.",
         view: "visualizer",
       },
       ...(hasCase
@@ -7194,7 +7224,7 @@ function getTutorialSteps() {
             {
               selector: "#report-summary",
               title: state.locale === "ko" ? "분석을 요약으로 정리" : "Turn the Analysis into a Summary",
-              body: state.locale === "ko" ? "준비가 되면 리포트 보기에서 요약, 긴장, 근거를 확인하세요." : "When you are ready, open the report view to review the summary, tensions, and evidence.",
+              body: state.locale === "ko" ? "준비가 되면 리포트 보기에서 요약, 쟁점, 근거를 확인하세요." : "When you are ready, open the report view to review the summary, tensions, and evidence.",
               view: "report",
             },
           ]
@@ -7223,7 +7253,7 @@ function getTutorialSteps() {
             selector: "[data-collapsible-panel='intake']",
             title: state.locale === "ko" ? "수업 설명요약 읽기" : "Read the Case Brief First",
             body: state.locale === "ko"
-              ? "왼쪽 패널의 수업 설명요약을 읽고, 설계가 해결하려는 문제와 학습자, 제약을 먼저 파악하세요. 읽고 나면 셰브론 버튼으로 패널을 접어 지도를 더 넓게 볼 수 있습니다."
+              ? "왼쪽 패널의 수업 설명요약을 읽고, 설계가 해결하려는 문제와 학습자, 제약을 먼저 파악하세요. 읽고 나면 셰브론 버튼으로 패널을 접어 맵을 더 넓게 볼 수 있습니다."
               : "The left panel holds the instructor's brief — read it before touching the map so you understand the design problem, the learners, and the constraints in play. Collapse this panel with the chevron once you are done to give the map more room.",
             view: "visualizer",
           },
@@ -7231,7 +7261,7 @@ function getTutorialSteps() {
             selector: "#network-stage",
             title: state.locale === "ko" ? "케이스 맵 탐색" : "Explore the Case Map",
             body: state.locale === "ko"
-              ? "먼저 큰 클러스터(이해관계자·제약·긴장)를 훑어보세요. 노드에 호버하면 내용을 보고, 이해관계자 노드를 클릭하면 선택된 렌즈가 그들의 시각으로 전환됩니다."
+              ? "먼저 큰 클러스터(이해관계자·제약·쟁점)를 훑어보세요. 노드에 호버하면 내용을 보고, 이해관계자 노드를 클릭하면 선택된 렌즈가 그들의 시각으로 전환됩니다."
               : "Scan the main clusters first — stakeholders, constraints, and tensions. Hover any node to read its detail; click a stakeholder node to shift the Selected lens panel into their point of view.",
             view: "visualizer",
           },
@@ -7239,7 +7269,7 @@ function getTutorialSteps() {
             selector: "#visualizer-form",
             title: state.locale === "ko" ? "스웜에게 질문하기" : "Ask the Swarm",
             body: state.locale === "ko"
-              ? "가장 중요한 갈등이나 트레이드오프, 이해관계자의 우려를 한 문장으로 물어보세요. 다섯 개의 AI 에이전트가 한 번의 라운드에서 서로 다른 관점으로 답하고, 동의·반대 연결이 맵에 자동으로 추가됩니다."
+              ? "가장 중요한 쟁점이나 트레이드오프, 이해관계자의 우려를 한 문장으로 물어보세요. 다섯 개의 AI 에이전트가 한 번의 라운드에서 서로 다른 관점으로 답하고, 동의·반대 연결이 맵에 자동으로 추가됩니다."
               : "Ask one focused question — a tension you noticed, a tradeoff, or a stakeholder concern. Five AI agents answer in a single round with different stances, and their agreements and disagreements get wired into the map as new edges.",
             view: "visualizer",
           },
@@ -7271,7 +7301,7 @@ function getTutorialSteps() {
             selector: "#reflection-prompts",
             title: state.locale === "ko" ? "리플렉션 작성 후 제출" : "Write Your Reflection, Then Submit",
             body: state.locale === "ko"
-              ? "리포트 뷰를 열고 프롬프트를 활용해 맵에서 발견한 긴장과 근거를 짧은 리플렉션으로 정리하세요. 다운로드 버튼으로 내보내거나 교수자에게 제출할 수 있습니다."
+              ? "리포트 뷰를 열고 프롬프트를 활용해 맵에서 발견한 쟁점과 근거를 짧은 리플렉션으로 정리하세요. 다운로드 버튼으로 내보내거나 교수자에게 제출할 수 있습니다."
               : "Open the Report view and use these prompts to turn what you found on the map into a short reflection. When you are ready, use the Download button at the bottom to export your report or submit it to your instructor.",
             view: "report",
           },
@@ -7280,9 +7310,9 @@ function getTutorialSteps() {
           // Fallback for students who haven't opened a case yet — still give them somewhere to go.
           {
             selector: "#network-stage",
-            title: state.locale === "ko" ? "케이스를 선택하면 지도가 열립니다" : "Pick a Case to Load the Map",
+            title: state.locale === "ko" ? "케이스를 선택하면 맵이 열립니다" : "Pick a Case to Load the Map",
             body: state.locale === "ko"
-              ? "위의 목록에서 게시된 케이스를 하나 고르면 네트워크 지도가 이곳에 나타납니다. 그 뒤 튜토리얼을 다시 실행하면 설명요약 읽기, 스웜에 질문하기, 노드 추가, 리플렉션 작성까지 나머지 단계를 안내합니다."
+              ? "위의 목록에서 게시된 케이스를 하나 고르면 네트워크 맵이 이곳에 나타납니다. 그 뒤 튜토리얼을 다시 실행하면 설명요약 읽기, 스웜에 질문하기, 노드 추가, 리플렉션 작성까지 나머지 단계를 안내합니다."
               : "Pick one published case from the list above and its network map will load here. Replay the tutorial after you've opened a case — it will walk you through reading the brief, exploring the map, asking the swarm, challenging responses, adding your own node, and writing a reflection.",
             view: "visualizer",
           },
@@ -8613,7 +8643,7 @@ document.addEventListener("submit", async (event) => {
     const submitButton = event.target.querySelector('button[type="submit"]');
     const originalLabel = submitButton ? submitButton.textContent : "";
     const stages = state.locale === "ko"
-      ? ["설명요약 분석 중…", "이해관계자 추출 중…", "긴장 관계 계산 중…", "케이스 저장 중…"]
+      ? ["설명요약 분석 중…", "이해관계자 추출 중…", "쟁점 관계 계산 중…", "케이스 저장 중…"]
       : ["Parsing brief…", "Extracting stakeholders…", "Computing tensions…", "Saving case…"];
     let stageIndex = 0;
     const setStage = (label) => { if (submitButton) submitButton.textContent = label; };

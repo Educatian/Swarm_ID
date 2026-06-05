@@ -232,7 +232,7 @@
 
     <section class="intro">
       <h2>Swarm ID가 다른 이유</h2>
-      <p>학생이 질문을 하면 Swarm ID는 LLM을 한 번만 부르지 않습니다. 대신 <strong>스웜 라운드</strong>가 돕니다 &mdash; 다섯 명의 이해관계자 에이전트(교사·학생·IT·행정·접근성)가 같은 질문에 <strong>동시에</strong> 답하고, 2차 분류 패스가 답변 쌍을 <em>동의 / 이견 / 부분일치</em>로 나눠 맵 위에 엣지로 그려 줍니다. 학생은 다원성과 충돌 지점을 한눈에 보게 되고, 어떤 답이 납득이 안 되면 <strong>도전(Challenge)</strong>을 눌러 그 에이전트에게 2라운드 정교화를 받아냅니다.</p>
+      <p>학생이 질문을 하면 Swarm ID는 LLM을 한 번만 부르지 않습니다. 대신 <strong>스웜 라운드</strong>가 돕니다 &mdash; 다섯 명의 이해관계자 에이전트(교사·학생·에듀테크·행정·접근성)가 같은 질문에 <strong>동시에</strong> 답하고, 2차 분류 패스가 답변 쌍을 <em>동의 / 이견 / 부분일치</em>로 나눠 맵 위에 엣지로 그려 줍니다. 학생은 다원성과 충돌 지점을 한눈에 보게 되고, 어떤 답이 납득이 안 되면 <strong>도전(Challenge)</strong>을 눌러 그 에이전트에게 2라운드 정교화를 받아냅니다.</p>
       <p>강사로서 여러분의 일은 이 스웜이 수업 활동 안에서 의미 있게 돌아가도록 <em>무대를 설계</em>하는 것입니다 &mdash; 좋은 설명요약, 신중한 게시 전략, 수업 중에는 개입 포인트를 알아보는 눈, 세션 뒤에는 학생 리포트를 해석하는 안목. 이 가이드가 그 네 가지를 순서대로 잡아드립니다.</p>
       <div class="pill-list">
         <span>설명요약 구조화</span>
@@ -325,7 +325,7 @@
           <div class="step-body">
             <h3>수업용 케이스 한 장 열어 예습</h3>
             <span class="target">카드 · <em>케이스 열기</em></span>
-            <p>수업에 사용할 카드(예: <em>Learner Motivation 사례 1</em>)의 <strong>케이스 열기</strong>를 누르면 캔버스가 재렌더됩니다: 중앙 <strong>코어</strong> 노드(케이스 제목), 그 둘레의 이해관계자 노드(교사·학생·IT·행정·접근성), 각 이해관계자에 연결된 시그널 노드(목표·제약·증거). 모든 주요 노드에는 오른쪽 위에 <strong>출처 배지</strong>가 붙습니다 &mdash; <code>설명</code> 배지는 업로드된 설명요약에서 나온 노드라는 뜻.</p>
+            <p>수업에 사용할 카드(예: <em>Learner Motivation 사례 1</em>)의 <strong>케이스 열기</strong>를 누르면 캔버스가 재렌더됩니다: 중앙 <strong>코어</strong> 노드(케이스 제목), 그 둘레의 이해관계자 노드(교사·학생·에듀테크·행정·접근성), 각 이해관계자에 연결된 시그널 노드(목표·제약·증거). 모든 주요 노드에는 오른쪽 위에 <strong>출처 배지</strong>가 붙습니다 &mdash; <code>설명</code> 배지는 업로드된 설명요약에서 나온 노드라는 뜻.</p>
             <p>수업 전에 강사가 직접 한 번 열어 보세요. 캐시를 데우고, Gemini 쿼터 이슈가 있는지 미리 걸러내는 용도입니다.</p>
           </div>
           <div class="shot">
@@ -344,7 +344,7 @@
             <div class="callouts two">
               <div class="callout success">
                 <span class="label">좋은 설명요약이 담는 요소</span>
-                <p>대상 학습자, 학습 목표(ADDIE/5E 친화적 언어), 제약(시간·도구·정책·워크로드), 최소 한 가지 긴장 지점(예: "저작 정책 vs AI 보조 드래프팅"). 긴장이 많이 인코딩될수록 스웜의 이견 엣지가 풍부해집니다.</p>
+                <p>대상 학습자, 학습 목표(ADDIE/5E 친화적 언어), 제약(시간·도구·정책·워크로드), 최소 한 가지 쟁점 지점(예: "저작 정책 vs AI 보조 드래프팅"). 쟁점이 많이 인코딩될수록 스웜의 이견 엣지가 풍부해집니다.</p>
               </div>
               <div class="callout warn">
                 <span class="label">피해야 할 설명요약</span>
@@ -404,7 +404,7 @@
           <div class="step-body">
             <h3>관점(Perspectives)으로 수업 여는 발문</h3>
             <span class="target">왼쪽 내비 · 관점</span>
-            <p>학생이 각자 스웜 라운드를 돌리기 전에, <strong>관점</strong> 뷰로 전환해 이해관계자별 상위 충돌 요약과 긴장 점수를 훑으세요. 전체 수업에 던질 좋은 첫 발문이 여기서 만들어집니다.</p>
+            <p>학생이 각자 스웜 라운드를 돌리기 전에, <strong>관점</strong> 뷰로 전환해 이해관계자별 상위 충돌 요약과 쟁점 점수를 훑으세요. 전체 수업에 던질 좋은 첫 발문이 여기서 만들어집니다.</p>
             <div class="callouts">
               <div class="callout success">
                 <span class="label">발문 예시</span>
@@ -415,7 +415,7 @@
           <div class="shot">
             <figure>
               <img src="assets/07-perspectives.png" alt="관점 뷰" />
-              <figcaption>관점 뷰 &mdash; 이해관계자별 상위 충돌과 긴장 점수.</figcaption>
+              <figcaption>관점 뷰 &mdash; 이해관계자별 상위 충돌과 쟁점 점수.</figcaption>
             </figure>
           </div>
         </li>
