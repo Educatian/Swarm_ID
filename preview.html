@@ -162,7 +162,7 @@
       </div>
 
       <div class="case-summary panel-soft">
-        <p class="eyebrow" id="case-summary-label">Selected Case</p>
+        <p class="eyebrow" id="case-summary-label" data-density="advanced">Selected Case</p>
         <label class="mini-control compact-control" id="sidebar-case-control">
           <span id="sidebar-case-label">Case</span>
           <select id="sidebar-case-select"></select>
@@ -174,14 +174,14 @@
           </button>
         </div>
         <p class="case-subtitle" id="case-subtitle">Waiting for course data.</p>
-        <div class="meter-label">
+        <div class="meter-label" data-density="advanced">
           <span id="sidebar-tension-label">Case tension</span>
           <strong id="sidebar-tension" title="0–100. Higher means more unresolved friction across stakeholders.">High</strong>
         </div>
-        <div class="meter">
+        <div class="meter" data-density="advanced">
           <div class="meter-fill meter-fill-danger" id="sidebar-tension-fill"></div>
         </div>
-        <p class="meter-hint" id="sidebar-tension-hint">0–100 · higher means more friction across stakeholders</p>
+        <p class="meter-hint" id="sidebar-tension-hint" data-density="advanced">0–100 · higher means more friction across stakeholders</p>
       </div>
 
       <nav class="primary-nav" aria-label="Primary">
@@ -362,6 +362,10 @@
 
               <div class="network-stage" id="network-stage">
                 <svg class="network-svg" id="network-svg" aria-label="Live case issue map"></svg>
+                <div class="map-lens-bar" id="map-lens-bar" role="group" aria-label="관점 전환">
+                  <span class="map-lens-bar-label" id="map-lens-bar-label">관점</span>
+                  <div class="lens-pill-row token-row" id="stakeholder-pills"></div>
+                </div>
                 <div class="network-tooltip" id="network-tooltip" hidden>
                   <p class="network-tooltip-kicker" id="network-tooltip-kicker">Issue</p>
                   <strong id="network-tooltip-title">Node title</strong>
@@ -482,8 +486,6 @@
               <div class="lens-summary-block">
                 <p id="lens-summary"></p>
               </div>
-
-              <div class="lens-pill-row token-row" id="stakeholder-pills"></div>
 
               <div class="subsection">
                 <div class="subsection-head">

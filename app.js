@@ -4559,6 +4559,9 @@ function renderPlatformControlsLegacy() {
   dom.sidebarCaseSelect.value = dom.caseSelect.value;
   dom.sidebarCaseSelect.disabled = dom.caseSelect.disabled;
   dom.sidebarCaseControl.classList.toggle("is-hidden", !course);
+  // With a single case the dropdown just repeats the title below it; mark it so
+  // simple mode can hide it (students still get the picker when >1 case exists).
+  dom.sidebarCaseControl.classList.toggle("single-case", dom.sidebarCaseSelect.options.length <= 1);
   dom.learnerSelect.innerHTML = learners
     .map((learner) => `<option value="${learner.id}">${learner.name}</option>`)
     .join("");
@@ -4678,6 +4681,9 @@ function renderPlatformControls() {
   dom.sidebarCaseSelect.value = dom.caseSelect.value;
   dom.sidebarCaseSelect.disabled = dom.caseSelect.disabled;
   dom.sidebarCaseControl.classList.toggle("is-hidden", !course);
+  // With a single case the dropdown just repeats the title below it; mark it so
+  // simple mode can hide it (students still get the picker when >1 case exists).
+  dom.sidebarCaseControl.classList.toggle("single-case", dom.sidebarCaseSelect.options.length <= 1);
 
   dom.learnerSelect.innerHTML = learners.map((learner) => `<option value="${learner.id}">${learner.name}</option>`).join("");
   dom.learnerSelect.value = activeLearner?.id || "";
