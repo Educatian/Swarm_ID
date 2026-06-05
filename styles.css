@@ -5447,3 +5447,33 @@ textarea:focus-visible,
   transform: translateX(0);
   opacity: 1;
 }
+
+/* ============================================================
+   Network map SVG text was rendering in #1e293b (the light-theme
+   --on-surface token) on the dark map background — contrast ~1.31, i.e.
+   black-on-black, the node names were invisible. The earlier dark-theme
+   passes fixed CSS `color` but SVG glyphs use `fill`, which was left dark
+   (and the runtime <style> that was meant to set it light never injects).
+   Force light fill on all network node text. Labels/meta sit BELOW the
+   nodes on the dark stage and the icon is centered in the dark node body,
+   so light is correct in every case. */
+.network-node .node-label,
+.network-stage .node-label,
+svg text.node-label {
+  fill: rgba(246, 246, 252, 0.96) !important;
+}
+.network-node .node-icon,
+.network-stage .node-icon,
+svg text.node-icon {
+  fill: #f6f6fc !important;
+}
+.network-node .node-meta,
+.network-stage .node-meta,
+svg text.node-meta {
+  fill: rgba(202, 208, 224, 0.92) !important;
+}
+/* Landing-page network labels share the same risk. */
+.landing-network text,
+.landing-node-label {
+  fill: rgba(246, 246, 252, 0.92);
+}
