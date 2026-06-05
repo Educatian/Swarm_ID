@@ -9092,6 +9092,10 @@ async function boot() {
   if (!dom.appShell?.classList.contains("is-hidden")) {
     startTutorial(false);
   }
+  // Preview-only hook (set by preview-demo.js). No-op in production.
+  if (window.__DTS_PREVIEW__ && typeof window.__dtsPreviewInject === "function") {
+    window.__dtsPreviewInject();
+  }
 }
 
 boot();

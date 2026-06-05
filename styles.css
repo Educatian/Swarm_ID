@@ -2936,11 +2936,13 @@ textarea:disabled {
 }
 
 body {
-  color: var(--on-surface);
+  color: rgba(246, 246, 252, 0.92);
   background:
-    radial-gradient(circle at top left, rgba(67, 97, 238, 0.12), transparent 22%),
-    radial-gradient(circle at right center, rgba(27, 156, 133, 0.08), transparent 20%),
-    linear-gradient(180deg, #f8fbff 0%, #eef3fb 100%);
+    radial-gradient(circle at 12% 8%, rgba(67, 97, 238, 0.16), transparent 34%),
+    radial-gradient(circle at 88% 6%, rgba(27, 156, 133, 0.1), transparent 32%),
+    radial-gradient(circle at 50% 120%, rgba(120, 80, 220, 0.12), transparent 45%),
+    linear-gradient(180deg, #0b0d14 0%, #0d0f16 100%);
+  background-attachment: fixed;
 }
 
 .is-hidden {
@@ -4392,8 +4394,8 @@ body {
   color: #fff;
   font-size: 26px;
 }
-.home-brand-title { margin: 0; font-size: 1.15rem; color: var(--on-surface); letter-spacing: -0.01em; }
-.home-brand-sub { margin: 2px 0 0; font-size: 0.82rem; color: var(--on-surface-variant); }
+.home-brand-title { margin: 0; font-size: 1.15rem; color: #fff; letter-spacing: -0.01em; }
+.home-brand-sub { margin: 2px 0 0; font-size: 0.82rem; color: rgba(246,246,252,0.55); }
 
 .home-continue {
   border-radius: 22px;
@@ -4561,3 +4563,154 @@ body {
   line-height: 1.5;
   color: rgba(246, 246, 252, 0.66);
 }
+
+/* ============================================================
+   DARK THEME (cohesive) — matches the approved PPTX mockups.
+   Appended last to override the earlier light-theme block.
+   ============================================================ */
+.background-layer { background-image: none; }
+
+/* Surfaces → frosted dark glass */
+.sidebar,
+.topbar,
+.workspace-tabs,
+.mobile-dock,
+.metric-chip,
+.panel,
+.panel-soft,
+.context-card,
+.pipeline-card,
+.document-card,
+.case-card,
+.settings-grid article,
+.lens-summary-block,
+.tension-item,
+.evidence-item,
+.conflict-card,
+.decision-item,
+.feed-item,
+.memo-item,
+.rubric-item,
+.prompt-item,
+.reflection-item,
+.network-meta-card {
+  background: rgba(21, 24, 32, 0.72);
+  border-color: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.34);
+}
+.sidebar { border-right-color: rgba(255, 255, 255, 0.06); }
+
+/* Inputs / selects / controls */
+.mini-control,
+.platform-switcher .mini-control,
+.mini-control select,
+.mini-control input,
+.pipeline-form input,
+.pipeline-form textarea,
+.pipeline-form select,
+.chat-composer textarea,
+.composer-input,
+.meter,
+.bar-track,
+.orbit-core {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f3f5fb;
+}
+.mini-control select option { color: #0d0f16; }
+
+/* Text → light */
+.case-subtitle,
+.topbar p:last-child,
+.detail-stack p:not(.label),
+.memo-section p:not(.label),
+.lens-summary-block p,
+.reaction-feed p,
+.context-card p,
+.pipeline-card p,
+.document-card p,
+.case-card p,
+.settings-grid p,
+.settings-grid li,
+.health-panel p,
+.network-meta-card p,
+.network-tooltip-body,
+.stage-overlay span,
+.tension-item p,
+.evidence-item p,
+.conflict-card p,
+.decision-item p,
+.memo-item p,
+.reflection-item p {
+  color: rgba(246, 246, 252, 0.62);
+}
+.eyebrow,
+.label,
+.meter-label,
+.health-header,
+.mini-control span,
+.graph-toggle,
+.metric-chip span,
+.network-node .node-meta,
+.card-meta span {
+  color: rgba(246, 246, 252, 0.5);
+}
+.case-summary h2,
+.brand-block h1,
+.section-header h3,
+.subsection-head h4 { color: #fff; }
+
+/* Nav */
+.nav-item,
+.workspace-tab,
+.dock-item { color: rgba(246, 246, 252, 0.6); }
+.nav-item:hover,
+.nav-item.is-active,
+.workspace-tab:hover,
+.workspace-tab.is-active,
+.dock-item:hover,
+.dock-item.is-active {
+  background: rgba(67, 97, 238, 0.18);
+  color: #cdd8ff;
+  border-color: rgba(67, 97, 238, 0.3);
+}
+
+/* Buttons (primary/danger keep their gradients) */
+.secondary-action,
+.toolbar-button {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(246, 246, 252, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.secondary-action:hover,
+.toolbar-button:hover { background: rgba(255, 255, 255, 0.12); }
+
+/* Tokens / badges / pills */
+.token,
+.pipeline-chip,
+.badge,
+.numeric-pill {
+  background: rgba(67, 97, 238, 0.16);
+  border-color: rgba(67, 97, 238, 0.28);
+  color: rgba(206, 216, 255, 0.95);
+}
+
+/* The map canvas → dark */
+.network-stage {
+  background:
+    radial-gradient(circle at 50% 45%, rgba(67, 97, 238, 0.16), transparent 26%),
+    radial-gradient(circle at 16% 16%, rgba(27, 156, 133, 0.1), transparent 20%),
+    linear-gradient(180deg, rgba(16, 18, 26, 0.96), rgba(12, 14, 20, 0.98));
+  border-color: rgba(255, 255, 255, 0.07);
+}
+.network-stage::before {
+  background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+}
+.stage-overlay,
+.network-tooltip { background: rgba(21, 24, 32, 0.86); }
+.empty-note {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(246, 246, 252, 0.55);
+}
+.network-link { stroke: rgba(180, 195, 220, 0.28); }
