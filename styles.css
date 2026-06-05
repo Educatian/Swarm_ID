@@ -4927,3 +4927,112 @@ body {
 
 /* Off-canvas drawers must not extend the page scroll width */
 .density-simple .visualizer-layout { overflow-x: clip; }
+
+/* ============================================================
+   Dark-theme contrast fixes (WCAG AA) — raise muted text alphas
+   ============================================================ */
+.case-subtitle,
+.topbar p:last-child,
+.detail-stack p:not(.label),
+.lens-summary-block p,
+.reaction-feed p,
+.context-card p,
+.pipeline-card p,
+.document-card p,
+.case-card p,
+.settings-grid p,
+.settings-grid li,
+.health-panel p,
+.network-meta-card p,
+.network-tooltip-body,
+.stage-overlay span,
+.tension-item p,
+.evidence-item p,
+.conflict-card p,
+.decision-item p,
+.memo-item p,
+.reflection-item p,
+#selected-node-copy,
+.selected-node-card p,
+.home-task-body,
+.home-advanced-body,
+.home-continue-sub {
+  color: rgba(246, 246, 252, 0.8);
+}
+.eyebrow,
+.label,
+.meter-label,
+.meter-hint,
+.health-header,
+.mini-control span,
+.graph-toggle,
+.metric-chip span,
+.network-node .node-meta,
+.card-meta span,
+.home-section-eyebrow,
+.home-recent-item span,
+.composer-hint,
+.home-recent-empty {
+  color: rgba(246, 246, 252, 0.7);
+}
+.topbar-identity { color: rgba(246, 246, 252, 0.76); }
+/* Active lens pill: solid accent so the selected lens reads clearly */
+.token-active {
+  background: #4361ee;
+  color: #fff;
+  border-color: transparent;
+}
+.home-task-framing { color: rgba(246, 246, 252, 0.9); }
+.icon-button { color: rgba(246, 246, 252, 0.66); }
+
+/* Dark-theme contrast: detailed-mode elements that kept light-theme dark text */
+.concept-help-title,
+.view-intro-title,
+.student-onboarding-title,
+.pipeline-card-collapsible .pipeline-card-header strong {
+  color: #fff;
+}
+.concept-help-body,
+.concept-help-list span,
+.view-intro-body,
+.student-onboarding-list li,
+.legend-label {
+  color: rgba(246, 246, 252, 0.82);
+}
+.concept-help-list strong { color: rgba(206, 216, 255, 0.95); }
+.legend-desc { color: rgba(246, 246, 252, 0.66); }
+.pipeline-card-collapsible .pipeline-card-header .chevron { color: rgba(246, 246, 252, 0.7); }
+/* Close / icon-toggle buttons inside overlays */
+.legend-close,
+.stage-note-close,
+.view-intro-close,
+.swarm-info-toggle,
+.legend-reopen,
+.stage-note-reopen { color: rgba(246, 246, 252, 0.72); }
+.legend-close .material-symbols-outlined,
+.stage-note-close .material-symbols-outlined,
+.view-intro-close,
+.swarm-info-toggle .material-symbols-outlined { color: inherit; }
+.concept-help { border-color: rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); }
+
+/* Higher-specificity overrides for legend / overlay close / panel-expand toggles */
+.legend-item .legend-label { color: rgba(246, 246, 252, 0.86); }
+.legend-item .legend-desc { color: rgba(246, 246, 252, 0.66); }
+.stage-overlay .legend-close,
+.stage-overlay .legend-close .material-symbols-outlined,
+.stage-overlay .stage-note-close,
+.stage-overlay .stage-note-close .material-symbols-outlined,
+.legend-reopen .material-symbols-outlined,
+.swarm-info-toggle .material-symbols-outlined { color: rgba(246, 246, 252, 0.74); }
+.panel-expand-toggle,
+.panel-expand-toggle span,
+#panel-expand-intake-label,
+#panel-expand-insight-label { color: rgba(246, 246, 252, 0.78); }
+
+/* Overlay close × icons (id-based, beats light-theme specifics) */
+#legend-close,
+#stage-note-close,
+#swarm-info-toggle { background: rgba(255, 255, 255, 0.08); border-color: rgba(255,255,255,0.12); }
+#legend-close .material-symbols-outlined,
+#stage-note-close .material-symbols-outlined,
+#swarm-info-toggle .material-symbols-outlined { color: rgba(246, 246, 252, 0.82); }
