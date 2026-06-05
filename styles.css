@@ -1038,21 +1038,23 @@ textarea:focus-visible,
   gap: 18px;
 }
 
+/* Detailed mode: the map gets the flexible space and dominates; side panels are
+   fixed professional widths (work tool, not a dense dashboard). */
 .visualizer-layout {
-  grid-template-columns: minmax(340px, 1.15fr) minmax(0, 2.35fr) minmax(270px, 0.7fr);
+  grid-template-columns: 244px minmax(0, 1fr) 288px;
   align-items: start;
 }
 
 .visualizer-layout.is-focused {
-  grid-template-columns: minmax(360px, 1.02fr) minmax(0, 2.75fr) minmax(260px, 0.62fr);
+  grid-template-columns: 244px minmax(0, 1fr) 288px;
 }
 
 .visualizer-layout.intake-collapsed {
-  grid-template-columns: 0 minmax(0, 1fr) minmax(270px, 0.7fr);
+  grid-template-columns: 0 minmax(0, 1fr) 288px;
 }
 
 .visualizer-layout.insight-collapsed {
-  grid-template-columns: minmax(340px, 1.15fr) minmax(0, 1fr) 0;
+  grid-template-columns: 244px minmax(0, 1fr) 0;
 }
 
 .visualizer-layout.intake-collapsed.insight-collapsed {
@@ -5770,3 +5772,120 @@ svg text.node-meta {
 .theme-light .nav-item.is-active,
 .theme-light .map-dock-btn.is-active,
 .theme-light .map-dock-btn.is-active * { color: #ffffff; }
+
+/* ============================================================
+   Professional detailed (자세히) mode — map-dominant, calmer panels, less prose.
+   Goal: a focused work tool, not a dense dashboard. (Simple mode already uses the
+   full-width map + drawers; these refine the 3-panel detailed layout.)
+   ============================================================ */
+/* Drop the onboarding prose entirely (intro paragraph, "how to read" sub-block,
+   and the step-by-step workflow guide). It was the bulk of the "too much" feeling;
+   the cleaner UI + the 튜토리얼 보기 button + the score explainer cover guidance. */
+.view-intro { display: none; }
+.concept-help { display: none; }
+.workflow-guide { display: none; }
+.student-onboarding { display: none; }
+
+/* Quiet, professional section kickers (small-caps, muted) instead of loud labels. */
+.insight-panel .eyebrow,
+.canvas-panel .eyebrow,
+.intake-panel .eyebrow,
+.card-column .eyebrow,
+.orbit-panel .eyebrow,
+.reflection-panel .eyebrow {
+  font-size: 0.64rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  /* no opacity dimming — it dropped these kickers below WCAG AA. Use color. */
+  color: rgba(196, 208, 248, 0.82);
+}
+.theme-light .insight-panel .eyebrow,
+.theme-light .canvas-panel .eyebrow,
+.theme-light .intake-panel .eyebrow,
+.theme-light .card-column .eyebrow,
+.theme-light .orbit-panel .eyebrow,
+.theme-light .reflection-panel .eyebrow { color: #50607a; }
+.insight-panel .section-header h3,
+.insight-panel .subsection-head { font-size: 0.92rem; }
+
+/* Section icons: a small leading glyph makes the panels scannable (professional). */
+.section-header h3 .material-symbols-outlined,
+.subsection-head .material-symbols-outlined,
+.section-icon {
+  font-size: 17px;
+  color: #97a9ff;
+  flex-shrink: 0;
+}
+/* Keep [icon][title] grouped on the left; push trailing badge/pill to the right. */
+.subsection-head { justify-content: flex-start; gap: 7px; }
+.subsection-head > .badge,
+.subsection-head > .numeric-pill { margin-left: auto; }
+.subsection-head .section-icon { margin-right: 1px; }
+.theme-light .section-icon,
+.theme-light .section-header h3 .material-symbols-outlined,
+.theme-light .subsection-head .material-symbols-outlined { color: #4361ee; }
+
+/* Give the dense insight panel a calm rhythm: hairline dividers between blocks. */
+.insight-panel .subsection {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(128, 142, 178, 0.18);
+}
+.insight-panel .subsection:first-of-type { border-top: none; padding-top: 0; margin-top: 12px; }
+
+/* Calmer on-map overlays (they float over the now-larger map). */
+.stage-overlay { font-size: 0.78rem; opacity: 0.94; max-width: 230px; }
+.stage-overlay .legend-desc { font-size: 0.72rem; }
+
+/* Tighter intake panel so case tools don't crowd the map. */
+.intake-panel .section-header h3 { font-size: 0.96rem; }
+.intake-panel { padding: 16px; }
+
+/* Light theme — detailed-only surfaces/controls the simple-mode audit didn't reach. */
+.theme-light .pipeline-console,
+.theme-light .pipeline-card,
+.theme-light .pipeline-card-collapsible,
+.theme-light .swarm-activity-panel,
+.theme-light .ai-additions,
+.theme-light .workflow-guide {
+  background: rgba(255, 255, 255, 0.94);
+  color: #1f2a44;
+  border-color: rgba(20, 30, 60, 0.12);
+}
+.theme-light .intake-panel strong,
+.theme-light .pipeline-console strong,
+.theme-light .pipeline-console h4 { color: #1f2a44; }
+.theme-light .case-summary-open,
+.theme-light .case-summary-more,
+.theme-light .panel-expand-toggle,
+.theme-light .panel-expand-toggle *,
+.theme-light .legend-close,
+.theme-light .stage-note-close,
+.theme-light .stage-note-reopen,
+.theme-light .swarm-info-toggle,
+.theme-light .drawer-close,
+.theme-light .legend-reopen { color: #2a3a6b; }
+.theme-light .score-info-summary .material-symbols-outlined { color: #4361ee; }
+.theme-light .score-info-body em { color: #15795f; }
+/* panel-collapse chips + overlay close glyphs were dark-on-dark in light theme */
+.theme-light .panel-expand-toggle {
+  background: #e9eefb !important;
+  border-color: rgba(20, 30, 60, 0.16) !important;
+}
+.theme-light .panel-expand-toggle,
+.theme-light .panel-expand-toggle *,
+.theme-light .stage-overlay .material-symbols-outlined,
+.theme-light .legend-close .material-symbols-outlined,
+.theme-light .stage-note-close .material-symbols-outlined,
+.theme-light .drawer-close .material-symbols-outlined,
+.theme-light .view-intro-close { color: #2a3a6b !important; }
+
+/* Home "더 깊이" advanced cards: legible label + icon in both themes. */
+.home-adv-item { color: rgba(246, 246, 252, 0.92); background: rgba(255, 255, 255, 0.06); }
+.home-adv-item .material-symbols-outlined { color: #c4ccff; }
+.theme-light .home-adv-item { color: #2a3a6b; background: rgba(20, 30, 60, 0.05); }
+.theme-light .home-adv-item .material-symbols-outlined { color: #34459c; }
+
+/* swarm info toggle glyph (the ⓘ on the map footer) in light theme */
+.theme-light .swarm-info-toggle .material-symbols-outlined { color: #2a3a6b !important; }
