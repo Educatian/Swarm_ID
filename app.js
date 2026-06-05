@@ -4581,25 +4581,25 @@ function renderPlatformControlsLegacy() {
   dom.courseSelect.innerHTML = dom.courseSelect.innerHTML.replace(/Ã‚Â·/g, "Â·");
   dom.platformContext.innerHTML = `
     <article class="context-card">
-      <strong>${institution?.name || "No institution selected"}</strong>
-      <p>${course ? `${course.code} · ${course.name}` : "No course selected"}.</p>
+      <strong>${institution?.name || t("noInstitutionSelected")}</strong>
+      <p>${course ? `${course.code} · ${course.name}` : t("noCourseSelected")}.</p>
       <div class="card-meta">
-        <span>${course?.documents?.length || 0} documents</span>
-        <span>${course?.cases?.length || 0} structured cases</span>
-        <span>${instructors.length} instructors</span>
-        <span>${learners.length} learners</span>
-        <span>${visibleCases.length} ${state.activeRole === "admin" ? "available in studio" : "published cases"}</span>
+        <span>${state.locale === "ko" ? `문서 ${course?.documents?.length || 0}개` : `${course?.documents?.length || 0} documents`}</span>
+        <span>${state.locale === "ko" ? `구성된 케이스 ${course?.cases?.length || 0}개` : `${course?.cases?.length || 0} structured cases`}</span>
+        <span>${state.locale === "ko" ? `교수자 ${instructors.length}명` : `${instructors.length} instructors`}</span>
+        <span>${state.locale === "ko" ? `학생 ${learners.length}명` : `${learners.length} learners`}</span>
+        <span>${state.activeRole === "admin" ? t("caseCount", { count: visibleCases.length }) : t("publishedCasesCount", { count: visibleCases.length })}</span>
       </div>
       ${
         state.activeRole === "admin" && activeInstructor
-          ? `<div class="card-meta"><span>${activeInstructor.name}</span><span>${activeInstructor.title}</span><span>${course?.settings?.reportMode || "Report mode"}</span></div>
-             <p class="context-note">Instructors create and publish course cases here. Students only see the cases you release.</p>`
+          ? `<div class="card-meta"><span>${activeInstructor.name}</span><span>${activeInstructor.title || t("instructor")}</span><span>${course?.settings?.reportMode || t("caseReport")}</span></div>
+             <p class="context-note">${t("createBaseBoardNote")}</p>`
           : ""
       }
       ${
         state.activeRole === "user" && activeLearner
           ? `<div class="card-meta"><span>${activeLearner.name}</span><span>${activeLearner.focus}</span><span>${activeLearner.section}</span></div>
-             <p class="context-note">Select one published case from this course. Your questions and reflections stay in your private notes.</p>`
+             <p class="context-note">${t("choosePublishedBoardNote")}</p>`
           : ""
       }
     </article>
@@ -4607,18 +4607,18 @@ function renderPlatformControlsLegacy() {
 
   dom.platformContext.innerHTML = `
     <article class="context-card">
-      <strong>${course ? `${course.code} · ${course.name}` : institution?.name || "No course selected"}</strong>
-      <p>${institution?.name || "No institution selected"}</p>
+      <strong>${course ? `${course.code} · ${course.name}` : institution?.name || t("noCourseSelected")}</strong>
+      <p>${institution?.name || t("noInstitutionSelected")}</p>
       ${
         state.activeRole === "admin" && activeInstructor
-          ? `<div class="card-meta"><span>${activeInstructor.name}</span><span>${course?.cases?.length || 0} cases</span><span>${visibleCases.length} published</span><span>Join code ${course?.joinCode || "not set"}</span></div>
-             <p class="context-note">Work on one case at a time. Students only see the cases you publish.</p>`
+          ? `<div class="card-meta"><span>${activeInstructor.name}</span><span>${t("caseCount", { count: course?.cases?.length || 0 })}</span><span>${t("publishedCount", { count: visibleCases.length })}</span><span>${t("courseCode")} ${course?.joinCode || t("notSet")}</span></div>
+             <p class="context-note">${t("createBaseBoardNote")}</p>`
           : ""
       }
       ${
         state.activeRole === "user" && activeLearner
-          ? `<div class="card-meta"><span>${activeLearner.name}</span><span>${visibleCases.length} published cases</span></div>
-             <p class="context-note">Choose one published case and explore it in your own private notes.</p>`
+          ? `<div class="card-meta"><span>${activeLearner.name}</span><span>${t("publishedCasesCount", { count: visibleCases.length })}</span></div>
+             <p class="context-note">${t("choosePublishedBoardNote")}</p>`
           : ""
       }
     </article>
@@ -8887,7 +8887,7 @@ dom.returnToLanding?.addEventListener("click", async () => {
     sessionEmail: "",
     remoteRole: "",
     message: state.auth.configured
-      ? "Signed out."
+      ? state.locale === "ko" ? "로그아웃했어요." : "Signed out."
       : "",
   };
   returnToLanding();
@@ -8907,7 +8907,7 @@ function updateTopbarCompactSummary() {
   const parts = [];
   if (course?.code) parts.push(course.code);
   if (caseRec?.title) parts.push(caseRec.title);
-  summary.textContent = parts.join(" · ") || "Context hidden";
+  summary.textContent = parts.join(" · ") || (state.locale === "ko" ? "맥락 숨김" : "Context hidden");
   summary.hidden = false;
 }
 
@@ -8915,7 +8915,9 @@ function setTopbarCollapsed(collapsed, { persist = true } = {}) {
   if (!dom.topbar) return;
   dom.topbar.classList.toggle("is-collapsed", !!collapsed);
   if (dom.topbarCollapseToggle) {
-    const label = collapsed ? "Expand context bar" : "Collapse context bar";
+    const label = collapsed
+      ? state.locale === "ko" ? "맥락 막대 펼치기" : "Expand context bar"
+      : state.locale === "ko" ? "맥락 막대 접기" : "Collapse context bar";
     dom.topbarCollapseToggle.setAttribute("aria-label", label);
     dom.topbarCollapseToggle.setAttribute("title", label);
   }

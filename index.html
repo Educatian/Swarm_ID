@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>디자인 텐션 스튜디오</title>
+  <meta property="og:image" content="./og-preview.png">
+  <meta name="twitter:image" content="./og-preview.png">
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,20 +35,20 @@
           </button>
           <div class="header-guides-menu" id="header-guides-menu" role="menu" hidden>
             <a class="header-guides-item" role="menuitem" href="tutorials/student-ko/" target="_blank" rel="noopener" id="landing-tutorial-student-ko">
-              <span class="header-guides-item-role" data-role="student">Student</span>
+              <span class="header-guides-item-role" data-role="student">학생</span>
               <span class="header-guides-item-lang" data-lang="ko">한국어</span>
             </a>
             <a class="header-guides-item" role="menuitem" href="tutorials/student-en/" target="_blank" rel="noopener" id="landing-tutorial-student-en">
-              <span class="header-guides-item-role" data-role="student">Student</span>
-              <span class="header-guides-item-lang" data-lang="en">English</span>
+              <span class="header-guides-item-role" data-role="student">학생</span>
+              <span class="header-guides-item-lang" data-lang="en">영어</span>
             </a>
             <a class="header-guides-item" role="menuitem" href="tutorials/instructor-ko/" target="_blank" rel="noopener" id="landing-tutorial-instructor-ko">
-              <span class="header-guides-item-role" data-role="instructor">Instructor</span>
+              <span class="header-guides-item-role" data-role="instructor">교수자</span>
               <span class="header-guides-item-lang" data-lang="ko">한국어</span>
             </a>
             <a class="header-guides-item" role="menuitem" href="tutorials/instructor-en/" target="_blank" rel="noopener" id="landing-tutorial-instructor-en">
-              <span class="header-guides-item-role" data-role="instructor">Instructor</span>
-              <span class="header-guides-item-lang" data-lang="en">English</span>
+              <span class="header-guides-item-role" data-role="instructor">교수자</span>
+              <span class="header-guides-item-lang" data-lang="en">영어</span>
             </a>
           </div>
         </div>
@@ -122,7 +124,7 @@
         <div class="landing-orb landing-orb-a"></div>
         <div class="landing-orb landing-orb-b"></div>
         <div class="landing-orb landing-orb-c"></div>
-        <svg class="landing-network" id="landing-network" aria-label="AI human network visualization"></svg>
+        <svg class="landing-network" id="landing-network" aria-label="AI와 사람의 설계 긴장 네트워크"></svg>
         <div class="landing-annotation landing-annotation-left">
           <p class="landing-annotation-label">인간</p>
           <strong>교수자, 학생, 비평, 업무 부담</strong>
@@ -240,8 +242,8 @@
             <label class="mini-control" id="role-control">
               <span>Workspace</span>
               <select id="role-select">
-                <option value="admin">Instructor</option>
-                <option value="user">Student</option>
+                <option value="admin">교수자</option>
+                <option value="user">학생</option>
               </select>
             </label>
             <label class="mini-control">
@@ -263,10 +265,10 @@
           </div>
 
           <div class="toolbar-actions">
-            <button class="toolbar-button toolbar-button-quiet" id="workspace-locale-toggle" type="button">KO</button>
-            <span class="topbar-identity" id="session-identity-label">Instructor</span>
-            <button class="toolbar-button toolbar-button-quiet" id="start-tutorial" type="button">Show Tutorial</button>
-            <button class="toolbar-button toolbar-button-danger" id="return-to-landing">Switch Account</button>
+            <button class="toolbar-button toolbar-button-quiet" id="workspace-locale-toggle" type="button">EN</button>
+            <span class="topbar-identity" id="session-identity-label">교수자</span>
+            <button class="toolbar-button toolbar-button-quiet" id="start-tutorial" type="button">튜토리얼 보기</button>
+            <button class="toolbar-button toolbar-button-danger" id="return-to-landing">로그아웃</button>
           </div>
         </div>
       </header>
