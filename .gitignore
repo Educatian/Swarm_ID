@@ -19,3 +19,6 @@ stitch (1).zip
 
 supabase-config.local.js
 gemini-config.js
+
+# local Cloudflare Pages preview build (no-login demo)
+dist-preview/
