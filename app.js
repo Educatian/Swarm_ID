@@ -4325,94 +4325,72 @@ function tensionLevel(score) {
 function stakeholderConflicts(key) {
   const { personalization, teacherLoad, privacy, accessibility } = state.metrics;
   const { feasibility } = computeScores();
-  const map = {
-    teacher: [
-      {
-        level: "critical",
-        title: "Manual feedback burden increases",
-        body: `Teacher load is currently ${teacherLoad}, which means moderation and exception handling remain too heavy during peer feedback cycles.`,
-      },
-      {
-        level: "medium",
-        title: "Pedagogical drift risk",
-        body: `Personalization depth is ${personalization}. Unless the teacher can inspect the rationale, scaffolding may feel efficient but pedagogically opaque.`,
-      },
-    ],
-    administrator: [
-      {
-        level: "medium",
-        title: "Cross-section consistency gap",
-        body: `Current feasibility is ${feasibility}, which may create uneven rollout quality across instructors and cohorts.`,
-      },
-      {
-        level: "critical",
-        title: "Policy oversight required",
-        body: `Privacy resilience is ${privacy}. Administrative approval will stall if governance remains implicit.`,
-      },
-    ],
-    student: [
-      {
-        level: "critical",
-        title: "Agency compression",
-        body: `Students benefit from tailored pathways, but a personalization score of ${personalization} can start to feel directive if choice is not explained.`,
-      },
-      {
-        level: "medium",
-        title: "Feedback trust is uneven",
-        body: `Accessibility coverage is ${accessibility}. Students with different support needs may not experience the same clarity or pacing.`,
-      },
-    ],
-    it: [
-      {
-        level: "critical",
-        title: "Integration complexity is rising",
-        body: "Teacher workload and personalization are moving in opposite directions, which usually signals orchestration logic the LMS cannot cleanly absorb.",
-      },
-      {
-        level: "medium",
-        title: "Support capacity pressure",
-        body: "When privacy drops below 70, exception-handling and vendor review overhead tend to escalate for campus IT.",
-      },
-    ],
-    accessibility: [
-      {
-        level: "critical",
-        title: "Multimodal parity is incomplete",
-        body: `Accessibility coverage is ${accessibility}. The system needs stronger guarantees for alt text, reading order, and explanation clarity.`,
-      },
-      {
-        level: "medium",
-        title: "Cognitive load can spike",
-        body: "Conflict increases when students must parse too many automated signals without a human framing layer.",
-      },
-    ],
-  };
+  const ko = state.locale === "ko";
+  const map = ko
+    ? {
+        teacher: [
+          { level: "critical", title: "수동 피드백 부담 증가", body: `교사 업무 부하가 현재 ${teacherLoad}이에요. 또래 피드백 과정에서 조정과 예외 처리가 여전히 너무 무겁다는 뜻이에요.` },
+          { level: "medium", title: "교육적 일관성 이탈 위험", body: `개인화 깊이가 ${personalization}이에요. 교사가 근거를 들여다볼 수 없으면 비계가 효율적이어도 교육적으로 불투명하게 느껴질 수 있어요.` },
+        ],
+        administrator: [
+          { level: "medium", title: "분반 간 일관성 격차", body: `현재 실행 가능성은 ${feasibility}이에요. 교수자와 코호트마다 도입 품질이 고르지 않을 수 있어요.` },
+          { level: "critical", title: "정책 감독 필요", body: `프라이버시 회복력이 ${privacy}이에요. 거버넌스가 암묵적으로 남으면 행정 승인이 지연돼요.` },
+        ],
+        student: [
+          { level: "critical", title: "주체성 위축", body: `학생은 맞춤 경로에서 이점을 얻지만, 개인화 점수 ${personalization}은 선택이 설명되지 않으면 지시적으로 느껴질 수 있어요.` },
+          { level: "medium", title: "피드백 신뢰가 고르지 않음", body: `접근성 보장 수준이 ${accessibility}이에요. 지원 요구가 다른 학생은 같은 명료성이나 속도를 경험하지 못할 수 있어요.` },
+        ],
+        it: [
+          { level: "critical", title: "통합 복잡도 상승", body: "교사 업무 부하와 개인화가 서로 반대 방향으로 움직이고 있어요. 보통 LMS가 깔끔히 흡수하기 어려운 오케스트레이션 로직을 뜻해요." },
+          { level: "medium", title: "지원 역량 압박", body: "프라이버시가 70 아래로 떨어지면 교내 IT의 예외 처리와 벤더 검토 부담이 커지는 경향이 있어요." },
+        ],
+        accessibility: [
+          { level: "critical", title: "다중양식 동등성 미흡", body: `접근성 보장 수준이 ${accessibility}이에요. 대체 텍스트, 읽기 순서, 설명 명료성에 대한 더 강한 보장이 필요해요.` },
+          { level: "medium", title: "인지 부하 급증 가능", body: "학생이 인간의 프레이밍 없이 너무 많은 자동 신호를 해석해야 할 때 갈등이 커져요." },
+        ],
+      }
+    : {
+        teacher: [
+          { level: "critical", title: "Manual feedback burden increases", body: `Teacher load is currently ${teacherLoad}, which means moderation and exception handling remain too heavy during peer feedback cycles.` },
+          { level: "medium", title: "Pedagogical drift risk", body: `Personalization depth is ${personalization}. Unless the teacher can inspect the rationale, scaffolding may feel efficient but pedagogically opaque.` },
+        ],
+        administrator: [
+          { level: "medium", title: "Cross-section consistency gap", body: `Current feasibility is ${feasibility}, which may create uneven rollout quality across instructors and cohorts.` },
+          { level: "critical", title: "Policy oversight required", body: `Privacy resilience is ${privacy}. Administrative approval will stall if governance remains implicit.` },
+        ],
+        student: [
+          { level: "critical", title: "Agency compression", body: `Students benefit from tailored pathways, but a personalization score of ${personalization} can start to feel directive if choice is not explained.` },
+          { level: "medium", title: "Feedback trust is uneven", body: `Accessibility coverage is ${accessibility}. Students with different support needs may not experience the same clarity or pacing.` },
+        ],
+        it: [
+          { level: "critical", title: "Integration complexity is rising", body: "Teacher workload and personalization are moving in opposite directions, which usually signals orchestration logic the LMS cannot cleanly absorb." },
+          { level: "medium", title: "Support capacity pressure", body: "When privacy drops below 70, exception-handling and vendor review overhead tend to escalate for campus IT." },
+        ],
+        accessibility: [
+          { level: "critical", title: "Multimodal parity is incomplete", body: `Accessibility coverage is ${accessibility}. The system needs stronger guarantees for alt text, reading order, and explanation clarity.` },
+          { level: "medium", title: "Cognitive load can spike", body: "Conflict increases when students must parse too many automated signals without a human framing layer." },
+        ],
+      };
   return map[key];
 }
 
 function stakeholderRecommendations(key) {
-  const map = {
-    teacher: [
-      "Keep human approval over redesign release decisions.",
-      "Batch AI suggestions into fewer, higher-quality intervention moments.",
-    ],
-    administrator: [
-      "Add rubric-visible governance checkpoints to every case.",
-      "Require one evidence note per stakeholder before escalation.",
-    ],
-    student: [
-      "Explain why the app is prioritizing one redesign path.",
-      "Preserve student override moments before the final submission.",
-    ],
-    it: [
-      "Reduce raw telemetry and exchange only scenario summaries.",
-      "Constrain integrations to the current LMS and one auditable AI layer.",
-    ],
-    accessibility: [
-      "Attach accessibility evidence to every redesign round.",
-      "Add plain-language summaries to each recommendation.",
-    ],
-  };
+  const ko = state.locale === "ko";
+  const map = ko
+    ? {
+        teacher: ["재설계 배포 결정에 대한 인간의 승인을 유지하세요.", "AI 제안을 더 적고 질 높은 개입 순간으로 묶으세요."],
+        administrator: ["모든 케이스에 루브릭에 보이는 거버넌스 체크포인트를 추가하세요.", "에스컬레이션 전에 이해관계자당 근거 메모 하나를 요구하세요."],
+        student: ["앱이 왜 특정 재설계 경로를 우선하는지 설명하세요.", "최종 제출 전에 학생이 무를 수 있는 순간을 남기세요."],
+        it: ["원시 텔레메트리를 줄이고 시나리오 요약만 주고받으세요.", "통합을 현재 LMS와 감사 가능한 AI 한 겹으로 제한하세요."],
+        accessibility: ["모든 재설계 라운드에 접근성 근거를 첨부하세요.", "각 권고에 쉬운 말 요약을 추가하세요."],
+      }
+    : {
+        teacher: ["Keep human approval over redesign release decisions.", "Batch AI suggestions into fewer, higher-quality intervention moments."],
+        administrator: ["Add rubric-visible governance checkpoints to every case.", "Require one evidence note per stakeholder before escalation."],
+        student: ["Explain why the app is prioritizing one redesign path.", "Preserve student override moments before the final submission."],
+        it: ["Reduce raw telemetry and exchange only scenario summaries.", "Constrain integrations to the current LMS and one auditable AI layer."],
+        accessibility: ["Attach accessibility evidence to every redesign round.", "Add plain-language summaries to each recommendation."],
+      };
   return map[key];
 }
 
