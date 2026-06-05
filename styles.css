@@ -5540,3 +5540,192 @@ svg text.node-meta {
 .density-simple .main-content .section-header { margin-bottom: 10px; }
 .density-simple .main-content .subsection { margin-top: 12px; }
 .density-simple .main-content .lens-summary-block { margin-bottom: 10px; }
+
+/* ============================================================
+   LIGHT (주간) THEME — toggled by the topbar/landing button (was EN/KO).
+   Dark is the default; html.theme-light flips the major surfaces to light.
+   The app's dark look is itself an override layer over light :root tokens, so
+   this is an inverse override layer. Verified with the contrast audit so no
+   text drops below WCAG AA in either theme.
+   ============================================================ */
+.theme-light body {
+  color: #1e293b;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(67, 97, 238, 0.10), transparent 34%),
+    radial-gradient(circle at 88% 6%, rgba(27, 156, 133, 0.07), transparent 32%),
+    radial-gradient(circle at 50% 120%, rgba(120, 80, 220, 0.06), transparent 45%),
+    linear-gradient(180deg, #f4f7fe 0%, #eaf0fb 100%);
+}
+
+/* Surfaces → light glass */
+.theme-light .sidebar,
+.theme-light .topbar,
+.theme-light .panel,
+.theme-light .panel-soft,
+.theme-light .context-card,
+.theme-light .case-card,
+.theme-light .pipeline-card,
+.theme-light .document-card,
+.theme-light .settings-grid article,
+.theme-light .lens-summary-block,
+.theme-light .tension-item,
+.theme-light .selected-node-card,
+.theme-light .selected-node-related,
+.theme-light .home-card,
+.theme-light .compare-summary,
+.theme-light .network-meta-card,
+.theme-light .health-panel,
+.theme-light .map-lens-bar,
+.theme-light .stage-overlay,
+.theme-light .network-tooltip,
+.theme-light .conflict-card,
+.theme-light .reason-card,
+.theme-light .insight-card,
+.theme-light .metric-bar,
+.theme-light .reflection-block,
+.theme-light .memo-section,
+.theme-light .evidence-item,
+.theme-light .prompt-item,
+.theme-light .rubric-item,
+.theme-light .decision-item,
+.theme-light .timeline-item,
+.theme-light .reaction-feed,
+.theme-light .network-meta-grid > * {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(20, 30, 60, 0.12);
+  color: #1e293b;
+  box-shadow: 0 12px 32px rgba(20, 30, 70, 0.08);
+}
+
+/* Text → dark (default body text + headings + muted) */
+.theme-light h1, .theme-light h2, .theme-light h3, .theme-light h4,
+.theme-light p, .theme-light li, .theme-light strong, .theme-light span,
+.theme-light label,
+.theme-light .case-subtitle,
+.theme-light .meter-hint,
+.theme-light .section-header h3,
+.theme-light .topbar p:last-child,
+.theme-light .chat-message,
+.theme-light .chat-message *,
+.theme-light .chat-message small,
+.theme-light .lens-summary-block p,
+.theme-light .concept-help-body,
+.theme-light .concept-help-list span,
+.theme-light .view-intro-body,
+.theme-light .legend-label,
+.theme-light .legend-desc,
+.theme-light .home-greeting,
+.theme-light .topbar-identity {
+  color: #1f2a44;
+}
+.theme-light .eyebrow,
+.theme-light .meter-hint,
+.theme-light .legend-desc,
+.theme-light .card-meta span,
+.theme-light .context-note { color: #5a6781; }
+.theme-light .concept-help-title,
+.theme-light .view-intro-title,
+.theme-light .student-onboarding-title { color: #0f1830; }
+
+/* Nav */
+.theme-light .nav-item { color: #46546f; }
+.theme-light .nav-item:hover,
+.theme-light .nav-item.is-active { color: #1a2a5c; background: rgba(67, 97, 238, 0.10); }
+
+/* Inputs / selects / textareas → light fields */
+.theme-light input,
+.theme-light select,
+.theme-light textarea,
+.theme-light .composer-input,
+.theme-light .chat-composer textarea,
+.theme-light .mini-control select {
+  background: #ffffff;
+  color: #1f2a44;
+  border-color: rgba(20, 30, 60, 0.18);
+}
+.theme-light input::placeholder,
+.theme-light textarea::placeholder { color: #8a96ad; }
+
+/* Tokens / pills → light; active keeps the indigo accent */
+.theme-light .token {
+  background: rgba(67, 97, 238, 0.08);
+  border-color: rgba(67, 97, 238, 0.22);
+  color: #2a3a6b;
+}
+.theme-light .token:hover { background: rgba(67, 97, 238, 0.16); color: #1a2a5c; }
+.theme-light .token-active { background: #4361ee; color: #ffffff; border-color: transparent; }
+
+/* Quiet/danger toolbar buttons readable on light */
+.theme-light .toolbar-button-quiet,
+.theme-light .toolbar-button.toolbar-button-danger { color: #46546f; }
+.theme-light .toolbar-button-quiet:hover,
+.theme-light .toolbar-button.toolbar-button-danger:hover {
+  background: rgba(20, 30, 60, 0.06); color: #1a2a5c; border-color: rgba(67, 97, 238, 0.3);
+}
+.theme-light .toolbar-button-primary { background: #4361ee; color: #fff; }
+
+/* Map: light stage; node labels/meta go dark (icon stays light on dark node body) */
+.theme-light .network-stage { background: rgba(248, 250, 255, 0.6); }
+.theme-light .node-label,
+.theme-light svg text.node-label { fill: #1f2a44 !important; }
+.theme-light .node-meta,
+.theme-light svg text.node-meta { fill: #5a6781 !important; }
+/* node-icon stays light — it sits on the dark node body */
+
+/* Map dock + drawer close on light */
+.theme-light .map-dock-btn {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(20, 30, 60, 0.14);
+  color: #2a3a6b;
+}
+.theme-light .map-dock-btn.is-active { background: #4361ee; color: #fff; }
+
+/* Meters / progress tracks */
+.theme-light .meter { background: rgba(20, 30, 60, 0.08); }
+
+/* Brand subtitle + kicker */
+.theme-light .brand-block p,
+.theme-light .landing-brand p { color: #5a6781; }
+
+/* --- light theme: audit-driven contrast fixes --- */
+/* Muted copy, empty states, summaries → readable. */
+.theme-light .empty-note,
+.theme-light #selected-node-copy,
+.theme-light #report-summary,
+.theme-light .selected-node-card p,
+.theme-light .reflection-block p,
+.theme-light .memo-section p { color: #46546f; }
+
+/* Matrix radar + metric-bar labels/values. */
+.theme-light .radar-label,
+.theme-light .metric-bar header strong,
+.theme-light .metric-bar header span,
+.theme-light .metric-bars span,
+.theme-light .metric-bars strong,
+.theme-light .metric-chip { color: #1f2a44; }
+
+/* Generic + secondary buttons + home advanced cards → dark text. */
+.theme-light .toolbar-button,
+.theme-light .secondary-action,
+.theme-light .home-adv-item { color: #2a3a6b; }
+
+/* Standalone accent icons read on white. */
+.theme-light .home-adv-item .material-symbols-outlined,
+.theme-light .density-toggle-btn .material-symbols-outlined,
+.theme-light .map-lens-bar .material-symbols-outlined,
+.theme-light .panel-expand-toggle .material-symbols-outlined { color: #4361ee; }
+
+/* All map SVG text except the node-icon (which sits on the dark node body). */
+.theme-light .network-stage svg text:not(.node-icon) { fill: #1f2a44 !important; }
+
+/* IMPORTANT: keep white text/icons on accent (indigo) surfaces — must come last
+   so it wins over the generic dark-text rules above. */
+.theme-light .toolbar-button-primary,
+.theme-light .toolbar-button-primary *,
+.theme-light .token-active,
+.theme-light .token-active *,
+.theme-light .home-continue-cta,
+.theme-light .home-continue-cta *,
+.theme-light .nav-item.is-active,
+.theme-light .map-dock-btn.is-active,
+.theme-light .map-dock-btn.is-active * { color: #ffffff; }

@@ -859,6 +859,7 @@ const SESSION_STORAGE_KEY = "swarm-id-session-v1";
 const TUTORIAL_STORAGE_KEY = "swarm-id-tutorial-v1";
 const LOCALE_STORAGE_KEY = "swarm-id-locale-v1";
 const DENSITY_STORAGE_KEY = "swarm-id-density-v1";
+const THEME_STORAGE_KEY = "swarm-id-theme-v1";
 const PLATFORM_ADMIN_EMAIL = "admin@swarm.io";
 const DEFAULT_SUPABASE_CONFIG = window.SUPABASE_CONFIG || { url: "", anonKey: "" };
 const DEFAULT_GEMINI_CONFIG = window.GEMINI_CONFIG || { apiKey: "", model: "gemini-2.5-flash" };
@@ -866,6 +867,7 @@ const DEFAULT_GEMINI_CONFIG = window.GEMINI_CONFIG || { apiKey: "", model: "gemi
 const state = {
   locale: window.localStorage.getItem(LOCALE_STORAGE_KEY) || "ko",
   density: window.localStorage.getItem(DENSITY_STORAGE_KEY) || "",
+  theme: window.localStorage.getItem(THEME_STORAGE_KEY) || "dark",
   activeView: "visualizer",
   activeStakeholder: "teacher",
   activeMapLayer: "base",
@@ -1206,8 +1208,8 @@ function applyStaticTranslations() {
     node.textContent = t("appName");
   });
 
-  if (dom.landingLocaleToggle) dom.landingLocaleToggle.textContent = t("languageToggle");
-  if (dom.workspaceLocaleToggle) dom.workspaceLocaleToggle.textContent = t("languageToggle");
+  // These buttons were the EN/KO locale toggle; they are now the night/light
+  // theme toggle (applyTheme sets their label/icon), so do not overwrite them here.
   if (dom.startTutorialButton) dom.startTutorialButton.textContent = t("showTutorial");
   if (dom.returnToLanding) dom.returnToLanding.textContent = t("switchAccount");
   if (document.getElementById("landing-enter-button")) document.getElementById("landing-enter-button").textContent = t("signIn");
@@ -7049,6 +7051,7 @@ function renderAll() {
   renderNavigation();
   renderHome();
   applyDensity();
+  applyTheme();
   renderSidebar();
   renderGraph();
   renderExportActions();
@@ -7880,6 +7883,29 @@ function setDensity(next) {
   try { localStorage.setItem(DENSITY_STORAGE_KEY, value); } catch (_) {}
   applyDensity();
   if (typeof logEvent === "function") logEvent("density.change", { to: value });
+}
+
+// Night / light theme. Dark is the default; html.theme-light flips the surfaces.
+function applyTheme() {
+  const light = state.theme === "light";
+  document.documentElement.classList.toggle("theme-light", light);
+  // The repurposed toggle buttons show the action they trigger (icon = target mode).
+  const icon = light ? "dark_mode" : "light_mode";
+  const aria = light ? "야간(다크) 모드로 전환" : "주간(라이트) 모드로 전환";
+  [dom.landingLocaleToggle, dom.workspaceLocaleToggle].forEach((btn) => {
+    if (!btn) return;
+    btn.innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">${icon}</span>`;
+    btn.setAttribute("aria-label", aria);
+    btn.setAttribute("title", aria);
+  });
+}
+
+function setTheme(next) {
+  const value = next === "light" ? "light" : "dark";
+  state.theme = value;
+  try { localStorage.setItem(THEME_STORAGE_KEY, value); } catch (_) {}
+  applyTheme();
+  if (typeof logEvent === "function") logEvent("theme.change", { to: value });
 }
 
 function setStakeholder(nextStakeholder) {
@@ -8847,13 +8873,13 @@ document.addEventListener("keydown", (event) => {
 });
 
 dom.landingLocaleToggle?.addEventListener("click", () => {
-  setLocale(state.locale === "en" ? "ko" : "en");
+  setTheme(state.theme === "light" ? "dark" : "light");
 });
 
 wireHeaderGuidesDropdown();
 
 dom.workspaceLocaleToggle?.addEventListener("click", () => {
-  setLocale(state.locale === "en" ? "ko" : "en");
+  setTheme(state.theme === "light" ? "dark" : "light");
 });
 
 window.addEventListener("resize", () => {
