@@ -5525,3 +5525,18 @@ svg text.node-meta {
 .density-simple .case-summary #sidebar-case-control.single-case {
   display: none;
 }
+
+/* (C) Redundant section kickers: an .eyebrow immediately followed by a heading
+   is a decorative label above the real title (e.g. "시스템 구조 / 제안 네트워크").
+   Hide just those in simple mode; standalone labels (e.g. "내 질문", which are
+   followed by content, not a heading) are kept. Scoped to main content so the
+   topbar/tour/sidebar are untouched. */
+.density-simple .main-content .eyebrow:has(+ h2, + h3, + h4) {
+  display: none;
+}
+
+/* (F) Compress vertical rhythm in simple mode so the secondary views (관점·상충
+   관계·리포트) scroll less. Intrinsic content is untouched; only the gaps shrink. */
+.density-simple .main-content .section-header { margin-bottom: 10px; }
+.density-simple .main-content .subsection { margin-top: 12px; }
+.density-simple .main-content .lens-summary-block { margin-bottom: 10px; }

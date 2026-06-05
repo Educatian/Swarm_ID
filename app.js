@@ -6518,7 +6518,8 @@ function renderStakeholderFocus() {
   dom.lensSummary.textContent = stakeholder.summary;
   dom.lensStatus.textContent = stakeholder.status;
   dom.lensScore.textContent = String(riskScore);
-  dom.orbitTitle.textContent = `${stakeholder.label} orbit`;
+  dom.orbitTitle.textContent =
+    state.locale === "ko" ? `${stakeholder.label}의 관심사` : `${stakeholder.label} orbit`;
   dom.orbitIcon.textContent = stakeholder.icon;
   dom.orbitSummary.textContent = stakeholder.summary;
   dom.chatBadge.textContent = state.locale === "ko" ? `${stakeholder.label} 보기` : `${stakeholder.label} view`;
