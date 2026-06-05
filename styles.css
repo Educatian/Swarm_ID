@@ -5889,3 +5889,67 @@ svg text.node-meta {
 
 /* swarm info toggle glyph (the ⓘ on the map footer) in light theme */
 .theme-light .swarm-info-toggle .material-symbols-outlined { color: #2a3a6b !important; }
+
+/* ============================================================
+   Score number chips — hover/focus to see what the 0–100 number means
+   (scale + direction). Used inside the stakeholder concern cards.
+   ============================================================ */
+.score-chip {
+  position: relative;
+  font-weight: 700;
+  color: #97a9ff;
+  border-bottom: 1px dotted currentColor;
+  cursor: help;
+  outline: none;
+}
+.theme-light .score-chip { color: #3551d4; }
+.score-chip::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 8px);
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 230px;
+  padding: 8px 11px;
+  border-radius: 9px;
+  background: #11141e;
+  color: #f6f6fc;
+  border: 1px solid rgba(151, 169, 255, 0.35);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  font-size: 0.76rem;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0;
+  white-space: normal;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.14s ease;
+  z-index: 60;
+  pointer-events: none;
+}
+/* little arrow */
+.score-chip::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 2px);
+  transform: translateX(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background: #11141e;
+  border-left: 1px solid rgba(151, 169, 255, 0.35);
+  border-top: 1px solid rgba(151, 169, 255, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.14s ease;
+  z-index: 61;
+  pointer-events: none;
+}
+.score-chip:hover::after,
+.score-chip:focus::after,
+.score-chip:hover::before,
+.score-chip:focus::before { opacity: 1; visibility: visible; }
+/* don't let the bubble get clipped by the card */
+.conflict-card { overflow: visible; }

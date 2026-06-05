@@ -4379,49 +4379,81 @@ function stakeholderConflicts(key) {
   const map = ko
     ? {
         teacher: [
-          { level: "critical", title: "수동 피드백 부담 증가", body: `교사 업무 부하가 현재 ${teacherLoad}이에요. 또래 피드백 과정에서 조정과 예외 처리가 여전히 너무 무겁다는 뜻이에요.` },
-          { level: "medium", title: "교육적 일관성 이탈 위험", body: `개인화 깊이가 ${personalization}이에요. 교사가 근거를 들여다볼 수 없으면 비계가 효율적이어도 교육적으로 불투명하게 느껴질 수 있어요.` },
+          { level: "critical", title: "수동 피드백 부담 증가", body: `교사 업무 부하가 현재 ${teacherLoad}이에요. 또래 피드백 과정에서 조정과 예외 처리가 여전히 너무 무겁다는 뜻이에요.`, num: teacherLoad, mk: "teacherLoad" },
+          { level: "medium", title: "교육적 일관성 이탈 위험", body: `개인화 깊이가 ${personalization}이에요. 교사가 근거를 들여다볼 수 없으면 비계가 효율적이어도 교육적으로 불투명하게 느껴질 수 있어요.`, num: personalization, mk: "personalization" },
         ],
         administrator: [
-          { level: "medium", title: "분반 간 일관성 격차", body: `현재 실행 가능성은 ${feasibility}이에요. 교수자와 코호트마다 도입 품질이 고르지 않을 수 있어요.` },
-          { level: "critical", title: "정책 감독 필요", body: `프라이버시 회복력이 ${privacy}이에요. 거버넌스가 암묵적으로 남으면 행정 승인이 지연돼요.` },
+          { level: "medium", title: "분반 간 일관성 격차", body: `현재 실행 가능성은 ${feasibility}이에요. 교수자와 코호트마다 도입 품질이 고르지 않을 수 있어요.`, num: feasibility, mk: "feasibility" },
+          { level: "critical", title: "정책 감독 필요", body: `프라이버시 회복력이 ${privacy}이에요. 거버넌스가 암묵적으로 남으면 행정 승인이 지연돼요.`, num: privacy, mk: "privacy" },
         ],
         student: [
-          { level: "critical", title: "주체성 위축", body: `학생은 맞춤 경로에서 이점을 얻지만, 개인화 점수 ${personalization}은 선택이 설명되지 않으면 지시적으로 느껴질 수 있어요.` },
-          { level: "medium", title: "피드백 신뢰가 고르지 않음", body: `접근성 보장 수준이 ${accessibility}이에요. 지원 요구가 다른 학생은 같은 명료성이나 속도를 경험하지 못할 수 있어요.` },
+          { level: "critical", title: "주체성 위축", body: `학생은 맞춤 경로에서 이점을 얻지만, 개인화 점수 ${personalization}은 선택이 설명되지 않으면 지시적으로 느껴질 수 있어요.`, num: personalization, mk: "personalization" },
+          { level: "medium", title: "피드백 신뢰가 고르지 않음", body: `접근성 보장 수준이 ${accessibility}이에요. 지원 요구가 다른 학생은 같은 명료성이나 속도를 경험하지 못할 수 있어요.`, num: accessibility, mk: "accessibility" },
         ],
         it: [
           { level: "critical", title: "통합 복잡도 상승", body: "교사 업무 부하와 개인화가 서로 반대 방향으로 움직이고 있어요. 보통 LMS가 깔끔히 흡수하기 어려운 오케스트레이션 로직을 뜻해요." },
-          { level: "medium", title: "지원 역량 압박", body: "프라이버시가 70 아래로 떨어지면 교내 IT의 예외 처리와 벤더 검토 부담이 커지는 경향이 있어요." },
+          { level: "medium", title: "지원 역량 압박", body: "프라이버시가 70 아래로 떨어지면 교내 IT의 예외 처리와 벤더 검토 부담이 커지는 경향이 있어요.", num: 70, mk: "threshold" },
         ],
         accessibility: [
-          { level: "critical", title: "다중양식 동등성 미흡", body: `접근성 보장 수준이 ${accessibility}이에요. 대체 텍스트, 읽기 순서, 설명 명료성에 대한 더 강한 보장이 필요해요.` },
+          { level: "critical", title: "다중양식 동등성 미흡", body: `접근성 보장 수준이 ${accessibility}이에요. 대체 텍스트, 읽기 순서, 설명 명료성에 대한 더 강한 보장이 필요해요.`, num: accessibility, mk: "accessibility" },
           { level: "medium", title: "인지 부하 급증 가능", body: "학생이 인간의 프레이밍 없이 너무 많은 자동 신호를 해석해야 할 때 갈등이 커져요." },
         ],
       }
     : {
         teacher: [
-          { level: "critical", title: "Manual feedback burden increases", body: `Teacher load is currently ${teacherLoad}, which means moderation and exception handling remain too heavy during peer feedback cycles.` },
-          { level: "medium", title: "Pedagogical drift risk", body: `Personalization depth is ${personalization}. Unless the teacher can inspect the rationale, scaffolding may feel efficient but pedagogically opaque.` },
+          { level: "critical", title: "Manual feedback burden increases", body: `Teacher load is currently ${teacherLoad}, which means moderation and exception handling remain too heavy during peer feedback cycles.`, num: teacherLoad, mk: "teacherLoad" },
+          { level: "medium", title: "Pedagogical drift risk", body: `Personalization depth is ${personalization}. Unless the teacher can inspect the rationale, scaffolding may feel efficient but pedagogically opaque.`, num: personalization, mk: "personalization" },
         ],
         administrator: [
-          { level: "medium", title: "Cross-section consistency gap", body: `Current feasibility is ${feasibility}, which may create uneven rollout quality across instructors and cohorts.` },
-          { level: "critical", title: "Policy oversight required", body: `Privacy resilience is ${privacy}. Administrative approval will stall if governance remains implicit.` },
+          { level: "medium", title: "Cross-section consistency gap", body: `Current feasibility is ${feasibility}, which may create uneven rollout quality across instructors and cohorts.`, num: feasibility, mk: "feasibility" },
+          { level: "critical", title: "Policy oversight required", body: `Privacy resilience is ${privacy}. Administrative approval will stall if governance remains implicit.`, num: privacy, mk: "privacy" },
         ],
         student: [
-          { level: "critical", title: "Agency compression", body: `Students benefit from tailored pathways, but a personalization score of ${personalization} can start to feel directive if choice is not explained.` },
-          { level: "medium", title: "Feedback trust is uneven", body: `Accessibility coverage is ${accessibility}. Students with different support needs may not experience the same clarity or pacing.` },
+          { level: "critical", title: "Agency compression", body: `Students benefit from tailored pathways, but a personalization score of ${personalization} can start to feel directive if choice is not explained.`, num: personalization, mk: "personalization" },
+          { level: "medium", title: "Feedback trust is uneven", body: `Accessibility coverage is ${accessibility}. Students with different support needs may not experience the same clarity or pacing.`, num: accessibility, mk: "accessibility" },
         ],
         it: [
           { level: "critical", title: "Integration complexity is rising", body: "Teacher workload and personalization are moving in opposite directions, which usually signals orchestration logic the LMS cannot cleanly absorb." },
-          { level: "medium", title: "Support capacity pressure", body: "When privacy drops below 70, exception-handling and vendor review overhead tend to escalate for campus IT." },
+          { level: "medium", title: "Support capacity pressure", body: "When privacy drops below 70, exception-handling and vendor review overhead tend to escalate for campus IT.", num: 70, mk: "threshold" },
         ],
         accessibility: [
-          { level: "critical", title: "Multimodal parity is incomplete", body: `Accessibility coverage is ${accessibility}. The system needs stronger guarantees for alt text, reading order, and explanation clarity.` },
+          { level: "critical", title: "Multimodal parity is incomplete", body: `Accessibility coverage is ${accessibility}. The system needs stronger guarantees for alt text, reading order, and explanation clarity.`, num: accessibility, mk: "accessibility" },
           { level: "medium", title: "Cognitive load can spike", body: "Conflict increases when students must parse too many automated signals without a human framing layer." },
         ],
       };
   return map[key];
+}
+
+// Localized tooltip text explaining what a 0–100 score number means (scale + direction).
+function scoreTipText(kind) {
+  const ko = state.locale === "ko";
+  const tips = ko
+    ? {
+        teacherLoad: "0–100 점수예요. 높을수록 교사 부담이 커요 (낮을수록 좋아요).",
+        personalization: "0–100 점수예요. 높을수록 개인화(맞춤) 깊이가 커요.",
+        privacy: "0–100 점수예요. 높을수록 프라이버시가 견고해요.",
+        accessibility: "0–100 점수예요. 높을수록 접근성 보장이 좋아요.",
+        feasibility: "0–100 점수예요. 높을수록 도입 현실성이 높아요 (업무 부하 낮고 프라이버시·접근성 높을수록 올라가요).",
+        threshold: "0–100 척도의 권장 하한선이에요. 이 아래로 내려가면 IT 부담이 커지는 경향이 있어요.",
+      }
+    : {
+        teacherLoad: "Score out of 100. Higher means more teacher burden (lower is better).",
+        personalization: "Score out of 100. Higher means deeper personalization.",
+        privacy: "Score out of 100. Higher means stronger privacy resilience.",
+        accessibility: "Score out of 100. Higher means better accessibility coverage.",
+        feasibility: "Score out of 100. Higher means more realistic rollout (rises with lower load and higher privacy/accessibility).",
+        threshold: "A recommended floor on the 0–100 scale; below it, IT overhead tends to grow.",
+      };
+  return tips[kind] || tips.feasibility;
+}
+
+// Wrap the cited score number inside a concern body with a hover/focus tooltip.
+function withScoreTooltip(item) {
+  if (item.num == null || !item.mk) return item.body;
+  const tip = scoreTipText(item.mk).replace(/"/g, "&quot;");
+  const chip = `<span class="score-chip" tabindex="0" role="note" data-tip="${tip}" aria-label="${item.num} — ${tip}">${item.num}</span>`;
+  // Replace only the first standalone occurrence of the number.
+  return item.body.replace(new RegExp(`\\b${item.num}\\b`), chip);
 }
 
 function stakeholderRecommendations(key) {
@@ -6598,7 +6630,7 @@ function renderStakeholderFocus() {
       (item) => `
         <article class="conflict-card" data-level="${item.level}">
           <strong>${item.title}</strong>
-          <p>${item.body}</p>
+          <p>${withScoreTooltip(item)}</p>
         </article>
       `
     )
