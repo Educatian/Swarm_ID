@@ -1581,7 +1581,10 @@ function applyStaticTranslations() {
 
 function defaultBoardSettings(overrides = {}) {
   return {
-    agendaPrompt: "Identify the most important instructional tension before redesigning.",
+    agendaPrompt:
+      state.locale === "ko"
+        ? "재설계에 들어가기 전에, 가장 중요한 설계 긴장을 짚어 보세요."
+        : "Identify the most important instructional tension before redesigning.",
     dueAt: "",
     maxLearnerNodes: 6,
     maxAiExpansionsPerNode: 3,
@@ -4181,7 +4184,11 @@ function buildGraphSnapshot(reason) {
         x: 20 + index * 14 + graphJitter(iteration * 0.6 + index, 2),
         y: 18 + index * 9 + graphJitter(iteration * 0.44 + index, 2),
         icon: meta.icon,
-        meta: linkedCount ? `${linkedCount} issue${linkedCount === 1 ? "" : "s"}` : meta.status.toLowerCase(),
+        meta: linkedCount
+          ? state.locale === "ko"
+            ? `이슈 ${linkedCount}개`
+            : `${linkedCount} issue${linkedCount === 1 ? "" : "s"}`
+          : meta.status.toLowerCase(),
         detail: meta.summary,
       };
     });

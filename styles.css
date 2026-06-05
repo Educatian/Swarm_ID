@@ -4924,3 +4924,6 @@ body {
   color: rgba(246,246,252,0.7); cursor: pointer; align-items: center; justify-content: center;
 }
 .density-simple .drawer-close { display: inline-flex; }
+
+/* Off-canvas drawers must not extend the page scroll width */
+.density-simple .visualizer-layout { overflow-x: clip; }
