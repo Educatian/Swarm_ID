@@ -4723,3 +4723,108 @@ body {
 .density-simple .intake-panel { padding-top: 18px; }
 /* Give the map real presence in simple mode. */
 .density-simple .network-stage { min-height: 560px; }
+
+/* ============================================================
+   Professional pass — button system + proportions (overhaul)
+   ============================================================ */
+:root { --r-sm: 9px; --r-md: 12px; --r-lg: 16px; }
+
+/* Buttons: modern rounded-rect, tighter, clear hierarchy */
+.toolbar-button,
+.secondary-action {
+  min-height: 34px;
+  border-radius: var(--r-sm);
+  padding: 0 13px;
+  font-size: 0.83rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(246, 246, 252, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: none;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.toolbar-button:hover,
+.secondary-action:hover {
+  transform: none;
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+.toolbar-button-quiet {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(246, 246, 252, 0.58);
+}
+.toolbar-button-quiet:hover { background: rgba(255, 255, 255, 0.06); color: rgba(246, 246, 252, 0.9); }
+
+.toolbar-button-primary {
+  background: #4361ee;
+  color: #fff;
+  font-weight: 600;
+  border-color: transparent;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+.toolbar-button-primary:hover { background: #5571f6; border-color: transparent; }
+
+/* Sign out: quiet, not a loud red block */
+.toolbar-button.toolbar-button-danger {
+  background: transparent;
+  color: rgba(246, 246, 252, 0.5);
+  border-color: rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+  box-shadow: none;
+}
+.toolbar-button.toolbar-button-danger:hover {
+  background: rgba(231, 111, 81, 0.12);
+  color: #ffb59e;
+  border-color: rgba(231, 111, 81, 0.4);
+}
+
+/* Card header (add-node) refined */
+.pipeline-card-collapsible .pipeline-card-header {
+  border-radius: var(--r-md);
+  box-shadow: none;
+  font-weight: 600;
+  background: rgba(67, 97, 238, 0.14);
+  border-color: rgba(67, 97, 238, 0.26);
+}
+.pipeline-card-collapsible .pipeline-card-header:hover { background: rgba(67, 97, 238, 0.22); }
+
+/* Selects / inputs / pills — consistent radius + height */
+.mini-control,
+.mini-control select,
+.mini-control input,
+.composer-input,
+.chat-composer textarea,
+.density-toggle { border-radius: var(--r-sm); }
+.mini-control { min-height: 34px; }
+
+/* Lens / token pills — refined */
+.token, .token-active, .badge, .numeric-pill, .pipeline-chip { border-radius: 8px; font-weight: 600; }
+
+/* Panels: slightly tighter radius for a pro, less-bubbly feel */
+.panel { border-radius: var(--r-lg); }
+.panel-soft { border-radius: var(--r-md); }
+
+/* Spacing / proportions */
+.toolbar-actions { gap: 8px; align-items: center; }
+.topbar { gap: 14px; }
+.visualizer-layout, .lens-layout, .matrix-layout, .sandbox-layout, .report-layout { gap: 16px; }
+.section-header { margin-bottom: 14px; }
+
+/* Primary form submit buttons consistent */
+.pipeline-form button[type="submit"],
+.quick-note-form button[type="submit"],
+#visualizer-form button[type="submit"] { border-radius: var(--r-sm); min-height: 36px; }
+
+/* Add-node header → primary indigo (single accent, not a loud green) */
+.pipeline-card-collapsible[data-pipeline-key="addNode"] .pipeline-card-header {
+  background: #4361ee;
+  border-color: transparent;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+.pipeline-card-collapsible[data-pipeline-key="addNode"] .pipeline-card-header:hover {
+  background: #5571f6;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.3);
+}
