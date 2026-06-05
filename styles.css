@@ -5687,6 +5687,47 @@ svg text.node-meta {
 .theme-light .brand-block p,
 .theme-light .landing-brand p { color: #5a6781; }
 
+/* Score explainer (collapsed by default — concise, not "too much info"). */
+.score-info {
+  margin: 0 0 12px;
+  border: 1px solid rgba(151, 169, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(67, 97, 238, 0.06);
+}
+.score-info-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  list-style: none;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(206, 216, 255, 0.92);
+  user-select: none;
+}
+.score-info-summary::-webkit-details-marker { display: none; }
+.score-info-summary .material-symbols-outlined { font-size: 18px; color: #97a9ff; }
+.score-info[open] .score-info-summary { color: #f6f6fc; }
+.score-info-summary:hover { color: #f6f6fc; }
+.score-info-body {
+  margin: 0;
+  padding: 0 12px 12px;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: rgba(246, 246, 252, 0.82);
+}
+.score-info-body strong { color: #cfe0ff; }
+.score-info-body em { font-style: normal; color: #9fe7c8; }
+/* light theme */
+.theme-light .score-info { background: rgba(67, 97, 238, 0.07); border-color: rgba(67, 97, 238, 0.22); }
+.theme-light .score-info-summary { color: #2a3a6b; }
+.theme-light .score-info[open] .score-info-summary,
+.theme-light .score-info-summary:hover { color: #1a2a5c; }
+.theme-light .score-info-body { color: #46546f; }
+.theme-light .score-info-body strong { color: #2a3a6b; }
+.theme-light .score-info-body em { color: #1b9c85; }
+
 /* --- light theme: audit-driven contrast fixes --- */
 /* Muted copy, empty states, summaries → readable. */
 .theme-light .empty-note,
