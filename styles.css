@@ -5071,13 +5071,29 @@ textarea:focus-visible,
 }
 
 .topbar {
-  align-items: flex-start;
+  align-items: center;
 }
 
 .topbar-side {
-  min-width: min(100%, 320px);
-  flex: 1 1 420px;
+  min-width: 0;
+  flex: 0 1 auto;
   justify-content: flex-end;
+}
+
+/* Desktop: keep the context bar a single slim horizontal row so the map stays
+   map-forward. (A prior flex:1 1 420px basis made .topbar-side balloon to ~420px
+   tall, pushing the network below the fold.) Narrow widths still stack via the
+   max-width:900px block below. */
+@media (min-width: 901px) {
+  .topbar {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .topbar-side {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
 }
 
 .toolbar-actions {
