@@ -5017,7 +5017,7 @@ function renderPipelineConsole() {
           ? `
             <div class="card-meta">
               <span>${activeLearner.name}</span>
-              <span>${activeLearner.focus}</span>
+              ${activeLearner.focus ? `<span>${activeLearner.focus}</span>` : ""}
               <span>${activeRun?.status || t("readyToStart")}</span>
             </div>
           `
@@ -5036,7 +5036,7 @@ function renderPipelineConsole() {
                     <strong>${item.title}</strong>
                     ${renderCaseSummary(item.summary, item.id)}
                     <div class="card-meta">
-                      <span>${item.pipeline.reportStatus}</span>
+                      ${item.pipeline?.reportStatus ? `<span>${item.pipeline.reportStatus}</span>` : ""}
                       <span>${
                         (course?.learnerRuns || []).filter(
                           (run) => run.caseId === item.id && run.learnerId === activeLearner?.id
