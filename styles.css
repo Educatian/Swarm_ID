@@ -5382,3 +5382,68 @@ textarea:focus-visible,
 /* Chat author <small> label */
 .chat-message small,
 .chat-thread small { color: rgba(246, 246, 252, 0.78); }
+
+/* ============================================================
+   Simple mode: the network map is a full-width, fluid background, and the
+   intake / insight panels become off-canvas slide-in drawers.
+
+   Two earlier simple-mode designs collided: a cramped 3-column grid (which
+   was what actually rendered) and an intended drawer mode that never engaged
+   because `.visualizer-layout.is-focused .intake-panel { position: sticky }`
+   (specificity 0,3,0) outranked `.density-simple .intake-panel` (0,2,0). So
+   "simple" mode was really showing all three full panels at once — that is
+   why it still felt complex. Here we (a) drop the layout to a plain block so
+   the canvas fills the full width and scales with the browser (app.js's
+   resize handler re-fits the D3 viewBox), and (b) re-assert the drawer
+   positioning with selectors specific enough (0,4,0) to beat is-focused. */
+.density-simple .visualizer-layout,
+.density-simple .visualizer-layout.is-focused {
+  display: block !important;
+  position: relative;
+}
+.density-simple .visualizer-layout .canvas-panel,
+.density-simple .visualizer-layout.is-focused .canvas-panel {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  padding: 6px;
+}
+.density-simple .network-stage { width: 100%; }
+
+/* Off-canvas drawers — must outrank `.visualizer-layout.is-focused .*-panel` */
+.density-simple .visualizer-layout .intake-panel,
+.density-simple .visualizer-layout.is-focused .intake-panel,
+.density-simple .visualizer-layout .insight-panel,
+.density-simple .visualizer-layout.is-focused .insight-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: min(360px, 84vw);
+  max-height: none;
+  z-index: 28;
+  overflow-y: auto;
+  border-radius: 18px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+  transition: transform 0.26s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+}
+.density-simple .visualizer-layout .intake-panel,
+.density-simple .visualizer-layout.is-focused .intake-panel {
+  left: 0;
+  right: auto;
+  transform: translateX(-115%);
+  opacity: 0;
+}
+.density-simple .visualizer-layout .insight-panel,
+.density-simple .visualizer-layout.is-focused .insight-panel {
+  right: 0;
+  left: auto;
+  transform: translateX(115%);
+  opacity: 0;
+}
+.density-simple .visualizer-layout .intake-panel.is-open,
+.density-simple .visualizer-layout.is-focused .intake-panel.is-open,
+.density-simple .visualizer-layout .insight-panel.is-open,
+.density-simple .visualizer-layout.is-focused .insight-panel.is-open {
+  transform: translateX(0);
+  opacity: 1;
+}
