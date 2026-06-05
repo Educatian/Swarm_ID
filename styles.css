@@ -4862,3 +4862,65 @@ body {
 
 /* Honour the hidden attribute on the annotate form (its display:flex overrode it) */
 .quick-note-form[hidden] { display: none !important; }
+
+/* ============================================================
+   Minimal icon-dock mode (간단히) — undergrad-friendly:
+   map fills the screen; panels fold in as drawers from icons.
+   ============================================================ */
+.map-dock { display: none; }
+.density-simple .map-dock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+}
+.map-dock-btn {
+  width: 46px; height: 46px;
+  display: grid; place-items: center;
+  border-radius: 14px;
+  background: rgba(18, 21, 29, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(246, 246, 252, 0.82);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: background 150ms ease, color 150ms ease, border-color 150ms ease, transform 120ms ease;
+}
+.map-dock-btn:hover { transform: translateY(-1px); }
+.map-dock-btn.is-active { background: #4361ee; color: #fff; border-color: transparent; }
+.map-dock-btn .material-symbols-outlined { font-size: 24px; }
+
+/* Map fills the layout; the two panels become off-canvas drawers */
+.density-simple .visualizer-layout,
+.density-simple .visualizer-layout.is-focused {
+  grid-template-columns: minmax(0, 1fr);
+  position: relative;
+}
+.density-simple .intake-panel,
+.density-simple .insight-panel {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: min(360px, 84vw);
+  z-index: 28;
+  overflow-y: auto;
+  border-radius: 18px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+  transition: transform 0.26s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+}
+.density-simple .intake-panel { left: 0; transform: translateX(-115%); opacity: 0; }
+.density-simple .insight-panel { right: 0; transform: translateX(115%); opacity: 0; }
+.density-simple .intake-panel.is-open,
+.density-simple .insight-panel.is-open { transform: translateX(0); opacity: 1; }
+/* Close affordance inside an open drawer */
+.drawer-close {
+  display: none;
+  position: sticky; top: 0; margin-left: auto;
+  width: 30px; height: 30px; border-radius: 8px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(246,246,252,0.7); cursor: pointer; align-items: center; justify-content: center;
+}
+.density-simple .drawer-close { display: inline-flex; }

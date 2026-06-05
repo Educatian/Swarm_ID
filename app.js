@@ -6120,6 +6120,9 @@ function updateGraphRenderer(frame) {
       return;
     }
     state.selectedGraphNodeId = node.id;
+    if (typeof resolveDensity === "function" && resolveDensity() === "simple") {
+      window.requestAnimationFrame(() => openMapDrawer("insight"));
+    }
     if (node.stakeholder && stakeholders[node.stakeholder]) {
       setStakeholder(node.stakeholder);
       return;
@@ -8274,6 +8277,39 @@ document.getElementById("composer-toggle")?.addEventListener("click", () => {
   document.querySelector(".canvas-panel")?.classList.add("composer-open");
   document.getElementById("visualizer-input")?.focus();
 });
+
+// Icon-dock drawers (간단히/minimal mode): panels fold in from icons.
+function closeMapDrawers() {
+  document.querySelectorAll(".intake-panel.is-open, .insight-panel.is-open").forEach((p) => p.classList.remove("is-open"));
+  document.querySelectorAll("#map-dock .map-dock-btn").forEach((b) => b.classList.remove("is-active"));
+}
+function openMapDrawer(target) {
+  const panel = document.querySelector(target === "intake" ? ".intake-panel" : ".insight-panel");
+  if (!panel) return;
+  // ensure a close button exists inside the drawer
+  if (!panel.querySelector(".drawer-close")) {
+    const x = document.createElement("button");
+    x.type = "button";
+    x.className = "drawer-close";
+    x.setAttribute("aria-label", "닫기");
+    x.innerHTML = '<span class="material-symbols-outlined" aria-hidden="true">close</span>';
+    x.addEventListener("click", (e) => { e.stopPropagation(); closeMapDrawers(); });
+    panel.insertBefore(x, panel.firstChild);
+  }
+  closeMapDrawers();
+  panel.classList.add("is-open");
+  document.querySelector(`#map-dock .map-dock-btn[data-drawer="${target}"]`)?.classList.add("is-active");
+}
+document.getElementById("map-dock")?.addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-drawer]");
+  if (!btn) return;
+  const target = btn.dataset.drawer;
+  const panel = document.querySelector(target === "intake" ? ".intake-panel" : ".insight-panel");
+  if (panel?.classList.contains("is-open")) closeMapDrawers();
+  else openMapDrawer(target);
+});
+// Tapping the map closes any open drawer.
+document.getElementById("network-stage")?.addEventListener("pointerdown", () => closeMapDrawers());
 
 dom.roleSelect.addEventListener("change", (event) => {
   state.activeRole = event.target.value;
