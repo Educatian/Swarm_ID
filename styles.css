@@ -4828,3 +4828,7 @@ body {
   border-color: transparent;
   box-shadow: 0 2px 8px rgba(67, 97, 238, 0.3);
 }
+
+/* Simple mode: the lone open add-node card needs no collapse chevron */
+.density-simple [data-pipeline-key="addNode"] .pipeline-card-header .chevron { display: none; }
+.density-simple [data-pipeline-key="addNode"] .pipeline-card-header { cursor: default; }

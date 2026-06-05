@@ -6496,14 +6496,14 @@ function renderStakeholderFocus() {
     )
     .join("");
 
-  const stakeholderPillMarkup = Object.entries(stakeholders)
-    .map(
-      ([key, item]) => `
-        <button class="${key === state.activeStakeholder ? "token-active" : "token"}" data-pill="${key}">
-          ${item.label}
-        </button>
-      `
-    )
+  // Four stakeholder lenses only (교사·학생·IT·행정), localized — not all 5 stakeholders.
+  const LENS_KEYS = ["teacher", "student", "it", "administrator"];
+  const stakeholderPillMarkup = LENS_KEYS
+    .filter((key) => stakeholders[key])
+    .map((key) => {
+      const meta = getCaseStakeholderMeta(key);
+      return `<button class="${key === state.activeStakeholder ? "token-active" : "token"}" data-pill="${key}">${meta.label}</button>`;
+    })
     .join("");
   dom.stakeholderPills.innerHTML = stakeholderPillMarkup;
   if (dom.perspectiveStakeholderPills) {
