@@ -4503,7 +4503,14 @@ function renderPlatformControlsLegacy() {
     : `<option value="">${state.activeRole === "admin" ? t("createFirstCase") : t("noPublishedCasesYet")}</option>`;
   dom.caseSelect.value = state.activeCaseId || selectableCases[0]?.id || "";
   dom.caseSelect.disabled = selectableCases.length === 0;
-  dom.caseControl.classList.toggle("is-hidden", !course);
+  // Declutter the topbar for students: one institution, one course, they are the
+  // learner, and the case is picked from the sidebar selector — hide that whole row.
+  const isStudent = state.activeRole === "user";
+  const institutionCtrl = dom.institutionSelect.closest("label");
+  const courseCtrl = dom.courseSelect.closest("label");
+  if (institutionCtrl) institutionCtrl.classList.toggle("is-hidden", isStudent);
+  if (courseCtrl) courseCtrl.classList.toggle("is-hidden", isStudent && (institution?.courses || []).length <= 1);
+  dom.caseControl.classList.toggle("is-hidden", !course || isStudent);
   dom.sidebarCaseLabel.textContent = state.activeRole === "admin" ? t("instructor") + " " + t("case").toLowerCase() : t("published") + " " + t("case").toLowerCase();
   dom.sidebarCaseSelect.innerHTML = dom.caseSelect.innerHTML;
   dom.sidebarCaseSelect.value = dom.caseSelect.value;
@@ -4513,7 +4520,7 @@ function renderPlatformControlsLegacy() {
     .map((learner) => `<option value="${learner.id}">${learner.name}</option>`)
     .join("");
   dom.learnerSelect.value = activeLearner?.id || "";
-  dom.learnerControl.classList.toggle("is-hidden", state.activeRole !== "user");
+  dom.learnerControl.classList.add("is-hidden");
   const allowedMapLayers = getAllowedMapLayers(activeCase);
   dom.mapLayerSelect.innerHTML = allowedMapLayers
     .map((item) => `<option value="${item.value}">${item.label}</option>`)
@@ -4614,7 +4621,14 @@ function renderPlatformControls() {
     : `<option value="">${state.activeRole === "admin" ? t("createFirstCase") : t("noPublishedCasesYet")}</option>`;
   dom.caseSelect.value = state.activeCaseId || selectableCases[0]?.id || "";
   dom.caseSelect.disabled = selectableCases.length === 0;
-  dom.caseControl.classList.toggle("is-hidden", !course);
+  // Declutter the topbar for students: one institution, one course, they are the
+  // learner, and the case is picked from the sidebar selector — hide that whole row.
+  const isStudent = state.activeRole === "user";
+  const institutionCtrl = dom.institutionSelect.closest("label");
+  const courseCtrl = dom.courseSelect.closest("label");
+  if (institutionCtrl) institutionCtrl.classList.toggle("is-hidden", isStudent);
+  if (courseCtrl) courseCtrl.classList.toggle("is-hidden", isStudent && (institution?.courses || []).length <= 1);
+  dom.caseControl.classList.toggle("is-hidden", !course || isStudent);
 
   dom.sidebarCaseLabel.textContent = state.activeRole === "admin" ? `${t("instructor")} ${t("case").toLowerCase()}` : t("publishedCase");
   dom.sidebarCaseSelect.innerHTML = dom.caseSelect.innerHTML;
@@ -4624,7 +4638,7 @@ function renderPlatformControls() {
 
   dom.learnerSelect.innerHTML = learners.map((learner) => `<option value="${learner.id}">${learner.name}</option>`).join("");
   dom.learnerSelect.value = activeLearner?.id || "";
-  dom.learnerControl.classList.toggle("is-hidden", state.activeRole !== "user");
+  dom.learnerControl.classList.add("is-hidden");
 
   const allowedMapLayers = getAllowedMapLayers(activeCase);
   dom.mapLayerSelect.innerHTML = allowedMapLayers.map((item) => `<option value="${item.value}">${item.label}</option>`).join("");
