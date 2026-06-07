@@ -488,7 +488,7 @@ const translations = {
     courseCode: "코스 코드",
     joinWithCode: "코드로 참여",
     landingHuman: "인간",
-    landingHumanBody: "교사, 학생, 비평, 업무 부담",
+    landingHumanBody: "교사, 학생, 피드백, 업무 부담",
     landingSystem: "시스템",
     landingSystemBody: "정책, 플랫폼, 근거, 확장성",
     selectedCase: "선택된 케이스",
@@ -499,7 +499,7 @@ const translations = {
     navNetwork: "네트워크",
     navPerspectives: "관점",
     navTradeoffs: "상충 관계",
-    navSandbox: "샌드박스",
+    navSandbox: "실험 공간",
     navReport: "리포트",
     currentStatus: "현재 상태",
     workspace: "작업 공간",
@@ -593,13 +593,13 @@ const translations = {
     nodeConstraint: "제약",
     nodeEvidence: "근거",
     nodeAgenda: "안건",
-    nodeAiIssue: "AI 제안 이슈",
+    nodeAiIssue: "AI 제안 쟁점",
     nodeNote: "메모",
     nodeNoteSuffix: "메모",
     nodeCaseSummary: "케이스 요약",
-    nodeLearnerAgenda: "학습자 안건",
+    nodeLearnerAgenda: "학습자 추가 노드",
     nodeLearnerNote: "학습자 메모",
-    nodeRelatedIssue: "관련 이슈",
+    nodeRelatedIssue: "관련 쟁점",
     coreNodeFallback: "설계 제안",
     nodeTitleProposal: "시스템 전반의 설계 쟁점",
     nodeTitleTeacher: "교사 부담 핫스팟",
@@ -615,7 +615,7 @@ const translations = {
     nodeTitleTelemetryScope: "텔레메트리 범위 감시",
     showMore: "더보기",
     showLess: "접기",
-    tlUploadParsed: "업로드한 문서를 이슈와 설계 신호로 분석했어요.",
+    tlUploadParsed: "업로드한 문서에서 쟁점과 설계 신호를 분석했어요.",
     tlOntologyExtracted: "설명요약에서 이해관계자와 제약 구조를 뽑아냈어요.",
     tlSynced: "그래프와 리포트를 최신 공개 케이스에 맞춰 동기화했어요.",
     stakeholderTeacher: "교사",
@@ -724,7 +724,7 @@ const translations = {
     noRelatedQuestionsYet: "아직 관련 질문이 없어요.",
     openLearnerRun: "학습 세션을 열어 주세요.",
     noSharedPatternsYet: "아직 공통 패턴이 없어요.",
-    noDialogueYet: "아직 오간 대화가 없어요.",
+    noDialogueYet: "아직 대화가 없어요.",
     youLabel: "나",
     matrixNeedsAttention: "주의 필요",
     matrixBalanced: "균형 상태",
@@ -813,7 +813,7 @@ const translations = {
     homeAdvancedTitle: "더 깊이 (선택)",
     homeAdvancedBody: "필요할 때만 여는 고급 도구예요. 평소엔 숨겨 두어 화면을 깔끔하게 유지해요.",
     homeAdvancedTradeoffs: "상충 관계 비교",
-    homeAdvancedSandbox: "감성 실험실",
+    homeAdvancedSandbox: "실험 공간",
     homeSubtitle: "수업 시간 쟁점 탐구",
     densityLabel: "보기",
     densitySimple: "간단히",
@@ -833,11 +833,11 @@ const translations = {
     stakeholderSummaryIt: "에듀테크 관점은 상호운용성, 데이터 이동, 벤더 의존성, 그리고 이 설계가 실제 학교 현장 시스템과 지원 역량에서 버틸 수 있는지를 살펴봅니다.",
     stakeholderSummaryAccessibility: "접근성 관점은 양식 동등성, 인지 부하, 투명성, 그리고 개인화가 공평한 참여를 지키는지에 집중합니다.",
     perspectivesIntroTitle: "관점 — 한 사람의 눈으로 케이스 읽기",
-    perspectivesIntroBody: "이해관계자(교사·학생·에듀테크·행정)를 고르면 이 화면이 그 사람의 입장으로 케이스를 다시 읽어요. 왼쪽엔 그 사람의 우려, 가운데엔 관심이 도는 쟁점, 아래 대화창에선 그 사람 목소리로 답을 들을 수 있어요. 렌즈를 바꾸면 셋이 한꺼번에 바뀝니다.",
-    matrixIntroTitle: "상충 관계 — 무엇이 함께 움직이나",
+    perspectivesIntroBody: "이해관계자(교사·학생·에듀테크·행정)를 고르면 이 화면이 그 사람의 입장으로 케이스를 다시 읽어요. 왼쪽에는 그 사람이 걱정하는 점, 가운데에는 그 관점에서 주목하는 쟁점, 아래 대화창에는 그 사람의 목소리로 된 답변이 나타나요. 렌즈를 바꾸면 세 영역이 함께 바뀝니다.",
+    matrixIntroTitle: "상충 관계 — 무엇이 함께 움직이나요",
     matrixIntroBody: "설계 결정엔 공짜가 없어요. 개인화를 높이면 교사 부담이 같이 오르고, 프라이버시를 조이면 개인화가 떨어져요. 이 레이더는 다섯 차원이 어떻게 맞물리는지 보여주고, 의사결정 로그엔 당신이 바꾼 것과 그 결과 움직인 차원이 기록돼요.",
-    sandboxIntroTitle: "샌드박스 — 가정해 보기",
-    sandboxIntroBody: "슬라이더로 한 차원을 밀면 다른 데서 무엇이 깨지는지 보여요. 자율 모드를 켜면 시스템이 재설계안을 먼저 제안해요. 여기 변경은 탐색용이라, 확정 전엔 케이스에 반영되지 않아요.",
+    sandboxIntroTitle: "실험 공간 — 가정해 보기",
+    sandboxIntroBody: "슬라이더로 한 차원을 조정하면 다른 지표가 어떻게 흔들리는지 볼 수 있어요. 자율 모드를 켜면 시스템이 재설계 방향을 먼저 제안해요. 여기서 바꾼 내용은 탐색용이라, 확정하기 전에는 케이스에 반영되지 않아요.",
     reportIntroTitle: "리포트 — 배운 것 정리하기",
     reportIntroBody: "여기서 케이스를 하나로 모아요. 요약·근거·성찰 질문은 다른 화면에서 만든 노드와 결정으로부터 생성돼요. 당신의 성찰은 교수자에게 제출돼요.",
     orbitSatPeerReview: "또래 평가",
@@ -1703,10 +1703,12 @@ function buildRemotePlatform({
               uiCopy: asObject(caseRow.ui_copy),
               boardSettings: defaultBoardSettings(asObject(caseRow.board_settings)),
               pipeline: asObject(caseRow.pipeline, {
-                ontologyStatus: "Structured",
-                graphStatus: "Case map ready",
-                simulationStatus: "Question prompts ready",
-                reportStatus: caseRow.published ? "Published to learner side" : "Instructor draft",
+                ontologyStatus: state.locale === "ko" ? "구조화 완료" : "Structured",
+                graphStatus: state.locale === "ko" ? "케이스 맵 준비 완료" : "Case map ready",
+                simulationStatus: state.locale === "ko" ? "질문 프롬프트 준비 완료" : "Question prompts ready",
+                reportStatus: caseRow.published
+                  ? state.locale === "ko" ? "학습자에게 공개됨" : "Published to learner side"
+                  : state.locale === "ko" ? "교수자 초안" : "Instructor draft",
               }),
               published: Boolean(caseRow.published),
             }));
@@ -1744,9 +1746,9 @@ function buildRemotePlatform({
                 id: run.id,
                 caseId: run.case_id,
                 learnerId: run.learner_id,
-                learnerName: run.learner_name || "Student",
-                learnerFocus: run.learner_focus || "Reflection run",
-                status: run.status || "Learner workspace updated",
+                learnerName: run.learner_name || (state.locale === "ko" ? "학생" : "Student"),
+                learnerFocus: run.learner_focus || (state.locale === "ko" ? "생각 정리 실행" : "Reflection run"),
+                status: run.status || (state.locale === "ko" ? "학습자 작업 공간 업데이트됨" : "Learner workspace updated"),
                 metrics: asObject(run.metrics),
                 evidence: asArray(run.evidence),
                 decisions: asArray(run.decisions),
@@ -1827,7 +1829,7 @@ function serializeLearnerRunForSupabase(runRecord, caseId = state.activeCaseId, 
     learner_id: learnerId,
     learner_name: runRecord.learnerName || "",
     learner_focus: runRecord.learnerFocus || "",
-    status: runRecord.status || "Learner workspace updated",
+    status: runRecord.status || (state.locale === "ko" ? "학습자 작업 공간 업데이트됨" : "Learner workspace updated"),
     metrics: asObject(runRecord.metrics),
     evidence: asArray(runRecord.evidence),
     decisions: asArray(runRecord.decisions),
@@ -2152,7 +2154,7 @@ async function signInWithSupabase(email, password) {
     throw new Error("Login is not ready yet.");
   }
   state.auth.loading = true;
-  state.auth.message = "Signing in...";
+  state.auth.message = state.locale === "ko" ? "로그인 중..." : "Signing in...";
   renderLandingLogin();
 
   const { data, error } = await client.auth.signInWithPassword({ email, password });
@@ -3104,7 +3106,7 @@ async function requestGeminiJson(options) {
 async function structureCaseFromDocumentWithAi(input) {
   const baseCase = structuredCaseFromDocument(input);
 
-  setAiStatus(`Structuring this case with ${getGeminiConfig().model}â€¦`, { busy: true });
+  setAiStatus(`Structuring this case with ${getGeminiConfig().model}...`, { busy: true });
   try {
     const draft = await requestGeminiJson({
       systemInstruction:
@@ -3163,7 +3165,7 @@ async function generateAgendaExpansionsWithAi(agendaNode, activeCase = getActive
   const fallback = generateAgendaExpansions(agendaNode, activeCase);
 
   const settings = getCaseBoardSettings(activeCase);
-  setAiStatus(`Expanding learner agenda with ${getGeminiConfig().model}â€¦`, { busy: true });
+  setAiStatus(`Expanding learner agenda with ${getGeminiConfig().model}...`, { busy: true });
   try {
     const payload = await requestGeminiJson({
       systemInstruction:
@@ -3216,11 +3218,11 @@ async function generateAgentReplyWithAi(stakeholderKey, question) {
   const stakeholder = getCaseStakeholderMeta(stakeholderKey);
   const activeCase = getActiveCaseRecord();
   const isKorean = state.locale === "ko";
-  setAiStatus(`Responding with ${getGeminiConfig().model}â€¦`, { busy: true });
+  setAiStatus(`Responding with ${getGeminiConfig().model}...`, { busy: true });
   try {
     const response = await requestGeminiContent({
       systemInstruction: isKorean
-        ? "당신은 교수 설계 분석 보조입니다. 한 관계자의 관점에서 평이한 한국어로 답하세요. 글머리 기호나 마크다운은 사용하지 마세요."
+        ? "당신은 교수 설계 분석 보조입니다. 한 이해관계자의 관점에서 평이한 한국어로 답하세요. 글머리 기호나 마크다운은 사용하지 마세요."
         : "You are an instructional design analysis assistant. Answer from one stakeholder lens in plain language, with no bullets and no markdown.",
       prompt: [
         `Stakeholder lens: ${stakeholder.label}`,
@@ -3298,7 +3300,11 @@ function structuredCaseFromDocument({ title, text, publish = true }) {
     id: `case-${slugify(title)}-${Date.now().toString(36)}`,
     title,
     summary:
-      prominentStakeholders.length > 0
+      state.locale === "ko"
+        ? prominentStakeholders.length > 0
+          ? `업로드된 설명요약을 구조화했습니다. 주요 이해관계자: ${prominentStakeholders.join(", ")}.`
+          : "업로드된 설명요약을 구조화했으며, 그래프·시뮬레이션·메모 생성 준비가 끝났습니다."
+      : prominentStakeholders.length > 0
         ? `Structured from uploaded brief with emphasis on ${prominentStakeholders.join(", ")}.`
         : "Structured from uploaded brief and ready for graph, simulation, and memo generation.",
     prompt: sentences[0] || cleanText.slice(0, 280),
@@ -3308,16 +3314,20 @@ function structuredCaseFromDocument({ title, text, publish = true }) {
     evidence,
     decisions: [
       {
-        stamp: "Now",
-        title: "Case structured from upload",
-        body: "The admin intake pipeline converted the uploaded document into a canonical case record for graph rendering and report generation.",
+        stamp: state.locale === "ko" ? "지금" : "Now",
+        title: state.locale === "ko" ? "업로드 문서에서 케이스 구조화" : "Case structured from upload",
+        body: state.locale === "ko"
+          ? "관리자 업로드 파이프라인이 문서를 그래프 렌더링과 리포트 생성을 위한 표준 케이스 레코드로 변환했습니다."
+          : "The admin intake pipeline converted the uploaded document into a canonical case record for graph rendering and report generation.",
       },
     ],
     chat: [
       {
         role: "agent",
         stakeholder: "teacher",
-        body: "The uploaded brief has been structured. The next useful move is to test which stakeholder tension dominates before publishing to learners.",
+        body: state.locale === "ko"
+          ? "업로드된 설명요약이 구조화되었습니다. 학습자에게 공개하기 전에 어느 이해관계자 간 쟁점이 가장 두드러지는지 테스트해 보세요."
+          : "The uploaded brief has been structured. The next useful move is to test which stakeholder tension dominates before publishing to learners.",
       },
     ],
     timeline,
@@ -3329,10 +3339,12 @@ function structuredCaseFromDocument({ title, text, publish = true }) {
     uiCopy: {},
     boardSettings: defaultBoardSettings(),
     pipeline: {
-      ontologyStatus: "Structured from upload",
-      graphStatus: "Case map ready",
-      simulationStatus: "Question prompts ready",
-      reportStatus: publish ? "Published to learner side" : "Admin draft only",
+      ontologyStatus: state.locale === "ko" ? "업로드 문서 구조화 완료" : "Structured from upload",
+      graphStatus: state.locale === "ko" ? "케이스 맵 준비 완료" : "Case map ready",
+      simulationStatus: state.locale === "ko" ? "질문 프롬프트 준비 완료" : "Question prompts ready",
+      reportStatus: publish
+        ? state.locale === "ko" ? "학습자에게 공개됨" : "Published to learner side"
+        : state.locale === "ko" ? "교수자 초안으로 보관" : "Admin draft only",
     },
     published: publish,
   };
@@ -3343,7 +3355,7 @@ function syncActiveCaseState() {
   const course = getActiveCourse();
   const activeCase = getCaseById(state.activeCaseId, course);
   dom.caseSummaryLabel.textContent = state.activeRole === "admin" ? (state.locale === "ko" ? "선택된 교수자 케이스" : "Selected Instructor Case") : (state.locale === "ko" ? "선택된 게시 케이스" : "Selected Published Case");
-  dom.sidebarTensionLabel.textContent = state.activeRole === "admin" ? t("caseTension") : (state.locale === "ko" ? "학습 런 쟁점도" : "Learner run tension");
+  dom.sidebarTensionLabel.textContent = state.activeRole === "admin" ? t("caseTension") : (state.locale === "ko" ? "학습 세션 쟁점도" : "Learner run tension");
   if (dom.sidebarTensionHint) dom.sidebarTensionHint.textContent = t("tensionScaleHint");
   if (!activeCase) {
     state.metrics = { ...emptyMetrics };
@@ -3423,7 +3435,7 @@ function handleReflectionSubmit(promptIndex) {
     answer: answer.slice(0, 2000),
     length: answer.length,
   });
-  if (status) status.textContent = state.locale === "ko" ? "제출됨 · 강사에게 공유되었습니다." : "Submitted — shared with your instructor.";
+  if (status) status.textContent = state.locale === "ko" ? "제출됨 · 교수자에게 공유되었습니다." : "Submitted — shared with your instructor.";
 }
 
 async function renderInstructorCohortPanel() {
@@ -3518,7 +3530,7 @@ async function renderInstructorCohortPanel() {
     };
     const showSectionCol = configuredSections.length > 0;
     const headers = state.locale === "ko"
-      ? ["학생", ...(showSectionCol ? ["섹션"] : []), "참여", "케이스 열기", "노드 추가", "질문", "리플렉션", "총 이벤트", "최근 활동"]
+      ? ["학생", ...(showSectionCol ? ["섹션"] : []), "참여", "케이스 열기", "노드 추가", "질문", "생각 정리", "총 이벤트", "최근 활동"]
       : ["Student", ...(showSectionCol ? ["Section"] : []), "Joined", "Opened case", "Added node", "Asked", "Reflected", "Events", "Last active"];
     const rows = members
       .map((m) => {
@@ -3589,7 +3601,7 @@ function formatDrilldownEvent(ev) {
     case "reflection.submit":
       return {
         stamp,
-        label: ko ? `리플렉션 #${payload.prompt_index ?? "?"}` : `Reflection #${payload.prompt_index ?? "?"}`,
+        label: ko ? `생각 정리 #${payload.prompt_index ?? "?"}` : `Reflection #${payload.prompt_index ?? "?"}`,
         body: safe(payload.answer || ""),
         sub: payload.prompt ? `prompt: ${safe(payload.prompt)}` : "",
         highlight: true,
@@ -3651,7 +3663,7 @@ async function renderStudentDrilldown(userId, displayName) {
     const reflectionMarkup = reflections.length
       ? `
         <section class="drilldown-section">
-          <p class="label">${ko ? "리플렉션 답변" : "Reflection answers"}</p>
+          <p class="label">${ko ? "생각 정리 답변" : "Reflection answers"}</p>
           <div class="drilldown-reflections">
             ${reflections
               .map((ev) => {
@@ -3753,7 +3765,7 @@ function persistActiveLearnerRunState() {
     activeRun.decisions = safeClone(state.decisions);
     activeRun.chat = safeClone(state.chat);
     activeRun.timeline = safeClone(state.timeline);
-    activeRun.status = "Learner workspace updated";
+    activeRun.status = state.locale === "ko" ? "학습자 작업 공간 업데이트됨" : "Learner workspace updated";
     activeRun.updatedAt = new Date().toISOString();
   });
   if (isSupabaseSessionActive()) {
@@ -4230,7 +4242,7 @@ function buildGraphSnapshot(reason) {
         icon: meta.icon,
         meta: linkedCount
           ? state.locale === "ko"
-            ? `이슈 ${linkedCount}개`
+            ? `쟁점 ${linkedCount}개`
             : `${linkedCount} issue${linkedCount === 1 ? "" : "s"}`
           : meta.status.toLowerCase(),
         detail: meta.summary,
@@ -4624,7 +4636,7 @@ function renderPlatformControlsLegacy() {
   dom.intakeTitle.textContent = state.activeRole === "admin" ? t("createOrChooseCase") : t("choosePublishedCase");
   dom.intakeBadge.textContent = state.activeRole === "admin" ? t("instructor") : t("student");
   dom.workflowGuide.innerHTML = buildWorkflowGuideMarkup(course, activeCase, visibleCases, activeLearner);
-  dom.courseSelect.innerHTML = dom.courseSelect.innerHTML.replace(/Ã‚Â·/g, "Â·");
+  dom.courseSelect.innerHTML = dom.courseSelect.innerHTML.replace(/\u00c3\u201a\u00c2\u00b7|\u00c2\u00b7/g, "·");
   dom.platformContext.innerHTML = `
     <article class="context-card">
       <strong>${institution?.name || t("noInstitutionSelected")}</strong>
@@ -4669,7 +4681,7 @@ function renderPlatformControlsLegacy() {
       }
     </article>
   `;
-  dom.platformContext.innerHTML = dom.platformContext.innerHTML.replace(/Ã‚Â·/g, "Â·");
+  dom.platformContext.innerHTML = dom.platformContext.innerHTML.replace(/\u00c3\u201a\u00c2\u00b7|\u00c2\u00b7/g, "·");
 }
 
 function renderPlatformControls() {
@@ -5005,44 +5017,44 @@ function renderPipelineConsole() {
           <p>${institution?.settings?.defaultAccess || "Unset"} access · ${institution?.settings?.governanceGate || "Unset"} governance gate · ${institution?.settings?.accessibilityGate || "Unset"} accessibility gate</p>
         </article>
         <article>
-          <strong>Course settings</strong>
-          <p>${course?.settings?.learnerVisibility || "Unset"} · ${course?.settings?.evidenceRule || "Unset"} · ${course?.settings?.reportMode || "Unset"}</p>
+          <strong>${state.locale === "ko" ? "수업 설정" : "Course settings"}</strong>
+          <p>${course?.settings?.learnerVisibility || (state.locale === "ko" ? "미설정" : "Unset")} · ${course?.settings?.evidenceRule || (state.locale === "ko" ? "미설정" : "Unset")} · ${course?.settings?.reportMode || (state.locale === "ko" ? "미설정" : "Unset")}</p>
         </article>
       </div>
       <article class="pipeline-card">
-        <strong>Add institution or course</strong>
+        <strong>${state.locale === "ko" ? "기관 또는 수업 추가" : "Add institution or course"}</strong>
         <div class="pipeline-form-row two-up">
           <form class="pipeline-form" id="add-institution-form">
-            <input name="institutionName" type="text" placeholder="New institution name" required>
-            <button class="toolbar-button" type="submit">Add institution</button>
+            <input name="institutionName" type="text" placeholder="${state.locale === "ko" ? "새 기관 이름" : "New institution name"}" required>
+            <button class="toolbar-button" type="submit">${state.locale === "ko" ? "기관 추가" : "Add institution"}</button>
           </form>
           <form class="pipeline-form" id="add-course-form">
-            <input name="courseName" type="text" placeholder="New course name" required>
-            <input name="courseCode" type="text" placeholder="Course code" required>
-            <button class="toolbar-button" type="submit">Add course</button>
+            <input name="courseName" type="text" placeholder="${state.locale === "ko" ? "새 수업 이름" : "New course name"}" required>
+            <input name="courseCode" type="text" placeholder="${state.locale === "ko" ? "수업 코드" : "Course code"}" required>
+            <button class="toolbar-button" type="submit">${state.locale === "ko" ? "수업 추가" : "Add course"}</button>
           </form>
         </div>
       </article>
       <article class="pipeline-card">
-        <strong>Upload and structure a document</strong>
-        <p>Admins can upload a brief, structure it into a case, and decide whether learners can see it immediately.</p>
+        <strong>${state.locale === "ko" ? "문서 업로드 및 구조화" : "Upload and structure a document"}</strong>
+        <p>${state.locale === "ko" ? "교수자는 설명요약을 업로드해 케이스로 구조화하고, 학습자에게 바로 공개할지 결정할 수 있습니다." : "Admins can upload a brief, structure it into a case, and decide whether learners can see it immediately."}</p>
         <form class="pipeline-form" id="upload-document-form">
           <div class="pipeline-form-row two-up">
-            <input name="documentTitle" type="text" placeholder="Document title" required>
+            <input name="documentTitle" type="text" placeholder="${state.locale === "ko" ? "문서 제목" : "Document title"}" required>
             <select name="publishMode">
-              <option value="published">Publish to learners</option>
-              <option value="draft">Keep as admin draft</option>
+              <option value="published">${state.locale === "ko" ? "학습자에게 공개" : "Publish to learners"}</option>
+              <option value="draft">${state.locale === "ko" ? "교수자 초안으로 보관" : "Keep as admin draft"}</option>
             </select>
           </div>
-          <textarea name="documentText" placeholder="Paste syllabus, assignment prompt, policy note, or design brief here..." required></textarea>
+          <textarea name="documentText" placeholder="${state.locale === "ko" ? "강의계획서, 과제 안내, 정책 메모, 설계 설명요약을 여기에 붙여 넣으세요..." : "Paste syllabus, assignment prompt, policy note, or design brief here..."}" required></textarea>
           <div class="pipeline-actions">
-            <button class="toolbar-button toolbar-button-primary" type="submit">Structure document</button>
+            <button class="toolbar-button toolbar-button-primary" type="submit">${state.locale === "ko" ? "문서 구조화" : "Structure document"}</button>
           </div>
         </form>
       </article>
       <article class="pipeline-card">
-        <strong>Structured cases</strong>
-        <p>Instructor-authored cases live here. Open any draft to continue editing, or publish it so students can select it on their side.</p>
+        <strong>${state.locale === "ko" ? "구조화된 케이스" : "Structured cases"}</strong>
+        <p>${state.locale === "ko" ? "교수자가 만든 케이스가 여기에 표시됩니다. 초안을 열어 계속 수정하거나, 학생이 선택할 수 있도록 공개하세요." : "Instructor-authored cases live here. Open any draft to continue editing, or publish it so students can select it on their side."}</p>
         <div class="case-list">
           ${
             course?.cases?.length
@@ -5475,7 +5487,7 @@ function describeNodeIssue(node) {
       kicker: ko ? `쟁점 강도 · ${koBandWord(scores.conflict)}(${scores.conflict}%)` : `Conflict ${scores.conflict}%`,
       title: titles[node.id] || node.label,
       body: ko
-        ? "이 코어 노드는 지금의 스웜 프레임을 한데 모아요. 주변 군집이 조여올수록, 제안이 아직 풀리지 않은 수업 상충을 더 많이 끌어안고 있다는 뜻이에요."
+        ? "이 코어 노드는 지금의 스웜 프레임을 한데 모아요. 주변 군집이 조여올수록, 제안이 아직 풀리지 않은 수업 쟁점을 더 많이 끌어안고 있다는 뜻이에요."
         : "This core node aggregates the current swarm frame. When nearby clusters tighten, the proposal is absorbing more unresolved instructional trade-offs.",
     };
   }
@@ -5576,8 +5588,8 @@ function describeNodeIssue(node) {
         { t: "Edge-case signal", b: "A smaller pattern branching off the main topic — often hints at where the design hasn't been tested yet." },
       ],
       ko: [
-        { t: "보조 이슈", b: "주요 군집에서 파생된 후속 이슈입니다. 비슷한 노드가 계속 근처에 생긴다면 다시 들여다볼 가치가 있습니다." },
-        { t: "경계 신호", b: "본 주제에서 갈라진 작은 패턴입니다 — 설계가 아직 검증되지 않은 구간을 시사하는 경우가 많습니다." },
+        { t: "보조 쟁점", b: "주요 군집에서 파생된 후속 쟁점입니다. 비슷한 노드가 계속 근처에 생긴다면 다시 들여다볼 가치가 있습니다." },
+        { t: "경계 신호", b: "본 주제에서 갈라진 작은 패턴입니다. 설계가 아직 검증되지 않은 구간을 시사하는 경우가 많습니다." },
       ],
     };
     const pool = concernPool[node.stakeholder] || fallbackPool;
@@ -5585,7 +5597,7 @@ function describeNodeIssue(node) {
     const idx = ((node.orbitIndex || 0) + (parentNode?.id?.length || 0)) % entries.length;
     const pick = entries[idx];
     return {
-      kicker: ko ? `파생 이슈 · ${parentLabel}` : `Branch of ${parentLabel}`,
+      kicker: ko ? `파생 쟁점 · ${parentLabel}` : `Branch of ${parentLabel}`,
       title: pick.t,
       body: pick.b,
     };
@@ -6328,10 +6340,10 @@ function renderGraph() {
         : "This view combines patterns shared across the class."
       : state.activeMapLayer === "personal"
         ? state.locale === "ko"
-          ? "노드에 호버해 이슈를 보고 클릭해 메모를 추가하세요."
+          ? "노드에 호버해 쟁점을 보고 클릭해 메모를 추가하세요."
           : "Hover to inspect an issue and click to add your notes."
         : state.locale === "ko"
-          ? "노드에 호버해 그 뒤의 이슈를 살펴보세요."
+          ? "노드에 호버해 그 뒤의 쟁점을 살펴보세요."
           : "Hover a node to inspect the issue behind it."
     : state.locale === "ko"
       ? "케이스를 만들거나 선택하면 네트워크가 생성됩니다."
@@ -6432,8 +6444,12 @@ function renderExportActions() {
   dom.studentExportActions.hidden = state.activeRole !== "user";
   dom.downloadPngButton.disabled = !canExport;
   dom.downloadHtmlButton.disabled = !canExport;
-  dom.downloadPngButton.title = canExport ? "Download the current network as a PNG." : "Open a case to export.";
-  dom.downloadHtmlButton.title = canExport ? "Download a standalone HTML snapshot of the current network." : "Open a case to export.";
+  dom.downloadPngButton.title = canExport
+    ? state.locale === "ko" ? "현재 네트워크를 PNG로 내려받기" : "Download the current network as a PNG."
+    : state.locale === "ko" ? "내보내려면 먼저 케이스를 여세요." : "Open a case to export.";
+  dom.downloadHtmlButton.title = canExport
+    ? state.locale === "ko" ? "독립형 HTML 스냅샷 내려받기" : "Download a standalone HTML snapshot of the current network."
+    : state.locale === "ko" ? "내보내려면 먼저 케이스를 여세요." : "Open a case to export.";
 }
 
 function getSelectedRenderableNode() {
@@ -6926,7 +6942,7 @@ function renderReport() {
   dom.reflectionBadge.textContent =
     state.activeRole === "admin"
       ? t("instructorView")
-      : `${activeLearner?.name || t("student")} ${state.locale === "ko" ? "리플렉션" : "reflection"}`;
+      : `${activeLearner?.name || t("student")} ${state.locale === "ko" ? "생각 정리" : "reflection"}`;
 
   const reflectionPrompts = asArray(activeCase?.reflectionPrompts);
   const isStudent = state.activeRole === "user";
@@ -7285,7 +7301,7 @@ function getTutorialSteps() {
             selector: "#agenda-node-form",
             title: state.locale === "ko" ? "직접 노드 추가" : "Add Your Own Node",
             body: state.locale === "ko"
-              ? "자신의 관점에서 질문, 우려, 설계 이슈 하나를 맵에 추가하세요. 이 노드는 개인 학습 레이어에 저장되어 세션 간에도 유지되며, 교수자는 리포트에서 확인할 수 있습니다."
+              ? "자신의 관점에서 질문, 우려, 설계 쟁점 하나를 맵에 추가하세요. 이 노드는 개인 학습 레이어에 저장되어 세션 간에도 유지되며, 교수자는 리포트에서 확인할 수 있습니다."
               : "Add a node for a question or issue you want to track from your own point of view. Your node joins a private learner layer on top of the map — it persists between sessions, and your instructor can see it in the report.",
             view: "visualizer",
           },
@@ -7293,15 +7309,15 @@ function getTutorialSteps() {
             selector: "#chat-form",
             title: state.locale === "ko" ? "한 이해관계자와 1:1로 대화" : "Go 1-on-1 with a Stakeholder",
             body: state.locale === "ko"
-              ? "상단의 관점(Perspectives) 뷰로 전환하면 특정 이해관계자의 관점에서 답을 듣는 단일 채널 채팅이 열립니다. 스웜 라운드보다 더 깊이 파고들고 싶을 때 사용하세요."
+              ? "상단의 관점 뷰로 전환하면 특정 이해관계자의 관점에서 답을 듣는 단일 채널 채팅이 열립니다. 스웜 라운드보다 더 깊이 파고들고 싶을 때 사용하세요."
               : "Switch to the Perspectives view (top nav) for a single-channel chat that answers from one stakeholder's point of view. Use it to go deeper than the multi-agent swarm round — one voice, follow-up questions, full turn-by-turn.",
             view: "perspectives",
           },
           {
             selector: "#reflection-prompts",
-            title: state.locale === "ko" ? "리플렉션 작성 후 제출" : "Write Your Reflection, Then Submit",
+            title: state.locale === "ko" ? "생각 정리 작성 후 제출" : "Write Your Reflection, Then Submit",
             body: state.locale === "ko"
-              ? "리포트 뷰를 열고 프롬프트를 활용해 맵에서 발견한 쟁점과 근거를 짧은 리플렉션으로 정리하세요. 다운로드 버튼으로 내보내거나 교수자에게 제출할 수 있습니다."
+              ? "리포트 뷰를 열고 프롬프트를 활용해 맵에서 발견한 쟁점과 근거를 짧은 생각 정리로 작성하세요. 다운로드 버튼으로 내보내거나 교수자에게 제출할 수 있습니다."
               : "Open the Report view and use these prompts to turn what you found on the map into a short reflection. When you are ready, use the Download button at the bottom to export your report or submit it to your instructor.",
             view: "report",
           },
@@ -7312,7 +7328,7 @@ function getTutorialSteps() {
             selector: "#network-stage",
             title: state.locale === "ko" ? "케이스를 선택하면 맵이 열립니다" : "Pick a Case to Load the Map",
             body: state.locale === "ko"
-              ? "위의 목록에서 게시된 케이스를 하나 고르면 네트워크 맵이 이곳에 나타납니다. 그 뒤 튜토리얼을 다시 실행하면 설명요약 읽기, 스웜에 질문하기, 노드 추가, 리플렉션 작성까지 나머지 단계를 안내합니다."
+              ? "위의 목록에서 게시된 케이스를 하나 고르면 네트워크 맵이 이곳에 나타납니다. 그 뒤 튜토리얼을 다시 실행하면 설명요약 읽기, 스웜에 질문하기, 노드 추가, 생각 정리 작성까지 나머지 단계를 안내합니다."
               : "Pick one published case from the list above and its network map will load here. Replay the tutorial after you've opened a case — it will walk you through reading the brief, exploring the map, asking the swarm, challenging responses, adding your own node, and writing a reflection.",
             view: "visualizer",
           },
@@ -7589,12 +7605,14 @@ async function addAgendaNode(title, body = "") {
       },
       ...asArray(run.evidence),
     ].slice(0, 6);
-    run.status = "Agenda expanded";
+    run.status = state.locale === "ko" ? "학습자 아젠다 확장됨" : "Agenda expanded";
     run.updatedAt = new Date().toISOString();
   });
 
   state.timeline = [
-    `${agendaNode.title} was added as a learner agenda and expanded into related issues.`,
+    state.locale === "ko"
+      ? `${agendaNode.title}이(가) 학습자 아젠다로 추가되고 관련 쟁점으로 확장되었습니다.`
+      : `${agendaNode.title} was added as a learner agenda and expanded into related issues.`,
     ...state.timeline,
   ].slice(0, 6);
   state.evidence = [
@@ -7673,29 +7691,31 @@ function addNodeAnnotation(noteType, visibility, body) {
   };
 
   if (!annotation.body) {
-    throw new Error("Add a short note before saving.");
+    throw new Error(state.locale === "ko" ? "저장하기 전에 짧은 메모를 입력하세요." : "Add a short note before saving.");
   }
 
   updateActiveLearnerRunRecord((run) => {
     run.annotations = [annotation, ...asArray(run.annotations)].slice(0, 24);
-    run.timeline = [`${selected.label} was annotated from the learner view.`, ...asArray(run.timeline)].slice(0, 8);
+    run.timeline = [state.locale === "ko" ? `${selected.label}에 학습자 메모가 추가되었습니다.` : `${selected.label} was annotated from the learner view.`, ...asArray(run.timeline)].slice(0, 8);
     run.evidence = [
       {
         stakeholder: annotation.stakeholder,
-        title: `${selected.label} note`,
+        title: state.locale === "ko" ? `${selected.label} 메모` : `${selected.label} note`,
         body: annotation.body,
       },
       ...asArray(run.evidence),
     ].slice(0, 8);
-    run.status = annotation.visibility === "cohort" ? "Shared note added" : "Private note added";
+    run.status = annotation.visibility === "cohort"
+      ? state.locale === "ko" ? "공유 메모가 추가되었습니다" : "Shared note added"
+      : state.locale === "ko" ? "비공개 메모가 추가되었습니다" : "Private note added";
     run.updatedAt = new Date().toISOString();
   });
 
-  state.timeline = [`${selected.label} was annotated from the learner view.`, ...state.timeline].slice(0, 8);
+  state.timeline = [state.locale === "ko" ? `${selected.label}에 학습자 메모가 추가되었습니다.` : `${selected.label} was annotated from the learner view.`, ...state.timeline].slice(0, 8);
   state.evidence = [
     {
       stakeholder: annotation.stakeholder,
-      title: `${selected.label} note`,
+      title: state.locale === "ko" ? `${selected.label} 메모` : `${selected.label} note`,
       body: annotation.body,
     },
     ...state.evidence,
@@ -8227,11 +8247,19 @@ function applyScenario(name) {
   state.metrics.privacy = next.privacy;
   state.metrics.accessibility = next.accessibility;
   state.autonomousIteration = next.autonomousIteration;
-  pushEvidence("teacher", `Scenario applied: ${name}`, `The sandbox injected the "${name}" scenario to observe how stakeholder tension redistributed.`);
+  pushEvidence(
+    "teacher",
+    state.locale === "ko" ? `시나리오 적용: ${name}` : `Scenario applied: ${name}`,
+    state.locale === "ko"
+      ? `실험 공간이 "${name}" 시나리오를 적용해 이해관계자 간 쟁점 분포가 어떻게 달라지는지 관찰했습니다.`
+      : `The sandbox injected the "${name}" scenario to observe how stakeholder tension redistributed.`
+  );
   state.decisions.unshift({
-    stamp: "Now",
-    title: `Scenario update: ${name}`,
-    body: `The sandbox applied the ${name} scenario and recalculated alignment, feasibility, and conflict tension.`,
+    stamp: state.locale === "ko" ? "지금" : "Now",
+    title: state.locale === "ko" ? `시나리오 업데이트: ${name}` : `Scenario update: ${name}`,
+    body: state.locale === "ko"
+      ? `실험 공간이 ${name} 시나리오를 적용하고 정렬도, 실행 가능성, 쟁점 강도를 다시 계산했습니다.`
+      : `The sandbox applied the ${name} scenario and recalculated alignment, feasibility, and conflict tension.`,
   });
   state.decisions = state.decisions.slice(0, 5);
   persistActiveWorkspaceState();
@@ -8346,7 +8374,9 @@ function toggleCasePublish(caseId) {
   const targetCase = getCaseById(caseId, course);
   if (!course || !targetCase) return;
   targetCase.published = !targetCase.published;
-  targetCase.pipeline.reportStatus = targetCase.published ? "Published to learner side" : "Admin draft only";
+  targetCase.pipeline.reportStatus = targetCase.published
+    ? state.locale === "ko" ? "학습자에게 공개됨" : "Published to learner side"
+    : state.locale === "ko" ? "교수자 초안으로 보관" : "Admin draft only";
   logEvent(targetCase.published ? "case.publish" : "case.unpublish", { case_id: caseId, title: targetCase.title });
   course.publishedCaseIds = course.cases.filter((item) => item.published).map((item) => item.id);
   course.documents.forEach((document) => {
@@ -8776,7 +8806,7 @@ if (dom.downloadPngButton) {
     const previousLabel = dom.downloadPngButton.textContent;
     try {
       dom.downloadPngButton.disabled = true;
-      dom.downloadPngButton.textContent = "Preparing...";
+      dom.downloadPngButton.textContent = state.locale === "ko" ? "준비 중..." : "Preparing...";
       await downloadNetworkPngSnapshot();
     } catch (error) {
       console.error(error);
@@ -8798,7 +8828,7 @@ if (dom.downloadHtmlButton) {
     const previousLabel = dom.downloadHtmlButton.textContent;
     try {
       dom.downloadHtmlButton.disabled = true;
-      dom.downloadHtmlButton.textContent = "Preparing...";
+      dom.downloadHtmlButton.textContent = state.locale === "ko" ? "준비 중..." : "Preparing...";
       downloadNetworkHtmlSnapshot();
     } catch (error) {
       console.error(error);
@@ -8823,13 +8853,13 @@ document.getElementById("chat-form").addEventListener("submit", async (event) =>
   try {
     if (submitButton) {
       submitButton.disabled = true;
-      submitButton.textContent = "Thinking...";
+      submitButton.textContent = t("thinking");
     }
     input.disabled = true;
     await handleAsk(input.value);
     input.value = "";
   } catch (error) {
-    state.auth.message = error.message || "The question could not be processed.";
+    state.auth.message = error.message || t("questionCouldNotBeProcessed");
     renderLandingLogin();
   } finally {
     input.disabled = false;
@@ -8858,7 +8888,9 @@ document.getElementById("autonomy-toggle").addEventListener("change", (event) =>
   }
   state.autonomousIteration = event.target.checked;
   updateActiveCaseRecord((activeCase) => {
-    activeCase.pipeline.simulationStatus = state.autonomousIteration ? "Autonomous iteration enabled" : "Instructor-gated iteration";
+    activeCase.pipeline.simulationStatus = state.autonomousIteration
+      ? state.locale === "ko" ? "자율 반복 활성화됨" : "Autonomous iteration enabled"
+      : state.locale === "ko" ? "교수자 승인 기반 반복" : "Instructor-gated iteration";
   });
   regenerateGraph("iteration mode toggled");
   renderAll();
@@ -8867,21 +8899,27 @@ document.getElementById("autonomy-toggle").addEventListener("change", (event) =>
 ["regenerate-memo"].forEach((id) => {
   document.getElementById(id)?.addEventListener("click", () => {
     state.decisions.unshift({
-      stamp: "Now",
-      title: state.activeRole === "admin" ? "Memo refreshed" : "Reflection memo refreshed",
+      stamp: state.locale === "ko" ? "지금" : "Now",
+      title: state.activeRole === "admin"
+        ? state.locale === "ko" ? "메모 새로고침" : "Memo refreshed"
+        : state.locale === "ko" ? "생각 정리 메모 새로고침" : "Reflection memo refreshed",
       body:
         state.activeRole === "admin"
-          ? `The report generator rebuilt the design memo using the current ${stakeholders[state.activeStakeholder].label.toLowerCase()} lens and sandbox metrics.`
-          : `The learner memo was rebuilt using the current ${stakeholders[state.activeStakeholder].label.toLowerCase()} lens, student evidence notes, and the student's private notes.`,
+          ? state.locale === "ko"
+            ? `리포트 생성기가 현재 ${stakeholders[state.activeStakeholder].label.toLowerCase()} 렌즈와 실험 공간 지표를 사용해 설계 메모를 다시 만들었습니다.`
+            : `The report generator rebuilt the design memo using the current ${stakeholders[state.activeStakeholder].label.toLowerCase()} lens and sandbox metrics.`
+          : state.locale === "ko"
+            ? `학습자 메모가 현재 ${stakeholders[state.activeStakeholder].label.toLowerCase()} 렌즈, 학생 증거 메모, 개인 메모를 바탕으로 다시 만들어졌습니다.`
+            : `The learner memo was rebuilt using the current ${stakeholders[state.activeStakeholder].label.toLowerCase()} lens, student evidence notes, and the student's private notes.`,
     });
     state.decisions = state.decisions.slice(0, 5);
     if (state.activeRole === "admin") {
       updateActiveCaseRecord((activeCase) => {
-        activeCase.pipeline.reportStatus = "Memo refreshed for instructor review";
+        activeCase.pipeline.reportStatus = state.locale === "ko" ? "교수자 검토용 메모 새로고침 완료" : "Memo refreshed for instructor review";
       });
     } else {
       updateActiveLearnerRunRecord((activeRun) => {
-        activeRun.status = "Reflection memo refreshed";
+        activeRun.status = state.locale === "ko" ? "생각 정리 메모 새로고침 완료" : "Reflection memo refreshed";
       });
     }
     persistActiveWorkspaceState();
@@ -9287,4 +9325,3 @@ async function boot() {
 }
 
 boot();
-

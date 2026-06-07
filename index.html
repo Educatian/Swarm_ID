@@ -127,7 +127,7 @@
         <svg class="landing-network" id="landing-network" aria-label="AI와 사람의 설계 쟁점 네트워크"></svg>
         <div class="landing-annotation landing-annotation-left">
           <p class="landing-annotation-label">인간</p>
-          <strong>교수자, 학생, 비평, 업무 부담</strong>
+          <strong>교사, 학생, 피드백, 업무 부담</strong>
         </div>
         <div class="landing-annotation landing-annotation-right">
           <p class="landing-annotation-label">시스템</p>
@@ -162,65 +162,65 @@
       </div>
 
       <div class="case-summary panel-soft">
-        <p class="eyebrow" id="case-summary-label" data-density="advanced">Selected Case</p>
+        <p class="eyebrow" id="case-summary-label" data-density="advanced">선택된 케이스</p>
         <label class="mini-control compact-control" id="sidebar-case-control">
-          <span id="sidebar-case-label">Case</span>
+          <span id="sidebar-case-label">케이스</span>
           <select id="sidebar-case-select"></select>
         </label>
         <div class="case-title-row">
-          <h2 id="case-title">No active case</h2>
-          <button id="case-title-edit" class="icon-button" type="button" hidden title="Rename case" aria-label="Rename case">
+          <h2 id="case-title">열린 케이스가 없어요</h2>
+          <button id="case-title-edit" class="icon-button" type="button" hidden title="케이스 이름 바꾸기" aria-label="케이스 이름 바꾸기">
             <span class="material-symbols-outlined">edit</span>
           </button>
         </div>
-        <p class="case-subtitle" id="case-subtitle">Waiting for course data.</p>
+        <p class="case-subtitle" id="case-subtitle">수업 정보를 불러오는 중이에요.</p>
         <div class="meter-label" data-density="advanced">
-          <span id="sidebar-tension-label">Case tension</span>
-          <strong id="sidebar-tension" title="0–100. Higher means more unresolved friction across stakeholders.">High</strong>
+          <span id="sidebar-tension-label">케이스 쟁점도</span>
+          <strong id="sidebar-tension" title="0–100. 숫자가 클수록 이해관계자 사이의 쟁점이 커요.">높음</strong>
         </div>
         <div class="meter" data-density="advanced">
           <div class="meter-fill meter-fill-danger" id="sidebar-tension-fill"></div>
         </div>
-        <p class="meter-hint" id="sidebar-tension-hint" data-density="advanced">0–100 · higher means more friction across stakeholders</p>
+        <p class="meter-hint" id="sidebar-tension-hint" data-density="advanced">0–100 · 숫자가 클수록 이해관계자 사이의 쟁점이 커요</p>
       </div>
 
-      <nav class="primary-nav" aria-label="Primary">
+      <nav class="primary-nav" aria-label="주요 탐색">
         <button class="nav-item" data-view="home">
           <span class="material-symbols-outlined">home</span>
-          <span>Home</span>
+          <span>홈</span>
         </button>
         <button class="nav-item is-active" data-view="visualizer">
           <span class="material-symbols-outlined">hub</span>
-          <span>Network</span>
+          <span>네트워크</span>
         </button>
         <button class="nav-item" data-view="perspectives">
           <span class="material-symbols-outlined">visibility</span>
-          <span>Perspectives</span>
+          <span>관점</span>
         </button>
         <button class="nav-item" data-view="matrix">
           <span class="material-symbols-outlined">leaderboard</span>
-          <span>Trade-offs</span>
+          <span>상충 관계</span>
         </button>
         <button class="nav-item" data-view="sandbox">
           <span class="material-symbols-outlined">science</span>
-          <span>Sandbox</span>
+          <span>실험 공간</span>
         </button>
         <button class="nav-item" data-view="report">
           <span class="material-symbols-outlined">note_stack</span>
-          <span>Report</span>
+          <span>리포트</span>
         </button>
       </nav>
 
       <div class="sidebar-footer">
         <div class="panel-soft health-panel">
           <div class="health-header">
-            <span>Current status</span>
+            <span>현재 상태</span>
             <span class="status-dot"></span>
           </div>
           <div class="meter">
             <div class="meter-fill meter-fill-ok" id="health-fill"></div>
           </div>
-          <p id="health-copy">Parallel reasoning stable. Node density within optimal band.</p>
+          <p id="health-copy">병렬 추론이 안정적이에요. 노드 밀도도 적정 범위에 있어요.</p>
         </div>
       </div>
     </aside>
@@ -228,38 +228,38 @@
     <div class="workspace">
       <header class="topbar">
         <div class="topbar-heading">
-          <p class="eyebrow" id="top-kicker">Workspace</p>
-          <h2 id="view-title">Workspace</h2>
+          <p class="eyebrow" id="top-kicker">작업 공간</p>
+          <h2 id="view-title">작업 공간</h2>
           <p class="topbar-compact-summary" id="topbar-compact-summary" hidden></p>
         </div>
 
-        <button class="topbar-collapse-toggle" id="topbar-collapse-toggle" type="button" aria-label="Collapse context bar" title="Collapse context bar">
+        <button class="topbar-collapse-toggle" id="topbar-collapse-toggle" type="button" aria-label="맥락 막대 접기" title="맥락 막대 접기">
           <span class="chevron">▾</span>
         </button>
 
         <div class="topbar-side">
           <div class="platform-switcher">
             <label class="mini-control" id="role-control">
-              <span>Workspace</span>
+              <span>작업 공간</span>
               <select id="role-select">
                 <option value="admin">교수자</option>
                 <option value="user">학생</option>
               </select>
             </label>
             <label class="mini-control">
-              <span>Institution</span>
+              <span>기관</span>
               <select id="institution-select"></select>
             </label>
             <label class="mini-control">
-              <span>Course</span>
+              <span>수업</span>
               <select id="course-select"></select>
             </label>
             <label class="mini-control" id="case-control">
-              <span id="case-control-label">Case</span>
+              <span id="case-control-label">케이스</span>
               <select id="case-select"></select>
             </label>
             <label class="mini-control" id="learner-control">
-              <span>Student</span>
+              <span>학생</span>
               <select id="learner-select"></select>
             </label>
           </div>
@@ -277,17 +277,17 @@
         <section class="view home-view" data-view-panel="home" id="home-view"></section>
         <section class="view is-active" data-view-panel="visualizer">
           <div class="view-intro" data-view-intro="visualizer" data-density="advanced">
-            <button class="view-intro-close" type="button" data-view-intro-dismiss="visualizer" aria-label="Dismiss">×</button>
-            <p class="view-intro-title" id="visualizer-intro-title">Visualizer — map the case</p>
-            <p class="view-intro-body" id="visualizer-intro-body">Every node is a stakeholder concern, constraint, or design move. Edges show which concerns pull on each other. Click a node to read it; add a new node to extend the case with a worry the original doesn't capture. Nodes connected by an edge are the ones you need to think about <em>together</em>.</p>
+            <button class="view-intro-close" type="button" data-view-intro-dismiss="visualizer" aria-label="닫기">×</button>
+            <p class="view-intro-title" id="visualizer-intro-title">시각화 도구 — 케이스를 맵으로 펼치기</p>
+            <p class="view-intro-body" id="visualizer-intro-body">각 노드는 이해관계자의 우려, 제약 조건, 설계 결정을 뜻해요. 선은 어떤 요소들이 서로 맞물리는지 보여줘요. 노드를 눌러 내용을 확인하고, 원래 케이스에서 빠진 걱정거리는 새 노드로 추가해 보세요.</p>
             <div class="concept-help" id="concept-help">
-              <p class="concept-help-title" id="concept-help-title">How to read this map</p>
-              <p class="concept-help-body" id="concept-help-body">Each case is a design problem viewed through three stakeholders. Switch lenses (Teacher → IT Systems → Students) to see how the same tension looks from each side — they pull on each other, so no single view is enough.</p>
+              <p class="concept-help-title" id="concept-help-title">이 맵을 읽는 법</p>
+              <p class="concept-help-body" id="concept-help-body">모든 케이스는 네 주체(교사 · 학생 · 에듀테크 · 행정)의 관점으로 바라본 설계 문제예요. 관점을 바꿔 보면 같은 쟁점이 어떻게 달라 보이는지 알 수 있어요. 네 관점은 서로를 잡아당기기 때문에 한 면만 봐서는 충분하지 않아요.</p>
               <ul class="concept-help-list">
-                <li><strong id="perspective-teacher-label">Teacher</strong><span id="perspective-teacher-body">what they plan and decide.</span></li>
-                <li><strong id="perspective-student-label">Students</strong><span id="perspective-student-body">what learners actually experience.</span></li>
-                <li><strong id="perspective-it-label">IT Systems</strong><span id="perspective-it-body">what the tools allow or block.</span></li>
-                <li><strong id="perspective-admin-label">Administration</strong><span id="perspective-admin-body">what policy and resources allow.</span></li>
+                <li><strong id="perspective-teacher-label">교사</strong><span id="perspective-teacher-body">무엇을 계획하고 결정하는지.</span></li>
+                <li><strong id="perspective-student-label">학생</strong><span id="perspective-student-body">학습자가 실제로 무엇을 경험하는지.</span></li>
+                <li><strong id="perspective-it-label">에듀테크</strong><span id="perspective-it-body">도구가 무엇을 허용하고 막는지.</span></li>
+                <li><strong id="perspective-admin-label">행정</strong><span id="perspective-admin-body">어떤 정책과 자원이 이를 좌우하는지.</span></li>
               </ul>
             </div>
           </div>
@@ -303,25 +303,25 @@
             <section class="panel intake-panel" data-collapsible-panel="intake">
               <div class="section-header" data-density="advanced">
                 <div>
-                  <p class="eyebrow" id="intake-eyebrow">Start here</p>
-                  <h3 id="intake-title">Create or Choose a Case</h3>
+                  <p class="eyebrow" id="intake-eyebrow">여기서 시작하세요</p>
+                  <h3 id="intake-title">케이스를 만들거나 선택하세요</h3>
                 </div>
                 <div class="section-header-actions">
-                  <span class="badge badge-primary" id="intake-badge">Instructor</span>
+                  <span class="badge badge-primary" id="intake-badge">교수자</span>
                                   </div>
               </div>
 
               <div class="student-onboarding" id="student-onboarding" data-density="advanced" hidden>
-                <button class="view-intro-close" type="button" data-view-intro-dismiss="student-onboarding" aria-label="Dismiss">×</button>
-                <p class="student-onboarding-title" id="student-onboarding-title">First steps</p>
+                <button class="view-intro-close" type="button" data-view-intro-dismiss="student-onboarding" aria-label="닫기">×</button>
+                <p class="student-onboarding-title" id="student-onboarding-title">무엇부터 해볼까요</p>
                 <ol class="student-onboarding-list">
-                  <li id="student-onboarding-step-1">Open a published case from the list below.</li>
-                  <li id="student-onboarding-step-2">Read the brief, then look at how nodes connect in the map.</li>
-                  <li id="student-onboarding-step-3">Switch lenses (Teacher → IT Systems → Students) to see the same case from each side.</li>
-                  <li id="student-onboarding-step-4">Ask a question or add a node the original case doesn't capture.</li>
+                  <li id="student-onboarding-step-1">아래 목록에서 공개된 케이스를 하나 골라 열어 보세요.</li>
+                  <li id="student-onboarding-step-2">설명을 읽고, 맵에서 노드들이 어떻게 연결되는지 살펴보세요.</li>
+                  <li id="student-onboarding-step-3">관점을 바꿔 가며(교사 → 학생 → 에듀테크 → 행정) 같은 케이스가 어떻게 달라 보이는지 살펴보세요.</li>
+                  <li id="student-onboarding-step-4">질문을 남기거나, 원래 케이스에 없는 관점을 새 노드로 추가해 보세요.</li>
                 </ol>
                 <div class="student-onboarding-actions">
-                  <button class="toolbar-button toolbar-button-primary" type="button" id="student-onboarding-tour-button">Take the guided tour</button>
+                  <button class="toolbar-button toolbar-button-primary" type="button" id="student-onboarding-tour-button">가이드 투어 시작하기</button>
                 </div>
               </div>
 
@@ -333,10 +333,10 @@
             <section class="panel canvas-panel">
               <div class="canvas-header">
                 <div class="canvas-header-left">
-                  <button class="panel-expand-toggle" type="button" data-expand-target="intake" id="panel-expand-intake" aria-expanded="true" title="Toggle Start here panel" data-density="advanced"><span class="chevron">▸</span><span id="panel-expand-intake-label">Start here</span></button>
+                  <button class="panel-expand-toggle" type="button" data-expand-target="intake" id="panel-expand-intake" aria-expanded="true" title="시작 패널 열고 닫기" data-density="advanced"><span class="chevron">▸</span><span id="panel-expand-intake-label">시작하기</span></button>
                   <div>
-                    <p class="eyebrow">System topology</p>
-                    <h3>Proposal network</h3>
+                    <p class="eyebrow">시스템 구조</p>
+                    <h3>제안 네트워크</h3>
                   </div>
                 </div>
                 <div class="canvas-stats">
@@ -345,74 +345,74 @@
                     <span id="density-toggle-label">간단히</span>
                   </button>
                   <label class="mini-control mini-control-inline" id="map-layer-control">
-                    <span>Map layer</span>
+                    <span>맵 레이어</span>
                     <select id="map-layer-select">
-                      <option value="base">Base map</option>
-                      <option value="personal">My view</option>
-                      <option value="cohort">Class view</option>
+                      <option value="base">기본 맵</option>
+                      <option value="personal">내 보기</option>
+                      <option value="cohort">학급 보기</option>
                     </select>
                   </label>
-                  <span id="active-stakeholder-pill" class="badge badge-secondary" data-density="advanced">Teacher focus</span>
-                  <span class="badge badge-neutral" id="active-stakeholder-status" data-density="advanced">Needs attention</span>
-                  <button class="panel-expand-toggle" type="button" data-expand-target="insight" id="panel-expand-insight" aria-expanded="true" title="Toggle Selected lens panel" data-density="advanced"><span id="panel-expand-insight-label">Selected lens</span><span class="chevron">◂</span></button>
+                  <span id="active-stakeholder-pill" class="badge badge-secondary" data-density="advanced">교사 관점</span>
+                  <span class="badge badge-neutral" id="active-stakeholder-status" data-density="advanced">주의 필요</span>
+                  <button class="panel-expand-toggle" type="button" data-expand-target="insight" id="panel-expand-insight" aria-expanded="true" title="선택한 관점 패널 열고 닫기" data-density="advanced"><span id="panel-expand-insight-label">선택한 관점</span><span class="chevron">◂</span></button>
                 </div>
               </div>
 
               <div class="compare-summary" id="compare-summary" hidden></div>
 
               <div class="network-stage" id="network-stage">
-                <svg class="network-svg" id="network-svg" aria-label="Live case issue map"></svg>
+                <svg class="network-svg" id="network-svg" aria-label="실시간 케이스 쟁점 맵"></svg>
                 <div class="map-lens-bar" id="map-lens-bar" role="group" aria-label="관점 전환">
                   <span class="map-lens-bar-label" id="map-lens-bar-label">관점</span>
                   <div class="lens-pill-row token-row" id="stakeholder-pills"></div>
                 </div>
                 <div class="network-tooltip" id="network-tooltip" hidden>
-                  <p class="network-tooltip-kicker" id="network-tooltip-kicker">Issue</p>
-                  <strong id="network-tooltip-title">Node title</strong>
-                  <p class="network-tooltip-body" id="network-tooltip-body">Node explanation</p>
+                  <p class="network-tooltip-kicker" id="network-tooltip-kicker">쟁점</p>
+                  <strong id="network-tooltip-title">노드 제목</strong>
+                  <p class="network-tooltip-body" id="network-tooltip-body">노드 설명</p>
                 </div>
                 <div class="network-empty-preview" id="network-empty-preview" hidden>
-                  <p class="eyebrow">Example view</p>
-                  <strong>This is where the case map appears.</strong>
-                  <p>Once a case is selected, the map will show people, constraints, and the main tensions around the design.</p>
+                  <p class="eyebrow">예시 화면</p>
+                  <strong>여기에 케이스 맵이 표시돼요.</strong>
+                  <p>케이스를 선택하면 이 맵에 관련 인물, 제약 조건, 주요 쟁점이 나타나요.</p>
                   <div class="network-empty-preview-row">
-                    <span class="preview-token">Teacher load</span>
-                    <span class="preview-token">Student agency</span>
-                    <span class="preview-token">Accessibility</span>
+                    <span class="preview-token">교사 부담</span>
+                    <span class="preview-token">학생 주체성</span>
+                    <span class="preview-token">접근성</span>
                   </div>
                 </div>
                 <div class="stage-overlay stage-overlay-top" id="stage-note" data-collapsed="false" data-density="advanced">
-                  <button type="button" class="legend-close" id="stage-note-close" aria-label="Hide info" title="Hide info">
+                  <button type="button" class="legend-close" id="stage-note-close" aria-label="정보 숨기기" title="정보 숨기기">
                     <span class="material-symbols-outlined" aria-hidden="true">close</span>
                   </button>
-                  <p class="eyebrow" id="stage-note-kicker">D3 force graph</p>
-                  <strong id="stage-note-title">Live swarm topology</strong>
-                  <span id="stage-note-body">Hover a node to inspect an issue. Click a stakeholder node to shift the active lens.</span>
+                  <p class="eyebrow" id="stage-note-kicker">D3 포스 그래프</p>
+                  <strong id="stage-note-title">실시간 네트워크 구조</strong>
+                  <span id="stage-note-body">노드에 마우스를 올리면 쟁점을 확인할 수 있어요. 이해관계자 노드를 누르면 선택한 관점이 바뀝니다.</span>
                 </div>
-                <button type="button" class="stage-note-reopen" id="stage-note-reopen" aria-label="Show info" title="Show info" hidden>
+                <button type="button" class="stage-note-reopen" id="stage-note-reopen" aria-label="정보 보기" title="정보 보기" hidden>
                   <span class="material-symbols-outlined" aria-hidden="true">info</span>
                 </button>
                 <div class="stage-overlay stage-overlay-bottom" id="stage-legend" data-collapsed="false" data-density="advanced">
-                  <button type="button" class="legend-close" id="legend-close" aria-label="Collapse legend" title="Collapse legend">
+                  <button type="button" class="legend-close" id="legend-close" aria-label="범례 접기" title="범례 접기">
                     <span class="material-symbols-outlined" aria-hidden="true">close</span>
                   </button>
                   <div class="legend-item" data-legend-key="instructionalSignals">
                     <span class="legend-swatch legend-swatch-primary"></span>
-                    <span class="legend-label">Instructional signals</span>
-                    <em class="legend-desc">What the teacher intends — objectives, lesson moves, pedagogical goals.</em>
+                    <span class="legend-label">수업 설계 신호</span>
+                    <em class="legend-desc">교사가 의도한 것, 즉 학습 목표, 수업 전략, 교수 설계 의도입니다.</em>
                   </div>
                   <div class="legend-item" data-legend-key="constraintFriction">
                     <span class="legend-swatch legend-swatch-danger"></span>
-                    <span class="legend-label">Constraint friction</span>
-                    <em class="legend-desc">Where real constraints — time, tools, policies, workload — collide with that intent.</em>
+                    <span class="legend-label">제약 충돌</span>
+                    <em class="legend-desc">시간, 도구, 정책, 업무 부담 같은 현실 제약이 수업 의도와 충돌하는 지점입니다.</em>
                   </div>
                   <div class="legend-item" data-legend-key="alignedEvidence">
                     <span class="legend-swatch legend-swatch-ok"></span>
-                    <span class="legend-label">Aligned evidence</span>
-                    <em class="legend-desc">Evidence from teachers, students, or IT systems that supports (or challenges) a design move.</em>
+                    <span class="legend-label">관련 근거</span>
+                    <em class="legend-desc">교사, 학생, 에듀테크 관점에서 설계 선택을 뒷받침하거나 반박하는 근거입니다.</em>
                   </div>
                 </div>
-                <button type="button" class="legend-reopen" id="legend-reopen" aria-label="Show legend" title="Show legend" hidden>
+                <button type="button" class="legend-reopen" id="legend-reopen" aria-label="범례 보기" title="범례 보기" hidden>
                   <span class="legend-reopen-swatch legend-reopen-swatch-primary"></span>
                   <span class="legend-reopen-swatch legend-reopen-swatch-danger"></span>
                   <span class="legend-reopen-swatch legend-reopen-swatch-ok"></span>
@@ -426,43 +426,43 @@
               <form class="composer" id="visualizer-form">
                 <label class="composer-input">
                   <span class="material-symbols-outlined">psychology</span>
-                  <input id="visualizer-input" name="visualizerQuestion" type="text" placeholder="Ask what conflict matters most in this caseâ€¦" autocomplete="off">
+                  <input id="visualizer-input" name="visualizerQuestion" type="text" placeholder="이 케이스에서 가장 중요한 쟁점은 무엇일지 물어보세요..." autocomplete="off">
                 </label>
-                <button class="toolbar-button toolbar-button-primary" type="submit">Ask a Question</button>
-                <p class="composer-hint" id="visualizer-hint">Your question will be added to the cohort graph. Your instructor and classmates can see it.</p>
+                <button class="toolbar-button toolbar-button-primary" type="submit">질문하기</button>
+                <p class="composer-hint" id="visualizer-hint">질문은 전체 네트워크에 추가되어 교수자와 같은 반 학생들이 볼 수 있어요.</p>
               </form>
 
               <div class="export-actions" id="student-export-actions" data-density="advanced" hidden>
-                <button class="toolbar-button" id="download-png-button" type="button">Download PNG</button>
-                <button class="toolbar-button" id="download-html-button" type="button">Download HTML Snapshot</button>
+                <button class="toolbar-button" id="download-png-button" type="button">PNG 다운로드</button>
+                <button class="toolbar-button" id="download-html-button" type="button">HTML 스냅샷 다운로드</button>
               </div>
 
               <div class="subsection swarm-activity-panel" data-density="advanced">
                 <div class="subsection-head">
-                  <h4>Swarm activity</h4>
+                  <h4>스웜 활동</h4>
                   <div class="subsection-head-right">
                     <span id="graph-cycle" class="numeric-pill">0</span>
-                    <button type="button" class="swarm-info-toggle" id="swarm-info-toggle" aria-expanded="false" aria-controls="swarm-info-panel" title="Legend">
+                    <button type="button" class="swarm-info-toggle" id="swarm-info-toggle" aria-expanded="false" aria-controls="swarm-info-panel" title="범례">
                       <span class="material-symbols-outlined" aria-hidden="true">info</span>
                     </button>
                   </div>
                 </div>
                 <div class="swarm-info-panel" id="swarm-info-panel" hidden>
                   <div class="swarm-info-section">
-                    <strong class="swarm-info-heading">Swarm links</strong>
+                    <strong class="swarm-info-heading">스웜 연결</strong>
                     <ul class="swarm-info-list">
-                      <li><span class="swarm-info-line swarm-info-line-ok"></span><span>Agents agree</span></li>
-                      <li><span class="swarm-info-line swarm-info-line-danger"></span><span>Agents disagree</span></li>
-                      <li><span class="swarm-info-line swarm-info-line-neutral"></span><span>Tangential</span></li>
+                      <li><span class="swarm-info-line swarm-info-line-ok"></span><span>에이전트 동의</span></li>
+                      <li><span class="swarm-info-line swarm-info-line-danger"></span><span>에이전트 이견</span></li>
+                      <li><span class="swarm-info-line swarm-info-line-neutral"></span><span>부분 일치</span></li>
                     </ul>
                   </div>
                   <div class="swarm-info-section">
-                    <strong class="swarm-info-heading">Node origin</strong>
+                    <strong class="swarm-info-heading">노드 출처</strong>
                     <ul class="swarm-info-list">
-                      <li><span class="legend-badge legend-badge-ai">AI</span><span>Generated by AI</span></li>
-                      <li><span class="legend-badge legend-badge-me">나</span><span>Added by you</span></li>
-                      <li><span class="legend-badge legend-badge-peer">동료</span><span>From a classmate</span></li>
-                      <li><span class="legend-badge legend-badge-brief">설명</span><span>From the case brief</span></li>
+                      <li><span class="legend-badge legend-badge-ai">AI</span><span>AI가 생성</span></li>
+                      <li><span class="legend-badge legend-badge-me">나</span><span>내가 추가</span></li>
+                      <li><span class="legend-badge legend-badge-peer">동료</span><span>동료 학생이 추가</span></li>
+                      <li><span class="legend-badge legend-badge-brief">설명</span><span>케이스 설명에서 가져옴</span></li>
                     </ul>
                   </div>
                 </div>
@@ -475,11 +475,11 @@
             <aside class="panel insight-panel" data-collapsible-panel="insight">
               <div class="section-header">
                 <div>
-                  <p class="eyebrow">Selected lens</p>
-                  <h3 id="lens-name">Teacher</h3>
+                  <p class="eyebrow">선택한 관점</p>
+                  <h3 id="lens-name">교사</h3>
                 </div>
                 <div class="section-header-actions">
-                  <span class="badge badge-danger" id="lens-status">Needs attention</span>
+                  <span class="badge badge-danger" id="lens-status">주의 필요</span>
                                   </div>
               </div>
 
@@ -490,7 +490,7 @@
               <div class="subsection">
                 <div class="subsection-head">
                   <span class="material-symbols-outlined section-icon" aria-hidden="true">bolt</span>
-                  <h4>Top tensions</h4>
+                  <h4>주요 쟁점</h4>
                   <span id="lens-score" class="numeric-pill">78</span>
                 </div>
                 <div id="top-tensions" class="tension-list"></div>
@@ -499,8 +499,8 @@
               <div class="subsection">
                 <div class="subsection-head">
                   <span class="material-symbols-outlined section-icon" aria-hidden="true">fact_check</span>
-                  <h4>Evidence queue</h4>
-                  <span class="badge badge-neutral">Live</span>
+                  <h4>근거 목록</h4>
+                  <span class="badge badge-neutral">실시간</span>
                 </div>
                 <div id="evidence-strip" class="evidence-list"></div>
               </div>
@@ -508,25 +508,25 @@
               <div class="subsection">
                 <div class="subsection-head">
                   <span class="material-symbols-outlined section-icon" aria-hidden="true">radio_button_checked</span>
-                  <h4>Selected node</h4>
-                  <span class="badge badge-neutral" id="selected-node-kicker">Hover or click</span>
+                  <h4>선택한 노드</h4>
+                  <span class="badge badge-neutral" id="selected-node-kicker">호버하거나 클릭</span>
                 </div>
                 <div class="selected-node-card">
-                  <strong id="selected-node-title">No node selected</strong>
-                  <p id="selected-node-copy">Hover or click a node in the network to inspect it here.</p>
+                  <strong id="selected-node-title">선택한 노드가 없어요</strong>
+                  <p id="selected-node-copy">네트워크의 노드에 마우스를 올리거나 클릭하면 여기서 내용을 볼 수 있어요.</p>
                 </div>
                 <div class="selected-node-related">
                   <div class="subsection-head">
                     <span class="material-symbols-outlined section-icon" aria-hidden="true">forum</span>
-                    <h4>Related activity</h4>
+                    <h4>관련 활동</h4>
                   </div>
                   <div class="related-activity-columns">
                     <div>
-                      <p class="eyebrow">My questions</p>
+                      <p class="eyebrow">내 질문</p>
                       <div id="related-personal-activity" class="evidence-list"></div>
                     </div>
                     <div>
-                      <p class="eyebrow">Class patterns</p>
+                      <p class="eyebrow">학급 패턴</p>
                       <div id="related-class-activity" class="evidence-list"></div>
                     </div>
                   </div>
@@ -534,23 +534,23 @@
                 <form class="quick-note-form" id="quick-annotation-form">
                   <div class="pipeline-form-row two-up" data-density="advanced">
                     <label class="mini-control">
-                      <span>Note type</span>
+                      <span>메모 유형</span>
                       <select name="noteType">
-                        <option value="note">Note</option>
-                        <option value="question">Question</option>
-                        <option value="concern">Concern</option>
+                        <option value="note">메모</option>
+                        <option value="question">질문</option>
+                        <option value="concern">우려</option>
                       </select>
                     </label>
                     <label class="mini-control">
-                      <span>Share</span>
+                      <span>공개 범위</span>
                       <select name="visibility">
-                        <option value="private">Only me</option>
-                        <option value="cohort">Class view</option>
+                        <option value="private">나만 보기</option>
+                        <option value="cohort">학급 보기</option>
                       </select>
                     </label>
                   </div>
-                  <textarea id="quick-annotation-body" name="annotationBody" rows="4" placeholder="Add a note to the selected node..." autocomplete="off"></textarea>
-                  <button class="toolbar-button toolbar-button-primary" id="quick-annotation-submit" type="submit">Save note</button>
+                  <textarea id="quick-annotation-body" name="annotationBody" rows="4" placeholder="선택한 노드에 메모를 추가하세요..." autocomplete="off"></textarea>
+                  <button class="toolbar-button toolbar-button-primary" id="quick-annotation-submit" type="submit">메모 저장</button>
                 </form>
               </div>
 
@@ -560,16 +560,16 @@
 
         <section class="view" data-view-panel="perspectives">
           <div class="view-intro" data-view-intro="perspectives" data-density="advanced">
-            <button class="view-intro-close" type="button" data-view-intro-dismiss="perspectives" aria-label="Dismiss">×</button>
-            <p class="view-intro-title" id="perspectives-intro-title">Perspectives — read the case through one person's eyes</p>
-            <p class="view-intro-body" id="perspectives-intro-body">Pick a stakeholder pill (teacher, student, administrator, parent, etc.). Everything on this page re-reads the case <em>as that person</em>: the left panel lists what <em>they</em> are worried about, the orbit on the right shows which concerns circle <em>their</em> attention, and the chat on the bottom-right lets you ask a question and get an answer framed in their voice — "what would the teacher say about this?" Switching the lens changes all three at once. Use it to find who you're designing against.</p>
+            <button class="view-intro-close" type="button" data-view-intro-dismiss="perspectives" aria-label="닫기">×</button>
+            <p class="view-intro-title" id="perspectives-intro-title">관점 — 한 사람의 시선으로 케이스 읽기</p>
+            <p class="view-intro-body" id="perspectives-intro-body">이해관계자를 고르면 이 화면이 그 사람의 입장으로 케이스를 다시 읽어요. 왼쪽에는 그 사람이 걱정하는 점, 오른쪽 궤도에는 그 관점에서 주목하는 쟁점, 아래 대화창에는 그 사람의 목소리로 된 답변이 나타나요. 관점을 바꾸면 세 영역이 함께 바뀝니다.</p>
           </div>
           <div class="lens-layout">
             <section class="panel card-column">
               <div class="section-header">
                 <div>
-                  <p class="eyebrow">People in the case</p>
-                  <h3>Key concerns</h3>
+                  <p class="eyebrow">케이스 속 사람들</p>
+                  <h3>주요 우려</h3>
                 </div>
                 <div class="token-row compact" id="perspective-stakeholder-pills"></div>
               </div>
@@ -586,8 +586,8 @@
             <section class="panel orbit-panel">
               <div class="section-header">
                 <div>
-                  <p class="eyebrow">Current focus</p>
-                  <h3 id="orbit-title">Teacher orbit</h3>
+                  <p class="eyebrow">현재 초점</p>
+                  <h3 id="orbit-title">교사 관점 궤도</h3>
                 </div>
               </div>
               <div class="orbit-visual">
@@ -596,28 +596,28 @@
                 <div class="orbit-core">
                   <span class="material-symbols-outlined" id="orbit-icon">school</span>
                 </div>
-                <div class="orbit-label" id="orbit-summary">High instructional load and facilitation burden.</div>
+                <div class="orbit-label" id="orbit-summary">수업 운영 부담과 진행 부담이 높아요.</div>
                 <div class="orbit-satellite orbit-satellite-a">LMS</div>
-                <div class="orbit-satellite orbit-satellite-b" id="orbit-sat-b">Peer review</div>
-                <div class="orbit-satellite orbit-satellite-c" id="orbit-sat-c">Assessment</div>
+                <div class="orbit-satellite orbit-satellite-b" id="orbit-sat-b">동료 피드백</div>
+                <div class="orbit-satellite orbit-satellite-c" id="orbit-sat-c">평가</div>
               </div>
             </section>
 
             <aside class="panel chat-panel">
               <div class="section-header">
                 <div>
-                  <p class="eyebrow">Questions</p>
-                  <h3>Ask about this perspective</h3>
+                  <p class="eyebrow">질문</p>
+                  <h3>이 관점에 질문하기</h3>
                 </div>
-                <span class="badge badge-primary" id="chat-badge">Teacher online</span>
+                <span class="badge badge-primary" id="chat-badge">교사 응답 가능</span>
               </div>
               <div id="chat-thread" class="chat-thread"></div>
               <form class="chat-composer" id="chat-form">
-                <textarea id="chat-input" name="perspectiveQuestion" rows="4" placeholder="Ask what this person would worry aboutâ€¦" autocomplete="off"></textarea>
+                <textarea id="chat-input" name="perspectiveQuestion" rows="4" placeholder="이 사람이 무엇을 걱정할지 질문해 보세요..." autocomplete="off"></textarea>
                 <div class="chat-actions">
-                  <button class="toolbar-button" type="button" data-prompt="Suggest mitigation">Suggest a fix</button>
-                  <button class="toolbar-button" type="button" data-prompt="Extract tension points">Find the main concern</button>
-                  <button class="toolbar-button toolbar-button-primary" type="submit">Ask This Perspective</button>
+                  <button class="toolbar-button" type="button" data-prompt="해결 방향 제안">해결 방향 제안</button>
+                  <button class="toolbar-button" type="button" data-prompt="주요 쟁점 찾기">주요 쟁점 찾기</button>
+                  <button class="toolbar-button toolbar-button-primary" type="submit">이 관점에 질문</button>
                 </div>
               </form>
             </aside>
@@ -626,23 +626,23 @@
 
         <section class="view" data-view-panel="matrix">
           <div class="view-intro" data-view-intro="matrix" data-density="advanced">
-            <button class="view-intro-close" type="button" data-view-intro-dismiss="matrix" aria-label="Dismiss">×</button>
-            <p class="view-intro-title" id="matrix-intro-title">Trade-offs — what moves together</p>
-            <p class="view-intro-body" id="matrix-intro-body">Instructional design moves are almost never free. Push personalization up, and teacher load usually goes up with it. Tighten privacy, and personalization often drops. This radar shows the five dimensions locked together in this case. The decision log on the right records every adjustment you made and which dimensions shifted as a result — so you can see the cost of each decision.</p>
+            <button class="view-intro-close" type="button" data-view-intro-dismiss="matrix" aria-label="닫기">×</button>
+            <p class="view-intro-title" id="matrix-intro-title">상충 관계 — 무엇이 함께 움직이나요</p>
+            <p class="view-intro-body" id="matrix-intro-body">수업 설계의 선택에는 거의 항상 비용이 따릅니다. 개인화를 높이면 교사 부담도 커질 수 있고, 프라이버시를 강화하면 개인화 폭이 줄어들 수 있어요. 이 레이더는 이 케이스의 다섯 지표가 어떻게 맞물리는지 보여줍니다. 오른쪽 결정 로그는 어떤 조정이 어떤 지표를 움직였는지 기록합니다.</p>
           </div>
           <div class="matrix-layout">
             <section class="panel matrix-panel">
               <div class="section-header">
                 <div>
-                  <p class="eyebrow">Trade-offs</p>
-                  <h3>What changes together</h3>
+                  <p class="eyebrow">상충 관계</p>
+                  <h3>함께 변하는 지표</h3>
                 </div>
-                <span class="badge badge-primary" id="matrix-state">Balanced</span>
+                <span class="badge badge-primary" id="matrix-state">균형</span>
               </div>
 
               <div class="matrix-main">
                 <div class="radar-shell">
-                  <svg id="radar-chart" viewBox="0 0 240 240" aria-label="Trade-off radar chart">
+                  <svg id="radar-chart" viewBox="0 0 240 240" aria-label="상충 관계 레이더 차트">
                     <polygon class="radar-grid" points="120,24 200,80 170,190 70,190 40,80"></polygon>
                     <polygon class="radar-grid inner" points="120,52 172,88 155,164 85,164 68,88"></polygon>
                     <polygon class="radar-fill" id="radar-fill" points=""></polygon>
@@ -652,11 +652,11 @@
                     <circle class="radar-dot" id="radar-dot-3" r="4"></circle>
                     <circle class="radar-dot" id="radar-dot-4" r="4"></circle>
                   </svg>
-                  <div class="radar-label radar-label-top">Personalization</div>
-                  <div class="radar-label radar-label-right">Privacy</div>
-                  <div class="radar-label radar-label-bottom-right">Accessibility</div>
-                  <div class="radar-label radar-label-bottom-left">Feasibility</div>
-                  <div class="radar-label radar-label-left">Teacher Load</div>
+                  <div class="radar-label radar-label-top">개인화</div>
+                  <div class="radar-label radar-label-right">프라이버시</div>
+                  <div class="radar-label radar-label-bottom-right">접근성</div>
+                  <div class="radar-label radar-label-bottom-left">실행 가능성</div>
+                  <div class="radar-label radar-label-left">교사 부담</div>
                 </div>
 
                 <div class="metric-bars" id="metric-bars"></div>
@@ -668,10 +668,10 @@
             <aside class="panel decision-panel">
               <div class="section-header">
                 <div>
-                  <p class="eyebrow">Change history</p>
-                  <h3>Decision log</h3>
+                  <p class="eyebrow">변경 기록</p>
+                  <h3>결정 로그</h3>
                 </div>
-                <span class="badge badge-neutral" id="decision-saved-badge">Saved</span>
+                <span class="badge badge-neutral" id="decision-saved-badge">저장됨</span>
               </div>
               <div id="decision-log" class="decision-log"></div>
             </aside>
@@ -680,24 +680,24 @@
 
         <section class="view" data-view-panel="sandbox">
           <div class="view-intro" data-view-intro="sandbox" data-density="advanced">
-            <button class="view-intro-close" type="button" data-view-intro-dismiss="sandbox" aria-label="Dismiss">×</button>
-            <p class="view-intro-title" id="sandbox-intro-title">Sandbox — test a what-if</p>
-            <p class="view-intro-body" id="sandbox-intro-body">Drag the sliders to push a single dimension and see what breaks elsewhere. Turn autonomy on to let the system suggest redesign moves before you accept them. Changes here are for exploration — nothing is committed to the case until you confirm. Use this when you want to try a bolder design move without rewriting the whole case first.</p>
+            <button class="view-intro-close" type="button" data-view-intro-dismiss="sandbox" aria-label="닫기">×</button>
+            <p class="view-intro-title" id="sandbox-intro-title">실험 공간 — 가정해 보기</p>
+            <p class="view-intro-body" id="sandbox-intro-body">슬라이더로 한 차원을 조정하면 다른 지표가 어떻게 흔들리는지 볼 수 있어요. 자율 모드를 켜면 시스템이 재설계 방향을 먼저 제안해요. 여기서 바꾼 내용은 탐색용이라, 확정하기 전에는 케이스에 반영되지 않아요.</p>
           </div>
           <div class="sandbox-layout">
             <section class="panel control-panel">
               <div class="section-header">
                 <div>
-                  <p class="eyebrow">Test changes</p>
-                  <h3>Adjust the case</h3>
+                  <p class="eyebrow">변경 실험</p>
+                  <h3>케이스 조정</h3>
                 </div>
               </div>
 
               <div class="control-group">
                 <div class="toggle-row">
                   <div>
-                    <h4>Autonomous iteration</h4>
-                    <p>Allow the system to suggest redesign moves before instructor review.</p>
+                    <h4>자율 반복</h4>
+                    <p>교수자가 검토하기 전에 시스템이 재설계 방향을 제안하도록 허용합니다.</p>
                   </div>
                   <label class="switch">
                     <input id="autonomy-toggle" type="checkbox" checked>
@@ -706,32 +706,32 @@
                 </div>
 
                 <div class="slider-group">
-                  <label for="personalization-range">Personalization depth <span id="personalization-value">82</span></label>
+                  <label for="personalization-range">개인화 깊이 <span id="personalization-value">82</span></label>
                   <input id="personalization-range" type="range" min="10" max="100" value="82">
                 </div>
 
                 <div class="slider-group">
-                  <label for="teacher-load-range">Teacher load <span id="teacher-load-value">68</span></label>
+                  <label for="teacher-load-range">교사 부담 <span id="teacher-load-value">68</span></label>
                   <input id="teacher-load-range" type="range" min="10" max="100" value="68">
                 </div>
 
                 <div class="slider-group">
-                  <label for="privacy-range">Privacy resilience <span id="privacy-value">64</span></label>
+                  <label for="privacy-range">프라이버시 회복력 <span id="privacy-value">64</span></label>
                   <input id="privacy-range" type="range" min="10" max="100" value="64">
                 </div>
 
                 <div class="slider-group">
-                  <label for="accessibility-range">Accessibility coverage <span id="accessibility-value">58</span></label>
+                  <label for="accessibility-range">접근성 범위 <span id="accessibility-value">58</span></label>
                   <input id="accessibility-range" type="range" min="10" max="100" value="58">
                 </div>
               </div>
 
               <div class="scenario-group">
-                <p class="label">Stress scenarios</p>
+                <p class="label">압박 시나리오</p>
                 <div class="scenario-buttons">
-                  <button class="scenario-button" type="button" data-scenario="budget">50% budget cut</button>
-                  <button class="scenario-button" type="button" data-scenario="accessibility">Accessibility audit</button>
-                  <button class="scenario-button" type="button" data-scenario="workload">Union workload complaint</button>
+                  <button class="scenario-button" type="button" data-scenario="budget">예산 50% 삭감</button>
+                  <button class="scenario-button" type="button" data-scenario="accessibility">접근성 점검</button>
+                  <button class="scenario-button" type="button" data-scenario="workload">업무 부담 이의 제기</button>
                 </div>
               </div>
             </section>
@@ -739,27 +739,27 @@
             <section class="panel reaction-panel">
               <div class="section-header">
                 <div>
-                  <p class="eyebrow">System response</p>
-                  <h3>What changes after the adjustment</h3>
+                  <p class="eyebrow">시스템 반응</p>
+                  <h3>조정 뒤 달라지는 것</h3>
                 </div>
-                <span class="badge badge-ok" id="simulation-state">Stable</span>
+                <span class="badge badge-ok" id="simulation-state">안정적</span>
               </div>
 
               <div class="reaction-grid">
                 <div class="metric-card metric-card-large">
                   <span class="material-symbols-outlined">hub</span>
                   <strong id="cohesion-score">81%</strong>
-                  <p>Alignment cohesion</p>
+                  <p>정렬 응집도</p>
                 </div>
                 <div class="metric-card">
                   <span class="material-symbols-outlined">psychology</span>
-                  <strong id="cognitive-load">High</strong>
-                  <p>Cognitive load</p>
+                  <strong id="cognitive-load">높음</strong>
+                  <p>인지 부담</p>
                 </div>
                 <div class="metric-card">
                   <span class="material-symbols-outlined">speed</span>
                   <strong id="inference-lag">14ms</strong>
-                  <p>Response time</p>
+                  <p>응답 시간</p>
                 </div>
               </div>
 
@@ -770,37 +770,37 @@
 
         <section class="view" data-view-panel="report">
           <div class="view-intro" data-view-intro="report" data-density="advanced">
-            <button class="view-intro-close" type="button" data-view-intro-dismiss="report" aria-label="Dismiss">×</button>
-            <p class="view-intro-title" id="report-intro-title">Report — write up what you learned</p>
-            <p class="view-intro-body" id="report-intro-body">This is where you pull the whole case together. The summary, evidence list, and reflection prompts are generated from the nodes and decisions you made in the other views. Your written reflections are submitted to your instructor and shape how they read your module design. If you are an instructor, you'll also see the class cohort panel here to watch who's moving through the case.</p>
+            <button class="view-intro-close" type="button" data-view-intro-dismiss="report" aria-label="닫기">×</button>
+            <p class="view-intro-title" id="report-intro-title">리포트 — 배운 내용 정리하기</p>
+            <p class="view-intro-body" id="report-intro-body">여기서 케이스를 하나로 모아요. 요약, 근거 목록, 생각 정리 질문은 다른 화면에서 만든 노드와 결정으로부터 생성돼요. 작성한 성찰은 교수자에게 제출되고, 교수자가 모듈 설계를 읽는 데 활용됩니다. 교수자라면 학급 진행 상황 패널도 여기에서 볼 수 있어요.</p>
           </div>
           <div class="report-layout">
             <section class="panel memo-panel">
               <div class="section-header">
                 <div>
-                  <p class="eyebrow">Case report</p>
-                  <h3>Draft the summary</h3>
+                  <p class="eyebrow">케이스 리포트</p>
+                  <h3>요약 초안 작성</h3>
                 </div>
-                <button class="toolbar-button toolbar-button-primary" id="regenerate-memo">Refresh summary</button>
+                <button class="toolbar-button toolbar-button-primary" id="regenerate-memo">요약 새로고침</button>
               </div>
 
               <div class="memo-section">
-                <p class="label">Executive summary</p>
+                <p class="label">핵심 요약</p>
                 <p id="report-summary"></p>
               </div>
 
               <div class="memo-section">
-                <p class="label">Priority tensions</p>
+                <p class="label">우선 쟁점</p>
                 <div id="report-tensions" class="memo-list"></div>
               </div>
 
               <div class="memo-section">
-                <p class="label">Recommended redesign moves</p>
+                <p class="label">추천 재설계 방향</p>
                 <div id="report-recommendations" class="memo-list"></div>
               </div>
 
               <div class="memo-section">
-                <p class="label">Evidence trace</p>
+                <p class="label">근거 흐름</p>
                 <div id="report-evidence" class="memo-list"></div>
               </div>
             </section>
@@ -808,29 +808,29 @@
             <aside class="panel reflection-panel">
               <div class="section-header">
                 <div>
-                  <p class="eyebrow">Reflection</p>
-                  <h3>Feedback and reflection</h3>
+                  <p class="eyebrow">생각 정리</p>
+                  <h3>피드백과 성찰</h3>
                 </div>
-                <span class="badge badge-neutral" id="reflection-badge">Instructor View</span>
+                <span class="badge badge-neutral" id="reflection-badge">교수자 보기</span>
               </div>
 
               <div class="rubric-list" id="rubric-list"></div>
 
               <div class="reflection-block">
-                <p class="label">Reflection prompts</p>
+                <p class="label">생각 정리 질문</p>
                 <div id="reflection-prompts" class="prompt-list"></div>
               </div>
 
               <div class="reflection-block" id="instructor-cohort-block" hidden>
                 <div class="cohort-header">
-                  <p class="label">Cohort analytics</p>
+                  <p class="label">학급 분석</p>
                   <button type="button" class="toolbar-button" id="cohort-refresh">새로고침</button>
                 </div>
                 <div id="instructor-cohort-panel" class="cohort-panel"></div>
               </div>
 
               <div class="reflection-block">
-                <p class="label" id="recent-dialogue-label">Recent dialogue</p>
+                <p class="label" id="recent-dialogue-label">최근 대화</p>
                 <div id="reflection-feed" class="reflection-feed"></div>
               </div>
             </aside>
@@ -840,39 +840,39 @@
     </div>
   </div>
 
-  <nav class="mobile-dock" aria-label="Mobile views">
+  <nav class="mobile-dock" aria-label="모바일 보기">
     <button class="dock-item is-active" data-view="visualizer">
       <span class="material-symbols-outlined">hub</span>
-      <span>Map</span>
+      <span>맵</span>
     </button>
     <button class="dock-item" data-view="perspectives">
       <span class="material-symbols-outlined">visibility</span>
-      <span>People</span>
+      <span>관점</span>
     </button>
     <button class="dock-item" data-view="matrix">
       <span class="material-symbols-outlined">leaderboard</span>
-      <span>Trade-offs</span>
+      <span>상충</span>
     </button>
     <button class="dock-item" data-view="sandbox">
       <span class="material-symbols-outlined">science</span>
-      <span>Test</span>
+      <span>실험</span>
     </button>
     <button class="dock-item" data-view="report">
       <span class="material-symbols-outlined">note_stack</span>
-      <span>Report</span>
+      <span>리포트</span>
     </button>
   </nav>
 
   <div class="tour-overlay is-hidden" id="tour-overlay" aria-hidden="true">
     <div class="tour-scrim"></div>
     <div class="tour-card" id="tour-card" role="dialog" aria-modal="true" aria-labelledby="tour-title">
-      <p class="eyebrow" id="tour-step-label">Step 1 of 5</p>
-      <h3 id="tour-title">Welcome</h3>
-      <p id="tour-body">This short walkthrough shows where to start.</p>
+      <p class="eyebrow" id="tour-step-label">1 / 5단계</p>
+      <h3 id="tour-title">환영합니다</h3>
+      <p id="tour-body">짧은 안내를 통해 어디서 시작하면 되는지 보여드릴게요.</p>
       <div class="tour-actions">
-        <button class="toolbar-button toolbar-button-quiet" id="tour-skip" type="button">Skip</button>
-        <button class="toolbar-button" id="tour-back" type="button">Back</button>
-        <button class="toolbar-button toolbar-button-primary" id="tour-next" type="button">Next</button>
+        <button class="toolbar-button toolbar-button-quiet" id="tour-skip" type="button">건너뛰기</button>
+        <button class="toolbar-button" id="tour-back" type="button">이전</button>
+        <button class="toolbar-button toolbar-button-primary" id="tour-next" type="button">다음</button>
       </div>
     </div>
   </div>
@@ -906,4 +906,3 @@
   </script>
 </body>
 </html>
-

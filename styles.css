@@ -5481,7 +5481,7 @@ svg text.node-meta {
 }
 
 /* ============================================================
-   Floating lens bar — the 4 stakeholder lenses (교사·학생·IT·행정) float over
+   Floating lens bar — the 4 stakeholder lenses (교사·학생·에듀테크·행정) float over
    the top of the map so "switch perspective" (the core DTS move) is always one
    click away, even with the map full-width and the insight panel as a drawer. */
 .map-lens-bar {

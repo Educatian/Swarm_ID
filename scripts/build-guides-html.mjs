@@ -16,7 +16,7 @@ const GUIDES = path.join(ROOT, "guides");
 
 const guides = [
   { slug: "instructor-en", md: "instructor-en.md", title: "Swarm_ID — Instructor Guide", lang: "en" },
-  { slug: "instructor-ko", md: "instructor-ko.md", title: "Swarm_ID — 강사용 가이드", lang: "ko" },
+  { slug: "instructor-ko", md: "instructor-ko.md", title: "Swarm_ID — 교수자용 가이드", lang: "ko" },
   { slug: "student-en",    md: "student-en.md",    title: "Swarm_ID — Student Guide",    lang: "en" },
   { slug: "student-ko",    md: "student-ko.md",    title: "Swarm_ID — 학생용 가이드",    lang: "ko" },
 ];
@@ -373,9 +373,24 @@ footer {
 `;
 
 function navLinks(activeSlug) {
+  const activeGuide = guides.find(g => g.slug === activeSlug);
+  const isKoreanPage = activeGuide?.lang === "ko";
   return guides.map(g => {
     const cls = g.slug === activeSlug ? ' class="active"' : "";
-    return `<a href="./${g.slug}.html"${cls}>${g.slug}</a>`;
+    const labels = isKoreanPage
+      ? {
+          "instructor-en": "교수자 가이드(영어)",
+          "instructor-ko": "교수자 가이드",
+          "student-en": "학생 가이드(영어)",
+          "student-ko": "학생 가이드",
+        }
+      : {
+          "instructor-en": "Instructor Guide",
+          "instructor-ko": "Instructor Guide (Korean)",
+          "student-en": "Student Guide",
+          "student-ko": "Student Guide (Korean)",
+        };
+    return `<a href="./${g.slug}.html"${cls}>${labels[g.slug] || g.slug}</a>`;
   }).join("");
 }
 
@@ -392,7 +407,7 @@ function wrap(title, lang, slug, bodyHtml, tagline) {
 <body>
   <header class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">Swarm_ID · Classroom guide</p>
+      <p class="eyebrow">${lang === "ko" ? "Swarm_ID · 수업용 가이드" : "Swarm_ID · Classroom guide"}</p>
       <h1>${escapeHtml(title)}</h1>
       <p>${escapeHtml(tagline)}</p>
     </div>
@@ -402,7 +417,9 @@ function wrap(title, lang, slug, bodyHtml, tagline) {
 ${bodyHtml}
   </main>
   <footer>
-    <p>Generated from <code>guides/${slug}.md</code>. Screenshots captured on <code>https://swarmid.vercel.app</code> via Playwright.</p>
+    <p>${lang === "ko"
+      ? `<code>guides/${slug}.md</code>에서 생성했습니다. 스크린샷은 Playwright로 <code>https://swarmid.vercel.app</code>에서 캡처했습니다.`
+      : `Generated from <code>guides/${slug}.md</code>. Screenshots captured on <code>https://swarmid.vercel.app</code> via Playwright.`}</p>
   </footer>
 </body>
 </html>`;
@@ -410,7 +427,7 @@ ${bodyHtml}
 
 const taglines = {
   "instructor-en": "Step-by-step setup for instructors preparing a class session with Swarm_ID.",
-  "instructor-ko": "Swarm_ID로 수업을 준비하는 강사를 위한 단계별 안내서.",
+  "instructor-ko": "Swarm_ID로 수업을 준비하는 교수자를 위한 단계별 안내서.",
   "student-en": "What students see in Swarm_ID — from sign-in through swarm rounds to export.",
   "student-ko": "Swarm_ID에서 학생이 보는 화면 — 로그인부터 스웜 라운드와 내보내기까지.",
 };
@@ -423,7 +440,7 @@ for (const g of guides) {
   }
   // Skip the first H1 of the .md since the hero already shows the title.
   let md = readFileSync(mdPath, "utf8");
-  md = md.replace(/^#\s+.*\n+/, "");
+  md = md.replace(/^#\s+[^\r\n]+\r?\n(?:\r?\n)?/, "");
   const body = renderMarkdown(md);
   const html = wrap(g.title, g.lang, g.slug, body, taglines[g.slug] || "");
   const outPath = path.join(GUIDES, `${g.slug}.html`);
