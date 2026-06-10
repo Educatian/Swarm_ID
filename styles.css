@@ -3646,7 +3646,7 @@ body {
 }
 
 .landing-footer-link-subtle {
-  color: rgba(71, 85, 105, 0.6);
+  color: rgba(71, 85, 105, 0.8);
 }
 
 .landing-copyright {
@@ -5953,3 +5953,118 @@ svg text.node-meta {
 .score-chip:focus::before { opacity: 1; visibility: visible; }
 /* don't let the bubble get clipped by the card */
 .conflict-card { overflow: visible; }
+
+
+/* ------------------------------------------------------------------ */
+/* Dark-default landing. The landing kept its light-native surfaces,   */
+/* which collided with the global dark text color (white-on-white).    */
+/* Light mode is already handled by the .theme-light layer, so these   */
+/* overrides are scoped to the dark default only.                      */
+/* ------------------------------------------------------------------ */
+html:not(.theme-light) .landing-copy,
+html:not(.theme-light) .landing-visual {
+  background: rgba(19, 23, 36, 0.86);
+  border-color: rgba(151, 169, 255, 0.16);
+  box-shadow: 0 24px 70px rgba(4, 6, 12, 0.5);
+}
+
+html:not(.theme-light) .landing-visual {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(67, 97, 238, 0.2), transparent 26%),
+    radial-gradient(circle at 14% 22%, rgba(217, 108, 95, 0.1), transparent 18%),
+    radial-gradient(circle at 82% 72%, rgba(27, 156, 133, 0.12), transparent 18%),
+    linear-gradient(180deg, rgba(21, 25, 40, 0.92), rgba(14, 17, 27, 0.94));
+}
+
+html:not(.theme-light) .landing-body {
+  color: rgba(206, 214, 235, 0.88);
+}
+
+html:not(.theme-light) .landing-signal-row span,
+html:not(.theme-light) .landing-mini-footer span {
+  background: rgba(67, 97, 238, 0.16);
+  border-color: rgba(151, 169, 255, 0.22);
+  color: rgba(214, 222, 244, 0.92);
+}
+
+html:not(.theme-light) .landing-login-card {
+  background: rgba(15, 18, 30, 0.78);
+  border-color: rgba(151, 169, 255, 0.16);
+}
+
+html:not(.theme-light) .landing-login-head strong {
+  color: rgba(246, 246, 252, 0.94);
+}
+
+html:not(.theme-light) .landing-login-row input {
+  background: rgba(10, 12, 20, 0.6);
+  border-color: rgba(151, 169, 255, 0.2);
+  color: rgba(246, 246, 252, 0.92);
+}
+
+html:not(.theme-light) .landing-login-row input::placeholder {
+  color: rgba(206, 214, 235, 0.45);
+}
+
+html:not(.theme-light) .landing-login-helper {
+  color: rgba(206, 214, 235, 0.75);
+}
+
+html:not(.theme-light) .landing-shell .toolbar-button:not(.toolbar-button-primary) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(151, 169, 255, 0.22);
+  color: rgba(240, 243, 252, 0.92);
+}
+
+html:not(.theme-light) .landing-annotation {
+  background: rgba(15, 18, 30, 0.82);
+  border-color: rgba(151, 169, 255, 0.18);
+  box-shadow: 0 14px 34px rgba(4, 6, 12, 0.45);
+}
+
+html:not(.theme-light) .landing-brand div p,
+html:not(.theme-light) .landing-mini-footer {
+  color: rgba(196, 205, 230, 0.85);
+}
+
+html:not(.theme-light) .landing-support-card {
+  background: rgba(17, 21, 34, 0.8);
+  border-color: rgba(151, 169, 255, 0.16);
+  box-shadow: 0 18px 46px rgba(4, 6, 12, 0.45);
+}
+
+html:not(.theme-light) .landing-support-card h3 {
+  color: rgba(240, 243, 252, 0.95);
+}
+
+html:not(.theme-light) .landing-support-card p {
+  color: rgba(202, 211, 234, 0.88);
+}
+
+html:not(.theme-light) .landing-footer {
+  border-top-color: rgba(151, 169, 255, 0.14);
+}
+
+html:not(.theme-light) .landing-footer-link {
+  color: rgba(196, 205, 230, 0.8);
+}
+
+html:not(.theme-light) .landing-footer-link:hover {
+  color: rgba(240, 243, 252, 0.96);
+}
+
+html:not(.theme-light) .landing-footer-sep {
+  color: rgba(196, 205, 230, 0.4);
+}
+
+html:not(.theme-light) .landing-footer-link-subtle,
+html:not(.theme-light) .landing-copyright {
+  color: rgba(196, 205, 230, 0.7);
+}
+
+html:not(.theme-light) .landing-kicker,
+html:not(.theme-light) .landing-annotation-label,
+html:not(.theme-light) .landing-brand-kicker,
+html:not(.theme-light) .landing-support-kicker {
+  color: #a7b6ff;
+}
