@@ -1,27 +1,44 @@
-# Design Tension Studio (디자인 텐션 스튜디오) — 한국어판
-
-> **이 `ko` 브랜치는 한국어 기본(Korean-default) 버전입니다.** 앱 UI는 처음부터 한국어로 표시되며,
-> 헤더의 `EN` 버튼으로 영어로 전환할 수 있습니다. 영어 원본은 `main` 브랜치를 참고하세요.
-> 변경 범위: 기본 로케일을 `ko`로 전환, 정적 랜딩/제목/브랜드명 한국어화(`디자인 텐션 스튜디오`),
-> CAT 100 참여 페이지(`cat100.html`) 한국어화. CAT 531(미국 강의)은 영어를 유지합니다.
-
-<p align="left">
-  <strong>An instructional design systems lab for seeing educational design as a sociotechnical problem.</strong>
+<p align="center">
+  <img src="./assets/logo.png" alt="Design Tension Studio logo" width="84" />
 </p>
 
-<p align="left">
-  Design Tension Studio is a network-based learning environment where instructors turn course briefs into structured design cases, and students explore those cases through interactive D3 tension maps instead of static prompts. The project is designed to help learners identify trade-offs across pedagogy, governance, accessibility, infrastructure, agency, and institutional policy while developing a more critical understanding of educational media and technology.
+<h1 align="center">디자인 텐션 스튜디오 (Design Tension Studio) — 한국어판</h1>
+
+<p align="center">
+  <strong>설계의 쟁점을 살아 있는 맵으로 읽는 비판적 수업설계 스튜디오</strong><br/>
+  An instructional design systems lab for seeing educational design as a sociotechnical problem.
 </p>
 
-<p align="left">
-  <img src="./docs/assets/design-tension-studio-preview.svg" alt="Design Tension Studio interface preview showing an instructor case panel, case setup workflow, and a D3 proposal network visualization" width="100%" />
+<p align="center">
+  <a href="https://swarm-id-ko.pages.dev"><b>라이브 앱</b></a> ·
+  <a href="https://dts-ko-preview.pages.dev"><b>무로그인 데모</b></a> ·
+  <a href="https://swarm-id-ko.pages.dev/guides/student-ko"><b>학생 가이드</b></a> ·
+  <a href="https://swarm-id-ko.pages.dev/guides/instructor-ko"><b>교수자 가이드</b></a>
 </p>
+
+> **이 `ko` 브랜치는 한국어 기본(Korean-default) 버전입니다.** 영어 원본은 `main` 브랜치
+> (swarmid.vercel.app)를 참고하세요. 두 브랜치는 같은 Supabase 백엔드를 공유하며,
+> `ko`는 한국어 UI·홈 대시보드·사용성 업그레이드·PWA·실시간 협업·AI 피드백 연구
+> 기능이 먼저 적용되는 선행 브랜치입니다.
+
+---
+
+## 스크린샷
+
+| | |
+|---|---|
+| **랜딩** — 3단계 제품 스토리 + 단일 인증 카드 | **학생 맵** — "지금 할 일" 5단계 배너 + 관점 바 |
+| ![랜딩](./guides/screenshots/student-ko/01-landing.png) | ![학생 맵](./guides/screenshots/student-ko/04-task-banner.png) |
+| **목록 보기** — 맵의 보조 뷰 (검색·4종 정렬) | **학급 보기** — 동료 쟁점 집계 + 실시간 반영 |
+| ![목록 보기](./guides/screenshots/student-ko/09-list-view.png) | ![학급 보기](./guides/screenshots/student-ko/10-class-view.png) |
+| **스웜 비평** — 5관점이 초안에 도전 질문 | **내 수업** — 교수자 케이스 관리 + 참여 분석 |
+| ![스웜 비평](./docs/assets/readme/swarm-critique.png) | ![내 수업](./guides/screenshots/instructor-ko/02-manage.png) |
+
+가이드 페이지에는 위 화면들의 **나레이션 포함 스크린 레코딩 16편**(ElevenLabs 한국어 음성)이 들어 있습니다.
 
 ## What This Project Is For
 
-Design Tension Studio was built around a simple premise: instructional design decisions are rarely only instructional. They are also organizational, infrastructural, political, ethical, and material. In many classroom settings, students are asked to redesign a learning experience by focusing on efficiency, usability, or learning outcomes alone. This prototype aims to slow that move down.
-
-Instead of asking students to jump immediately to solutions, the studio helps them:
+Design Tension Studio was built around a simple premise: instructional design decisions are rarely only instructional. They are also organizational, infrastructural, political, ethical, and material. Instead of asking students to jump immediately to solutions, the studio helps them:
 
 - inspect how goals, constraints, stakeholders, and evidence interact
 - see design work as a network of tensions rather than a linear checklist
@@ -33,201 +50,72 @@ In other words, this is not just a case viewer. It is a workspace for critical d
 
 ## Core Experience
 
-The MVP is organized around two main roles.
+**교수자**: 수업 브리프를 붙여넣으면 AI가 이해관계자·제약·쟁점이 추출된 구조화 케이스로 변환 → 게시 → **내 수업** 화면에서 참여 코드 공유, 케이스 게시/보관/삭제(학생 활동 보존 가드), 참여 퍼널·관점 분포·학생별 활동 분석.
 
-### Instructor workflow
+**학생**: 코스 코드로 참여 → 첫 방문 웰컴 슬라이드 + 가이드 투어 → **지금 할 일** 5단계 배너를 따라 ① 케이스 열기 ② 노드 눌러 쟁점 읽기 ③ 교사·학생·에듀테크·행정 관점 전환 ④ 질문(스웜 라운드)·내 노드 추가 ⑤ 생각 정리 제출. 맵/목록 보기 전환, 학급 보기·비교 보기(나만/팀만/공유), iPad 터치 최적화 + 홈 화면 설치(PWA).
 
-Instructors can:
+**스웜 AI**: 질문 하나에 다섯 이해관계자 에이전트가 동시에 답하고, 에이전트 간 **이견은 빨간 엣지**로 맵에 표시됩니다. 정답을 주는 튜터가 아니라, 긴장을 드러내는 다성적(polyvocal) 환경입니다.
 
-- sign in and open their linked institution and course
-- create or select a case
-- paste a brief, syllabus, policy note, assignment prompt, or other source text
-- turn that text into a structured case with goals, constraints, evidence, stakeholder signals, and board settings
-- publish a case when it is ready for student exploration
-- configure board conditions such as agenda prompt, due date, node limits, AI expansions, and layout mode
+## AI-Assisted Feedback (연구 기능)
 
-### Student workflow
+단일 튜터의 교정 피드백 패러다임 대신 **tension-preserving, polyvocal feedback**을 구현합니다:
 
-Students can:
-
-- sign in to their linked course
-- see only the cases published to their course
-- open the instructor-authored base map
-- inspect nodes and links in the D3 network
-- add agenda nodes, annotations, and learner-side reflections
-- work in a private learner layer while keeping the instructor case canonical
-
-### Cohort logic
-
-The longer-term design direction supports three layers of activity:
-
-1. Instructor base map
-2. Learner private layer
-3. Cohort synthesis layer
-
-This structure allows instructors to publish the initial case, learners to interpret it through their own perspective, and the system to later synthesize class-level patterns without collapsing everything into one noisy shared graph.
-
-## Why The Network Matters
-
-The network view is not decoration. It is the instructional interface.
-
-In the current prototype, the D3 topology is used to represent:
-
-- the design proposal or case core
-- stakeholder clusters
-- constraints and friction points
-- evidence traces
-- learner-added agenda nodes
-- AI-generated related nodes
-
-This helps students understand that design decisions produce ripple effects. A change in personalization logic, privacy boundaries, or teacher workload is not isolated; it alters the broader system.
+- **스웜 비평 라운드** — 생각 정리 초안에 다섯 관점이 교정/칭찬 없이 도전 질문만 던지고, 초안이 맵 노드를 근거로 인용했는지 자동 점검(evidence-anchor check)
+- **JOL 캘리브레이션** — 질문 전 "동의할까, 갈릴까?" 1탭 예측 → 실제 이견 분류와 대조
+- **전 과정 계측** — `feedback.requested/shown`, `reflection.submit`(수정 여부·초안 스냅샷·앵커 전후), `jol.predict/outcome`, `question.answer`(AI 턴 원문) → 이벤트 사전과 마이닝 SQL은 [docs/analytics_feedback_events.md](./docs/analytics_feedback_events.md)
 
 ## Critical Lens
 
-One of the main learning goals behind this project is to help students acquire a more critical stance toward educational technology.
-
-The prototype is especially interested in helping students ask questions like:
+The prototype helps students ask questions like:
 
 - What assumptions about teachers, students, institutions, or data are embedded in this design?
 - Which actors gain or lose agency when a system becomes more automated?
-- How do interfaces and infrastructures shape what counts as a reasonable design move?
 - What kinds of labor become hidden when a workflow is described as efficient?
 - How do policy, platform architecture, accessibility, governance, and pedagogy shape one another?
 
-This is where the social materiality orientation matters. The studio is intended to support students in seeing educational media not as neutral delivery tools, but as part of a broader sociotechnical arrangement.
-
-## Product Structure
-
-The current application includes:
-
-- a branded landing page with sign-in and join paths
-- role-aware instructor and learner workspaces
-- institution, course, and case context controls
-- a D3-powered proposal network
-- stakeholder and lens switching
-- structured case generation from uploaded text
-- published case gating for learner visibility
-- learner agenda nodes and annotations
-- report and reflection surfaces
-- Supabase-backed authentication and course data
-- Gemini-backed generation paths with local fallback logic
-
-## Data Model
-
-The project uses Supabase as the operational backend and is organized around a course-centered model.
-
-Main entities:
-
-- `profiles`
-- `institutions`
-- `courses`
-- `course_memberships`
-- `cases`
-- `documents`
-- `learner_runs`
-- `cohort_graph_snapshots`
-
-Important design principles:
-
-- instructor-authored cases remain canonical
-- learner work happens in `learner_runs`
-- published state controls learner visibility
-- student accounts can be constrained to a single active course membership
-- platform bootstrap can be handled by a root admin account
-
-Schema and setup notes live in:
-
-- [docs/supabase_schema.sql](./docs/supabase_schema.sql)
-- [docs/supabase_setup.md](./docs/supabase_setup.md)
-
-## AI In The Loop
-
-The prototype is not built around chat for its own sake. Generation is used where it materially supports instructional reasoning.
-
-Current and planned AI responsibilities include:
-
-- structuring a pasted brief into a design case
-- identifying goals, constraints, and stakeholder signals
-- expanding learner-added agenda nodes into related issues
-- generating question prompts and reflection prompts
-- supporting instructor memo and learner reflection workflows
-
-The intended direction is not to replace judgment, but to help surface relationships that might otherwise remain invisible.
+The studio is intended to support students in seeing educational media not as neutral delivery tools, but as part of a broader sociotechnical arrangement.
 
 ## Technical Stack
 
-- Plain HTML, CSS, and JavaScript
-- D3.js for network visualization
-- Supabase for auth and course-linked data
-- Gemini integration for generative case and node expansion flows
-- Vercel-friendly API routing for server-side generation paths
+- Plain HTML/CSS/JS + **D3.js** force-directed tension maps
+- **Supabase** — auth, course data, learner runs, append-only `analytics_events`, **Realtime** (동료 활동 라이브 반영 + 프레즌스)
+- **Gemini** — case structuring, swarm replies, disagreement classification, critique rounds (배포별 프록시: Vercel `api/gemini.js`, Cloudflare `_worker.js`) + 결정론적 로컬 폴백
+- **PWA** — manifest + network-first service worker(미디어 우회), 홈 화면 설치, 오프라인 셸
+- 배포: Cloudflare Pages (`swarm-id-ko` 본판 / `dts-ko-preview` 데모), wrangler direct-upload
 
-## Current Prototype Status
+## Data Model
 
-This is still an evolving MVP. Some parts are already working end-to-end, while others are still being hardened or extended.
+Course-centered Supabase model: `profiles` · `institutions` · `courses` · `course_memberships` · `cases` · `documents` · `learner_runs` · `cohort_graph_snapshots` (+ `analytics_events`).
 
-Working areas include:
-
-- role-aware sign-in and context loading
-- instructor-side case creation and publishing
-- student-side published-case visibility
-- learner run persistence
-- D3 visualization as the main case interface
-- root admin bootstrap for institution and course setup
-
-Still evolving:
-
-- richer cohort-level synthesis
-- stronger class/group collaboration workflows
-- production-hardening around enrollment and roster management
-- more sophisticated AI-driven graph generation
-- improved report generation and assessment support
+- instructor-authored cases remain canonical; learner work lives in `learner_runs`
+- published/archived state controls learner visibility; cases with student activity can only be archived, never deleted from the UI
+- schema & policies: [docs/supabase_schema.sql](./docs/supabase_schema.sql) · [docs/supabase_setup.md](./docs/supabase_setup.md)
 
 ## Local Development
 
-Open the project locally and serve the static files however you prefer.
+```bash
+# repo root
+py -m http.server 8137
+# real app:    http://127.0.0.1:8137/index.html
+# demo data:   http://127.0.0.1:8137/preview.html  (no login, preview-demo.js injects a sample cohort)
+node harness/run.js                        # logic tests
+node scripts/smoke-usability-upgrade.mjs   # browser smoke (11 checks)
+```
 
-Typical files:
-
-- [index.html](./index.html)
-- [styles.css](./styles.css)
-- [app.js](./app.js)
-- [api/gemini.js](./api/gemini.js)
-
-To use the Supabase-backed flow:
-
-1. Add your Supabase URL and publishable key in [supabase-config.js](./supabase-config.js)
-2. Apply the schema in [docs/supabase_schema.sql](./docs/supabase_schema.sql)
-3. Configure your memberships and course records
-4. Add `GEMINI_API_KEY` for deployment if you want live generation
+가이드 재생성 파이프라인: `node scripts/capture-ko-guides.mjs`(스크린샷) → `node scripts/record-guide-videos.mjs`(녹화) → `py scripts/mux-guide-videos.py`(나레이션 합성) → `node scripts/build-guides-html.mjs`. 나레이션 대본/재생성: `py scripts/generate-guide-narration.py`.
 
 ## Repository Guide
 
-- [docs/prototype_gap_plan.md](./docs/prototype_gap_plan.md): design gaps and next-step planning
-- [docs/harness_engineering.md](./docs/harness_engineering.md): test harness direction
-- [docs/swarm_id_app_functions.md](./docs/swarm_id_app_functions.md): function-level notes
+- [docs/analytics_feedback_events.md](./docs/analytics_feedback_events.md) — 피드백 계측 이벤트 사전 + 마이닝 SQL
+- [docs/ko-glossary.md](./docs/ko-glossary.md) — 한국어 용어 기준표
+- [docs/supabase_setup.md](./docs/supabase_setup.md) — 백엔드 셋업 (Realtime publication, 케이스 삭제 정책 포함)
+- [guides/](./guides) — 학생/교수자 가이드 (md → HTML 빌드, 영상·나레이션 포함)
+- [scripts/](./scripts) — 코호트 시딩, 가이드 캡처/녹화, E2E 검증(`e2e-verify-feedback.mjs`)
 
 ## Who This Is For
 
-This project may be useful to:
-
-- instructional designers
-- learning experience designers
-- education technology researchers
-- critical edtech scholars
-- HCI and CSCL researchers
-- educators interested in studio-style design pedagogy
-- collaborators building tools for reflective, systems-oriented learning
+Instructional designers, LX designers, edtech researchers, critical edtech scholars, HCI/CSCL researchers, and educators interested in studio-style design pedagogy.
 
 ## Collaboration Welcome
 
-I am especially interested in feedback, collaboration, and critique around:
-
-- instructional design pedagogy
-- social materiality and sociotechnical analysis in education
-- critical educational media studies
-- network visualization for learning
-- AI-assisted reflection and case-based learning
-- instructor workflows for publishing and moderating structured design cases
-
-If this connects with your work, I would love to hear from you, test ideas together, or explore research and product directions collaboratively.
+I am especially interested in feedback, collaboration, and critique around instructional design pedagogy, social materiality in education, network visualization for learning, and AI-assisted reflection. If this connects with your work, I would love to hear from you.
