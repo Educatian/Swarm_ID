@@ -2065,6 +2065,274 @@ function buildRemotePlatform({
   });
 }
 
+// ---- Realtime collaboration (Supabase Realtime) ----
+// Usability feedback: "실시간 토론 기능", "공동작업기능". Peers' node additions,
+// notes, and instructor case edits stream into the open workspace live, with a
+// lightweight presence count of who is looking at the same case.
+
+let toastHost = null;
+
+function showToast(message) {
+  if (!message) return;
+  if (!toastHost) {
+    toastHost = document.createElement("div");
+    toastHost.className = "toast-host";
+    toastHost.setAttribute("aria-live", "polite");
+    document.body.appendChild(toastHost);
+  }
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = message;
+  toastHost.appendChild(toast);
+  window.requestAnimationFrame(() => toast.classList.add("is-visible"));
+  window.setTimeout(() => {
+    toast.classList.remove("is-visible");
+    window.setTimeout(() => toast.remove(), 350);
+  }, 4200);
+}
+
+const realtimeState = {
+  channel: null,
+  caseId: "",
+  presenceCount: 0,
+  refreshTimer: null,
+  pendingToast: "",
+};
+
+function isUserTyping() {
+  const el = document.activeElement;
+  return Boolean(el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable));
+}
+
+function findCourseByCaseId(caseId) {
+  for (const institution of state.platform?.institutions || []) {
+    for (const course of institution.courses || []) {
+      if ((course.cases || []).some((item) => item.id === caseId)) {
+        return course;
+      }
+    }
+  }
+  return null;
+}
+
+function mapRemoteLearnerRunRow(run) {
+  const ko = state.locale === "ko";
+  return {
+    id: run.id,
+    caseId: run.case_id,
+    learnerId: run.learner_id,
+    learnerName: run.learner_name || (ko ? "학생" : "Student"),
+    learnerFocus: run.learner_focus || (ko ? "생각 정리 실행" : "Reflection run"),
+    status: run.status || (ko ? "학습자 작업 공간 업데이트됨" : "Learner workspace updated"),
+    metrics: asObject(run.metrics),
+    evidence: asArray(run.evidence),
+    decisions: asArray(run.decisions),
+    chat: asArray(run.chat),
+    timeline: asArray(run.timeline),
+    agendaNodes: asArray(run.agenda_nodes),
+    aiGeneratedNodes: asArray(run.ai_generated_nodes),
+    annotations: asArray(run.annotations),
+    updatedAt: run.updated_at || "",
+  };
+}
+
+function applyRemoteLearnerRunRow(run) {
+  const course = findCourseByCaseId(run.case_id);
+  if (!course) return false;
+  const mapped = mapRemoteLearnerRunRow(run);
+  const index = course.learnerRuns.findIndex((item) => item.id === run.id);
+  if (index >= 0) {
+    course.learnerRuns[index] = mapped;
+  } else {
+    course.learnerRuns.push(mapped);
+  }
+  return true;
+}
+
+function removeRemoteLearnerRunRow(runId) {
+  for (const institution of state.platform?.institutions || []) {
+    for (const course of institution.courses || []) {
+      const index = (course.learnerRuns || []).findIndex((item) => item.id === runId);
+      if (index >= 0) {
+        course.learnerRuns.splice(index, 1);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function applyRemoteCaseRow(caseRow) {
+  let course = findCourseByCaseId(caseRow.id);
+  if (!course) {
+    for (const institution of state.platform?.institutions || []) {
+      course = (institution.courses || []).find((item) => item.id === caseRow.course_id) || null;
+      if (course) break;
+    }
+  }
+  if (!course) return false;
+  const existing = course.cases.find((item) => item.id === caseRow.id);
+  const mapped = {
+    id: caseRow.id,
+    title: caseRow.title,
+    summary: caseRow.summary || "",
+    prompt: caseRow.prompt || "",
+    learningGoals: asArray(caseRow.learning_goals),
+    constraints: asArray(caseRow.constraints),
+    metrics: asObject(caseRow.metrics, existing?.metrics || {}),
+    evidence: asArray(caseRow.evidence),
+    decisions: asArray(caseRow.decisions),
+    chat: asArray(caseRow.chat),
+    timeline: asArray(caseRow.timeline),
+    stakeholderProfiles: asObject(caseRow.stakeholder_profiles),
+    matrixInsights: asArray(caseRow.matrix_insights),
+    sandboxFeed: asArray(caseRow.sandbox_feed),
+    reflectionPrompts: asArray(caseRow.reflection_prompts),
+    networkMeta: asArray(caseRow.network_meta),
+    uiCopy: asObject(caseRow.ui_copy),
+    boardSettings: defaultBoardSettings(asObject(caseRow.board_settings)),
+    pipeline: asObject(caseRow.pipeline, existing?.pipeline || {}),
+    published: Boolean(caseRow.published),
+  };
+  if (existing) {
+    Object.assign(existing, mapped);
+  } else {
+    course.cases.push(mapped);
+  }
+  course.publishedCaseIds = course.cases.filter((item) => item.published).map((item) => item.id);
+  return true;
+}
+
+function renderPresencePill() {
+  const pill = document.getElementById("presence-pill");
+  if (!pill) return;
+  const count = realtimeState.presenceCount;
+  if (!realtimeState.channel || count <= 1) {
+    pill.hidden = true;
+    return;
+  }
+  const ko = state.locale === "ko";
+  pill.hidden = false;
+  pill.textContent = ko ? `함께 보는 중 ${count}명` : `${count} viewing now`;
+  pill.title = ko
+    ? "지금 이 케이스를 함께 열어 둔 사람 수예요. 동료의 노드와 메모가 실시간으로 반영됩니다."
+    : "People who have this case open right now. Peer nodes and notes stream in live.";
+}
+
+// Re-render after a remote change, but never clobber something the user is
+// actively typing — retry shortly instead.
+function scheduleRealtimeRefresh(toastMessage) {
+  if (toastMessage) realtimeState.pendingToast = toastMessage;
+  if (realtimeState.refreshTimer) return;
+  const attempt = () => {
+    realtimeState.refreshTimer = null;
+    if (isUserTyping()) {
+      realtimeState.refreshTimer = window.setTimeout(attempt, 2500);
+      return;
+    }
+    lastGraphSignature = "";
+    persistPlatformState();
+    renderAll();
+    if (realtimeState.pendingToast) {
+      showToast(realtimeState.pendingToast);
+      realtimeState.pendingToast = "";
+    }
+  };
+  realtimeState.refreshTimer = window.setTimeout(attempt, 400);
+}
+
+function teardownRealtimeSubscription() {
+  const client = initializeSupabase();
+  if (realtimeState.channel && client) {
+    try {
+      client.removeChannel(realtimeState.channel);
+    } catch (_) {}
+  }
+  realtimeState.channel = null;
+  realtimeState.caseId = "";
+  realtimeState.presenceCount = 0;
+  renderPresencePill();
+}
+
+function syncRealtimeSubscription() {
+  const client = initializeSupabase();
+  if (!client || !isSupabaseSessionActive()) {
+    if (realtimeState.channel) teardownRealtimeSubscription();
+    return;
+  }
+  const caseId = state.activeCaseId || "";
+  if (caseId === realtimeState.caseId) return;
+  teardownRealtimeSubscription();
+  if (!caseId) return;
+
+  const ko = state.locale === "ko";
+  const channel = client.channel(`dts-case-${caseId}`, {
+    config: { presence: { key: state.auth.userId || `anon-${Date.now().toString(36)}` } },
+  });
+
+  channel.on(
+    "postgres_changes",
+    { event: "*", schema: "public", table: "learner_runs", filter: `case_id=eq.${caseId}` },
+    (payload) => {
+      const row = payload.new && payload.new.id ? payload.new : null;
+      if (payload.eventType === "DELETE") {
+        if (payload.old?.id) {
+          removeRemoteLearnerRunRow(payload.old.id);
+          scheduleRealtimeRefresh("");
+        }
+        return;
+      }
+      if (!row || row.learner_id === state.auth.userId) return;
+      if (applyRemoteLearnerRunRow(row)) {
+        const name = row.learner_name || (ko ? "동료" : "A peer");
+        scheduleRealtimeRefresh(
+          ko ? `${name} 님의 활동이 맵에 반영됐어요.` : `${name}'s activity just landed on the map.`
+        );
+      }
+    }
+  );
+
+  channel.on(
+    "postgres_changes",
+    { event: "*", schema: "public", table: "cases", filter: `id=eq.${caseId}` },
+    (payload) => {
+      const row = payload.new && payload.new.id ? payload.new : null;
+      if (!row) return;
+      if (applyRemoteCaseRow(row)) {
+        scheduleRealtimeRefresh(
+          state.activeRole === "user"
+            ? ko ? "교수자가 케이스를 업데이트했어요." : "Your instructor updated the case."
+            : ""
+        );
+      }
+    }
+  );
+
+  channel.on("presence", { event: "sync" }, () => {
+    try {
+      realtimeState.presenceCount = Object.keys(channel.presenceState() || {}).length;
+    } catch (_) {
+      realtimeState.presenceCount = 0;
+    }
+    renderPresencePill();
+  });
+
+  channel.subscribe((status) => {
+    if (status === "SUBSCRIBED") {
+      const me = state.activeRole === "admin" ? getActiveInstructor() : getActiveLearner();
+      try {
+        channel.track({
+          name: me?.name || state.auth.sessionEmail || "viewer",
+          role: state.activeRole,
+        });
+      } catch (_) {}
+    }
+  });
+
+  realtimeState.channel = channel;
+  realtimeState.caseId = caseId;
+}
+
 function isSupabaseSessionActive() {
   return state.auth.source === "supabase" && Boolean(state.auth.userId);
 }
@@ -7695,6 +7963,8 @@ function renderAll() {
   renderMatrix();
   renderSandbox();
   renderReport();
+  syncRealtimeSubscription();
+  renderPresencePill();
   normalizeRenderedCopy();
   if (tutorialState.active) {
     window.requestAnimationFrame(renderTutorialStep);
@@ -8317,6 +8587,7 @@ function openStudio() {
 
 function returnToLanding() {
   endTutorial(false);
+  teardownRealtimeSubscription();
   dom.appShell?.classList.add("is-hidden");
   dom.landingShell?.classList.remove("is-hidden");
   window.location.hash = "";

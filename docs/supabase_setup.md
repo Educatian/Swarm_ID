@@ -37,6 +37,20 @@ The schema also includes a partial unique index so a learner account can have on
 
 Optional case-level text can now come from the database too. Put values into `cases.stakeholder_profiles`, `cases.matrix_insights`, `cases.sandbox_feed`, `cases.reflection_prompts`, `cases.network_meta`, and `cases.ui_copy` if you want the visible copy blocks to render from incoming data instead of the built-in fallback text.
 
+## Realtime collaboration
+
+The Korean build streams peer activity (learner runs) and instructor case edits live into open workspaces, plus a presence count of who has the same case open. Realtime needs the tables added to the `supabase_realtime` publication once per project (Supabase SQL editor):
+
+```sql
+alter publication supabase_realtime add table public.learner_runs;
+alter publication supabase_realtime add table public.cases;
+```
+
+Notes:
+- Postgres-changes events respect RLS, so members only receive rows they could already read.
+- Presence uses the signed-in user id as the key; no extra tables are needed.
+- If the publication already contains a table, the `alter` statement errors harmlessly — check with `select * from pg_publication_tables where pubname = 'supabase_realtime';`.
+
 When `gemini-config.js` is present, the app uses Gemini for:
 - uploaded document to structured case conversion
 - learner agenda node to related issue expansion

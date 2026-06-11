@@ -3004,6 +3004,42 @@ body {
   stroke-dasharray: 6 5;
 }
 
+/* ---- Realtime collaboration ---- */
+.presence-pill {
+  white-space: nowrap;
+}
+
+.toast-host {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  max-width: min(420px, calc(100vw - 40px));
+  padding: 11px 18px;
+  border-radius: 999px;
+  background: rgba(24, 30, 44, 0.94);
+  color: #fff;
+  font-size: 0.88rem;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.35);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .legend-swatch-dashed {
   background: none;
   border-top: 2px dashed rgba(151, 169, 255, 0.85);
