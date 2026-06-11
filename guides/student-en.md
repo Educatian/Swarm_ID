@@ -104,8 +104,10 @@ two lenses** — tensions stay invisible from a single side.
 
 [video](./videos/student-en/07-swarm-round.mp4)
 
-Type a question into the **Ask** composer and five stakeholder agents answer
-**simultaneously**. Responses join the map as new nodes, and when agents
+Type a question into the **Ask** composer and send it — first, a one-tap
+prediction appears: **"will they agree or split?"** Stake your intuition.
+Then five stakeholder agents answer **simultaneously**, and after the round
+the activity feed tells you whether your prediction held. Responses join the map as new nodes, and when agents
 **disagree, a red edge** marks the spot — exactly where a discussion is worth
 having.
 
@@ -160,6 +162,21 @@ Finish in the **Report** view. The issues and evidence you found are
 summarized there; answer the **reflection prompt** and submit it to your
 instructor. One standard for a good reflection: *did you pick the single most
 important tension and explain your choice with evidence from the map?*
+
+---
+
+## Step 12 · Sharpen with swarm feedback, submit as one page
+
+[video](./videos/student-en/12-critique.mp4)
+
+After drafting your reflection, press **"Get swarm feedback"** — five lenses
+read your draft and push back with **challenges**. They never hand you
+answers; they point at the tensions your argument missed. The studio also
+checks whether you **cited map nodes as evidence**. Revise to answer the
+challenges, then submit.
+
+The **"One-page export"** button bundles your nodes, notes, reflection, and
+the critiques you received into a single printable page for submission.
 
 ---
 
