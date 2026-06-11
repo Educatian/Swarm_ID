@@ -3854,11 +3854,11 @@ async function generateAgentReplyWithAi(stakeholderKey, question) {
       temperature: 0.6,
     });
     setAiStatus(`${getGeminiConfig().model} answered from the ${stakeholder.label.toLowerCase()} lens.`, { busy: false });
-    return response;
+    return { text: response, source: "ai" };
   } catch (error) {
     console.error(error);
     setAiStatus(`Gemini fallback active. ${error.message}`, { busy: false, error: error.message });
-    return fallback;
+    return { text: fallback, source: "fallback" };
   }
 }
 
@@ -9829,14 +9829,17 @@ async function runSwarmRound(question) {
   results.forEach((r, i) => {
     const stakeholderKey = SWARM_AGENTS[i];
     const stakeholder = stakeholders[stakeholderKey];
-    const body =
-      r.status === "fulfilled" && r.value ? r.value : generateAgentReply(stakeholderKey);
+    // generateAgentReplyWithAi never rejects — it self-reports {text, source}
+    // so the instrumentation records what ACTUALLY answered (ai vs fallback).
+    const value = r.status === "fulfilled" && r.value ? r.value : null;
+    const body = value?.text || generateAgentReply(stakeholderKey);
+    const source = value?.source === "ai" ? "ai" : "fallback";
     allResponses.push({
       stakeholder: stakeholderKey,
-      source: r.status === "fulfilled" && r.value ? "ai" : "fallback",
+      source,
       text: String(body).slice(0, 400),
     });
-    if (r.status === "fulfilled") {
+    if (source === "ai") {
       okCount += 1;
       successfulResponses.push({ stakeholder: stakeholderKey, body });
     }
@@ -9853,9 +9856,13 @@ async function runSwarmRound(question) {
 
   pushGraphEvent(
     isKorean ? `라운드 ${roundNumber} 응답 완료` : `Round ${roundNumber} complete`,
-    isKorean
-      ? `${okCount}/${SWARM_AGENTS.length} 관점이 질문에 답했어요`
-      : `${okCount}/${SWARM_AGENTS.length} perspectives answered your question`
+    okCount === 0
+      ? isKorean
+        ? `${SWARM_AGENTS.length}개 관점이 기본 응답으로 답했어요`
+        : `${SWARM_AGENTS.length} perspectives answered with built-in responses`
+      : isKorean
+        ? `${okCount}/${SWARM_AGENTS.length} 관점이 질문에 답했어요`
+        : `${okCount}/${SWARM_AGENTS.length} perspectives answered your question`
   );
 
   // Research instrumentation: preserve the full AI turn (question + every
