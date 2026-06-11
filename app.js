@@ -1227,6 +1227,16 @@ document.getElementById("network-svg")?.addEventListener("click", (event) => {
   }
 });
 
+// Keep reflection drafts across re-renders (renderReport rebuilds the textareas).
+document.addEventListener("input", (event) => {
+  if (event.target.matches?.("textarea.reflection-response")) {
+    const idx = Number(event.target.getAttribute("data-prompt-index"));
+    if (Number.isFinite(idx)) {
+      reflectionFeedbackState.drafts[reflectionKey(idx)] = event.target.value;
+    }
+  }
+});
+
 document.getElementById("task-banner")?.addEventListener("click", (event) => {
   if (event.target.closest("[data-task-collapse]")) {
     setTaskBannerCollapsed(true);
@@ -4017,6 +4027,159 @@ async function renameActiveCase() {
   }
 }
 
+// ---- Swarm critique on reflection drafts (AI-assisted feedback) ----
+// Research design: polyvocal, tension-preserving feedback — five stakeholder
+// agents CHALLENGE the student's draft instead of correcting it, plus a
+// deterministic evidence-anchor check (does the draft cite map nodes?).
+// Every exposure and the draft snapshot are logged so revision behavior is
+// minable offline (feedback.requested / feedback.shown / reflection.submit).
+const reflectionFeedbackState = {
+  drafts: {},
+  critiques: {},
+  busy: {},
+};
+
+function reflectionKey(promptIndex) {
+  return `${state.activeCaseId || "none"}:${promptIndex}`;
+}
+
+function detectDraftAnchors(draft) {
+  const labels = state.graph.nodes
+    .filter((node) => node.kind === "signal" && (node.label || "").length >= 2)
+    .map((node) => node.label);
+  const matched = [...new Set(labels.filter((label) => draft.includes(label)))];
+  return { cited: matched.length, matched };
+}
+
+async function generateCritiqueWithAi(stakeholderKey, draft, promptText) {
+  const stakeholder = getCaseStakeholderMeta(stakeholderKey);
+  const activeCase = getActiveCaseRecord();
+  const ko = state.locale === "ko";
+  const conflict = stakeholderConflicts(stakeholderKey)[0];
+  const fallback = ko
+    ? `${stakeholder.label} 관점에서 보면, "${conflict.title}" 문제를 초안이 어떻게 다루는지 드러나지 않아요. 이 부분이 당신의 선택과 충돌하지 않는지, 맵의 근거와 함께 짚어 보세요.`
+    : `From the ${stakeholder.label} lens, the draft does not address "${conflict.title}". Check whether it conflicts with your choice, citing evidence from the map.`;
+  try {
+    const response = await requestGeminiContent({
+      systemInstruction: ko
+        ? "당신은 비판적 수업설계 세미나의 이해관계자입니다. 학생의 초안을 교정하거나 칭찬하지 말고, 당신의 입장에서 초안이 놓친 긴장을 벼리는 도전 질문 또는 반박을 던지세요. 정답을 제시하지 마세요. 글머리 기호와 마크다운 금지."
+        : "You are a stakeholder in a critical design seminar. Do not correct or praise the student's draft — raise one pointed challenge or counter-question from your position that sharpens a tension the draft misses. Offer no answers. No bullets, no markdown.",
+      prompt: [
+        `Stakeholder lens: ${stakeholder.label}`,
+        `Stakeholder summary: ${stakeholder.summary}`,
+        `Case title: ${activeCase?.title || ""}`,
+        `Case constraints: ${normalizeStringList(activeCase?.constraints).join(" | ")}`,
+        `Reflection prompt: ${promptText}`,
+        `Student draft: ${draft.slice(0, 1200)}`,
+        ko ? "한국어 2~3문장으로 작성하세요." : "Write 2-3 sentences.",
+      ].join("\n"),
+      responseMimeType: "text/plain",
+      temperature: 0.7,
+    });
+    return { text: response, source: "ai" };
+  } catch (_) {
+    return { text: fallback, source: "fallback" };
+  }
+}
+
+function renderReflectionCritique(promptIndex) {
+  const host = dom.reflectionPrompts?.querySelector(`[data-critique-host="${promptIndex}"]`);
+  if (!host) return;
+  const ko = state.locale === "ko";
+  const key = reflectionKey(promptIndex);
+  if (reflectionFeedbackState.busy[key]) {
+    host.innerHTML = `<p class="critique-loading">${ko ? "다섯 관점이 초안을 읽는 중…" : "Five lenses are reading your draft…"}</p>`;
+    return;
+  }
+  const record = reflectionFeedbackState.critiques[key];
+  if (!record) {
+    host.innerHTML = "";
+    return;
+  }
+  const anchorLine =
+    record.anchors.cited === 0
+      ? `<p class="critique-anchor is-warn">${ko ? "맵의 노드를 근거로 인용하지 않았어요 — 주장마다 어느 노드가 뒷받침하는지 적어 보세요." : "No map nodes cited — name the node that backs each claim."}</p>`
+      : `<p class="critique-anchor is-ok">${ko ? `근거 인용 ${record.anchors.cited}건 감지: ${record.anchors.matched.slice(0, 4).map(escapeHtml).join(", ")}` : `${record.anchors.cited} evidence anchors detected: ${record.anchors.matched.slice(0, 4).map(escapeHtml).join(", ")}`}</p>`;
+  host.innerHTML = `
+    <p class="critique-title">${ko ? "스웜 피드백 — 다섯 관점의 도전" : "Swarm feedback — five challenges"}</p>
+    ${anchorLine}
+    ${record.items
+      .map(
+        (item) => `
+        <article class="critique-item" data-stakeholder="${item.stakeholder}">
+          <span class="critique-lens">${escapeHtml(item.label)}</span>
+          <p>${escapeHtml(item.text)}</p>
+        </article>`
+      )
+      .join("")}
+    <p class="critique-hint">${ko ? "도전에 답하도록 초안을 고친 뒤 제출하세요. 다시 받을 수도 있어요." : "Revise your draft to answer the challenges, then submit. You can ask again."}</p>
+  `;
+}
+
+async function requestReflectionFeedback(promptIndex) {
+  const activeCase = getCaseById(state.activeCaseId);
+  if (!activeCase || state.activeRole !== "user") return;
+  const ko = state.locale === "ko";
+  const key = reflectionKey(promptIndex);
+  if (reflectionFeedbackState.busy[key]) return;
+  const textarea = dom.reflectionPrompts?.querySelector(
+    `textarea.reflection-response[data-prompt-index="${promptIndex}"]`
+  );
+  const status = dom.reflectionPrompts?.querySelector(`[data-reflection-status="${promptIndex}"]`);
+  const draft = String(textarea?.value || "").trim();
+  if (draft.length < 20) {
+    if (status) status.textContent = ko ? "초안을 조금 더 쓴 뒤 피드백을 받아 보세요." : "Write a bit more before asking for feedback.";
+    return;
+  }
+  const promptText = String(asArray(activeCase.reflectionPrompts)[promptIndex] || "");
+  const anchors = detectDraftAnchors(draft);
+  reflectionFeedbackState.busy[key] = true;
+  renderReflectionCritique(promptIndex);
+  logEvent("feedback.requested", {
+    prompt_index: promptIndex,
+    draft: draft.slice(0, 1000),
+    draft_length: draft.length,
+    anchors_cited: anchors.cited,
+    anchor_labels: anchors.matched.slice(0, 10),
+  });
+  const results = await Promise.allSettled(
+    SWARM_AGENTS.map((agentKey) => generateCritiqueWithAi(agentKey, draft, promptText))
+  );
+  const items = results.map((result, i) => {
+    const agentKey = SWARM_AGENTS[i];
+    const meta = getCaseStakeholderMeta(agentKey);
+    const value = result.status === "fulfilled" ? result.value : null;
+    return {
+      stakeholder: agentKey,
+      label: meta.label,
+      text: value?.text || "",
+      source: value?.source || "fallback",
+    };
+  }).filter((item) => item.text);
+  reflectionFeedbackState.busy[key] = false;
+  reflectionFeedbackState.critiques[key] = {
+    items,
+    anchors,
+    draftSnapshot: draft,
+    at: Date.now(),
+  };
+  renderReflectionCritique(promptIndex);
+  if (status) status.textContent = "";
+  pushGraphEvent(
+    ko ? "스웜 피드백" : "Swarm feedback",
+    ko ? "다섯 관점이 생각 정리 초안에 도전 질문을 남겼어요" : "Five lenses left challenges on your reflection draft"
+  );
+  logEvent("feedback.shown", {
+    prompt_index: promptIndex,
+    anchors_cited: anchors.cited,
+    responses: items.map((item) => ({
+      stakeholder: item.stakeholder,
+      source: item.source,
+      text: item.text.slice(0, 400),
+    })),
+  });
+}
+
 function handleReflectionSubmit(promptIndex) {
   const activeCase = getCaseById(state.activeCaseId);
   if (!activeCase) return;
@@ -4034,11 +4197,18 @@ function handleReflectionSubmit(promptIndex) {
     if (status) status.textContent = state.locale === "ko" ? "먼저 답변을 적어주세요." : "Write your reflection first.";
     return;
   }
+  const critique = reflectionFeedbackState.critiques[reflectionKey(promptIndex)];
   logEvent("reflection.submit", {
     prompt_index: promptIndex,
     prompt: String(prompt).slice(0, 400),
     answer: answer.slice(0, 2000),
     length: answer.length,
+    had_feedback: Boolean(critique),
+    revised_after_feedback: critique ? answer !== critique.draftSnapshot : null,
+    draft_at_feedback: critique ? critique.draftSnapshot.slice(0, 1000) : null,
+    feedback_age_ms: critique ? Date.now() - critique.at : null,
+    anchors_at_feedback: critique ? critique.anchors.cited : null,
+    anchors_at_submit: detectDraftAnchors(answer).cited,
   });
   if (status) status.textContent = state.locale === "ko" ? "제출됨 · 교수자에게 공유되었습니다." : "Submitted — shared with your instructor.";
 }
@@ -7863,19 +8033,27 @@ function renderReport() {
           if (!isStudent) return `<article class="prompt-item">${safe}</article>`;
           const placeholder = state.locale === "ko" ? "여기에 답변을 적어보세요..." : "Type your reflection...";
           const submitLabel = state.locale === "ko" ? "제출" : "Submit";
+          const feedbackLabel = state.locale === "ko" ? "스웜 피드백 받기" : "Get swarm feedback";
+          const savedDraft = reflectionFeedbackState.drafts[reflectionKey(index)] || "";
           return `
             <article class="prompt-item" data-prompt-index="${index}">
               <span class="prompt-text">${safe}</span>
-              <textarea class="reflection-response" data-prompt-index="${index}" placeholder="${placeholder}"></textarea>
+              <textarea class="reflection-response" data-prompt-index="${index}" placeholder="${placeholder}">${escapeHtml(savedDraft)}</textarea>
               <div class="reflection-footer">
+                <button type="button" class="toolbar-button reflection-feedback" data-reflection-feedback="${index}">${feedbackLabel}</button>
                 <button type="button" class="toolbar-button toolbar-button-primary reflection-submit" data-reflection-submit="${index}">${submitLabel}</button>
                 <span class="reflection-status" data-reflection-status="${index}"></span>
               </div>
+              <div class="reflection-critique" data-critique-host="${index}"></div>
             </article>
           `;
         })
         .join("")
     : emptyNoteMarkup(t("noPrompts"));
+
+  if (isStudent) {
+    reflectionPrompts.forEach((_, index) => renderReflectionCritique(index));
+  }
 
   if (dom.instructorCohortBlock) {
     const showCohort = state.activeRole === "admin" && Boolean(activeCase);
@@ -8760,6 +8938,22 @@ function renderTutorialStep() {
   target.scrollIntoView({ behavior: "auto", block: "center", inline: "nearest" });
   dom.tourOverlay.classList.remove("is-hidden");
   dom.tourOverlay.setAttribute("aria-hidden", "false");
+  // Highlight ring lives INSIDE the overlay so it always paints above the app.
+  window.requestAnimationFrame(() => {
+    let ring = document.getElementById("tour-ring");
+    if (!ring) {
+      ring = document.createElement("div");
+      ring.id = "tour-ring";
+      ring.className = "tour-ring";
+      dom.tourOverlay.appendChild(ring);
+    }
+    const rect = target.getBoundingClientRect();
+    ring.hidden = false;
+    ring.style.left = `${Math.max(4, rect.left - 6)}px`;
+    ring.style.top = `${Math.max(4, rect.top - 6)}px`;
+    ring.style.width = `${rect.width + 12}px`;
+    ring.style.height = `${rect.height + 12}px`;
+  });
   dom.tourStepLabel.textContent =
     state.locale === "ko"
       ? `${tutorialState.stepIndex + 1} / ${tutorialState.steps.length} 단계`
@@ -8795,6 +8989,8 @@ function endTutorial(markSeen = true) {
     persistTutorialState();
   }
   clearTutorialHighlight();
+  const ring = document.getElementById("tour-ring");
+  if (ring) ring.hidden = true;
   tutorialState.active = false;
   tutorialState.stepIndex = 0;
   tutorialState.steps = [];
@@ -9525,10 +9721,96 @@ async function challengeAgent(stakeholderKey, priorBody, challengeText, priorRou
   }
 }
 
+// ---- JOL calibration hook (judgment of learning × swarm outcome) ----
+// One tap before each question: will the five lenses agree or split?
+// Compared against the actual disagreement classification afterwards.
+// Events: jol.predict / jol.outcome — feeds the confidence-calibration line.
+const jolState = {
+  prediction: null, // "split" | "agree" | "skip"
+  question: "",
+  byRound: {},
+};
+
+function renderJolBar(question) {
+  const ko = state.locale === "ko";
+  let bar = document.getElementById("jol-bar");
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.id = "jol-bar";
+    bar.className = "jol-bar";
+    const form = document.getElementById("visualizer-form");
+    form?.parentElement?.insertBefore(bar, form);
+  }
+  bar.innerHTML = `
+    <span class="jol-bar-question">${ko ? "잠깐 — 다섯 관점이 이 질문에 동의할까요, 갈릴까요?" : "Quick guess — will the five lenses agree or split on this?"}</span>
+    <span class="jol-bar-actions">
+      <button type="button" class="toolbar-button" data-jol="split">${ko ? "갈릴 듯" : "They'll split"}</button>
+      <button type="button" class="toolbar-button" data-jol="agree">${ko ? "동의할 듯" : "They'll agree"}</button>
+      <button type="button" class="toolbar-button toolbar-button-quiet" data-jol="skip">${ko ? "건너뛰기" : "Skip"}</button>
+    </span>
+  `;
+  bar.hidden = false;
+  bar.querySelectorAll("[data-jol]").forEach((button) => {
+    button.addEventListener("click", () => {
+      jolState.prediction = button.getAttribute("data-jol");
+      jolState.question = question;
+      bar.hidden = true;
+      logEvent("jol.predict", {
+        prediction: jolState.prediction,
+        question: question.slice(0, 300),
+      });
+      document.getElementById("visualizer-form")?.requestSubmit();
+    }, { once: true });
+  });
+}
+
+function shouldAskJol(question) {
+  return (
+    state.activeRole === "user" &&
+    hasActiveCase() &&
+    question.trim().length > 0 &&
+    !(jolState.prediction && jolState.question === question.trim())
+  );
+}
+
+function resolveJol(roundNumber, disagreements) {
+  const record = jolState.byRound[roundNumber];
+  if (!record) return;
+  delete jolState.byRound[roundNumber];
+  const ko = state.locale === "ko";
+  const actualSplit = disagreements === null ? null : disagreements > 0;
+  const correct =
+    record.prediction === "skip" || actualSplit === null
+      ? null
+      : (record.prediction === "split") === actualSplit;
+  logEvent("jol.outcome", {
+    round: roundNumber,
+    prediction: record.prediction,
+    disagreements: disagreements,
+    correct,
+  });
+  if (correct === null || record.prediction === "skip") return;
+  const predLabel = record.prediction === "split" ? (ko ? "갈릴 듯" : "split") : (ko ? "동의할 듯" : "agree");
+  const actualLabel = actualSplit
+    ? ko ? `실제 이견 ${disagreements}건` : `${disagreements} disagreement(s)`
+    : ko ? "실제로는 대체로 동의" : "they mostly agreed";
+  pushGraphEvent(
+    ko ? "예측 결과" : "Your prediction",
+    ko
+      ? `"${predLabel}"이라고 예측했고, ${actualLabel} — ${correct ? "잘 맞췄어요!" : "다시 보면 왜 어긋났을까요?"}`
+      : `You guessed "${predLabel}", and ${actualLabel} — ${correct ? "nice call!" : "worth asking why it differed."}`
+  );
+}
+
 async function runSwarmRound(question) {
   const isKorean = state.locale === "ko";
   state.graph.swarmRound = (state.graph.swarmRound || 0) + 1;
   const roundNumber = state.graph.swarmRound;
+  if (jolState.prediction && jolState.question === question.trim()) {
+    jolState.byRound[roundNumber] = { prediction: jolState.prediction };
+    jolState.prediction = null;
+    jolState.question = "";
+  }
 
   setAiStatus(
     isKorean
@@ -9591,11 +9873,15 @@ async function runSwarmRound(question) {
   if (successfulResponses.length >= 2) {
     classifySwarmEdges(successfulResponses, roundNumber)
       .then((edges) => {
-        if (!edges || !edges.length) return;
+        if (!edges || !edges.length) {
+          resolveJol(roundNumber, 0);
+          return;
+        }
         state.graph.rounds = state.graph.rounds || [];
         state.graph.rounds.push({ round: roundNumber, edges });
         if (state.graph.rounds.length > 3) state.graph.rounds.shift();
         const disagreements = edges.filter((edge) => edge.relation === "disagree").length;
+        resolveJol(roundNumber, disagreements);
         if (disagreements > 0) {
           pushGraphEvent(
             isKorean ? "이견 감지" : "Disagreement detected",
@@ -9609,7 +9895,11 @@ async function runSwarmRound(question) {
       })
       .catch((err) => {
         console.warn("Swarm edge classification failed:", err);
+        resolveJol(roundNumber, null);
       });
+  } else {
+    // Not enough AI responses to classify — resolve the prediction as unscored.
+    resolveJol(roundNumber, null);
   }
 
   state.timeline.push(
@@ -9963,6 +10253,12 @@ document.addEventListener("click", (event) => {
     if (Number.isFinite(idx)) handleReflectionSubmit(idx);
   }
 
+  const reflectionFeedback = event.target.closest("[data-reflection-feedback]");
+  if (reflectionFeedback) {
+    const idx = Number(reflectionFeedback.getAttribute("data-reflection-feedback"));
+    if (Number.isFinite(idx)) requestReflectionFeedback(idx);
+  }
+
   const viewIntroDismiss = event.target.closest("[data-view-intro-dismiss]");
   if (viewIntroDismiss) {
     const key = viewIntroDismiss.getAttribute("data-view-intro-dismiss");
@@ -10199,6 +10495,11 @@ document.addEventListener("submit", async (event) => {
 document.getElementById("visualizer-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const input = document.getElementById("visualizer-input");
+  // JOL calibration: one quick prediction tap before the swarm answers.
+  if (shouldAskJol(input.value)) {
+    renderJolBar(input.value.trim());
+    return;
+  }
   const submitButton = event.target.querySelector('button[type="submit"]');
   const previousLabel = submitButton?.textContent || "";
   try {

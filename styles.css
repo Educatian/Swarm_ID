@@ -2982,18 +2982,19 @@ body {
 .tour-overlay {
   position: fixed;
   inset: 0;
-  z-index: 40;
+  z-index: 58;
   pointer-events: none;
 }
 
 .tour-scrim {
   position: absolute;
   inset: 0;
-  background: rgba(15, 23, 42, 0.42);
+  background: rgba(15, 23, 42, 0.48);
 }
 
 .tour-card {
   position: fixed;
+  z-index: 46;
   width: min(360px, calc(100vw - 32px));
   max-height: calc(100vh - 32px);
   overflow: auto;
@@ -3465,12 +3466,19 @@ html.dark .welcome-card {
   border-color: rgba(121, 140, 171, 0.3);
 }
 
+/* Target emphasis is drawn as a ring INSIDE the overlay (no z-index punch-through:
+   that approach lost to app stacking contexts and covered the card). */
 .tour-target-active {
-  position: relative;
-  z-index: 41 !important;
-  isolation: isolate;
   border-radius: 18px;
-  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.9), 0 0 0 9999px rgba(15, 23, 42, 0.18);
+}
+
+.tour-ring {
+  position: fixed;
+  pointer-events: none;
+  border: 3px solid rgba(255, 213, 87, 0.95);
+  border-radius: 18px;
+  box-shadow: 0 0 0 4px rgba(255, 213, 87, 0.25), 0 0 24px rgba(255, 213, 87, 0.45);
+  transition: left 0.25s ease, top 0.25s ease, width 0.25s ease, height 0.25s ease;
 }
 
 .landing-shell {
@@ -7057,4 +7065,104 @@ html.theme-light .manage-case-row {
 html.theme-light .manage-lens-chip {
   background: rgba(20, 30, 60, 0.04);
   border-color: rgba(20, 30, 60, 0.12);
+}
+
+/* ---- Swarm critique on reflection drafts ---- */
+.reflection-feedback {
+  border-color: rgba(151, 169, 255, 0.4);
+}
+
+.reflection-critique {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.critique-title {
+  margin: 4px 0 0;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #a7b6ff;
+}
+
+.critique-loading {
+  margin: 8px 0 0;
+  font-size: 0.84rem;
+  color: var(--on-surface-variant);
+}
+
+.critique-anchor {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+}
+
+.critique-anchor.is-warn {
+  background: rgba(255, 113, 107, 0.1);
+  border: 1px solid rgba(255, 113, 107, 0.3);
+}
+
+.critique-anchor.is-ok {
+  background: rgba(0, 195, 137, 0.1);
+  border: 1px solid rgba(0, 195, 137, 0.28);
+}
+
+.critique-item {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-left: 2px solid rgba(151, 169, 255, 0.55);
+}
+
+.critique-item .critique-lens {
+  display: inline-block;
+  margin-bottom: 4px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #a7b6ff;
+}
+
+.critique-item p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.critique-hint {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: var(--on-surface-variant);
+}
+
+/* ---- JOL calibration bar ---- */
+.jol-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 213, 87, 0.08);
+  border: 1px solid rgba(255, 213, 87, 0.3);
+}
+
+.jol-bar-question {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.jol-bar-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.jol-bar-actions .toolbar-button {
+  padding: 6px 12px;
+  font-size: 0.8rem;
 }
