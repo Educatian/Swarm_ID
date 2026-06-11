@@ -4,13 +4,15 @@ import { chromium } from "playwright";
 import { mkdirSync } from "node:fs";
 
 const BASE = "http://127.0.0.1:8137";
-mkdirSync("guides/screenshots/student-ko", { recursive: true });
-mkdirSync("guides/screenshots/instructor-ko", { recursive: true });
+const LOCALE = (process.env.GUIDE_LOCALE || "ko").toLowerCase() === "en" ? "en" : "ko";
+mkdirSync(`guides/screenshots/student-${LOCALE}`, { recursive: true });
+mkdirSync(`guides/screenshots/instructor-${LOCALE}`, { recursive: true });
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 2 });
-const S = "guides/screenshots/student-ko";
-const I = "guides/screenshots/instructor-ko";
+await page.addInitScript(`try { localStorage.setItem("swarm-id-locale-v1", "${LOCALE}"); } catch (_) {}`);
+const S = `guides/screenshots/student-${LOCALE}`;
+const I = `guides/screenshots/instructor-${LOCALE}`;
 const snap = (path) => page.screenshot({ path }).then(() => console.log("✓", path));
 
 // ---- 01 landing (real app, no demo) ----
@@ -62,7 +64,7 @@ const lensBar = page.locator("#map-lens-bar");
 await lensBar.screenshot({ path: `${S}/06-lens-bar.png` }).then(() => console.log("✓ lens-bar"));
 
 // 07 swarm round (detailed, shows 활동 내역)
-await page.evaluate(async () => { setDensity("detailed"); renderAll(); await handleAsk("AI 개인화가 교사 자율성을 침해하지 않으려면?"); });
+await page.evaluate(async (en) => { setDensity("detailed"); renderAll(); await handleAsk(en ? "How can AI personalization avoid eroding teacher autonomy?" : "AI 개인화가 교사 자율성을 침해하지 않으려면?"); }, LOCALE === "en");
 await page.waitForTimeout(2500);
 await snap(`${S}/07-swarm-round.png`);
 
@@ -101,24 +103,30 @@ await snap(`${I}/01-create-case.png`);
 await page.evaluate(() => { setView("manage"); renderAll(); });
 await page.waitForTimeout(700);
 await page.evaluate(() => {
-  const stages = [
-    { label: "코스 참여", count: 22 }, { label: "접속함", count: 20 },
-    { label: "케이스 열람", count: 19 }, { label: "관점 탐색", count: 16 },
-    { label: "기여 (노드·질문·메모)", count: 13 }, { label: "성찰 제출", count: 9 },
-  ];
-  const kpis = [["20/22", "활동 학생"], ["31", "노드 추가"], ["54", "질문"], ["27", "메모"], ["9", "성찰 제출"]];
-  const lens = [["교사", 38], ["학생", 27], ["에듀테크", 19], ["행정", 11], ["접근성", 5]];
-  const rows = [["김민지", "6월 10일 14:22", 3, 5, 2, 1], ["이서연", "6월 10일 14:18", 2, 4, 3, 1], ["박지호", "6월 10일 13:55", 4, 2, 1, 0]];
+  const en = localStorage.getItem("swarm-id-locale-v1") === "en";
+  const stages = (en
+    ? [["Enrolled", 22], ["Signed in", 20], ["Opened a case", 19], ["Explored lenses", 16], ["Contributed", 13], ["Submitted reflection", 9]]
+    : [["코스 참여", 22], ["접속함", 20], ["케이스 열람", 19], ["관점 탐색", 16], ["기여 (노드·질문·메모)", 13], ["성찰 제출", 9]]
+  ).map((p) => ({ label: p[0], count: p[1] }));
+  const kpis = en
+    ? [["20/22", "Active students"], ["31", "Nodes"], ["54", "Questions"], ["27", "Notes"], ["9", "Reflections"]]
+    : [["20/22", "활동 학생"], ["31", "노드 추가"], ["54", "질문"], ["27", "메모"], ["9", "성찰 제출"]];
+  const lens = en
+    ? [["Teacher", 38], ["Student", 27], ["Edtech", 19], ["Admin", 11], ["Accessibility", 5]]
+    : [["교사", 38], ["학생", 27], ["에듀테크", 19], ["행정", 11], ["접근성", 5]];
+  const rows = en
+    ? [["Mina Kim", "Jun 10, 2:22 PM", 3, 5, 2, 1], ["Seo-yeon Lee", "Jun 10, 2:18 PM", 2, 4, 3, 1], ["Jiho Park", "Jun 10, 1:55 PM", 4, 2, 1, 0]]
+    : [["김민지", "6월 10일 14:22", 3, 5, 2, 1], ["이서연", "6월 10일 14:18", 2, 4, 3, 1], ["박지호", "6월 10일 13:55", 4, 2, 1, 0]];
   document.getElementById("manage-analytics-body").innerHTML = `
     <div class="manage-kpi-row">${kpis.map(([v, l]) => `<div class="manage-kpi"><strong>${v}</strong><span>${l}</span></div>`).join("")}</div>
     <div class="manage-analytics-grid">
-      <div><h4>참여 퍼널</h4>${buildManageFunnel(stages)}</div>
-      <div><h4>관점 전환 분포</h4><div class="manage-lens-row">${lens.map(([l, p]) => `<span class="manage-lens-chip"><strong>${l}</strong> ${p}%</span>`).join("")}</div>
-      <p class="muted manage-hint">비중이 낮은 관점은 수업에서 명시적으로 다뤄볼 만해요.</p></div>
+      <div><h4>${en ? "Engagement funnel" : "참여 퍼널"}</h4>${buildManageFunnel(stages)}</div>
+      <div><h4>${en ? "Lens switches" : "관점 전환 분포"}</h4><div class="manage-lens-row">${lens.map(([l, p]) => `<span class="manage-lens-chip"><strong>${l}</strong> ${p}%</span>`).join("")}</div>
+      <p class="muted manage-hint">${en ? "Low-share lenses are good candidates for explicit discussion." : "비중이 낮은 관점은 수업에서 명시적으로 다뤄볼 만해요."}</p></div>
     </div>
-    <h4>학생별 활동</h4>
+    <h4>${en ? "Per-student activity" : "학생별 활동"}</h4>
     <div class="manage-table-wrap"><table class="manage-table">
-      <thead><tr><th>이름</th><th>마지막 활동</th><th>노드</th><th>질문</th><th>메모</th><th>성찰</th></tr></thead>
+      <thead><tr>${(en ? ["Name", "Last active", "Nodes", "Questions", "Notes", "Reflections"] : ["이름", "마지막 활동", "노드", "질문", "메모", "성찰"]).map((h) => `<th>${h}</th>`).join("")}</tr></thead>
       <tbody>${rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody>
     </table></div>`;
 });

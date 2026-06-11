@@ -8,6 +8,8 @@ import { mkdirSync, readdirSync, renameSync, rmSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 
 const BASE = "http://127.0.0.1:8137";
+const LOCALE = (process.env.GUIDE_LOCALE || "ko").toLowerCase() === "en" ? "en" : "ko";
+const EN = LOCALE === "en";
 const FF = execFileSync("py", ["-c", "import imageio_ffmpeg; print(imageio_ffmpeg.get_ffmpeg_exe())"]).toString().trim();
 
 function audioDur(mp3) {
@@ -156,7 +158,7 @@ const STUDENT = {
   "07-swarm-round": async (page) => {
     await enterStudio(page, { density: "detailed" });
     await clickAt(page, "#composer-toggle");
-    await typeSlow(page, "#visualizer-input", "AI 개인화가 교사 자율성을 침해하지 않으려면?");
+    await typeSlow(page, "#visualizer-input", EN ? "How can AI personalization avoid eroding teacher autonomy?" : "AI 개인화가 교사 자율성을 침해하지 않으려면?");
     await clickAt(page, "#visualizer-form button[type='submit']");
     await page.waitForTimeout(2600);
     await glideTo(page, "#graph-events", 900);
@@ -165,8 +167,8 @@ const STUDENT = {
     await enterStudio(page);
     await clickAt(page, ".map-dock-btn[data-drawer='intake']");
     await page.waitForTimeout(700);
-    await typeSlow(page, "#agenda-node-form input[name='agendaTitle']", "기기 접근 격차");
-    await typeSlow(page, "#agenda-node-form textarea[name='agendaBody']", "가정에 기기가 없는 학생은 어떻게 참여하나요?");
+    await typeSlow(page, "#agenda-node-form input[name='agendaTitle']", EN ? "Device access gap" : "기기 접근 격차");
+    await typeSlow(page, "#agenda-node-form textarea[name='agendaBody']", EN ? "How do students without a device at home participate?" : "가정에 기기가 없는 학생은 어떻게 참여하나요?");
     await clickAt(page, "#agenda-node-form button[type='submit']");
     await page.waitForTimeout(2500);
   },
@@ -174,7 +176,7 @@ const STUDENT = {
     await enterStudio(page);
     await clickAt(page, "#map-mode-btn");
     await page.waitForTimeout(900);
-    await typeSlow(page, "#node-list-search", "교사");
+    await typeSlow(page, "#node-list-search", EN ? "teacher" : "교사");
     await page.waitForTimeout(900);
     await page.locator("#node-list-search").fill("");
     await clickAt(page, ".node-list-row");
@@ -190,9 +192,9 @@ const STUDENT = {
       const pill = document.getElementById("presence-pill");
       if (pill) {
         pill.hidden = false;
-        pill.textContent = "함께 보는 중 3명";
+        pill.textContent = document.documentElement.lang === "en" || localStorage.getItem("swarm-id-locale-v1") === "en" ? "3 viewing now" : "함께 보는 중 3명";
       }
-      showToast("서연 님의 활동이 맵에 반영됐어요.");
+      showToast(localStorage.getItem("swarm-id-locale-v1") === "en" ? "Seo-yeon’s activity just landed on the map." : "서연 님의 활동이 맵에 반영됐어요.");
     });
     await glideTo(page, "#presence-pill", 800);
   },
@@ -222,7 +224,7 @@ const INSTRUCTOR = {
         await glide(page, box.x + 40, box.y + 20, 700);
         await page.mouse.down();
         await page.mouse.up();
-        await brief.type("중학교 과학 수업에 AI 튜터를 도입하려는 상황...", { delay: 45 }).catch(() => {});
+        await brief.type(EN ? "A middle-school science class is adopting an AI tutor..." : "중학교 과학 수업에 AI 튜터를 도입하려는 상황...", { delay: 45 }).catch(() => {});
       }
     }
   },
@@ -236,15 +238,22 @@ const INSTRUCTOR = {
     await clickAt(page, ".nav-item[data-view='manage']");
     await page.waitForTimeout(900);
     await page.evaluate(() => {
-      const stages = [["코스 참여", 22], ["접속함", 20], ["케이스 열람", 19], ["관점 탐색", 16], ["기여 (노드·질문·메모)", 13], ["성찰 제출", 9]].map((p) => ({ label: p[0], count: p[1] }));
-      const kpis = [["20/22", "활동 학생"], ["31", "노드 추가"], ["54", "질문"], ["27", "메모"], ["9", "성찰 제출"]];
-      const lens = [["교사", 38], ["학생", 27], ["에듀테크", 19], ["행정", 11], ["접근성", 5]];
+      const en = localStorage.getItem("swarm-id-locale-v1") === "en";
+      const stages = (en
+        ? [["Enrolled", 22], ["Signed in", 20], ["Opened a case", 19], ["Explored lenses", 16], ["Contributed", 13], ["Submitted reflection", 9]]
+        : [["코스 참여", 22], ["접속함", 20], ["케이스 열람", 19], ["관점 탐색", 16], ["기여 (노드·질문·메모)", 13], ["성찰 제출", 9]]).map((p) => ({ label: p[0], count: p[1] }));
+      const kpis = en
+        ? [["20/22", "Active students"], ["31", "Nodes"], ["54", "Questions"], ["27", "Notes"], ["9", "Reflections"]]
+        : [["20/22", "활동 학생"], ["31", "노드 추가"], ["54", "질문"], ["27", "메모"], ["9", "성찰 제출"]];
+      const lens = en
+        ? [["Teacher", 38], ["Student", 27], ["Edtech", 19], ["Admin", 11], ["Accessibility", 5]]
+        : [["교사", 38], ["학생", 27], ["에듀테크", 19], ["행정", 11], ["접근성", 5]];
       const kpiHtml = kpis.map((p) => '<div class="manage-kpi"><strong>' + p[0] + "</strong><span>" + p[1] + "</span></div>").join("");
       const lensHtml = lens.map((p) => '<span class="manage-lens-chip"><strong>' + p[0] + "</strong> " + p[1] + "%</span>").join("");
       document.getElementById("manage-analytics-body").innerHTML =
         '<div class="manage-kpi-row">' + kpiHtml + "</div>" +
-        '<div class="manage-analytics-grid"><div><h4>참여 퍼널</h4>' + buildManageFunnel(stages) + "</div>" +
-        '<div><h4>관점 전환 분포</h4><div class="manage-lens-row">' + lensHtml + "</div></div></div>";
+        '<div class="manage-analytics-grid"><div><h4>' + (en ? "Engagement funnel" : "참여 퍼널") + '</h4>' + buildManageFunnel(stages) + "</div>" +
+        '<div><h4>' + (en ? "Lens switches" : "관점 전환 분포") + '</h4><div class="manage-lens-row">' + lensHtml + "</div></div></div>";
     });
     await glideTo(page, ".manage-join-code", 800);
     await glideTo(page, ".manage-case-row", 800);
@@ -286,10 +295,10 @@ const INSTRUCTOR = {
       const pill = document.getElementById("presence-pill");
       if (pill) {
         pill.hidden = false;
-        pill.textContent = "함께 보는 중 12명";
+        pill.textContent = localStorage.getItem("swarm-id-locale-v1") === "en" ? "12 viewing now" : "함께 보는 중 12명";
       }
-      pushGraphEvent("동료 활동", "민지 님의 활동이 맵에 반영됐어요");
-      showToast("민지 님의 활동이 맵에 반영됐어요.");
+      pushGraphEvent(localStorage.getItem("swarm-id-locale-v1") === "en" ? "Peer activity" : "동료 활동", localStorage.getItem("swarm-id-locale-v1") === "en" ? "Mina’s activity just landed on the map" : "민지 님의 활동이 맵에 반영됐어요");
+      showToast(localStorage.getItem("swarm-id-locale-v1") === "en" ? "Mina’s activity just landed on the map." : "민지 님의 활동이 맵에 반영됐어요.");
       renderAll();
     });
     await glideTo(page, "#presence-pill", 800);
@@ -308,6 +317,7 @@ async function record(group, name, fn, audioPath, outDir) {
   });
   const page = await ctx.newPage();
   await page.addInitScript(CURSOR_INIT);
+  await page.addInitScript(`try { localStorage.setItem("swarm-id-locale-v1", "${LOCALE}"); } catch (_) {}`);
   const start = Date.now();
   try {
     await fn(page);
@@ -328,10 +338,10 @@ async function record(group, name, fn, audioPath, outDir) {
 const only = process.argv[2] || "";
 for (const [name, fn] of Object.entries(STUDENT)) {
   if (only && !("student/" + name).includes(only)) continue;
-  await record("student", name, fn, "guides/audio/student-ko/" + name + ".mp3", "guides/videos/student-ko");
+  await record("student", name, fn, "guides/audio/student-" + LOCALE + "/" + name + ".mp3", "guides/videos/student-" + LOCALE);
 }
 for (const [name, fn] of Object.entries(INSTRUCTOR)) {
   if (only && !("instructor/" + name).includes(only)) continue;
-  await record("instructor", name, fn, "guides/audio/instructor-ko/" + name + ".mp3", "guides/videos/instructor-ko");
+  await record("instructor", name, fn, "guides/audio/instructor-" + LOCALE + "/" + name + ".mp3", "guides/videos/instructor-" + LOCALE);
 }
 console.log("recording done");

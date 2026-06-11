@@ -4,6 +4,9 @@
 window.__DTS_PREVIEW__ = true;
 (function () {
   function inject() {
+    const EN = (function () {
+      try { return localStorage.getItem("swarm-id-locale-v1") === "en"; } catch (_) { return false; }
+    })();
     const A = (title, stakeholder) => ({ title, stakeholder: stakeholder || "teacher", body: title });
     const arrs = () => ({
       aiGeneratedNodes: [],
@@ -18,12 +21,16 @@ window.__DTS_PREVIEW__ = true;
 
     const ca = {
       id: "ca",
-      title: "AI 개인화 학습 도입",
+      title: EN ? "Adopting AI-Personalized Learning" : "AI 개인화 학습 도입",
       published: true,
-      summary: "학교가 컴퓨터 기반 수업(CBI)을 도입하는 상황의 설계 쟁점을 지도화합니다.",
-      pipeline: { graphStatus: "동기화됨" },
-      learningGoals: ["CBI를 교육적 의도를 잃지 않고 통합하기"],
-      constraints: ["페다고지 vs 자동화", "형평성 vs 표준화", "통제 vs 편의"],
+      summary: EN
+        ? "Mapping the design tensions of a school adopting computer-based instruction (CBI)."
+        : "학교가 컴퓨터 기반 수업(CBI)을 도입하는 상황의 설계 쟁점을 지도화합니다.",
+      pipeline: { graphStatus: EN ? "Synced" : "동기화됨" },
+      learningGoals: [EN ? "Integrate CBI without losing pedagogical intent" : "CBI를 교육적 의도를 잃지 않고 통합하기"],
+      constraints: EN
+        ? ["Pedagogy vs automation", "Equity vs standardization", "Control vs convenience"]
+        : ["페다고지 vs 자동화", "형평성 vs 표준화", "통제 vs 편의"],
       metrics: { personalization: 70, teacherLoad: 62, privacy: 55, accessibility: 50 },
       evidence: [],
       decisions: [],
@@ -40,24 +47,36 @@ window.__DTS_PREVIEW__ = true;
     const course = {
       id: "c",
       code: "EDU101",
-      name: "인공지능활용교육론",
+      name: EN ? "AI in Education" : "인공지능활용교육론",
       cases: [ca],
       publishedCaseIds: ["ca"],
-      learners: [
-        { id: "l", name: "민지" },
-        { id: "p1", name: "서연" },
-        { id: "p2", name: "지호" },
-      ],
-      learnerRuns: [
-        run("l", "민지", [A("AI 페이싱이 교사 판단을 덮음", "teacher"), A("기기 접근 격차", "student"), A("데이터 주권", "it")]),
-        run("p1", "서연", [A("AI 페이싱이 교사 판단을 덮음", "teacher"), A("채점 노동 증가", "teacher")]),
-        run("p2", "지호", [A("AI 페이싱이 교사 판단을 덮음", "teacher"), A("기기 접근 격차", "student"), A("행정 도입 압력", "administrator")]),
-      ],
+      learners: EN
+        ? [
+            { id: "l", name: "Mina" },
+            { id: "p1", name: "Seo-yeon" },
+            { id: "p2", name: "Jiho" },
+          ]
+        : [
+            { id: "l", name: "민지" },
+            { id: "p1", name: "서연" },
+            { id: "p2", name: "지호" },
+          ],
+      learnerRuns: EN
+        ? [
+            run("l", "Mina", [A("AI pacing overrides teacher judgment", "teacher"), A("Device access gap", "student"), A("Data sovereignty", "it")]),
+            run("p1", "Seo-yeon", [A("AI pacing overrides teacher judgment", "teacher"), A("Grading labor increases", "teacher")]),
+            run("p2", "Jiho", [A("AI pacing overrides teacher judgment", "teacher"), A("Device access gap", "student"), A("Administrative adoption pressure", "administrator")]),
+          ]
+        : [
+            run("l", "민지", [A("AI 페이싱이 교사 판단을 덮음", "teacher"), A("기기 접근 격차", "student"), A("데이터 주권", "it")]),
+            run("p1", "서연", [A("AI 페이싱이 교사 판단을 덮음", "teacher"), A("채점 노동 증가", "teacher")]),
+            run("p2", "지호", [A("AI 페이싱이 교사 판단을 덮음", "teacher"), A("기기 접근 격차", "student"), A("행정 도입 압력", "administrator")]),
+          ],
       instructors: [],
     };
 
-    state.platform.institutions = [{ id: "i", name: "이화여자대학교", courses: [course] }];
-    state.locale = "ko";
+    state.platform.institutions = [{ id: "i", name: EN ? "Ewha Womans University" : "이화여자대학교", courses: [course] }];
+    state.locale = EN ? "en" : "ko";
     state.activeRole = "user";
     state.activeInstitutionId = "i";
     state.activeCourseId = "c";
