@@ -2,7 +2,7 @@
   <img src="./assets/logo.png" alt="Design Tension Studio logo" width="84" />
 </p>
 
-<h1 align="center">디자인 텐션 스튜디오 (Design Tension Studio) — 한국어판</h1>
+<h1 align="center">Design Tension Studio</h1>
 
 <p align="center">
   <strong>설계의 쟁점을 살아 있는 맵으로 읽는 비판적 수업설계 스튜디오</strong><br/>
@@ -10,16 +10,16 @@
 </p>
 
 <p align="center">
-  <a href="https://swarm-id-ko.pages.dev"><b>라이브 앱</b></a> ·
-  <a href="https://dts-ko-preview.pages.dev"><b>무로그인 데모</b></a> ·
-  <a href="https://swarm-id-ko.pages.dev/guides/student-ko"><b>학생 가이드</b></a> ·
-  <a href="https://swarm-id-ko.pages.dev/guides/instructor-ko"><b>교수자 가이드</b></a>
+  <a href="https://swarmid.vercel.app"><b>Live app (EN)</b></a> ·
+  <a href="https://swarm-id-ko.pages.dev"><b>한국어판</b></a> ·
+  <a href="https://dts-ko-preview.pages.dev"><b>No-login demo</b></a> ·
+  <a href="https://swarm-id-ko.pages.dev/guides/student-ko"><b>Guides</b></a>
 </p>
 
-> **이 `ko` 브랜치는 한국어 기본(Korean-default) 버전입니다.** 영어 원본은 `main` 브랜치
-> (swarmid.vercel.app)를 참고하세요. 두 브랜치는 같은 Supabase 백엔드를 공유하며,
-> `ko`는 한국어 UI·홈 대시보드·사용성 업그레이드·PWA·실시간 협업·AI 피드백 연구
-> 기능이 먼저 적용되는 선행 브랜치입니다.
+> **`main` is the English-default canonical deployment** (live at swarmid.vercel.app and
+> used by CAT 531). The Korean-default twin lives on the `ko` branch
+> (swarm-id-ko.pages.dev). Both branches share the same codebase and Supabase
+> backend — they differ only in default locale, first-paint statics, and manifest.
 
 ---
 

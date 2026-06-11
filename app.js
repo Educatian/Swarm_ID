@@ -890,7 +890,7 @@ const DEFAULT_SUPABASE_CONFIG = window.SUPABASE_CONFIG || { url: "", anonKey: ""
 const DEFAULT_GEMINI_CONFIG = window.GEMINI_CONFIG || { apiKey: "", model: "gemini-2.5-flash" };
 
 const state = {
-  locale: window.localStorage.getItem(LOCALE_STORAGE_KEY) || "ko",
+  locale: window.localStorage.getItem(LOCALE_STORAGE_KEY) || "en",
   density: window.localStorage.getItem(DENSITY_STORAGE_KEY) || "",
   theme: window.localStorage.getItem(THEME_STORAGE_KEY) || "dark",
   activeView: "visualizer",
