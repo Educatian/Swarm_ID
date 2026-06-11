@@ -53,27 +53,43 @@
           </div>
         </div>
         <button class="toolbar-button toolbar-button-quiet toolbar-button-icon" id="landing-locale-toggle" type="button" aria-label="주간(라이트) 모드로 전환" title="주간(라이트) 모드로 전환"><span class="material-symbols-outlined" aria-hidden="true">light_mode</span></button>
-        <button class="toolbar-button toolbar-button-primary" id="landing-enter-button" type="button">로그인</button>
       </div>
     </header>
 
     <section class="landing-hero">
       <div class="landing-copy">
-        <p class="landing-kicker">AI + 인간 네트워크 시각화</p>
-        <h2 class="hero-type-h2"><span class="hero-type-text" id="landing-hero-title">설계의 쟁점을 살아 있는 네트워크로 바꾸세요.</span><span class="hero-type-caret" aria-hidden="true"></span></h2>
-        <p class="landing-body">사람의 판단, 제도적 제약, AI 추론을 하나의 화면에서 함께 살펴봅니다.</p>
-        <div class="landing-signal-row">
-          <span>교사 부담</span>
-          <span>학생 주체성</span>
-          <span>거버넌스</span>
-          <span>접근성</span>
-        </div>
-        <article class="landing-login-card" id="landing-login-card">
-          <div class="landing-login-head">
-            <p class="landing-kicker">로그인</p>
-              <strong>워크스페이스 열기</strong>
-          </div>
+        <p class="landing-kicker">비판적 수업설계 스튜디오</p>
+        <h2 class="hero-headline"><span id="landing-hero-title">설계의 쟁점을 살아 있는 맵으로 읽어요.</span></h2>
+        <p class="landing-body">교사 · 학생 · 에듀테크 · 행정 — 네 관점이 부딪히는 지점을 시각화하고, 근거로 생각을 정리하는 수업 설계 스튜디오예요.</p>
+        <ol class="landing-steps">
+          <li>
+            <span class="landing-step-num">1</span>
+            <div>
+              <strong>케이스를 맵으로 펼쳐요</strong>
+              <p>수업 설계 사례 하나가 이해관계자 · 제약 · 쟁점의 네트워크로 나타나요.</p>
+            </div>
+          </li>
+          <li>
+            <span class="landing-step-num">2</span>
+            <div>
+              <strong>네 관점으로 다시 읽어요</strong>
+              <p>같은 쟁점이 입장에 따라 어떻게 달라 보이는지 비교해요.</p>
+            </div>
+          </li>
+          <li>
+            <span class="landing-step-num">3</span>
+            <div>
+              <strong>근거로 생각을 정리해요</strong>
+              <p>질문하고, 내 노드를 더하고, 발견한 쟁점을 짧은 성찰로 제출해요.</p>
+            </div>
+          </li>
+        </ol>
+        <article class="landing-login-card" id="landing-login-card" data-auth-mode="login">
           <form class="landing-login-form" id="landing-login-form">
+            <div class="landing-login-head">
+              <p class="landing-kicker">로그인</p>
+              <strong>워크스페이스 열기</strong>
+            </div>
             <div class="landing-login-grid auth-grid">
               <label class="mini-control">
                 <span>이메일</span>
@@ -117,6 +133,8 @@
             </div>
             <p class="landing-join-helper" id="landing-join-helper"></p>
           </form>
+
+          <button type="button" class="landing-auth-mode-toggle" id="landing-auth-mode-toggle">처음 오셨나요? 코스 코드로 참여</button>
         </article>
       </div>
 

@@ -6520,3 +6520,107 @@ html:not(.theme-light) .landing-header {
 html:not(.theme-light) .landing-brand .material-symbols-outlined {
   color: #a7b6ff;
 }
+
+/* ---- Landing redesign: quieter, fewer buttons, app content up front ---- */
+.landing-steps {
+  list-style: none;
+  margin: 26px 0 30px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 56ch;
+}
+
+.landing-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.landing-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: "Space Grotesk", sans-serif;
+  background: rgba(151, 169, 255, 0.16);
+  color: #a7b6ff;
+  border: 1px solid rgba(151, 169, 255, 0.3);
+}
+
+.landing-steps strong {
+  display: block;
+  font-size: 0.98rem;
+  margin-bottom: 2px;
+}
+
+.landing-steps p {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: rgba(214, 222, 240, 0.78);
+}
+
+html.theme-light .landing-step-num {
+  background: rgba(84, 104, 255, 0.1);
+  color: #4051d8;
+  border-color: rgba(84, 104, 255, 0.28);
+}
+
+html.theme-light .landing-steps p {
+  color: rgba(50, 62, 88, 0.82);
+}
+
+/* One auth form at a time, switched by a quiet text toggle. */
+.landing-login-card[data-auth-mode="login"] .landing-join-form {
+  display: none;
+}
+
+.landing-login-card[data-auth-mode="join"] .landing-login-form {
+  display: none;
+}
+
+.landing-auth-mode-toggle {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 6px 4px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  text-align: center;
+  color: #a7b6ff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(167, 182, 255, 0.4);
+  border-radius: 8px;
+}
+
+.landing-auth-mode-toggle:hover,
+.landing-auth-mode-toggle:focus-visible {
+  color: #c3cdff;
+  text-decoration-color: currentColor;
+}
+
+html.theme-light .landing-auth-mode-toggle {
+  color: #4051d8;
+  text-decoration-color: rgba(64, 81, 216, 0.4);
+}
+
+html.theme-light .landing-auth-mode-toggle:hover,
+html.theme-light .landing-auth-mode-toggle:focus-visible {
+  color: #2435b8;
+}
+
+html:not(.theme-light) .landing-brand div p.landing-brand-kicker {
+  color: rgba(222, 229, 246, 0.96);
+}

@@ -79,9 +79,17 @@ const translations = {
     labName: "Instructional design systems lab",
     signIn: "Sign In",
     signInSubmit: "Continue",
-    landingHeroKicker: "AI + Human Network Visualization",
-    landingHeroTitle: "Turn design tension into a living network.",
-    landingHeroBody: "Human judgment, institutional friction, and AI reasoning in one responsive field.",
+    landingHeroKicker: "Critical Instructional-Design Studio",
+    landingHeroTitle: "Read design tensions as a living map.",
+    landingHeroBody: "Teacher, student, edtech, administration — see where the four perspectives pull against each other, then build your reasoning on evidence.",
+    landingStep1Title: "Open a case as a map",
+    landingStep1Body: "One design case unfolds into a network of stakeholders, constraints, and issues.",
+    landingStep2Title: "Re-read it through four lenses",
+    landingStep2Body: "Compare how the same issue looks from each side of the classroom.",
+    landingStep3Title: "Build your reasoning on evidence",
+    landingStep3Body: "Ask questions, add your own nodes, and submit a short reflection.",
+    landingAuthToJoin: "First time here? Join with a course code",
+    landingAuthToLogin: "Already enrolled? Sign in with email",
     landingTutorialsKicker: "Guides",
     landingTutorialRoleStudent: "Student",
     landingTutorialRoleInstructor: "Instructor",
@@ -465,9 +473,17 @@ const translations = {
     labName: "수업설계 시스템 연구실",
     signIn: "로그인",
     signInSubmit: "계속",
-    landingHeroKicker: "AI + 인간 네트워크 시각화",
-    landingHeroTitle: "설계의 쟁점을 살아 있는 네트워크로 바꾸세요.",
-    landingHeroBody: "사람의 판단, 제도적 제약, AI 추론을 하나의 화면에서 함께 살펴봅니다.",
+    landingHeroKicker: "비판적 수업설계 스튜디오",
+    landingHeroTitle: "설계의 쟁점을 살아 있는 맵으로 읽어요.",
+    landingHeroBody: "교사 · 학생 · 에듀테크 · 행정 — 네 관점이 부딪히는 지점을 시각화하고, 근거로 생각을 정리하는 수업 설계 스튜디오예요.",
+    landingStep1Title: "케이스를 맵으로 펼쳐요",
+    landingStep1Body: "수업 설계 사례 하나가 이해관계자 · 제약 · 쟁점의 네트워크로 나타나요.",
+    landingStep2Title: "네 관점으로 다시 읽어요",
+    landingStep2Body: "같은 쟁점이 입장에 따라 어떻게 달라 보이는지 비교해요.",
+    landingStep3Title: "근거로 생각을 정리해요",
+    landingStep3Body: "질문하고, 내 노드를 더하고, 발견한 쟁점을 짧은 성찰로 제출해요.",
+    landingAuthToJoin: "처음 오셨나요? 코스 코드로 참여",
+    landingAuthToLogin: "이미 참여했나요? 이메일로 로그인",
     landingTutorialsKicker: "가이드",
     landingTutorialRoleStudent: "학생",
     landingTutorialRoleInstructor: "교수자",
@@ -1506,17 +1522,27 @@ function applyStaticTranslations() {
   const landingCopy = document.querySelector(".landing-copy");
   if (landingCopy) {
     const kicker = landingCopy.querySelector(".landing-kicker");
-    const titleTextEl = landingCopy.querySelector(".hero-type-text") || landingCopy.querySelector("h2");
+    const titleTextEl = document.getElementById("landing-hero-title") || landingCopy.querySelector("h2");
     const body = landingCopy.querySelector(".landing-body");
     if (kicker) kicker.textContent = t("landingHeroKicker");
-    if (titleTextEl) typeHeroTitle(titleTextEl, t("landingHeroTitle"));
+    if (titleTextEl) titleTextEl.textContent = t("landingHeroTitle");
     if (body) body.textContent = t("landingHeroBody");
   }
 
-  const signalSpans = document.querySelectorAll(".landing-signal-row span");
-  [t("signalTeacherLoad"), t("signalStudentAgency"), t("signalGovernance"), t("signalAccessibility")].forEach((text, index) => {
-    if (signalSpans[index]) signalSpans[index].textContent = text;
+  const landingSteps = document.querySelectorAll(".landing-steps li");
+  [
+    ["landingStep1Title", "landingStep1Body"],
+    ["landingStep2Title", "landingStep2Body"],
+    ["landingStep3Title", "landingStep3Body"],
+  ].forEach(([titleKey, bodyKey], index) => {
+    const item = landingSteps[index];
+    if (!item) return;
+    const strong = item.querySelector("strong");
+    const body = item.querySelector("p");
+    if (strong) strong.textContent = t(titleKey);
+    if (body) body.textContent = t(bodyKey);
   });
+  refreshLandingAuthModeToggle();
 
   const headerGuidesLabel = document.getElementById("header-guides-label");
   if (headerGuidesLabel) headerGuidesLabel.textContent = t("landingTutorialsKicker");
@@ -9768,6 +9794,39 @@ dom.landingEnterButtons.forEach((button) => {
     focusLandingLogin();
   });
 });
+
+// Landing auth card shows ONE form at a time (fewer visible buttons); the quiet
+// text toggle underneath switches between email sign-in and join-by-code.
+function refreshLandingAuthModeToggle() {
+  const card = document.getElementById("landing-login-card");
+  const toggle = document.getElementById("landing-auth-mode-toggle");
+  if (!card || !toggle) return;
+  const mode = card.dataset.authMode === "join" ? "join" : "login";
+  toggle.textContent = mode === "join" ? t("landingAuthToLogin") : t("landingAuthToJoin");
+}
+
+function setLandingAuthMode(mode) {
+  const card = document.getElementById("landing-login-card");
+  if (!card) return;
+  card.dataset.authMode = mode === "join" ? "join" : "login";
+  try {
+    localStorage.setItem("landing-auth-mode", card.dataset.authMode);
+  } catch (_) {}
+  refreshLandingAuthModeToggle();
+}
+
+document.getElementById("landing-auth-mode-toggle")?.addEventListener("click", () => {
+  const card = document.getElementById("landing-login-card");
+  setLandingAuthMode(card?.dataset.authMode === "join" ? "login" : "join");
+});
+
+(function restoreLandingAuthMode() {
+  let stored = "";
+  try {
+    stored = localStorage.getItem("landing-auth-mode") || "";
+  } catch (_) {}
+  setLandingAuthMode(stored === "join" ? "join" : "login");
+})();
 
 document.getElementById("student-onboarding-tour-button")?.addEventListener("click", () => {
   startTutorial(true);
