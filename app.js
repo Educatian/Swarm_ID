@@ -9427,6 +9427,7 @@ function setPanelCollapsed(panelKey, collapsed, { persist = true } = {}) {
   if (persist) {
     try { localStorage.setItem(`panel-collapsed:${panelKey}`, collapsed ? "1" : "0"); } catch (_) {}
   }
+  updateMapFocusButton();
   // Re-measure the D3 stage after layout changes so the graph expands into the reclaimed space.
   // Use two rAFs so CSS grid has actually reflowed before we read the new width/height.
   window.requestAnimationFrame(() => {
@@ -9461,6 +9462,39 @@ function setPanelCollapsed(panelKey, collapsed, { persist = true } = {}) {
     });
   });
 }
+
+// "맵 크게 보기" — collapse/expand both side panels at once so the map takes the
+// full width (usability: "맵 영역이 작다", "양 옆 UI를 줄이거나 펼쳐 볼 수 있는 형태").
+function isMapFocusActive() {
+  const intake = document.querySelector('[data-collapsible-panel="intake"]');
+  const insight = document.querySelector('[data-collapsible-panel="insight"]');
+  return Boolean(
+    intake?.classList.contains("is-collapsed") && insight?.classList.contains("is-collapsed")
+  );
+}
+
+function updateMapFocusButton() {
+  const btn = document.getElementById("map-focus-btn");
+  if (!btn) return;
+  const active = isMapFocusActive();
+  const ko = state.locale === "ko";
+  btn.classList.toggle("is-detailed", active);
+  const icon = btn.querySelector(".material-symbols-outlined");
+  if (icon) icon.textContent = active ? "fullscreen_exit" : "fullscreen";
+  const label = document.getElementById("map-focus-label");
+  if (label) label.textContent = active ? (ko ? "패널 열기" : "Show panels") : (ko ? "맵 크게" : "Focus map");
+  const title = active ? (ko ? "양쪽 패널 다시 열기" : "Reopen both panels") : (ko ? "패널을 접고 맵을 크게 보기" : "Collapse panels and focus the map");
+  btn.title = title;
+  btn.setAttribute("aria-label", title);
+  btn.setAttribute("aria-pressed", active ? "true" : "false");
+}
+
+document.getElementById("map-focus-btn")?.addEventListener("click", () => {
+  const next = !isMapFocusActive();
+  setPanelCollapsed("intake", next);
+  setPanelCollapsed("insight", next);
+  logEvent("map.focus", { active: next });
+});
 
 function restoreCollapsiblePanels() {
   // One-time reset for this version: earlier builds could persist a broken collapsed state,
