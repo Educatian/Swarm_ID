@@ -2,7 +2,7 @@
    Strategy: network-first for the app shell (so every deploy reaches students
    on the next launch), falling back to cache when offline. Static assets are
    cached as they are fetched. */
-const CACHE_NAME = "dts-shell-v1";
+const CACHE_NAME = "dts-shell-v2";
 const SHELL = [
   "./index.html",
   "./app.js",
@@ -37,9 +37,16 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const request = event.request;
   if (request.method !== "GET") return;
+  // Media streams use Range requests / partial (206) responses, which the
+  // Cache API cannot store and which break when proxied through the worker
+  // ("video playback aborted due to a network error"). Let the browser talk
+  // to the network directly for all media.
+  if (request.headers.has("range")) return;
+  if (request.destination === "video" || request.destination === "audio") return;
   const url = new URL(request.url);
   // Never intercept API/auth traffic (Supabase, Gemini, fonts CDNs).
   if (url.origin !== self.location.origin) return;
+  if (url.pathname.includes("/guides/videos/") || url.pathname.includes("/guides/audio/")) return;
 
   event.respondWith(
     fetch(request)
