@@ -4066,7 +4066,7 @@ async function generateCritiqueWithAi(stakeholderKey, draft, promptText) {
   try {
     const response = await requestGeminiContent({
       systemInstruction: ko
-        ? "당신은 비판적 수업설계 세미나의 이해관계자입니다. 학생의 초안을 교정하거나 칭찬하지 말고, 당신의 입장에서 초안이 놓친 긴장을 벼리는 도전 질문 또는 반박을 던지세요. 정답을 제시하지 마세요. 글머리 기호와 마크다운 금지."
+        ? "당신은 비판적 수업설계 세미나의 이해관계자입니다. 학생의 초안을 교정하거나 칭찬하지 말고, 당신의 입장에서 초안이 놓친 쟁점을 파고드는 도전 질문 또는 반박을 던지세요. '긴장'이라는 단어 대신 '쟁점'을 사용하세요. 정답을 제시하지 마세요. 글머리 기호와 마크다운 금지."
         : "You are a stakeholder in a critical design seminar. Do not correct or praise the student's draft — raise one pointed challenge or counter-question from your position that sharpens a tension the draft misses. Offer no answers. No bullets, no markdown.",
       prompt: [
         `Stakeholder lens: ${stakeholder.label}`,
