@@ -25,13 +25,13 @@ const CURSOR_INIT = `
   window.addEventListener("DOMContentLoaded", () => {
     const c = document.createElement("div");
     c.id = "fake-cursor";
-    c.style.cssText = "position:fixed;z-index:99999;width:22px;height:22px;border-radius:50%;" +
-      "background:rgba(255,213,87,.45);border:2px solid rgba(255,213,87,.95);pointer-events:none;" +
-      "transform:translate(-50%,-50%);transition:width .15s,height .15s;left:640px;top:400px;box-shadow:0 0 14px rgba(255,213,87,.6)";
+    c.style.cssText = "position:fixed;z-index:99999;width:28px;height:28px;border-radius:50%;" +
+      "background:rgba(255,213,87,.5);border:3px solid rgba(255,213,87,1);pointer-events:none;" +
+      "transform:translate(-50%,-50%);transition:width .15s,height .15s;left:640px;top:400px;box-shadow:0 0 18px rgba(255,213,87,.8)";
     document.body.appendChild(c);
     window.addEventListener("mousemove", (e) => { c.style.left = e.clientX + "px"; c.style.top = e.clientY + "px"; }, true);
-    window.addEventListener("mousedown", () => { c.style.width = "34px"; c.style.height = "34px"; }, true);
-    window.addEventListener("mouseup", () => { c.style.width = "22px"; c.style.height = "22px"; }, true);
+    window.addEventListener("mousedown", () => { c.style.width = "42px"; c.style.height = "42px"; }, true);
+    window.addEventListener("mouseup", () => { c.style.width = "28px"; c.style.height = "28px"; }, true);
   });
 `;
 
@@ -41,10 +41,22 @@ async function glide(page, x, y, ms = 700) {
 }
 
 async function glideTo(page, selector, ms = 700) {
-  const box = await page.locator(selector).first().boundingBox().catch(() => null);
+  const loc = page.locator(selector).first();
+  let box = await loc.boundingBox().catch(() => null);
   if (!box) return null;
-  await glide(page, box.x + box.width / 2, box.y + box.height / 2, ms);
-  return box;
+  // The view must FOLLOW the cursor: if the target sits outside the viewport,
+  // smooth-scroll it to center first so the recording shows the camera move.
+  const viewport = page.viewportSize();
+  if (box.y < 70 || box.y + box.height > viewport.height - 40) {
+    await loc.evaluate((el) => el.scrollIntoView({ behavior: "smooth", block: "center" })).catch(() => {});
+    await page.waitForTimeout(950);
+    box = await loc.boundingBox().catch(() => null);
+    if (!box) return null;
+  }
+  const cx = box.x + box.width / 2;
+  const cy = Math.min(Math.max(box.y + box.height / 2, 10), viewport.height - 10);
+  await glide(page, cx, cy, ms);
+  return { ...box, cx, cy };
 }
 
 async function clickAt(page, selector) {
