@@ -159,7 +159,7 @@ async function runInstructor(browser) {
   await shot(page, role, 8, "trade-offs");
 
   // 09 · Sandbox (scenarios)
-  const sandboxNav = page.locator('[data-view="sandbox"], a:has-text("Sandbox"), a:has-text("샌드박스")').first();
+  const sandboxNav = page.locator('[data-view="sandbox"], a:has-text("Sandbox"), a:has-text("실험 공간")').first();
   if (await sandboxNav.count()) {
     await sandboxNav.click();
     await wait(page, 800);

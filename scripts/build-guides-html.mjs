@@ -16,9 +16,9 @@ const GUIDES = path.join(ROOT, "guides");
 
 const guides = [
   { slug: "instructor-en", md: "instructor-en.md", title: "Swarm_ID — Instructor Guide", lang: "en" },
-  { slug: "instructor-ko", md: "instructor-ko.md", title: "Swarm_ID — 강사용 가이드", lang: "ko" },
+  { slug: "instructor-ko", md: "instructor-ko.md", title: "디자인 텐션 스튜디오 — 교수자용 가이드", lang: "ko" },
   { slug: "student-en",    md: "student-en.md",    title: "Swarm_ID — Student Guide",    lang: "en" },
-  { slug: "student-ko",    md: "student-ko.md",    title: "Swarm_ID — 학생용 가이드",    lang: "ko" },
+  { slug: "student-ko",    md: "student-ko.md",    title: "디자인 텐션 스튜디오 — 학생용 가이드",    lang: "ko" },
 ];
 
 // --- tiny markdown-to-HTML (purpose-built for these guides) ---
@@ -125,6 +125,22 @@ function renderMarkdown(md) {
       closeList(); closeBlockquote(); flushTable();
       const lvl = h[1].length;
       out.push(`<h${lvl}>${renderInline(escapeHtml(h[2]))}</h${lvl}>`);
+      i++; continue;
+    }
+
+    // screen-recording line: [video](path.mp4)
+    const videoOnly = line.match(/^\[video\]\(([^)]+)\)\s*$/);
+    if (videoOnly) {
+      closeList(); closeBlockquote(); flushTable();
+      out.push(`<figure class="screencast"><video controls preload="metadata" playsinline src="${videoOnly[1]}"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>`);
+      i++; continue;
+    }
+
+    // audio narration line: [audio](path.mp3)
+    const audioOnly = line.match(/^\[audio\]\(([^)]+)\)\s*$/);
+    if (audioOnly) {
+      closeList(); closeBlockquote(); flushTable();
+      out.push(`<div class="narration"><span class="narration-label">나레이션 듣기</span><audio controls preload="none" src="${audioOnly[1]}"></audio></div>`);
       i++; continue;
     }
 
@@ -297,6 +313,27 @@ blockquote {
   margin: 18px 0;
   border-radius: 0 var(--radius) var(--radius) 0;
 }
+.screencast video {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(42, 63, 200, 0.2);
+  background: #0b0d14;
+  box-shadow: 0 10px 30px rgba(20, 30, 80, 0.12);
+}
+
+.narration {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0 6px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(42, 63, 200, 0.06);
+  border: 1px solid rgba(42, 63, 200, 0.18);
+}
+.narration-label { font-size: 0.82rem; font-weight: 600; white-space: nowrap; }
+.narration audio { width: 100%; height: 36px; }
+
 figure {
   margin: 24px 0;
   padding: 14px;
@@ -373,9 +410,24 @@ footer {
 `;
 
 function navLinks(activeSlug) {
+  const activeGuide = guides.find(g => g.slug === activeSlug);
+  const isKoreanPage = activeGuide?.lang === "ko";
   return guides.map(g => {
     const cls = g.slug === activeSlug ? ' class="active"' : "";
-    return `<a href="./${g.slug}.html"${cls}>${g.slug}</a>`;
+    const labels = isKoreanPage
+      ? {
+          "instructor-en": "교수자 가이드(영어)",
+          "instructor-ko": "교수자 가이드",
+          "student-en": "학생 가이드(영어)",
+          "student-ko": "학생 가이드",
+        }
+      : {
+          "instructor-en": "Instructor Guide",
+          "instructor-ko": "Instructor Guide (Korean)",
+          "student-en": "Student Guide",
+          "student-ko": "Student Guide (Korean)",
+        };
+    return `<a href="./${g.slug}.html"${cls}>${labels[g.slug] || g.slug}</a>`;
   }).join("");
 }
 
@@ -392,7 +444,7 @@ function wrap(title, lang, slug, bodyHtml, tagline) {
 <body>
   <header class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">Swarm_ID · Classroom guide</p>
+      <p class="eyebrow">${lang === "ko" ? "디자인 텐션 스튜디오 · 수업용 가이드" : "Design Tension Studio · Classroom guide"}</p>
       <h1>${escapeHtml(title)}</h1>
       <p>${escapeHtml(tagline)}</p>
     </div>
@@ -402,7 +454,9 @@ function wrap(title, lang, slug, bodyHtml, tagline) {
 ${bodyHtml}
   </main>
   <footer>
-    <p>Generated from <code>guides/${slug}.md</code>. Screenshots captured on <code>https://swarmid.vercel.app</code> via Playwright.</p>
+    <p>${lang === "ko"
+      ? `<code>guides/${slug}.md</code>에서 생성했습니다. 스크린샷은 Playwright로 <code>https://swarmid.vercel.app</code>에서 캡처했습니다.`
+      : `Generated from <code>guides/${slug}.md</code>. Screenshots captured on <code>https://swarmid.vercel.app</code> via Playwright.`}</p>
   </footer>
 </body>
 </html>`;
@@ -410,9 +464,9 @@ ${bodyHtml}
 
 const taglines = {
   "instructor-en": "Step-by-step setup for instructors preparing a class session with Swarm_ID.",
-  "instructor-ko": "Swarm_ID로 수업을 준비하는 강사를 위한 단계별 안내서.",
+  "instructor-ko": "케이스 만들기부터 참여 분석까지 — 수업 운영의 전체 흐름.",
   "student-en": "What students see in Swarm_ID — from sign-in through swarm rounds to export.",
-  "student-ko": "Swarm_ID에서 학생이 보는 화면 — 로그인부터 스웜 라운드와 내보내기까지.",
+  "student-ko": "로그인부터 생각 정리 제출까지 — 학생이 보는 모든 화면.",
 };
 
 for (const g of guides) {
@@ -423,7 +477,7 @@ for (const g of guides) {
   }
   // Skip the first H1 of the .md since the hero already shows the title.
   let md = readFileSync(mdPath, "utf8");
-  md = md.replace(/^#\s+.*\n+/, "");
+  md = md.replace(/^#\s+[^\r\n]+\r?\n(?:\r?\n)?/, "");
   const body = renderMarkdown(md);
   const html = wrap(g.title, g.lang, g.slug, body, taglines[g.slug] || "");
   const outPath = path.join(GUIDES, `${g.slug}.html`);

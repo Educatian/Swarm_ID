@@ -103,6 +103,27 @@ blockquote {
   margin: 18px 0;
   border-radius: 0 var(--radius) var(--radius) 0;
 }
+.screencast video {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(42, 63, 200, 0.2);
+  background: #0b0d14;
+  box-shadow: 0 10px 30px rgba(20, 30, 80, 0.12);
+}
+
+.narration {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0 6px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(42, 63, 200, 0.06);
+  border: 1px solid rgba(42, 63, 200, 0.18);
+}
+.narration-label { font-size: 0.82rem; font-weight: 600; white-space: nowrap; }
+.narration audio { width: 100%; height: 36px; }
+
 figure {
   margin: 24px 0;
   padding: 14px;
@@ -181,20 +202,20 @@ footer {
 <body>
   <header class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">Swarm_ID · Classroom guide</p>
+      <p class="eyebrow">Design Tension Studio · Classroom guide</p>
       <h1>Swarm_ID — Guides</h1>
       <p>Instructor and student walkthroughs.</p>
     </div>
   </header>
-  <nav class="guide-nav"><a href="./instructor-en.html" class="active">instructor-en</a><a href="./instructor-ko.html">instructor-ko</a><a href="./student-en.html">student-en</a><a href="./student-ko.html">student-ko</a></nav>
+  <nav class="guide-nav"><a href="./instructor-en.html" class="active">Instructor Guide</a><a href="./instructor-ko.html">Instructor Guide (Korean)</a><a href="./student-en.html">Student Guide</a><a href="./student-ko.html">Student Guide (Korean)</a></nav>
   <main>
 
 <h2>Four guides</h2>
 <ul>
 <li><a href="./instructor-en.html">Swarm_ID — Instructor Guide</a> — <small>Step-by-step setup for instructors preparing a class session with Swarm_ID.</small></li>
-<li><a href="./instructor-ko.html">Swarm_ID — 강사용 가이드</a> — <small>Swarm_ID로 수업을 준비하는 강사를 위한 단계별 안내서.</small></li>
+<li><a href="./instructor-ko.html">디자인 텐션 스튜디오 — 교수자용 가이드</a> — <small>케이스 만들기부터 참여 분석까지 — 수업 운영의 전체 흐름.</small></li>
 <li><a href="./student-en.html">Swarm_ID — Student Guide</a> — <small>What students see in Swarm_ID — from sign-in through swarm rounds to export.</small></li>
-<li><a href="./student-ko.html">Swarm_ID — 학생용 가이드</a> — <small>Swarm_ID에서 학생이 보는 화면 — 로그인부터 스웜 라운드와 내보내기까지.</small></li>
+<li><a href="./student-ko.html">디자인 텐션 스튜디오 — 학생용 가이드</a> — <small>로그인부터 생각 정리 제출까지 — 학생이 보는 모든 화면.</small></li>
 </ul>
 <h3>How screenshots were captured</h3>
 <p>Each PNG under <code>guides/screenshots/{role}-{locale}/</code> was produced by <code>scripts/capture-guides.mjs</code>, which drives a headless Chromium through the real deployed app at <a href="https://swarmid.vercel.app">swarmid.vercel.app</a>.</p>

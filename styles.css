@@ -1,3 +1,29 @@
+/* Self-hosted Material Symbols: icons must not degrade to raw ligature text
+   ("tune", "fullscreen") when Google Fonts is blocked or offline. */
+@font-face {
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: block;
+  src: url("./assets/material-symbols-outlined.woff2") format("woff2");
+}
+
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
 :root {
   --surface-tint: #4361ee;
   --secondary-dim: #e76f51;
@@ -1038,21 +1064,23 @@ textarea:focus-visible,
   gap: 18px;
 }
 
+/* Detailed mode: the map gets the flexible space and dominates; side panels are
+   fixed professional widths (work tool, not a dense dashboard). */
 .visualizer-layout {
-  grid-template-columns: minmax(340px, 1.15fr) minmax(0, 2.35fr) minmax(270px, 0.7fr);
+  grid-template-columns: 244px minmax(0, 1fr) 288px;
   align-items: start;
 }
 
 .visualizer-layout.is-focused {
-  grid-template-columns: minmax(360px, 1.02fr) minmax(0, 2.75fr) minmax(260px, 0.62fr);
+  grid-template-columns: 244px minmax(0, 1fr) 288px;
 }
 
 .visualizer-layout.intake-collapsed {
-  grid-template-columns: 0 minmax(0, 1fr) minmax(270px, 0.7fr);
+  grid-template-columns: 0 minmax(0, 1fr) 288px;
 }
 
 .visualizer-layout.insight-collapsed {
-  grid-template-columns: minmax(340px, 1.15fr) minmax(0, 1fr) 0;
+  grid-template-columns: 244px minmax(0, 1fr) 0;
 }
 
 .visualizer-layout.intake-collapsed.insight-collapsed {
@@ -1265,6 +1293,7 @@ textarea:disabled {
 
 .canvas-panel {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
 }
 
@@ -1299,7 +1328,8 @@ textarea:disabled {
 .canvas-stats {
   display: flex;
   gap: 8px;
-  flex-wrap: nowrap;
+  row-gap: 8px;
+  flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
   min-width: 0;
@@ -2936,11 +2966,13 @@ textarea:disabled {
 }
 
 body {
-  color: var(--on-surface);
+  color: rgba(246, 246, 252, 0.92);
   background:
-    radial-gradient(circle at top left, rgba(67, 97, 238, 0.12), transparent 22%),
-    radial-gradient(circle at right center, rgba(27, 156, 133, 0.08), transparent 20%),
-    linear-gradient(180deg, #f8fbff 0%, #eef3fb 100%);
+    radial-gradient(circle at 12% 8%, rgba(67, 97, 238, 0.16), transparent 34%),
+    radial-gradient(circle at 88% 6%, rgba(27, 156, 133, 0.1), transparent 32%),
+    radial-gradient(circle at 50% 120%, rgba(120, 80, 220, 0.12), transparent 45%),
+    linear-gradient(180deg, #0b0d14 0%, #0d0f16 100%);
+  background-attachment: fixed;
 }
 
 .is-hidden {
@@ -2950,18 +2982,19 @@ body {
 .tour-overlay {
   position: fixed;
   inset: 0;
-  z-index: 40;
+  z-index: 58;
   pointer-events: none;
 }
 
 .tour-scrim {
   position: absolute;
   inset: 0;
-  background: rgba(15, 23, 42, 0.42);
+  background: rgba(15, 23, 42, 0.48);
 }
 
 .tour-card {
   position: fixed;
+  z-index: 46;
   width: min(360px, calc(100vw - 32px));
   max-height: calc(100vh - 32px);
   overflow: auto;
@@ -2991,12 +3024,461 @@ body {
   margin-top: 18px;
 }
 
-.tour-target-active {
+.network-node .node-hit {
+  fill: transparent;
+  stroke: none;
+}
+
+.network-link[data-kind="inter-stakeholder"] {
+  stroke-dasharray: 6 5;
+}
+
+/* ---- Realtime collaboration ---- */
+.presence-pill {
+  white-space: nowrap;
+}
+
+.toast-host {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  max-width: min(420px, calc(100vw - 40px));
+  padding: 11px 18px;
+  border-radius: 999px;
+  background: rgba(24, 30, 44, 0.94);
+  color: #fff;
+  font-size: 0.88rem;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.35);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.legend-swatch-dashed {
+  background: none;
+  border-top: 2px dashed rgba(151, 169, 255, 0.85);
+  height: 0;
+  align-self: center;
+}
+
+/* ---- Node list companion view ---- */
+.network-stage.is-list-mode .network-svg,
+.network-stage.is-list-mode .stage-overlay,
+.network-stage.is-list-mode .stage-note-reopen,
+.network-stage.is-list-mode .legend-reopen,
+.network-stage.is-list-mode .network-tooltip,
+.network-stage.is-list-mode .network-empty-preview {
+  display: none;
+}
+
+.node-list-panel {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding: 14px 16px calc(14px + 52px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.node-list-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 6px 8px;
+  border-radius: 12px;
+  background: var(--surface, rgba(255, 255, 255, 0.92));
+  backdrop-filter: blur(6px);
+}
+
+html.dark .node-list-controls {
+  background: rgba(20, 26, 40, 0.92);
+}
+
+.node-list-search-control {
+  flex: 1 1 200px;
+}
+
+.node-list-count {
+  font-size: 0.8rem;
+  color: var(--on-surface-variant);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.node-list-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.node-list-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 11px 13px;
+  border-radius: 14px;
+  border: 1px solid rgba(121, 140, 171, 0.2);
+  background: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+html.dark .node-list-row {
+  background: rgba(28, 35, 52, 0.6);
+  border-color: rgba(121, 140, 171, 0.28);
+}
+
+.node-list-row:hover {
+  border-color: rgba(99, 122, 255, 0.5);
+}
+
+.node-list-row.is-selected {
+  border-color: #5468ff;
+  background: rgba(99, 122, 255, 0.09);
+}
+
+.node-list-dot {
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(121, 140, 171, 0.7);
+}
+
+.node-list-dot[data-tone="danger"] { background: #ff716b; }
+.node-list-dot[data-tone="primary"] { background: #97a9ff; }
+.node-list-dot[data-tone="ok"], .node-list-dot[data-tone="mint"] { background: #00c389; }
+.node-list-dot[data-tone="warm"] { background: #ffb45c; }
+
+.node-list-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.node-list-main strong {
+  display: block;
+  font-size: 0.92rem;
+  margin-bottom: 2px;
+}
+
+.node-list-main p {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--on-surface-variant);
+}
+
+.node-list-tags {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.node-list-empty {
+  margin: 24px 0;
+  text-align: center;
+  color: var(--on-surface-variant);
+}
+
+/* Touch ergonomics: classroom iPads have no hover and need bigger targets. */
+@media (hover: none), (pointer: coarse) {
+  .map-dock-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .lens-pill-row button,
+  .token-row button {
+    min-height: 40px;
+  }
+
+  .toolbar-button,
+  .density-toggle-btn,
+  .panel-expand-toggle {
+    min-height: 40px;
+  }
+
+  .network-tooltip {
+    max-width: min(320px, 78vw);
+  }
+}
+
+.task-banner {
+  margin: 10px 0 0;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(99, 122, 255, 0.22);
+  background: rgba(99, 122, 255, 0.07);
+}
+
+.task-banner-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.task-banner-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.task-banner-title .material-symbols-outlined {
+  font-size: 18px;
+  color: #5468ff;
+}
+
+.task-banner-count {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #5468ff;
+  background: rgba(99, 122, 255, 0.14);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.task-banner-collapse {
+  flex-shrink: 0;
+}
+
+.task-step-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.task-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  opacity: 0.55;
+}
+
+.task-step.is-done,
+.task-step.is-current {
+  opacity: 1;
+}
+
+.task-step-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(121, 140, 171, 0.18);
+  color: var(--on-surface-variant);
+}
+
+.task-step.is-current .task-step-marker {
+  background: #5468ff;
+  color: #fff;
+}
+
+.task-step.is-done .task-step-marker {
+  background: rgba(0, 190, 130, 0.16);
+  color: #00a873;
+}
+
+.task-step-marker .material-symbols-outlined {
+  font-size: 15px;
+}
+
+.task-step-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+.task-step.is-done .task-step-text strong {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  color: var(--on-surface-variant);
+  font-weight: 500;
+}
+
+.task-step-text em {
+  font-style: normal;
+  font-size: 0.8rem;
+  color: var(--on-surface-variant);
+  max-width: 280px;
+}
+
+.task-banner-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: none;
+  padding: 2px 4px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.88rem;
+  color: inherit;
+}
+
+.task-banner-pill .material-symbols-outlined {
+  font-size: 17px;
+  color: #5468ff;
+}
+
+html.dark .task-banner {
+  background: rgba(99, 122, 255, 0.1);
+  border-color: rgba(120, 140, 255, 0.3);
+}
+
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 44;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-overlay.is-hidden {
+  display: none;
+}
+
+.welcome-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(3px);
+}
+
+.welcome-card {
   position: relative;
-  z-index: 41 !important;
-  isolation: isolate;
+  width: min(420px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  padding: 28px 26px 22px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(121, 140, 171, 0.2);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.3);
+  text-align: center;
+}
+
+.welcome-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin: 10px auto 14px;
   border-radius: 18px;
-  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.9), 0 0 0 9999px rgba(15, 23, 42, 0.18);
+  background: rgba(99, 122, 255, 0.12);
+}
+
+.welcome-icon .material-symbols-outlined {
+  font-size: 30px;
+  color: #5468ff;
+}
+
+.welcome-card h3 {
+  margin: 0 0 10px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.2rem;
+  text-wrap: balance;
+}
+
+.welcome-card > p:not(.eyebrow) {
+  margin: 0;
+  color: var(--on-surface-variant);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.welcome-dots {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin: 18px 0 4px;
+}
+
+.welcome-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(121, 140, 171, 0.35);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.welcome-dots span.is-active {
+  background: #5468ff;
+  transform: scale(1.25);
+}
+
+.welcome-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.welcome-actions #welcome-back {
+  margin-left: auto;
+}
+
+html.dark .welcome-card {
+  background: rgba(24, 30, 44, 0.98);
+  border-color: rgba(121, 140, 171, 0.3);
+}
+
+/* Target emphasis is drawn as a ring INSIDE the overlay (no z-index punch-through:
+   that approach lost to app stacking contexts and covered the card). */
+.tour-target-active {
+  border-radius: 18px;
+}
+
+.tour-ring {
+  position: fixed;
+  pointer-events: none;
+  border: 3px solid rgba(255, 213, 87, 0.95);
+  border-radius: 18px;
+  box-shadow: 0 0 0 4px rgba(255, 213, 87, 0.25), 0 0 24px rgba(255, 213, 87, 0.45);
+  transition: left 0.25s ease, top 0.25s ease, width 0.25s ease, height 0.25s ease;
 }
 
 .landing-shell {
@@ -3642,7 +4124,7 @@ body {
 }
 
 .landing-footer-link-subtle {
-  color: rgba(71, 85, 105, 0.6);
+  color: rgba(71, 85, 105, 0.8);
 }
 
 .landing-copyright {
@@ -4368,4 +4850,2319 @@ body {
 .view-intro-close:hover {
   opacity: 1;
   background: rgba(67, 97, 238, 0.1);
+}
+
+/* ===== Home dashboard (slide-4 direction: clean entry → routes into the map) ===== */
+.home-view { display: none; }
+.home-view.is-active { display: block; }
+.home-wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 4px 2px 32px;
+}
+.home-head { display: flex; align-items: center; justify-content: space-between; }
+.home-brand { display: flex; align-items: center; gap: 14px; }
+.home-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 46px; height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(67,97,238,0.9), rgba(67,97,238,0.6));
+  color: #fff;
+  font-size: 26px;
+}
+.home-brand-title { margin: 0; font-size: 1.15rem; color: #fff; letter-spacing: -0.01em; }
+.home-brand-sub { margin: 2px 0 0; font-size: 0.82rem; color: rgba(246,246,252,0.55); }
+
+.home-continue {
+  border-radius: 22px;
+  padding: 26px 28px;
+  background: linear-gradient(135deg, rgba(67,97,238,0.22), rgba(23,26,31,0.72));
+  border: 1px solid rgba(67,97,238,0.32);
+}
+.home-greeting { margin: 0 0 14px; font-size: 0.92rem; color: rgba(132,160,255,0.95); font-weight: 600; }
+.home-continue-eyebrow {
+  margin: 0; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: rgba(246,246,252,0.5);
+}
+.home-continue-title { margin: 6px 0 4px; font-size: 1.6rem; color: #fff; letter-spacing: -0.02em; }
+.home-continue-sub { margin: 0; font-size: 0.9rem; color: rgba(246,246,252,0.66); }
+.home-continue-empty { margin-top: 8px; }
+.home-task-framing {
+  margin: 14px 0 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: rgba(246, 246, 252, 0.82);
+  max-width: 62ch;
+}
+.home-continue-cta {
+  margin-top: 18px;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.95rem; padding: 11px 22px;
+}
+.home-continue-cta .material-symbols-outlined { font-size: 20px; }
+
+.home-section-eyebrow {
+  margin: 0 0 12px; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: rgba(246,246,252,0.5);
+}
+/* The tasks eyebrow sits on the light page (not inside a dark panel) — needs dark ink. */
+.home-tasks > .home-section-eyebrow { color: var(--on-surface-variant); }
+.home-task-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.home-task-card {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 20px;
+  border-radius: 18px;
+  background: rgba(23,26,31,0.72);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: transform 0.16s ease, border-color 0.16s ease;
+}
+.home-task-card:hover { transform: translateY(-2px); border-color: rgba(67,97,238,0.4); }
+.home-task-card.is-disabled { opacity: 0.5; }
+.home-task-icon {
+  display: grid; place-items: center;
+  width: 38px; height: 38px;
+  border-radius: 11px;
+  background: rgba(67,97,238,0.16);
+  color: rgba(150,175,255,0.95);
+  font-size: 22px;
+}
+.home-task-title { margin: 6px 0 0; font-size: 1.02rem; color: #fff; }
+.home-task-body { margin: 0; font-size: 0.85rem; line-height: 1.5; color: rgba(246,246,252,0.62); flex: 1; }
+.home-task-open {
+  margin-top: 6px;
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 4px;
+  background: none; border: none; cursor: pointer;
+  color: rgba(132,160,255,0.95); font-size: 0.88rem; font-weight: 600;
+  padding: 0;
+}
+.home-task-open .material-symbols-outlined { font-size: 18px; }
+.home-task-open:disabled { color: rgba(246,246,252,0.4); cursor: default; }
+
+.home-bottom {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 16px;
+}
+.home-recent, .home-advanced { border-radius: 18px; padding: 20px; }
+.home-recent-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.home-recent-item {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 10px 12px; border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border-left: 3px solid rgba(67,97,238,0.55);
+}
+.home-recent-item strong { font-size: 0.9rem; color: #fff; font-weight: 500; }
+.home-recent-item span { font-size: 0.76rem; color: rgba(246,246,252,0.5); }
+.home-recent-empty { font-size: 0.86rem; color: rgba(246,246,252,0.5); }
+.home-advanced-body { margin: 0 0 14px; font-size: 0.84rem; line-height: 1.5; color: rgba(246,246,252,0.58); }
+.home-adv-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+.home-adv-item {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 16px; border-radius: 12px; cursor: pointer;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(246,246,252,0.82); font-size: 0.86rem; font-weight: 500;
+  transition: border-color 0.16s ease;
+}
+.home-adv-item:hover { border-color: rgba(67,97,238,0.45); }
+.home-adv-item .material-symbols-outlined { font-size: 18px; color: rgba(150,175,255,0.9); }
+.home-adv-item:disabled { opacity: 0.45; cursor: default; }
+
+@media (max-width: 860px) {
+  .home-task-grid { grid-template-columns: 1fr; }
+  .home-bottom { grid-template-columns: 1fr; }
+}
+
+/* ===== 간단히 / 자세히 (simple / detailed) map density (slide-5 direction) ===== */
+.density-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.density-option {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 999px;
+  color: rgba(246, 246, 252, 0.6);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.density-option:hover { color: rgba(246, 246, 252, 0.92); }
+.density-option.is-active { background: rgba(67, 97, 238, 0.92); color: #fff; }
+
+/* In simple mode, tuck away the dense "process" panels — keep map, lenses,
+   selected node, annotate, and the question composer. */
+.density-simple [data-density="advanced"] { display: none !important; }
+
+/* ===== You ↔ Team comparison layer (personal vs cohort overlay) ===== */
+.compare-summary {
+  margin-bottom: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(23, 26, 31, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.compare-summary-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.compare-summary-title { font-size: 0.92rem; font-weight: 600; color: #fff; }
+.compare-summary-counts { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.compare-chip {
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+.compare-chip-shared { background: rgba(27, 156, 133, 0.18); color: #5fe3c4; border-color: rgba(27, 156, 133, 0.35); }
+.compare-chip-mine   { background: rgba(67, 97, 238, 0.18);  color: #9ab2ff; border-color: rgba(67, 97, 238, 0.35); }
+.compare-chip-team   { background: rgba(231, 111, 81, 0.18); color: #ffb59e; border-color: rgba(231, 111, 81, 0.38); }
+.compare-summary-prompt {
+  margin: 10px 0 0;
+  font-size: 0.83rem;
+  line-height: 1.5;
+  color: rgba(246, 246, 252, 0.66);
+}
+
+/* ============================================================
+   DARK THEME (cohesive) — matches the approved PPTX mockups.
+   Appended last to override the earlier light-theme block.
+   ============================================================ */
+.background-layer { background-image: none; }
+
+/* Surfaces → frosted dark glass */
+.sidebar,
+.topbar,
+.workspace-tabs,
+.mobile-dock,
+.metric-chip,
+.panel,
+.panel-soft,
+.context-card,
+.pipeline-card,
+.document-card,
+.case-card,
+.settings-grid article,
+.lens-summary-block,
+.tension-item,
+.evidence-item,
+.conflict-card,
+.decision-item,
+.feed-item,
+.memo-item,
+.rubric-item,
+.prompt-item,
+.reflection-item,
+.network-meta-card {
+  background: rgba(21, 24, 32, 0.72);
+  border-color: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.34);
+}
+.sidebar { border-right-color: rgba(255, 255, 255, 0.06); }
+
+/* Inputs / selects / controls */
+.mini-control,
+.platform-switcher .mini-control,
+.mini-control select,
+.mini-control input,
+.pipeline-form input,
+.pipeline-form textarea,
+.pipeline-form select,
+.chat-composer textarea,
+.composer-input,
+.meter,
+.bar-track,
+.orbit-core {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f3f5fb;
+}
+.mini-control select option { color: #0d0f16; }
+
+/* Text → light */
+.case-subtitle,
+.topbar p:last-child,
+.detail-stack p:not(.label),
+.memo-section p:not(.label),
+.lens-summary-block p,
+.reaction-feed p,
+.context-card p,
+.pipeline-card p,
+.document-card p,
+.case-card p,
+.settings-grid p,
+.settings-grid li,
+.health-panel p,
+.network-meta-card p,
+.network-tooltip-body,
+.stage-overlay span,
+.tension-item p,
+.evidence-item p,
+.conflict-card p,
+.decision-item p,
+.memo-item p,
+.reflection-item p {
+  color: rgba(246, 246, 252, 0.62);
+}
+.eyebrow,
+.label,
+.meter-label,
+.health-header,
+.mini-control span,
+.graph-toggle,
+.metric-chip span,
+.network-node .node-meta,
+.card-meta span {
+  color: rgba(246, 246, 252, 0.5);
+}
+.case-summary h2,
+.brand-block h1,
+.section-header h3,
+.subsection-head h4 { color: #fff; }
+
+/* Nav */
+.nav-item,
+.workspace-tab,
+.dock-item { color: rgba(246, 246, 252, 0.6); }
+.nav-item:hover,
+.nav-item.is-active,
+.workspace-tab:hover,
+.workspace-tab.is-active,
+.dock-item:hover,
+.dock-item.is-active {
+  background: rgba(67, 97, 238, 0.18);
+  color: #cdd8ff;
+  border-color: rgba(67, 97, 238, 0.3);
+}
+
+/* Buttons (primary/danger keep their gradients) */
+.secondary-action,
+.toolbar-button {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(246, 246, 252, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.secondary-action:hover,
+.toolbar-button:hover { background: rgba(255, 255, 255, 0.12); }
+
+/* Tokens / badges / pills */
+.token,
+.pipeline-chip,
+.badge,
+.numeric-pill {
+  background: rgba(67, 97, 238, 0.16);
+  border-color: rgba(67, 97, 238, 0.28);
+  color: rgba(206, 216, 255, 0.95);
+}
+
+/* The map canvas → dark */
+.network-stage {
+  background:
+    radial-gradient(circle at 50% 45%, rgba(67, 97, 238, 0.16), transparent 26%),
+    radial-gradient(circle at 16% 16%, rgba(27, 156, 133, 0.1), transparent 20%),
+    linear-gradient(180deg, rgba(16, 18, 26, 0.96), rgba(12, 14, 20, 0.98));
+  border-color: rgba(255, 255, 255, 0.07);
+}
+.network-stage::before {
+  background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+}
+.stage-overlay,
+.network-tooltip { background: rgba(21, 24, 32, 0.86); }
+.empty-note {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(246, 246, 252, 0.55);
+}
+.network-link { stroke: rgba(180, 195, 220, 0.28); }
+
+/* Simple-mode map proportions: slim side rails, dominant map (the workspace). */
+.density-simple .visualizer-layout,
+.density-simple .visualizer-layout.is-focused {
+  grid-template-columns: minmax(230px, 264px) minmax(0, 1.9fr) minmax(250px, 290px);
+}
+.density-simple .intake-panel { padding-top: 18px; }
+/* Give the map real presence in simple mode. */
+.density-simple .network-stage { min-height: 560px; }
+
+/* ============================================================
+   Professional pass — button system + proportions (overhaul)
+   ============================================================ */
+:root { --r-sm: 9px; --r-md: 12px; --r-lg: 16px; }
+
+/* Buttons: modern rounded-rect, tighter, clear hierarchy */
+.toolbar-button,
+.secondary-action {
+  min-height: 34px;
+  border-radius: var(--r-sm);
+  padding: 0 13px;
+  font-size: 0.83rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(246, 246, 252, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: none;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.toolbar-button:hover,
+.secondary-action:hover {
+  transform: none;
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+.toolbar-button-quiet {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(246, 246, 252, 0.58);
+}
+.toolbar-button-quiet:hover { background: rgba(255, 255, 255, 0.06); color: rgba(246, 246, 252, 0.9); }
+
+.toolbar-button-primary {
+  background: #4361ee;
+  color: #fff;
+  font-weight: 600;
+  border-color: transparent;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+.toolbar-button-primary:hover { background: #5571f6; border-color: transparent; }
+
+/* Sign out: quiet, not a loud red block */
+.toolbar-button.toolbar-button-danger {
+  background: transparent;
+  color: rgba(246, 246, 252, 0.5);
+  border-color: rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+  box-shadow: none;
+}
+.toolbar-button.toolbar-button-danger:hover {
+  background: rgba(231, 111, 81, 0.12);
+  color: #ffb59e;
+  border-color: rgba(231, 111, 81, 0.4);
+}
+
+/* Card header (add-node) refined */
+.pipeline-card-collapsible .pipeline-card-header {
+  border-radius: var(--r-md);
+  box-shadow: none;
+  font-weight: 600;
+  background: rgba(67, 97, 238, 0.14);
+  border-color: rgba(67, 97, 238, 0.26);
+}
+.pipeline-card-collapsible .pipeline-card-header:hover { background: rgba(67, 97, 238, 0.22); }
+
+/* Selects / inputs / pills — consistent radius + height */
+.mini-control,
+.mini-control select,
+.mini-control input,
+.composer-input,
+.chat-composer textarea,
+.density-toggle { border-radius: var(--r-sm); }
+.mini-control { min-height: 34px; }
+
+/* Lens / token pills — refined */
+.token, .token-active, .badge, .numeric-pill, .pipeline-chip { border-radius: 8px; font-weight: 600; }
+
+/* Panels: slightly tighter radius for a pro, less-bubbly feel */
+.panel { border-radius: var(--r-lg); }
+.panel-soft { border-radius: var(--r-md); }
+
+/* Spacing / proportions */
+.toolbar-actions { gap: 8px; align-items: center; }
+.topbar { gap: 14px; }
+.visualizer-layout, .lens-layout, .matrix-layout, .sandbox-layout, .report-layout { gap: 16px; }
+.section-header { margin-bottom: 14px; }
+
+/* Primary form submit buttons consistent */
+.pipeline-form button[type="submit"],
+.quick-note-form button[type="submit"],
+#visualizer-form button[type="submit"] { border-radius: var(--r-sm); min-height: 36px; }
+
+/* Add-node header → primary indigo (single accent, not a loud green) */
+.pipeline-card-collapsible[data-pipeline-key="addNode"] .pipeline-card-header {
+  background: #4361ee;
+  border-color: transparent;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+.pipeline-card-collapsible[data-pipeline-key="addNode"] .pipeline-card-header:hover {
+  background: #5571f6;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.3);
+}
+
+/* Simple mode: the lone open add-node card needs no collapse chevron */
+.density-simple [data-pipeline-key="addNode"] .pipeline-card-header .chevron { display: none; }
+.density-simple [data-pipeline-key="addNode"] .pipeline-card-header { cursor: default; }
+
+/* Single density toggle button (간단히/자세히) */
+.density-toggle-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 34px; padding: 0 12px; border-radius: var(--r-sm, 9px);
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: rgba(246, 246, 252, 0.82);
+  font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+.density-toggle-btn:hover { background: rgba(255, 255, 255, 0.09); border-color: rgba(255, 255, 255, 0.16); }
+.density-toggle-btn .material-symbols-outlined { font-size: 17px; color: rgba(150, 175, 255, 0.9); }
+
+/* Collapsible question composer */
+.composer-toggle {
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 36px; padding: 0 14px; border-radius: var(--r-sm, 9px);
+  background: rgba(67, 97, 238, 0.14);
+  border: 1px solid rgba(67, 97, 238, 0.28);
+  color: #cdd8ff; font-size: 0.83rem; font-weight: 600; cursor: pointer;
+  transition: background 150ms ease;
+}
+.composer-toggle:hover { background: rgba(67, 97, 238, 0.22); }
+.composer-toggle .material-symbols-outlined { font-size: 18px; }
+.canvas-panel:not(.composer-open) #visualizer-form { display: none; }
+.canvas-panel.composer-open #composer-toggle { display: none; }
+
+/* Honour the hidden attribute on the annotate form (its display:flex overrode it) */
+.quick-note-form[hidden] { display: none !important; }
+
+/* ============================================================
+   Minimal icon-dock mode (간단히) — undergrad-friendly:
+   map fills the screen; panels fold in as drawers from icons.
+   ============================================================ */
+.map-dock { display: none; }
+.density-simple .map-dock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+}
+.map-dock-btn {
+  width: 46px; height: 46px;
+  display: grid; place-items: center;
+  border-radius: 14px;
+  background: rgba(18, 21, 29, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(246, 246, 252, 0.82);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: background 150ms ease, color 150ms ease, border-color 150ms ease, transform 120ms ease;
+}
+.map-dock-btn:hover { transform: translateY(-1px); }
+.map-dock-btn.is-active { background: #4361ee; color: #fff; border-color: transparent; }
+.map-dock-btn .material-symbols-outlined { font-size: 24px; }
+
+/* Map fills the layout; the two panels become off-canvas drawers */
+.density-simple .visualizer-layout,
+.density-simple .visualizer-layout.is-focused {
+  grid-template-columns: minmax(0, 1fr);
+  position: relative;
+}
+.density-simple .intake-panel,
+.density-simple .insight-panel {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: min(360px, 84vw);
+  z-index: 28;
+  overflow-y: auto;
+  border-radius: 18px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+  transition: transform 0.26s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+}
+.density-simple .intake-panel { left: 0; transform: translateX(-115%); opacity: 0; }
+.density-simple .insight-panel { right: 0; transform: translateX(115%); opacity: 0; }
+.density-simple .intake-panel.is-open,
+.density-simple .insight-panel.is-open { transform: translateX(0); opacity: 1; }
+/* Close affordance inside an open drawer */
+.drawer-close {
+  display: none;
+  position: sticky; top: 0; margin-left: auto;
+  width: 30px; height: 30px; border-radius: 8px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(246,246,252,0.7); cursor: pointer; align-items: center; justify-content: center;
+}
+.density-simple .drawer-close { display: inline-flex; }
+
+/* Off-canvas drawers must not extend the page scroll width */
+.density-simple .visualizer-layout { overflow-x: clip; }
+
+/* ============================================================
+   Dark-theme contrast fixes (WCAG AA) — raise muted text alphas
+   ============================================================ */
+.case-subtitle,
+.topbar p:last-child,
+.detail-stack p:not(.label),
+.lens-summary-block p,
+.reaction-feed p,
+.context-card p,
+.pipeline-card p,
+.document-card p,
+.case-card p,
+.settings-grid p,
+.settings-grid li,
+.health-panel p,
+.network-meta-card p,
+.network-tooltip-body,
+.stage-overlay span,
+.tension-item p,
+.evidence-item p,
+.conflict-card p,
+.decision-item p,
+.memo-item p,
+.reflection-item p,
+#selected-node-copy,
+.selected-node-card p,
+.home-task-body,
+.home-advanced-body,
+.home-continue-sub {
+  color: rgba(246, 246, 252, 0.8);
+}
+.eyebrow,
+.label,
+.meter-label,
+.meter-hint,
+.health-header,
+.mini-control span,
+.graph-toggle,
+.metric-chip span,
+.network-node .node-meta,
+.card-meta span,
+.home-section-eyebrow,
+.home-recent-item span,
+.composer-hint,
+.home-recent-empty {
+  color: rgba(246, 246, 252, 0.7);
+}
+.topbar-identity { color: rgba(246, 246, 252, 0.76); }
+/* Active lens pill: solid accent so the selected lens reads clearly */
+.token-active {
+  background: #4361ee;
+  color: #fff;
+  border-color: transparent;
+}
+.home-task-framing { color: rgba(246, 246, 252, 0.9); }
+.icon-button { color: rgba(246, 246, 252, 0.66); }
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.nav-item:focus-visible,
+.dock-item:focus-visible,
+.workspace-tab:focus-visible,
+.token:focus-visible,
+.token-active:focus-visible,
+.map-dock-btn:focus-visible,
+.drawer-close:focus-visible,
+.case-summary-more:focus-visible,
+.case-summary-open:focus-visible {
+  outline: 3px solid rgba(151, 169, 255, 0.95);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(67, 97, 238, 0.26);
+}
+
+.toolbar-button:focus-visible,
+.secondary-action:focus-visible {
+  border-color: rgba(151, 169, 255, 0.9);
+}
+
+.toolbar-button:hover,
+.secondary-action:hover {
+  color: #f8faff;
+}
+
+.toolbar-button-quiet,
+.toolbar-button.toolbar-button-danger {
+  color: rgba(246, 246, 252, 0.72);
+}
+
+.toolbar-button-quiet:hover,
+.toolbar-button.toolbar-button-danger:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #f8faff;
+  border-color: rgba(151, 169, 255, 0.34);
+}
+
+.toolbar-button-primary:hover {
+  background: #5571f6;
+  color: #ffffff;
+}
+
+.nav-item:hover,
+.nav-item.is-active,
+.nav-item:focus-visible,
+.workspace-tab:hover,
+.workspace-tab.is-active,
+.workspace-tab:focus-visible,
+.dock-item:hover,
+.dock-item.is-active,
+.dock-item:focus-visible {
+  color: #dbe4ff;
+}
+
+.token:hover,
+.token:focus-visible {
+  background: rgba(67, 97, 238, 0.24);
+  border-color: rgba(151, 169, 255, 0.46);
+  color: #f8faff;
+}
+
+.map-dock-btn:hover,
+.map-dock-btn:focus-visible {
+  background: rgba(28, 33, 47, 0.96);
+  border-color: rgba(151, 169, 255, 0.42);
+  color: #f8faff;
+}
+
+.map-dock-btn.is-active:hover,
+.map-dock-btn.is-active:focus-visible {
+  background: #4361ee;
+  color: #ffffff;
+}
+
+.drawer-close:hover,
+.drawer-close:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(151, 169, 255, 0.4);
+  color: #ffffff;
+}
+
+.topbar {
+  align-items: center;
+}
+
+.topbar-side {
+  min-width: 0;
+  flex: 0 1 auto;
+  justify-content: flex-end;
+}
+
+/* Desktop: keep the context bar a single slim horizontal row so the map stays
+   map-forward. (A prior flex:1 1 420px basis made .topbar-side balloon to ~420px
+   tall, pushing the network below the fold.) Narrow widths still stack via the
+   max-width:900px block below. */
+@media (min-width: 901px) {
+  .topbar {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .topbar-side {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+}
+
+.toolbar-actions {
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.topbar-identity {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  max-width: min(28ch, 100%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.density-simple .intake-panel,
+.density-simple .insight-panel {
+  max-width: calc(100% - 18px);
+}
+
+@media (max-width: 900px) {
+  .topbar {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 8px 10px;
+    padding: 10px 12px;
+  }
+
+  .topbar-heading {
+    flex: 1 1 180px;
+    margin-right: 0;
+  }
+
+  .topbar h2 {
+    font-size: 1rem;
+  }
+
+  .topbar p:last-child {
+    display: none;
+  }
+
+  .topbar-collapse-toggle {
+    order: 2;
+  }
+
+  .topbar-side {
+    order: 3;
+    flex: 1 1 100%;
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .platform-switcher {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .toolbar-actions {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+  }
+
+  .toolbar-actions .toolbar-button {
+    min-height: 32px;
+    padding-inline: 10px;
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-header-actions,
+  .landing-actions,
+  .toolbar-actions,
+  .composer,
+  .chat-actions,
+  .pipeline-actions,
+  .card-actions {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .landing-header-actions {
+    justify-content: flex-start;
+  }
+
+  .header-guides-menu {
+    width: min(280px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
+  }
+
+  .topbar {
+    padding: 8px 10px;
+    border-radius: 16px;
+  }
+
+  .topbar-side {
+    gap: 7px;
+  }
+
+  .toolbar-actions {
+    gap: 6px;
+  }
+
+  .topbar-identity {
+    order: -1;
+    flex: 1 1 100%;
+    min-height: 22px;
+    font-size: 0.78rem;
+  }
+
+  .density-simple .map-dock {
+    left: 8px;
+    top: 12px;
+    transform: none;
+  }
+
+  .map-dock-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+  }
+
+  .density-simple .intake-panel,
+  .density-simple .insight-panel {
+    width: min(340px, calc(100vw - 58px));
+    max-width: calc(100vw - 58px);
+    border-radius: 14px;
+  }
+
+  .density-simple .intake-panel {
+    left: 50px;
+  }
+
+  .density-simple .insight-panel {
+    left: 50px;
+    right: auto;
+  }
+
+  .density-simple .insight-panel {
+    transform: translateX(115%);
+  }
+
+  .density-simple .intake-panel.is-open,
+  .density-simple .insight-panel.is-open {
+    transform: translateX(0);
+  }
+
+  .density-simple .visualizer-layout,
+  .density-simple .visualizer-layout.is-focused {
+    overflow-x: clip;
+  }
+}
+
+@media (max-width: 420px) {
+  .landing-shell {
+    padding-inline: 14px;
+  }
+
+  .landing-header {
+    gap: 12px;
+  }
+
+  .landing-header-actions .toolbar-button {
+    min-height: 32px;
+    padding-inline: 10px;
+  }
+
+  .topbar-heading {
+    flex-basis: calc(100% - 44px);
+  }
+
+  .topbar-side {
+    flex-basis: 100%;
+  }
+
+  .toolbar-actions .toolbar-button {
+    font-size: 0.76rem;
+    padding-inline: 8px;
+  }
+
+  .density-simple .network-stage {
+    min-height: clamp(430px, 68vh, 620px);
+  }
+}
+
+/* Dark-theme contrast: detailed-mode elements that kept light-theme dark text */
+.concept-help-title,
+.view-intro-title,
+.student-onboarding-title,
+.pipeline-card-collapsible .pipeline-card-header strong {
+  color: #fff;
+}
+.concept-help-body,
+.concept-help-list span,
+.view-intro-body,
+.student-onboarding-list li,
+.legend-label {
+  color: rgba(246, 246, 252, 0.82);
+}
+.concept-help-list strong { color: rgba(206, 216, 255, 0.95); }
+.legend-desc { color: rgba(246, 246, 252, 0.66); }
+.pipeline-card-collapsible .pipeline-card-header .chevron { color: rgba(246, 246, 252, 0.7); }
+/* Close / icon-toggle buttons inside overlays */
+.legend-close,
+.stage-note-close,
+.view-intro-close,
+.swarm-info-toggle,
+.legend-reopen,
+.stage-note-reopen { color: rgba(246, 246, 252, 0.72); }
+.legend-close .material-symbols-outlined,
+.stage-note-close .material-symbols-outlined,
+.view-intro-close,
+.swarm-info-toggle .material-symbols-outlined { color: inherit; }
+.concept-help { border-color: rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); }
+
+/* Higher-specificity overrides for legend / overlay close / panel-expand toggles */
+.legend-item .legend-label { color: rgba(246, 246, 252, 0.86); }
+.legend-item .legend-desc { color: rgba(246, 246, 252, 0.66); }
+.stage-overlay .legend-close,
+.stage-overlay .legend-close .material-symbols-outlined,
+.stage-overlay .stage-note-close,
+.stage-overlay .stage-note-close .material-symbols-outlined,
+.legend-reopen .material-symbols-outlined,
+.swarm-info-toggle .material-symbols-outlined { color: rgba(246, 246, 252, 0.74); }
+.panel-expand-toggle,
+.panel-expand-toggle span,
+#panel-expand-intake-label,
+#panel-expand-insight-label { color: rgba(246, 246, 252, 0.78); }
+
+/* Overlay close × icons (id-based, beats light-theme specifics) */
+#legend-close,
+#stage-note-close,
+#swarm-info-toggle { background: rgba(255, 255, 255, 0.08); border-color: rgba(255,255,255,0.12); }
+#legend-close .material-symbols-outlined,
+#stage-note-close .material-symbols-outlined,
+#swarm-info-toggle .material-symbols-outlined { color: rgba(246, 246, 252, 0.82); }
+
+/* Matrix / report / perspectives metric + label contrast (>=4.5) */
+.metric-bar header span,
+.metric-bar header strong,
+.metric-bar span,
+.metric-bar strong,
+.radar-label,
+.bar-label,
+.reaction-feed strong { color: rgba(246, 246, 252, 0.82); }
+.orbit-satellite { color: rgba(246, 246, 252, 0.82); }
+.chat-message,
+.chat-message strong,
+.chat-message .chat-meta { color: rgba(246, 246, 252, 0.85); }
+
+/* Report rubric, orbit satellites, chat labels — contrast */
+.rubric-item,
+.rubric-item strong,
+.rubric-item span,
+.rubric-item .label { color: rgba(246, 246, 252, 0.82); }
+.orbit-satellite,
+.orbit-satellite-a,
+.orbit-satellite-b,
+.orbit-satellite-c {
+  background: rgba(67, 97, 238, 0.22);
+  color: rgba(246, 246, 252, 0.92);
+  border-color: rgba(67, 97, 238, 0.4);
+}
+.chat-message span,
+.chat-message strong,
+.chat-message b { color: rgba(246, 246, 252, 0.9); }
+
+/* Orbit satellites: opaque dark chips (avoid compositing over light ancestor) */
+.orbit-satellite,
+.orbit-satellite-a,
+.orbit-satellite-b,
+.orbit-satellite-c {
+  background: #20283f;
+  color: #e9ecf6;
+  border: 1px solid rgba(120, 150, 255, 0.35);
+}
+/* Chat bubbles read on dark */
+.chat-message,
+.chat-message * { color: rgba(246, 246, 252, 0.9); }
+
+/* Chat author <small> label */
+.chat-message small,
+.chat-thread small { color: rgba(246, 246, 252, 0.78); }
+
+/* ============================================================
+   Simple mode: the network map is a full-width, fluid background, and the
+   intake / insight panels become off-canvas slide-in drawers.
+
+   Two earlier simple-mode designs collided: a cramped 3-column grid (which
+   was what actually rendered) and an intended drawer mode that never engaged
+   because `.visualizer-layout.is-focused .intake-panel { position: sticky }`
+   (specificity 0,3,0) outranked `.density-simple .intake-panel` (0,2,0). So
+   "simple" mode was really showing all three full panels at once — that is
+   why it still felt complex. Here we (a) drop the layout to a plain block so
+   the canvas fills the full width and scales with the browser (app.js's
+   resize handler re-fits the D3 viewBox), and (b) re-assert the drawer
+   positioning with selectors specific enough (0,4,0) to beat is-focused. */
+.density-simple .visualizer-layout,
+.density-simple .visualizer-layout.is-focused {
+  display: block !important;
+  position: relative;
+}
+.density-simple .visualizer-layout .canvas-panel,
+.density-simple .visualizer-layout.is-focused .canvas-panel {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  padding: 6px;
+}
+.density-simple .network-stage { width: 100%; }
+
+/* Off-canvas drawers — must outrank `.visualizer-layout.is-focused .*-panel` */
+.density-simple .visualizer-layout .intake-panel,
+.density-simple .visualizer-layout.is-focused .intake-panel,
+.density-simple .visualizer-layout .insight-panel,
+.density-simple .visualizer-layout.is-focused .insight-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: min(360px, 84vw);
+  max-height: none;
+  z-index: 28;
+  overflow-y: auto;
+  border-radius: 18px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+  transition: transform 0.26s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+}
+.density-simple .visualizer-layout .intake-panel,
+.density-simple .visualizer-layout.is-focused .intake-panel {
+  left: 0;
+  right: auto;
+  transform: translateX(-115%);
+  opacity: 0;
+}
+.density-simple .visualizer-layout .insight-panel,
+.density-simple .visualizer-layout.is-focused .insight-panel {
+  right: 0;
+  left: auto;
+  transform: translateX(115%);
+  opacity: 0;
+}
+.density-simple .visualizer-layout .intake-panel.is-open,
+.density-simple .visualizer-layout.is-focused .intake-panel.is-open,
+.density-simple .visualizer-layout .insight-panel.is-open,
+.density-simple .visualizer-layout.is-focused .insight-panel.is-open {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* ============================================================
+   Network map SVG text was rendering in #1e293b (the light-theme
+   --on-surface token) on the dark map background — contrast ~1.31, i.e.
+   black-on-black, the node names were invisible. The earlier dark-theme
+   passes fixed CSS `color` but SVG glyphs use `fill`, which was left dark
+   (and the runtime <style> that was meant to set it light never injects).
+   Force light fill on all network node text. Labels/meta sit BELOW the
+   nodes on the dark stage and the icon is centered in the dark node body,
+   so light is correct in every case. */
+.network-node .node-label,
+.network-stage .node-label,
+svg text.node-label {
+  fill: rgba(246, 246, 252, 0.96) !important;
+}
+.network-node .node-icon,
+.network-stage .node-icon,
+svg text.node-icon {
+  fill: #f6f6fc !important;
+}
+.network-node .node-meta,
+.network-stage .node-meta,
+svg text.node-meta {
+  fill: rgba(202, 208, 224, 0.92) !important;
+}
+/* Landing-page network labels share the same risk. */
+.landing-network text,
+.landing-node-label {
+  fill: rgba(246, 246, 252, 0.92);
+}
+
+/* ============================================================
+   Floating lens bar — the 4 stakeholder lenses (교사·학생·에듀테크·행정) float over
+   the top of the map so "switch perspective" (the core DTS move) is always one
+   click away, even with the map full-width and the insight panel as a drawer. */
+.map-lens-bar {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 16;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100% - 24px);
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(14, 17, 26, 0.74);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(151, 169, 255, 0.20);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+}
+.map-lens-bar-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: rgba(206, 216, 255, 0.9);
+  padding-left: 2px;
+  flex-shrink: 0;
+}
+.map-lens-bar .lens-pill-row {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+/* On a narrow map the bar stays centered and wraps without overflowing. */
+@media (max-width: 640px) {
+  .map-lens-bar { gap: 6px; padding: 5px 8px; }
+  .map-lens-bar-label { display: none; }
+}
+
+/* Sidebar declutter: when there is only one case the picker just echoes the
+   title, so hide it in simple mode (kept in detailed and whenever >1 case). */
+.density-simple .case-summary #sidebar-case-control.single-case {
+  display: none;
+}
+
+/* (C) Redundant section kickers: an .eyebrow immediately followed by a heading
+   is a decorative label above the real title (e.g. "시스템 구조 / 제안 네트워크").
+   Hide just those in simple mode; standalone labels (e.g. "내 질문", which are
+   followed by content, not a heading) are kept. Scoped to main content so the
+   topbar/tour/sidebar are untouched. */
+.density-simple .main-content .eyebrow:has(+ h2, + h3, + h4) {
+  display: none;
+}
+
+/* (F) Compress vertical rhythm in simple mode so the secondary views (관점·상충
+   관계·리포트) scroll less. Intrinsic content is untouched; only the gaps shrink. */
+.density-simple .main-content .section-header { margin-bottom: 10px; }
+.density-simple .main-content .subsection { margin-top: 12px; }
+.density-simple .main-content .lens-summary-block { margin-bottom: 10px; }
+
+/* ============================================================
+   LIGHT (주간) THEME — toggled by the topbar/landing button (was EN/KO).
+   Dark is the default; html.theme-light flips the major surfaces to light.
+   The app's dark look is itself an override layer over light :root tokens, so
+   this is an inverse override layer. Verified with the contrast audit so no
+   text drops below WCAG AA in either theme.
+   ============================================================ */
+.theme-light body {
+  color: #1e293b;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(67, 97, 238, 0.10), transparent 34%),
+    radial-gradient(circle at 88% 6%, rgba(27, 156, 133, 0.07), transparent 32%),
+    radial-gradient(circle at 50% 120%, rgba(120, 80, 220, 0.06), transparent 45%),
+    linear-gradient(180deg, #f4f7fe 0%, #eaf0fb 100%);
+}
+
+/* Surfaces → light glass */
+.theme-light .sidebar,
+.theme-light .topbar,
+.theme-light .panel,
+.theme-light .panel-soft,
+.theme-light .context-card,
+.theme-light .case-card,
+.theme-light .pipeline-card,
+.theme-light .document-card,
+.theme-light .settings-grid article,
+.theme-light .lens-summary-block,
+.theme-light .tension-item,
+.theme-light .selected-node-card,
+.theme-light .selected-node-related,
+.theme-light .home-card,
+.theme-light .compare-summary,
+.theme-light .network-meta-card,
+.theme-light .health-panel,
+.theme-light .map-lens-bar,
+.theme-light .stage-overlay,
+.theme-light .network-tooltip,
+.theme-light .conflict-card,
+.theme-light .reason-card,
+.theme-light .insight-card,
+.theme-light .metric-bar,
+.theme-light .reflection-block,
+.theme-light .memo-section,
+.theme-light .evidence-item,
+.theme-light .prompt-item,
+.theme-light .rubric-item,
+.theme-light .decision-item,
+.theme-light .timeline-item,
+.theme-light .reaction-feed,
+.theme-light .network-meta-grid > * {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(20, 30, 60, 0.12);
+  color: #1e293b;
+  box-shadow: 0 12px 32px rgba(20, 30, 70, 0.08);
+}
+
+/* Text → dark (default body text + headings + muted) */
+.theme-light h1, .theme-light h2, .theme-light h3, .theme-light h4,
+.theme-light p, .theme-light li, .theme-light strong, .theme-light span,
+.theme-light label,
+.theme-light .case-subtitle,
+.theme-light .meter-hint,
+.theme-light .section-header h3,
+.theme-light .topbar p:last-child,
+.theme-light .chat-message,
+.theme-light .chat-message *,
+.theme-light .chat-message small,
+.theme-light .lens-summary-block p,
+.theme-light .concept-help-body,
+.theme-light .concept-help-list span,
+.theme-light .view-intro-body,
+.theme-light .legend-label,
+.theme-light .legend-desc,
+.theme-light .home-greeting,
+.theme-light .topbar-identity {
+  color: #1f2a44;
+}
+.theme-light .eyebrow,
+.theme-light .meter-hint,
+.theme-light .legend-desc,
+.theme-light .card-meta span,
+.theme-light .context-note { color: #5a6781; }
+.theme-light .concept-help-title,
+.theme-light .view-intro-title,
+.theme-light .student-onboarding-title { color: #0f1830; }
+
+/* Nav */
+.theme-light .nav-item { color: #46546f; }
+.theme-light .nav-item:hover,
+.theme-light .nav-item.is-active { color: #1a2a5c; background: rgba(67, 97, 238, 0.10); }
+
+/* Inputs / selects / textareas → light fields */
+.theme-light input,
+.theme-light select,
+.theme-light textarea,
+.theme-light .composer-input,
+.theme-light .chat-composer textarea,
+.theme-light .mini-control select {
+  background: #ffffff;
+  color: #1f2a44;
+  border-color: rgba(20, 30, 60, 0.18);
+}
+.theme-light input::placeholder,
+.theme-light textarea::placeholder { color: #8a96ad; }
+
+/* Tokens / pills → light; active keeps the indigo accent */
+.theme-light .token {
+  background: rgba(67, 97, 238, 0.08);
+  border-color: rgba(67, 97, 238, 0.22);
+  color: #2a3a6b;
+}
+.theme-light .token:hover { background: rgba(67, 97, 238, 0.16); color: #1a2a5c; }
+.theme-light .token-active { background: #4361ee; color: #ffffff; border-color: transparent; }
+
+/* Quiet/danger toolbar buttons readable on light */
+.theme-light .toolbar-button-quiet,
+.theme-light .toolbar-button.toolbar-button-danger { color: #46546f; }
+.theme-light .toolbar-button-quiet:hover,
+.theme-light .toolbar-button.toolbar-button-danger:hover {
+  background: rgba(20, 30, 60, 0.06); color: #1a2a5c; border-color: rgba(67, 97, 238, 0.3);
+}
+.theme-light .toolbar-button-primary { background: #4361ee; color: #fff; }
+
+/* Map: light stage; node labels/meta go dark (icon stays light on dark node body) */
+.theme-light .network-stage { background: rgba(248, 250, 255, 0.6); }
+.theme-light .node-label,
+.theme-light svg text.node-label { fill: #1f2a44 !important; }
+.theme-light .node-meta,
+.theme-light svg text.node-meta { fill: #5a6781 !important; }
+/* node-icon stays light — it sits on the dark node body */
+
+/* Map dock + drawer close on light */
+.theme-light .map-dock-btn {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(20, 30, 60, 0.14);
+  color: #2a3a6b;
+}
+.theme-light .map-dock-btn.is-active { background: #4361ee; color: #fff; }
+
+/* Meters / progress tracks */
+.theme-light .meter { background: rgba(20, 30, 60, 0.08); }
+
+/* Brand subtitle + kicker */
+.theme-light .brand-block p,
+.theme-light .landing-brand p { color: #5a6781; }
+
+/* Score explainer (collapsed by default — concise, not "too much info"). */
+.score-info {
+  margin: 0 0 12px;
+  border: 1px solid rgba(151, 169, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(67, 97, 238, 0.06);
+}
+.score-info-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  list-style: none;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(206, 216, 255, 0.92);
+  user-select: none;
+}
+.score-info-summary::-webkit-details-marker { display: none; }
+.score-info-summary .material-symbols-outlined { font-size: 18px; color: #97a9ff; }
+.score-info[open] .score-info-summary { color: #f6f6fc; }
+.score-info-summary:hover { color: #f6f6fc; }
+.score-info-body {
+  margin: 0;
+  padding: 0 12px 12px;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: rgba(246, 246, 252, 0.82);
+}
+.score-info-body strong { color: #cfe0ff; }
+.score-info-body em { font-style: normal; color: #9fe7c8; }
+/* light theme */
+.theme-light .score-info { background: rgba(67, 97, 238, 0.07); border-color: rgba(67, 97, 238, 0.22); }
+.theme-light .score-info-summary { color: #2a3a6b; }
+.theme-light .score-info[open] .score-info-summary,
+.theme-light .score-info-summary:hover { color: #1a2a5c; }
+.theme-light .score-info-body { color: #46546f; }
+.theme-light .score-info-body strong { color: #2a3a6b; }
+.theme-light .score-info-body em { color: #1b9c85; }
+
+/* --- light theme: audit-driven contrast fixes --- */
+/* Muted copy, empty states, summaries → readable. */
+.theme-light .empty-note,
+.theme-light #selected-node-copy,
+.theme-light #report-summary,
+.theme-light .selected-node-card p,
+.theme-light .reflection-block p,
+.theme-light .memo-section p { color: #46546f; }
+
+/* Matrix radar + metric-bar labels/values. */
+.theme-light .radar-label,
+.theme-light .metric-bar header strong,
+.theme-light .metric-bar header span,
+.theme-light .metric-bars span,
+.theme-light .metric-bars strong,
+.theme-light .metric-chip { color: #1f2a44; }
+
+/* Generic + secondary buttons + home advanced cards → dark text. */
+.theme-light .toolbar-button,
+.theme-light .secondary-action,
+.theme-light .home-adv-item { color: #2a3a6b; }
+
+/* Standalone accent icons read on white. */
+.theme-light .home-adv-item .material-symbols-outlined,
+.theme-light .density-toggle-btn .material-symbols-outlined,
+.theme-light .map-lens-bar .material-symbols-outlined,
+.theme-light .panel-expand-toggle .material-symbols-outlined { color: #4361ee; }
+
+/* All map SVG text except the node-icon (which sits on the dark node body). */
+.theme-light .network-stage svg text:not(.node-icon) { fill: #1f2a44 !important; }
+
+/* IMPORTANT: keep white text/icons on accent (indigo) surfaces — must come last
+   so it wins over the generic dark-text rules above. */
+.theme-light .toolbar-button-primary,
+.theme-light .toolbar-button-primary *,
+.theme-light .token-active,
+.theme-light .token-active *,
+.theme-light .home-continue-cta,
+.theme-light .home-continue-cta *,
+.theme-light .nav-item.is-active,
+.theme-light .map-dock-btn.is-active,
+.theme-light .map-dock-btn.is-active * { color: #ffffff; }
+
+/* ============================================================
+   Professional detailed (자세히) mode — map-dominant, calmer panels, less prose.
+   Goal: a focused work tool, not a dense dashboard. (Simple mode already uses the
+   full-width map + drawers; these refine the 3-panel detailed layout.)
+   ============================================================ */
+/* Drop the onboarding prose entirely (intro paragraph, "how to read" sub-block,
+   and the step-by-step workflow guide). It was the bulk of the "too much" feeling;
+   the cleaner UI + the 튜토리얼 보기 button + the score explainer cover guidance. */
+.view-intro { display: none; }
+.concept-help { display: none; }
+.workflow-guide { display: none; }
+.student-onboarding { display: none; }
+
+/* Quiet, professional section kickers (small-caps, muted) instead of loud labels. */
+.insight-panel .eyebrow,
+.canvas-panel .eyebrow,
+.intake-panel .eyebrow,
+.card-column .eyebrow,
+.orbit-panel .eyebrow,
+.reflection-panel .eyebrow {
+  font-size: 0.64rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  /* no opacity dimming — it dropped these kickers below WCAG AA. Use color. */
+  color: rgba(196, 208, 248, 0.82);
+}
+.theme-light .insight-panel .eyebrow,
+.theme-light .canvas-panel .eyebrow,
+.theme-light .intake-panel .eyebrow,
+.theme-light .card-column .eyebrow,
+.theme-light .orbit-panel .eyebrow,
+.theme-light .reflection-panel .eyebrow { color: #50607a; }
+.insight-panel .section-header h3,
+.insight-panel .subsection-head { font-size: 0.92rem; }
+
+/* Section icons: a small leading glyph makes the panels scannable (professional). */
+.section-header h3 .material-symbols-outlined,
+.subsection-head .material-symbols-outlined,
+.section-icon {
+  font-size: 17px;
+  color: #97a9ff;
+  flex-shrink: 0;
+}
+/* Keep [icon][title] grouped on the left; push trailing badge/pill to the right. */
+.subsection-head { justify-content: flex-start; gap: 7px; }
+.subsection-head > .badge,
+.subsection-head > .numeric-pill { margin-left: auto; }
+.subsection-head .section-icon { margin-right: 1px; }
+.theme-light .section-icon,
+.theme-light .section-header h3 .material-symbols-outlined,
+.theme-light .subsection-head .material-symbols-outlined { color: #4361ee; }
+
+/* Give the dense insight panel a calm rhythm: hairline dividers between blocks. */
+.insight-panel .subsection {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(128, 142, 178, 0.18);
+}
+.insight-panel .subsection:first-of-type { border-top: none; padding-top: 0; margin-top: 12px; }
+
+/* Calmer on-map overlays (they float over the now-larger map). */
+.stage-overlay { font-size: 0.78rem; opacity: 0.94; max-width: 230px; }
+.stage-overlay .legend-desc { font-size: 0.72rem; }
+
+/* Tighter intake panel so case tools don't crowd the map. */
+.intake-panel .section-header h3 { font-size: 0.96rem; }
+.intake-panel { padding: 16px; }
+
+/* Light theme — detailed-only surfaces/controls the simple-mode audit didn't reach. */
+.theme-light .pipeline-console,
+.theme-light .pipeline-card,
+.theme-light .pipeline-card-collapsible,
+.theme-light .swarm-activity-panel,
+.theme-light .ai-additions,
+.theme-light .workflow-guide {
+  background: rgba(255, 255, 255, 0.94);
+  color: #1f2a44;
+  border-color: rgba(20, 30, 60, 0.12);
+}
+.theme-light .intake-panel strong,
+.theme-light .pipeline-console strong,
+.theme-light .pipeline-console h4 { color: #1f2a44; }
+.theme-light .case-summary-open,
+.theme-light .case-summary-more,
+.theme-light .panel-expand-toggle,
+.theme-light .panel-expand-toggle *,
+.theme-light .legend-close,
+.theme-light .stage-note-close,
+.theme-light .stage-note-reopen,
+.theme-light .swarm-info-toggle,
+.theme-light .drawer-close,
+.theme-light .legend-reopen { color: #2a3a6b; }
+.theme-light .score-info-summary .material-symbols-outlined { color: #4361ee; }
+.theme-light .score-info-body em { color: #15795f; }
+/* panel-collapse chips + overlay close glyphs were dark-on-dark in light theme */
+.theme-light .panel-expand-toggle {
+  background: #e9eefb !important;
+  border-color: rgba(20, 30, 60, 0.16) !important;
+}
+.theme-light .panel-expand-toggle,
+.theme-light .panel-expand-toggle *,
+.theme-light .stage-overlay .material-symbols-outlined,
+.theme-light .legend-close .material-symbols-outlined,
+.theme-light .stage-note-close .material-symbols-outlined,
+.theme-light .drawer-close .material-symbols-outlined,
+.theme-light .view-intro-close { color: #2a3a6b !important; }
+
+/* Home "더 깊이" advanced cards: legible label + icon in both themes. */
+.home-adv-item { color: rgba(246, 246, 252, 0.92); background: rgba(255, 255, 255, 0.06); }
+.home-adv-item .material-symbols-outlined { color: #c4ccff; }
+.theme-light .home-adv-item { color: #2a3a6b; background: rgba(20, 30, 60, 0.05); }
+.theme-light .home-adv-item .material-symbols-outlined { color: #34459c; }
+
+/* swarm info toggle glyph (the ⓘ on the map footer) in light theme */
+.theme-light .swarm-info-toggle .material-symbols-outlined { color: #2a3a6b !important; }
+
+/* ============================================================
+   Score number chips — hover/focus to see what the 0–100 number means
+   (scale + direction). Used inside the stakeholder concern cards.
+   ============================================================ */
+.score-chip {
+  position: relative;
+  font-weight: 700;
+  color: #97a9ff;
+  border-bottom: 1px dotted currentColor;
+  cursor: help;
+  outline: none;
+}
+.theme-light .score-chip { color: #3551d4; }
+.score-chip::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 8px);
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 230px;
+  padding: 8px 11px;
+  border-radius: 9px;
+  background: #11141e;
+  color: #f6f6fc;
+  border: 1px solid rgba(151, 169, 255, 0.35);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  font-size: 0.76rem;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0;
+  white-space: normal;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.14s ease;
+  z-index: 60;
+  pointer-events: none;
+}
+/* little arrow */
+.score-chip::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 2px);
+  transform: translateX(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background: #11141e;
+  border-left: 1px solid rgba(151, 169, 255, 0.35);
+  border-top: 1px solid rgba(151, 169, 255, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.14s ease;
+  z-index: 61;
+  pointer-events: none;
+}
+.score-chip:hover::after,
+.score-chip:focus::after,
+.score-chip:hover::before,
+.score-chip:focus::before { opacity: 1; visibility: visible; }
+/* don't let the bubble get clipped by the card */
+.conflict-card { overflow: visible; }
+
+
+/* ------------------------------------------------------------------ */
+/* Dark-default landing. The landing kept its light-native surfaces,   */
+/* which collided with the global dark text color (white-on-white).    */
+/* Light mode is already handled by the .theme-light layer, so these   */
+/* overrides are scoped to the dark default only.                      */
+/* ------------------------------------------------------------------ */
+html:not(.theme-light) .landing-copy,
+html:not(.theme-light) .landing-visual {
+  background: rgba(19, 23, 36, 0.86);
+  border-color: rgba(151, 169, 255, 0.16);
+  box-shadow: 0 24px 70px rgba(4, 6, 12, 0.5);
+}
+
+html:not(.theme-light) .landing-visual {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(67, 97, 238, 0.2), transparent 26%),
+    radial-gradient(circle at 14% 22%, rgba(217, 108, 95, 0.1), transparent 18%),
+    radial-gradient(circle at 82% 72%, rgba(27, 156, 133, 0.12), transparent 18%),
+    linear-gradient(180deg, rgba(21, 25, 40, 0.92), rgba(14, 17, 27, 0.94));
+}
+
+html:not(.theme-light) .landing-body {
+  color: rgba(206, 214, 235, 0.88);
+}
+
+html:not(.theme-light) .landing-signal-row span,
+html:not(.theme-light) .landing-mini-footer span {
+  background: rgba(67, 97, 238, 0.16);
+  border-color: rgba(151, 169, 255, 0.22);
+  color: rgba(214, 222, 244, 0.92);
+}
+
+html:not(.theme-light) .landing-login-card {
+  background: rgba(15, 18, 30, 0.78);
+  border-color: rgba(151, 169, 255, 0.16);
+}
+
+html:not(.theme-light) .landing-login-head strong {
+  color: rgba(246, 246, 252, 0.94);
+}
+
+html:not(.theme-light) .landing-login-row input {
+  background: rgba(10, 12, 20, 0.6);
+  border-color: rgba(151, 169, 255, 0.2);
+  color: rgba(246, 246, 252, 0.92);
+}
+
+html:not(.theme-light) .landing-login-row input::placeholder {
+  color: rgba(206, 214, 235, 0.45);
+}
+
+html:not(.theme-light) .landing-login-helper {
+  color: rgba(206, 214, 235, 0.75);
+}
+
+html:not(.theme-light) .landing-shell .toolbar-button:not(.toolbar-button-primary) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(151, 169, 255, 0.22);
+  color: rgba(240, 243, 252, 0.92);
+}
+
+html:not(.theme-light) .landing-annotation {
+  background: rgba(15, 18, 30, 0.82);
+  border-color: rgba(151, 169, 255, 0.18);
+  box-shadow: 0 14px 34px rgba(4, 6, 12, 0.45);
+}
+
+html:not(.theme-light) .landing-brand div p,
+html:not(.theme-light) .landing-mini-footer {
+  color: rgba(196, 205, 230, 0.85);
+}
+
+html:not(.theme-light) .landing-support-card {
+  background: rgba(17, 21, 34, 0.8);
+  border-color: rgba(151, 169, 255, 0.16);
+  box-shadow: 0 18px 46px rgba(4, 6, 12, 0.45);
+}
+
+html:not(.theme-light) .landing-support-card h3 {
+  color: rgba(240, 243, 252, 0.95);
+}
+
+html:not(.theme-light) .landing-support-card p {
+  color: rgba(202, 211, 234, 0.88);
+}
+
+html:not(.theme-light) .landing-footer {
+  border-top-color: rgba(151, 169, 255, 0.14);
+}
+
+html:not(.theme-light) .landing-footer-link {
+  color: rgba(196, 205, 230, 0.8);
+}
+
+html:not(.theme-light) .landing-footer-link:hover {
+  color: rgba(240, 243, 252, 0.96);
+}
+
+html:not(.theme-light) .landing-footer-sep {
+  color: rgba(196, 205, 230, 0.4);
+}
+
+html:not(.theme-light) .landing-footer-link-subtle,
+html:not(.theme-light) .landing-copyright {
+  color: rgba(196, 205, 230, 0.7);
+}
+
+html:not(.theme-light) .landing-kicker,
+html:not(.theme-light) .landing-annotation-label,
+html:not(.theme-light) .landing-brand-kicker,
+html:not(.theme-light) .landing-support-kicker {
+  color: #a7b6ff;
+}
+
+html:not(.theme-light) .landing-header {
+  background: rgba(15, 18, 30, 0.72);
+  border-color: rgba(151, 169, 255, 0.16);
+  box-shadow: 0 18px 50px rgba(4, 6, 12, 0.45);
+}
+
+html:not(.theme-light) .landing-brand .material-symbols-outlined {
+  color: #a7b6ff;
+}
+
+/* ---- Landing redesign: quieter, fewer buttons, app content up front ---- */
+.landing-steps {
+  list-style: none;
+  margin: 26px 0 30px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 56ch;
+}
+
+.landing-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.landing-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: "Space Grotesk", sans-serif;
+  background: rgba(151, 169, 255, 0.16);
+  color: #a7b6ff;
+  border: 1px solid rgba(151, 169, 255, 0.3);
+}
+
+.landing-steps strong {
+  display: block;
+  font-size: 0.98rem;
+  margin-bottom: 2px;
+}
+
+.landing-steps p {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: rgba(214, 222, 240, 0.78);
+}
+
+html.theme-light .landing-step-num {
+  background: rgba(84, 104, 255, 0.1);
+  color: #4051d8;
+  border-color: rgba(84, 104, 255, 0.28);
+}
+
+html.theme-light .landing-steps p {
+  color: rgba(50, 62, 88, 0.82);
+}
+
+/* One auth form at a time, switched by a quiet text toggle. */
+.landing-login-card[data-auth-mode="login"] .landing-join-form {
+  display: none;
+}
+
+.landing-login-card[data-auth-mode="join"] .landing-login-form {
+  display: none;
+}
+
+.landing-auth-mode-toggle {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 6px 4px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  text-align: center;
+  color: #a7b6ff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(167, 182, 255, 0.4);
+  border-radius: 8px;
+}
+
+.landing-auth-mode-toggle:hover,
+.landing-auth-mode-toggle:focus-visible {
+  color: #c3cdff;
+  text-decoration-color: currentColor;
+}
+
+html.theme-light .landing-auth-mode-toggle {
+  color: #4051d8;
+  text-decoration-color: rgba(64, 81, 216, 0.4);
+}
+
+html.theme-light .landing-auth-mode-toggle:hover,
+html.theme-light .landing-auth-mode-toggle:focus-visible {
+  color: #2435b8;
+}
+
+html:not(.theme-light) .landing-brand div p.landing-brand-kicker {
+  color: rgba(222, 229, 246, 0.96);
+}
+
+/* ---- Landing visual effects (Higgsfield assets + motion) ---- */
+.brand-mark .brand-logo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(151, 169, 255, 0.55));
+  animation: logoBreath 5.5s ease-in-out infinite;
+}
+
+@keyframes logoBreath {
+  0%, 100% { filter: drop-shadow(0 0 5px rgba(151, 169, 255, 0.4)); transform: scale(1); }
+  50% { filter: drop-shadow(0 0 11px rgba(151, 169, 255, 0.75)); transform: scale(1.04); }
+}
+
+/* AI-generated constellation backdrop, slow cinematic drift (dark theme only) */
+.landing-shell::before {
+  content: "";
+  position: fixed;
+  inset: -7%;
+  z-index: -1;
+  pointer-events: none;
+  background: url("./assets/hero-bg.webp") center / cover no-repeat;
+  opacity: 0.5;
+  animation: heroDrift 75s ease-in-out infinite alternate;
+}
+
+.landing-shell::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 18% 38%, rgba(11, 13, 20, 0.82) 0%, rgba(11, 13, 20, 0.45) 45%, rgba(11, 13, 20, 0.15) 100%);
+}
+
+@keyframes heroDrift {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.09) translate(-1.6%, 1.1%); }
+}
+
+html.theme-light .landing-shell::before,
+html.theme-light .landing-shell::after {
+  display: none;
+}
+
+/* Headline: living gradient on the key phrase */
+html:not(.theme-light) .landing-copy h2 #landing-hero-title {
+  background: linear-gradient(100deg, #eef1ff 0%, #aab9ff 30%, #7de8c4 55%, #aab9ff 75%, #eef1ff 100%);
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: heroShimmer 9s ease-in-out infinite;
+}
+
+@keyframes heroShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Staggered entrance for the hero column */
+.landing-copy > .landing-kicker,
+.landing-copy > h2,
+.landing-copy > .landing-body,
+.landing-copy > .landing-steps,
+.landing-copy > .landing-login-card {
+  animation: riseIn 0.7s cubic-bezier(0.22, 0.9, 0.3, 1) both;
+}
+
+.landing-copy > h2 { animation-delay: 0.08s; }
+.landing-copy > .landing-body { animation-delay: 0.16s; }
+.landing-copy > .landing-steps { animation-delay: 0.26s; }
+.landing-copy > .landing-login-card { animation-delay: 0.38s; }
+
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.landing-visual {
+  animation: riseIn 0.9s cubic-bezier(0.22, 0.9, 0.3, 1) 0.2s both;
+}
+
+/* Step rows light up on hover */
+.landing-steps li {
+  padding: 6px 8px;
+  margin: -6px -8px;
+  border-radius: 12px;
+  transition: background 0.25s ease;
+}
+
+.landing-steps li:hover {
+  background: rgba(151, 169, 255, 0.07);
+}
+
+.landing-steps li:hover .landing-step-num {
+  background: rgba(151, 169, 255, 0.3);
+  color: #e6ebff;
+  box-shadow: 0 0 12px rgba(151, 169, 255, 0.35);
+  transition: all 0.25s ease;
+}
+
+/* Login card: soft glow when active */
+.landing-login-card {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.landing-login-card:focus-within {
+  border-color: rgba(151, 169, 255, 0.55);
+  box-shadow: 0 0 0 1px rgba(151, 169, 255, 0.25), 0 18px 48px rgba(20, 28, 60, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-shell::before,
+  .brand-mark .brand-logo,
+  html:not(.theme-light) .landing-copy h2 #landing-hero-title,
+  .landing-copy > *,
+  .landing-visual {
+    animation: none !important;
+  }
+}
+
+/* Detailed mode: compact swarm activity log (was oversized slabs) */
+.swarm-activity-panel #graph-events {
+  max-height: 230px;
+  overflow-y: auto;
+  display: grid;
+  gap: 8px;
+}
+
+.swarm-activity-panel .evidence-item {
+  padding: 9px 12px;
+  border-radius: 12px;
+  border-left: 2px solid rgba(151, 169, 255, 0.4);
+}
+
+.swarm-activity-panel .evidence-item strong {
+  font-size: 0.82rem;
+}
+
+.swarm-activity-panel .evidence-item p {
+  font-size: 0.79rem;
+  line-height: 1.45;
+}
+
+.home-brand-logo {
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(151, 169, 255, 0.45));
+}
+
+/* Detailed mode: cap the sticky intake column to the viewport so a long
+   pipeline doesn't stretch the page far past the map (instructor view). */
+@media (min-width: 901px) {
+  .app-shell:not(.density-simple) .visualizer-layout > .intake-panel {
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .app-shell:not(.density-simple) .visualizer-layout > .insight-panel {
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+.graph-events-empty {
+  margin: 4px 0;
+  font-size: 0.82rem;
+  color: var(--on-surface-variant);
+}
+
+/* ---- Instructor course management view ---- */
+.manage-view {
+  display: grid;
+  gap: 18px;
+}
+
+.manage-panel .muted {
+  color: var(--on-surface-variant);
+  font-size: 0.88rem;
+}
+
+.manage-course-code {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--on-surface-variant);
+  margin-left: 6px;
+}
+
+.manage-join {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.manage-join-label {
+  font-size: 0.8rem;
+  color: var(--on-surface-variant);
+}
+
+.manage-join-code {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(151, 169, 255, 0.12);
+  border: 1px solid rgba(151, 169, 255, 0.3);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+.manage-cases-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 14px 0 10px;
+}
+
+.manage-cases-head h4 {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.manage-archived-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+}
+
+.manage-case-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.manage-case-row.is-archived {
+  opacity: 0.6;
+}
+
+.manage-case-main {
+  min-width: 0;
+}
+
+.manage-case-main strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.manage-case-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--on-surface-variant);
+  flex-wrap: wrap;
+}
+
+.manage-case-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.manage-case-actions .toolbar-button {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+}
+
+.manage-kpi-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.manage-kpi {
+  flex: 1 1 120px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(151, 169, 255, 0.08);
+  border: 1px solid rgba(151, 169, 255, 0.18);
+  text-align: center;
+}
+
+.manage-kpi strong {
+  display: block;
+  font-size: 1.3rem;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.manage-kpi span {
+  font-size: 0.78rem;
+  color: var(--on-surface-variant);
+}
+
+.manage-analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.manage-funnel {
+  display: grid;
+  gap: 7px;
+}
+
+.manage-funnel-row {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr) 36px;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+}
+
+.manage-funnel-label {
+  color: var(--on-surface-variant);
+}
+
+.manage-funnel-bar {
+  display: block;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(121, 140, 171, 0.16);
+  overflow: hidden;
+}
+
+.manage-funnel-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #5468ff, #97a9ff);
+}
+
+.manage-funnel-count {
+  text-align: right;
+  font-weight: 600;
+}
+
+.manage-lens-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.manage-lens-chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.82rem;
+}
+
+.manage-hint {
+  margin-top: 10px;
+  font-size: 0.78rem;
+}
+
+.manage-table-wrap {
+  overflow-x: auto;
+}
+
+.manage-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.manage-table th,
+.manage-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(121, 140, 171, 0.15);
+}
+
+.manage-table th {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--on-surface-variant);
+}
+
+html.theme-light .manage-case-row {
+  background: rgba(20, 30, 60, 0.03);
+  border-color: rgba(20, 30, 60, 0.1);
+}
+
+html.theme-light .manage-lens-chip {
+  background: rgba(20, 30, 60, 0.04);
+  border-color: rgba(20, 30, 60, 0.12);
+}
+
+/* ---- Swarm critique on reflection drafts ---- */
+.reflection-feedback {
+  border-color: rgba(151, 169, 255, 0.4);
+}
+
+.reflection-critique {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.critique-title {
+  margin: 4px 0 0;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #a7b6ff;
+}
+
+.critique-loading {
+  margin: 8px 0 0;
+  font-size: 0.84rem;
+  color: var(--on-surface-variant);
+}
+
+.critique-anchor {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+}
+
+.critique-anchor.is-warn {
+  background: rgba(255, 113, 107, 0.1);
+  border: 1px solid rgba(255, 113, 107, 0.3);
+}
+
+.critique-anchor.is-ok {
+  background: rgba(0, 195, 137, 0.1);
+  border: 1px solid rgba(0, 195, 137, 0.28);
+}
+
+.critique-item {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-left: 2px solid rgba(151, 169, 255, 0.55);
+}
+
+.critique-item .critique-lens {
+  display: inline-block;
+  margin-bottom: 4px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #a7b6ff;
+}
+
+.critique-item p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.critique-hint {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: var(--on-surface-variant);
+}
+
+/* ---- JOL calibration bar ---- */
+.jol-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 213, 87, 0.08);
+  border: 1px solid rgba(255, 213, 87, 0.3);
+}
+
+.jol-bar-question {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.jol-bar-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.jol-bar-actions .toolbar-button {
+  padding: 6px 12px;
+  font-size: 0.8rem;
 }
