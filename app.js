@@ -1225,6 +1225,27 @@ document.getElementById("onepager-export")?.addEventListener("click", () => {
   openStudentOnePager();
 });
 
+// ---- Session telemetry: tab visibility + visible-only heartbeat ----
+// Makes time-on-task computable: gaps between events split into "tab hidden"
+// vs "idle while visible", and dwell is bounded by heartbeats.
+document.addEventListener("visibilitychange", () => {
+  if (dom.appShell?.classList.contains("is-hidden")) return;
+  logEvent("visibility.change", {
+    visibility: document.visibilityState,
+    view: state.activeView,
+  });
+});
+
+window.setInterval(() => {
+  if (document.visibilityState !== "visible") return;
+  if (dom.appShell?.classList.contains("is-hidden")) return;
+  logEvent("session.heartbeat", {
+    view: state.activeView,
+    map_layer: state.activeMapLayer,
+    stakeholder: state.activeStakeholder,
+  });
+}, 60000);
+
 document.getElementById("network-svg")?.addEventListener("click", (event) => {
   if (event.target.id === "network-svg") {
     hideNetworkTooltip(true);
@@ -2336,6 +2357,13 @@ function syncRealtimeSubscription() {
       if (!row || row.learner_id === state.auth.userId) return;
       if (applyRemoteLearnerRunRow(row)) {
         const name = row.learner_name || (ko ? "동료" : "A peer");
+        logEvent("peer.exposure", {
+          peer_run_id: row.id,
+          peer_name: String(row.learner_name || "").slice(0, 80),
+          peer_agenda_count: asArray(row.agenda_nodes).length,
+          event: payload.eventType,
+          presence_count: realtimeState.presenceCount,
+        });
         pushGraphEvent(
           ko ? "동료 활동" : "Peer activity",
           ko ? `${name} 님의 활동이 맵에 반영됐어요` : `${name}'s activity just landed on the map`
@@ -7069,6 +7097,15 @@ function updateGraphRenderer(frame) {
       showNetworkTooltip(event, node, { pinned: true });
     }
     state.selectedGraphNodeId = node.id;
+    logEvent("node.select", {
+      node_id: node.id,
+      label: String(node.label || "").slice(0, 120),
+      kind: node.kind || node.type || "",
+      stakeholder: node.stakeholder || "",
+      issue_type: node.issueType || "",
+      origin: node.origin || "",
+      via: "map",
+    });
     if (typeof resolveDensity === "function" && resolveDensity() === "simple") {
       window.requestAnimationFrame(() => openMapDrawer("insight"));
     }
@@ -7306,6 +7343,16 @@ function renderNodeList() {
       if (!row) return;
       markTaskProgress("inspect");
       state.selectedGraphNodeId = row.getAttribute("data-node-id") || "";
+      const picked = state.graph.nodes.find((n) => n.id === state.selectedGraphNodeId);
+      logEvent("node.select", {
+        node_id: state.selectedGraphNodeId,
+        label: String(picked?.label || "").slice(0, 120),
+        kind: picked?.kind || "",
+        stakeholder: picked?.stakeholder || "",
+        issue_type: picked?.issueType || "",
+        origin: picked?.origin || "",
+        via: "list",
+      });
       renderAll();
     });
   }
@@ -10035,9 +10082,11 @@ async function runSwarmRound(question) {
     { busy: true }
   );
 
+  const roundStartedAt = Date.now();
   const results = await Promise.allSettled(
     SWARM_AGENTS.map((key) => generateAgentReplyWithAi(key, question))
   );
+  const roundDurationMs = Date.now() - roundStartedAt;
 
   let okCount = 0;
   const successfulResponses = [];
@@ -10089,6 +10138,7 @@ async function runSwarmRound(question) {
     question: question.slice(0, 500),
     ok_count: okCount,
     agent_count: SWARM_AGENTS.length,
+    duration_ms: roundDurationMs,
     responses: allResponses,
   });
 
@@ -10367,6 +10417,7 @@ function closeMapDrawers() {
   document.querySelectorAll("#map-dock .map-dock-btn").forEach((b) => b.classList.remove("is-active"));
 }
 function openMapDrawer(target) {
+  logEvent("drawer.open", { drawer: String(target || "") });
   const panel = document.querySelector(target === "intake" ? ".intake-panel" : ".insight-panel");
   if (!panel) return;
   // ensure a close button exists inside the drawer
@@ -10447,8 +10498,10 @@ dom.learnerSelect.addEventListener("change", (event) => {
 });
 
 dom.mapLayerSelect?.addEventListener("change", (event) => {
+  const previousLayer = state.activeMapLayer;
   state.activeMapLayer = event.target.value;
   state.selectedGraphNodeId = "";
+  logEvent("layer.change", { from: previousLayer, to: state.activeMapLayer });
   persistSessionState();
   renderAll();
 });
