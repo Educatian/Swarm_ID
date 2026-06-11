@@ -395,6 +395,8 @@ const translations = {
     instructionalSignalsDesc: "What the teacher intends — objectives, lesson moves, pedagogical goals.",
     constraintFrictionDesc: "Where real constraints — time, tools, policies, workload — collide with that intent.",
     alignedEvidenceDesc: "Evidence from teachers, students, or IT systems that supports (or challenges) a design move.",
+    interStakeholder: "Stakeholder interplay",
+    interStakeholderDesc: "A dashed line connects two stakeholders whose issues overlap in type — where one side's decision becomes the other side's burden.",
     conceptHelpTitle: "How to read this map",
     conceptHelpBody: "Each case is a design problem viewed through four stakeholders. Switch lenses (Teacher → Student → IT → Administration) to see how the same tension looks from each side — they pull on each other, so no single view is enough.",
     perspectiveTeacherShort: "Teacher: what they plan and decide.",
@@ -789,6 +791,8 @@ const translations = {
     instructionalSignalsDesc: "교사가 의도한 것 — 학습 목표, 수업 전략, 교수 설계 의도입니다.",
     constraintFrictionDesc: "시간·도구·정책·업무 부담 같은 현실 제약이 수업 의도와 충돌하는 지점입니다.",
     alignedEvidenceDesc: "교사·학생·에듀테크 관점에서 설계 선택을 뒷받침하거나 반박하는 근거입니다.",
+    interStakeholder: "이해관계자 간 상호작용",
+    interStakeholderDesc: "두 주체의 쟁점이 같은 유형에서 맞물릴 때 점선으로 이어집니다. 한쪽의 결정이 다른 쪽의 부담이 되는 지점이에요.",
     conceptHelpTitle: "이 맵을 읽는 법",
     conceptHelpBody: "모든 케이스는 네 주체(교사 · 학생 · 에듀테크 · 행정)의 관점으로 바라본 설계 문제예요. 관점을 바꿔 보면 같은 쟁점이 어떻게 달라 보이는지 알 수 있어요. 네 관점은 서로를 잡아당기기 때문에 한 면만 봐서는 충분하지 않아요.",
     perspectiveTeacherShort: "교사: 무엇을 계획하고 결정하는지.",
@@ -7938,9 +7942,9 @@ function renderHome() {
     <div class="home-wrap">
       <header class="home-head">
         <div class="home-brand">
-          <span class="home-brand-mark material-symbols-outlined" aria-hidden="true">hub</span>
+          <img class="home-brand-mark home-brand-logo" src="./assets/logo.png" alt="" width="34" height="34">
           <div>
-            <h1 class="home-brand-title">Design Tension Studio</h1>
+            <h1 class="home-brand-title">${escapeHtml(t("appName"))}</h1>
             <p class="home-brand-sub">${t("homeSubtitle")}</p>
           </div>
         </div>

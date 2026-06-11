@@ -6773,3 +6773,8 @@ html:not(.theme-light) .landing-copy h2 #landing-hero-title {
   font-size: 0.79rem;
   line-height: 1.45;
 }
+
+.home-brand-logo {
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(151, 169, 255, 0.45));
+}
