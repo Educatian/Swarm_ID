@@ -2995,6 +2995,106 @@ body {
   margin-top: 18px;
 }
 
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 44;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-overlay.is-hidden {
+  display: none;
+}
+
+.welcome-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(3px);
+}
+
+.welcome-card {
+  position: relative;
+  width: min(420px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  padding: 28px 26px 22px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(121, 140, 171, 0.2);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.3);
+  text-align: center;
+}
+
+.welcome-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin: 10px auto 14px;
+  border-radius: 18px;
+  background: rgba(99, 122, 255, 0.12);
+}
+
+.welcome-icon .material-symbols-outlined {
+  font-size: 30px;
+  color: #5468ff;
+}
+
+.welcome-card h3 {
+  margin: 0 0 10px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.2rem;
+  text-wrap: balance;
+}
+
+.welcome-card > p:not(.eyebrow) {
+  margin: 0;
+  color: var(--on-surface-variant);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.welcome-dots {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin: 18px 0 4px;
+}
+
+.welcome-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(121, 140, 171, 0.35);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.welcome-dots span.is-active {
+  background: #5468ff;
+  transform: scale(1.25);
+}
+
+.welcome-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.welcome-actions #welcome-back {
+  margin-left: auto;
+}
+
+html.dark .welcome-card {
+  background: rgba(24, 30, 44, 0.98);
+  border-color: rgba(121, 140, 171, 0.3);
+}
+
 .tour-target-active {
   position: relative;
   z-index: 41 !important;

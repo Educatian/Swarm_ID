@@ -860,6 +860,9 @@ const TUTORIAL_STORAGE_KEY = "swarm-id-tutorial-v1";
 const LOCALE_STORAGE_KEY = "swarm-id-locale-v1";
 const DENSITY_STORAGE_KEY = "swarm-id-density-v1";
 const THEME_STORAGE_KEY = "swarm-id-theme-v1";
+const WELCOME_STORAGE_KEY = "swarm-id-welcome-v1";
+const TASK_PROGRESS_STORAGE_KEY = "swarm-id-task-progress-v1";
+const MAP_VIEW_MODE_STORAGE_KEY = "swarm-id-map-mode-v1";
 const PLATFORM_ADMIN_EMAIL = "admin@swarm.io";
 const DEFAULT_SUPABASE_CONFIG = window.SUPABASE_CONFIG || { url: "", anonKey: "" };
 const DEFAULT_GEMINI_CONFIG = window.GEMINI_CONFIG || { apiKey: "", model: "gemini-2.5-flash" };
@@ -921,6 +924,127 @@ const tutorialState = {
   target: null,
   seenByRole: {},
 };
+
+// First-visit welcome slides (usability feedback: students asked for a short
+// slide popup explaining the tool before the element-anchored tour).
+const welcomeState = {
+  active: false,
+  index: 0,
+};
+
+function getWelcomeSlides() {
+  const ko = state.locale === "ko";
+  return [
+    {
+      icon: "hub",
+      title: ko ? "디자인 텐션 스튜디오에 오신 걸 환영해요" : "Welcome to Design Tension Studio",
+      body: ko
+        ? "수업 설계를 둘러싼 여러 입장이 어떻게 부딪히고 맞물리는지, 살아 있는 맵으로 살펴보는 도구예요. 정답을 고르는 게 아니라 쟁점을 발견하는 공간이에요."
+        : "This studio turns the competing pressures around a lesson design into a living map. It is a place to discover issues, not to pick right answers.",
+    },
+    {
+      icon: "visibility",
+      title: ko ? "같은 케이스, 네 가지 관점" : "One case, four perspectives",
+      body: ko
+        ? "모든 케이스는 교사 · 학생 · 에듀테크 · 행정의 눈으로 다시 읽을 수 있어요. 맵 아래 관점 버튼을 누르면 같은 쟁점이 어떻게 달라 보이는지 바로 확인할 수 있어요."
+        : "Every case can be re-read through the eyes of the teacher, students, edtech, and administration. Switch lenses below the map to see how the same issue changes.",
+    },
+    {
+      icon: "checklist",
+      title: ko ? "오늘 할 일은 세 가지예요" : "Three things to do today",
+      body: ko
+        ? "① 케이스를 열고 ② 맵의 노드를 눌러 쟁점을 읽고 ③ 질문이나 내 노드를 추가한 뒤 생각을 정리하면 끝이에요. 맵 위의 '지금 할 일' 안내가 단계를 계속 알려줘요."
+        : "① Open a case ② tap nodes on the map to read the issues ③ add a question or your own node, then write a short reflection. The 'what to do now' guide above the map keeps track for you.",
+    },
+    {
+      icon: "tour",
+      title: ko ? "처음이라면 가이드 투어로 시작하세요" : "New here? Start with the guided tour",
+      body: ko
+        ? "화면 요소를 하나씩 짚어 주는 짧은 투어가 준비돼 있어요. 건너뛰어도 괜찮아요. 언제든 상단의 '튜토리얼 보기' 버튼으로 다시 열 수 있어요."
+        : "A short tour walks through each part of the screen. You can skip it — the 'Show Tutorial' button at the top reopens it anytime.",
+    },
+  ];
+}
+
+function hasSeenWelcome() {
+  try {
+    return window.localStorage.getItem(WELCOME_STORAGE_KEY) === "1";
+  } catch (_) {
+    return false;
+  }
+}
+
+function markWelcomeSeen() {
+  try {
+    window.localStorage.setItem(WELCOME_STORAGE_KEY, "1");
+  } catch (_) {}
+}
+
+function renderWelcomeSlide() {
+  if (!welcomeState.active || !dom.welcomeOverlay) return;
+  const slides = getWelcomeSlides();
+  const slide = slides[welcomeState.index];
+  if (!slide) {
+    finishWelcome(false);
+    return;
+  }
+  const ko = state.locale === "ko";
+  const isLast = welcomeState.index === slides.length - 1;
+  dom.welcomeStepLabel.textContent = `${welcomeState.index + 1} / ${slides.length}`;
+  dom.welcomeIcon.textContent = slide.icon;
+  dom.welcomeTitle.textContent = slide.title;
+  dom.welcomeBody.textContent = slide.body;
+  dom.welcomeDots.innerHTML = slides
+    .map((_, i) => `<span class="${i === welcomeState.index ? "is-active" : ""}"></span>`)
+    .join("");
+  dom.welcomeBack.disabled = welcomeState.index === 0;
+  dom.welcomeNext.textContent = isLast ? (ko ? "가이드 투어 시작" : "Start the guided tour") : (ko ? "다음" : "Next");
+  dom.welcomeSkip.textContent = ko ? "바로 시작" : "Jump right in";
+}
+
+function showWelcome(force = false) {
+  if (!dom.welcomeOverlay) return false;
+  if (!force && (hasSeenWelcome() || state.activeRole !== "user")) return false;
+  welcomeState.active = true;
+  welcomeState.index = 0;
+  dom.welcomeOverlay.classList.remove("is-hidden");
+  dom.welcomeOverlay.setAttribute("aria-hidden", "false");
+  logEvent("welcome.start", { role: state.activeRole, forced: Boolean(force) });
+  renderWelcomeSlide();
+  return true;
+}
+
+function finishWelcome(launchTour) {
+  if (!dom.welcomeOverlay) return;
+  const lastIndex = welcomeState.index;
+  welcomeState.active = false;
+  dom.welcomeOverlay.classList.add("is-hidden");
+  dom.welcomeOverlay.setAttribute("aria-hidden", "true");
+  markWelcomeSeen();
+  logEvent(launchTour ? "welcome.complete" : "welcome.skip", { slide_index: lastIndex });
+  if (launchTour) {
+    startTutorial(true);
+  }
+}
+
+function advanceWelcome(direction) {
+  if (!welcomeState.active) return;
+  const slides = getWelcomeSlides();
+  const nextIndex = welcomeState.index + direction;
+  if (nextIndex >= slides.length) {
+    finishWelcome(true);
+    return;
+  }
+  welcomeState.index = Math.max(0, nextIndex);
+  renderWelcomeSlide();
+}
+
+// Single entry point for first-run guidance: students get the welcome slides
+// once, everyone else falls back to the existing auto-tour behavior.
+function startFirstRunGuidance() {
+  if (showWelcome(false)) return;
+  startTutorial(false);
+}
 function createLearnerRunScaffold(caseRecord, learner) {
   return {
     id: `run-${caseRecord.id}-${learner.id}`,
@@ -2409,6 +2533,15 @@ const dom = {
   instructorCohortBlock: document.getElementById("instructor-cohort-block"),
   instructorCohortPanel: document.getElementById("instructor-cohort-panel"),
   cohortRefresh: document.getElementById("cohort-refresh"),
+  welcomeOverlay: document.getElementById("welcome-overlay"),
+  welcomeStepLabel: document.getElementById("welcome-step-label"),
+  welcomeIcon: document.getElementById("welcome-icon"),
+  welcomeTitle: document.getElementById("welcome-title"),
+  welcomeBody: document.getElementById("welcome-body"),
+  welcomeDots: document.getElementById("welcome-dots"),
+  welcomeSkip: document.getElementById("welcome-skip"),
+  welcomeBack: document.getElementById("welcome-back"),
+  welcomeNext: document.getElementById("welcome-next"),
   tourOverlay: document.getElementById("tour-overlay"),
   tourCard: document.getElementById("tour-card"),
   tourStepLabel: document.getElementById("tour-step-label"),
@@ -7756,7 +7889,7 @@ function openStudio() {
   }
   persistSessionState();
   renderAll();
-  startTutorial(false);
+  startFirstRunGuidance();
 }
 
 function returnToLanding() {
@@ -8942,6 +9075,32 @@ dom.startTutorialButton?.addEventListener("click", () => {
   startTutorial(true);
 });
 
+dom.welcomeNext?.addEventListener("click", () => {
+  advanceWelcome(1);
+});
+
+dom.welcomeBack?.addEventListener("click", () => {
+  advanceWelcome(-1);
+});
+
+dom.welcomeSkip?.addEventListener("click", () => {
+  finishWelcome(false);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (!welcomeState.active) return;
+  if (event.key === "Escape") {
+    event.preventDefault();
+    finishWelcome(false);
+  } else if (event.key === "ArrowRight" || event.key === "Enter") {
+    event.preventDefault();
+    advanceWelcome(1);
+  } else if (event.key === "ArrowLeft") {
+    event.preventDefault();
+    advanceWelcome(-1);
+  }
+});
+
 dom.tourNext?.addEventListener("click", () => {
   advanceTutorial(1);
 });
@@ -9316,7 +9475,7 @@ async function boot() {
   }
   renderAll();
   if (!dom.appShell?.classList.contains("is-hidden")) {
-    startTutorial(false);
+    startFirstRunGuidance();
   }
   // Preview-only hook (set by preview-demo.js). No-op in production.
   if (window.__DTS_PREVIEW__ && typeof window.__dtsPreviewInject === "function") {

@@ -863,6 +863,22 @@
     </button>
   </nav>
 
+  <div class="welcome-overlay is-hidden" id="welcome-overlay" aria-hidden="true">
+    <div class="welcome-scrim"></div>
+    <div class="welcome-card" role="dialog" aria-modal="true" aria-labelledby="welcome-title">
+      <p class="eyebrow" id="welcome-step-label">1 / 4</p>
+      <div class="welcome-icon"><span class="material-symbols-outlined" id="welcome-icon" aria-hidden="true">hub</span></div>
+      <h3 id="welcome-title">환영합니다</h3>
+      <p id="welcome-body"></p>
+      <div class="welcome-dots" id="welcome-dots" aria-hidden="true"></div>
+      <div class="welcome-actions">
+        <button class="toolbar-button toolbar-button-quiet" id="welcome-skip" type="button">바로 시작</button>
+        <button class="toolbar-button" id="welcome-back" type="button">이전</button>
+        <button class="toolbar-button toolbar-button-primary" id="welcome-next" type="button">다음</button>
+      </div>
+    </div>
+  </div>
+
   <div class="tour-overlay is-hidden" id="tour-overlay" aria-hidden="true">
     <div class="tour-scrim"></div>
     <div class="tour-card" id="tour-card" role="dialog" aria-modal="true" aria-labelledby="tour-title">
