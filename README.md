@@ -5,36 +5,37 @@
 <h1 align="center">Design Tension Studio</h1>
 
 <p align="center">
-  <strong>설계의 쟁점을 살아 있는 맵으로 읽는 비판적 수업설계 스튜디오</strong><br/>
+  <strong>A critical instructional-design studio that reads design tensions as a living map.</strong><br/>
   An instructional design systems lab for seeing educational design as a sociotechnical problem.
 </p>
 
 <p align="center">
-  <a href="https://swarmid.vercel.app"><b>Live app (EN)</b></a> ·
+  <a href="https://swarm-id-en.pages.dev"><b>Live app</b></a> ·
+  <a href="https://swarm-id-en.pages.dev/guides/student-en"><b>Student guide</b></a> ·
+  <a href="https://swarm-id-en.pages.dev/guides/instructor-en"><b>Instructor guide</b></a> ·
   <a href="https://swarm-id-ko.pages.dev"><b>한국어판</b></a> ·
-  <a href="https://dts-ko-preview.pages.dev"><b>No-login demo</b></a> ·
-  <a href="https://swarm-id-ko.pages.dev/guides/student-ko"><b>Guides</b></a>
+  <a href="https://dts-ko-preview.pages.dev"><b>No-login demo</b></a>
 </p>
 
-> **`main` is the English-default canonical deployment** (live at swarmid.vercel.app and
-> used by CAT 531). The Korean-default twin lives on the `ko` branch
-> (swarm-id-ko.pages.dev). Both branches share the same codebase and Supabase
-> backend — they differ only in default locale, first-paint statics, and manifest.
+> **`main` is the English-default canonical branch**, deployed on Cloudflare Pages at
+> swarm-id-en.pages.dev. The Korean-default twin lives on the `ko` branch
+> (swarm-id-ko.pages.dev). Both share the same codebase and Supabase backend — they
+> differ only in default locale, first-paint statics, and manifest.
 
 ---
 
-## 스크린샷
+## Screenshots
 
 | | |
 |---|---|
-| **랜딩** — 3단계 제품 스토리 + 단일 인증 카드 | **학생 맵** — "지금 할 일" 5단계 배너 + 관점 바 |
-| ![랜딩](./guides/screenshots/student-ko/01-landing.png) | ![학생 맵](./guides/screenshots/student-ko/04-task-banner.png) |
-| **목록 보기** — 맵의 보조 뷰 (검색·4종 정렬) | **학급 보기** — 동료 쟁점 집계 + 실시간 반영 |
-| ![목록 보기](./guides/screenshots/student-ko/09-list-view.png) | ![학급 보기](./guides/screenshots/student-ko/10-class-view.png) |
-| **스웜 비평** — 5관점이 초안에 도전 질문 | **내 수업** — 교수자 케이스 관리 + 참여 분석 |
-| ![스웜 비평](./docs/assets/readme/swarm-critique.png) | ![내 수업](./guides/screenshots/instructor-ko/02-manage.png) |
+| **Landing** — 3-step product story + single auth card | **Student map** — "What to do now" banner + lens bar |
+| ![Landing](./guides/screenshots/student-en/01-landing.png) | ![Student map](./guides/screenshots/student-en/04-task-banner.png) |
+| **List view** — searchable companion to the map | **Class view** — peer issues aggregated, live updates |
+| ![List view](./guides/screenshots/student-en/09-list-view.png) | ![Class view](./guides/screenshots/student-en/10-class-view.png) |
+| **Swarm critique** — five lenses challenge a draft | **My Course** — instructor case curation + analytics |
+| ![Swarm critique](./docs/assets/readme/swarm-critique-en.png) | ![My Course](./guides/screenshots/instructor-en/02-manage.png) |
 
-가이드 페이지에는 위 화면들의 **나레이션 포함 스크린 레코딩 16편**(ElevenLabs 한국어 음성)이 들어 있습니다.
+The guides embed **16 narrated screen recordings** (ElevenLabs voices) of these flows.
 
 ## What This Project Is For
 
@@ -50,19 +51,19 @@ In other words, this is not just a case viewer. It is a workspace for critical d
 
 ## Core Experience
 
-**교수자**: 수업 브리프를 붙여넣으면 AI가 이해관계자·제약·쟁점이 추출된 구조화 케이스로 변환 → 게시 → **내 수업** 화면에서 참여 코드 공유, 케이스 게시/보관/삭제(학생 활동 보존 가드), 참여 퍼널·관점 분포·학생별 활동 분석.
+**Instructors** paste a course brief and the AI structures it into a case — stakeholders, constraints, and issues become a map. Publish it, share the join code, then curate everything from the **My Course** view: publish/archive/delete (with a guard that preserves student records), plus engagement analytics (funnel, lens distribution, per-student table).
 
-**학생**: 코스 코드로 참여 → 첫 방문 웰컴 슬라이드 + 가이드 투어 → **지금 할 일** 5단계 배너를 따라 ① 케이스 열기 ② 노드 눌러 쟁점 읽기 ③ 교사·학생·에듀테크·행정 관점 전환 ④ 질문(스웜 라운드)·내 노드 추가 ⑤ 생각 정리 제출. 맵/목록 보기 전환, 학급 보기·비교 보기(나만/팀만/공유), iPad 터치 최적화 + 홈 화면 설치(PWA).
+**Students** join with a course code, get welcome slides + a guided tour on first visit, then follow the five-step **What to do now** banner: open a case → read issues by tapping nodes → switch lenses (teacher · student · edtech · administration) → ask the swarm or add their own nodes → submit a reflection. Map/list view toggle, class & compare layers (only-you vs only-team), touch-optimized for iPad with home-screen install (PWA).
 
-**스웜 AI**: 질문 하나에 다섯 이해관계자 에이전트가 동시에 답하고, 에이전트 간 **이견은 빨간 엣지**로 맵에 표시됩니다. 정답을 주는 튜터가 아니라, 긴장을 드러내는 다성적(polyvocal) 환경입니다.
+**The swarm**: one question, five stakeholder agents answering in parallel — and when agents disagree, a **red edge** marks the spot on the map. Not a tutor that hands out answers; a polyvocal environment that surfaces tensions.
 
-## AI-Assisted Feedback (연구 기능)
+## AI-Assisted Feedback (research features)
 
-단일 튜터의 교정 피드백 패러다임 대신 **tension-preserving, polyvocal feedback**을 구현합니다:
+Against the dominant single-tutor corrective paradigm, the studio implements **tension-preserving, polyvocal feedback**:
 
-- **스웜 비평 라운드** — 생각 정리 초안에 다섯 관점이 교정/칭찬 없이 도전 질문만 던지고, 초안이 맵 노드를 근거로 인용했는지 자동 점검(evidence-anchor check)
-- **JOL 캘리브레이션** — 질문 전 "동의할까, 갈릴까?" 1탭 예측 → 실제 이견 분류와 대조
-- **전 과정 계측** — `feedback.requested/shown`, `reflection.submit`(수정 여부·초안 스냅샷·앵커 전후), `jol.predict/outcome`, `question.answer`(AI 턴 원문) → 이벤트 사전과 마이닝 SQL은 [docs/analytics_feedback_events.md](./docs/analytics_feedback_events.md)
+- **Swarm critique rounds** — five lenses challenge a student's reflection draft (no corrections, no praise) plus an automatic evidence-anchor check (does the draft cite map nodes?)
+- **JOL calibration** — a one-tap "will they agree or split?" prediction before each question, scored against the actual disagreement classification
+- **Full instrumentation** — `feedback.requested/shown`, extended `reflection.submit` (revision flag, draft snapshot, anchors before/after), `jol.predict/outcome`, `question.answer` (verbatim AI turns). Event dictionary and mining SQL: [docs/analytics_feedback_events.md](./docs/analytics_feedback_events.md)
 
 ## Critical Lens
 
@@ -73,15 +74,15 @@ The prototype helps students ask questions like:
 - What kinds of labor become hidden when a workflow is described as efficient?
 - How do policy, platform architecture, accessibility, governance, and pedagogy shape one another?
 
-The studio is intended to support students in seeing educational media not as neutral delivery tools, but as part of a broader sociotechnical arrangement.
+The studio supports students in seeing educational media not as neutral delivery tools, but as part of a broader sociotechnical arrangement.
 
 ## Technical Stack
 
 - Plain HTML/CSS/JS + **D3.js** force-directed tension maps
-- **Supabase** — auth, course data, learner runs, append-only `analytics_events`, **Realtime** (동료 활동 라이브 반영 + 프레즌스)
-- **Gemini** — case structuring, swarm replies, disagreement classification, critique rounds (배포별 프록시: Vercel `api/gemini.js`, Cloudflare `_worker.js`) + 결정론적 로컬 폴백
-- **PWA** — manifest + network-first service worker(미디어 우회), 홈 화면 설치, 오프라인 셸
-- 배포: Cloudflare Pages (`swarm-id-ko` 본판 / `dts-ko-preview` 데모), wrangler direct-upload
+- **Supabase** — auth, course data, learner runs, append-only `analytics_events`, **Realtime** (live peer activity + presence)
+- **OpenRouter** — case structuring, swarm replies, disagreement classification, critique rounds via the `_worker.js` Cloudflare Pages worker (model fallback chain absorbs provider rate limits) + deterministic local fallback
+- **PWA** — manifest + network-first service worker (media bypassed), home-screen install, offline shell
+- Hosting: Cloudflare Pages (`swarm-id-en` / `swarm-id-ko` / `dts-ko-preview`), wrangler direct-upload
 
 ## Data Model
 
@@ -97,20 +98,20 @@ Course-centered Supabase model: `profiles` · `institutions` · `courses` · `co
 # repo root
 py -m http.server 8137
 # real app:    http://127.0.0.1:8137/index.html
-# demo data:   http://127.0.0.1:8137/preview.html  (no login, preview-demo.js injects a sample cohort)
+# demo data:   http://127.0.0.1:8137/preview.html  (no login; preview-demo.js injects a sample cohort)
 node harness/run.js                        # logic tests
 node scripts/smoke-usability-upgrade.mjs   # browser smoke (11 checks)
 ```
 
-가이드 재생성 파이프라인: `node scripts/capture-ko-guides.mjs`(스크린샷) → `node scripts/record-guide-videos.mjs`(녹화) → `py scripts/mux-guide-videos.py`(나레이션 합성) → `node scripts/build-guides-html.mjs`. 나레이션 대본/재생성: `py scripts/generate-guide-narration.py`.
+Guide regeneration pipeline (locale-parametrized — `GUIDE_LOCALE=en|ko`):
+`node scripts/capture-ko-guides.mjs` (screenshots) → `node scripts/record-guide-videos.mjs` (recordings) → `py scripts/mux-guide-videos.py` (narration mux) → `node scripts/build-guides-html.mjs`. Narration scripts: `py scripts/generate-guide-narration.py` (KO) / `generate-guide-narration-en.py` (EN).
 
 ## Repository Guide
 
-- [docs/analytics_feedback_events.md](./docs/analytics_feedback_events.md) — 피드백 계측 이벤트 사전 + 마이닝 SQL
-- [docs/ko-glossary.md](./docs/ko-glossary.md) — 한국어 용어 기준표
-- [docs/supabase_setup.md](./docs/supabase_setup.md) — 백엔드 셋업 (Realtime publication, 케이스 삭제 정책 포함)
-- [guides/](./guides) — 학생/교수자 가이드 (md → HTML 빌드, 영상·나레이션 포함)
-- [scripts/](./scripts) — 코호트 시딩, 가이드 캡처/녹화, E2E 검증(`e2e-verify-feedback.mjs`)
+- [docs/analytics_feedback_events.md](./docs/analytics_feedback_events.md) — feedback instrumentation dictionary + mining SQL
+- [docs/supabase_setup.md](./docs/supabase_setup.md) — backend setup (Realtime publication, case-delete policy)
+- [guides/](./guides) — student/instructor guides (md → HTML build, with videos & narration)
+- [scripts/](./scripts) — cohort seeding, guide capture/recording, E2E verification (`e2e-verify-feedback.mjs`)
 
 ## Who This Is For
 
