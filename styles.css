@@ -2995,6 +2995,142 @@ body {
   margin-top: 18px;
 }
 
+.task-banner {
+  margin: 10px 0 0;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(99, 122, 255, 0.22);
+  background: rgba(99, 122, 255, 0.07);
+}
+
+.task-banner-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.task-banner-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.task-banner-title .material-symbols-outlined {
+  font-size: 18px;
+  color: #5468ff;
+}
+
+.task-banner-count {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #5468ff;
+  background: rgba(99, 122, 255, 0.14);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.task-banner-collapse {
+  flex-shrink: 0;
+}
+
+.task-step-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.task-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  opacity: 0.55;
+}
+
+.task-step.is-done,
+.task-step.is-current {
+  opacity: 1;
+}
+
+.task-step-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(121, 140, 171, 0.18);
+  color: var(--on-surface-variant);
+}
+
+.task-step.is-current .task-step-marker {
+  background: #5468ff;
+  color: #fff;
+}
+
+.task-step.is-done .task-step-marker {
+  background: rgba(0, 190, 130, 0.16);
+  color: #00a873;
+}
+
+.task-step-marker .material-symbols-outlined {
+  font-size: 15px;
+}
+
+.task-step-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+.task-step.is-done .task-step-text strong {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  color: var(--on-surface-variant);
+  font-weight: 500;
+}
+
+.task-step-text em {
+  font-style: normal;
+  font-size: 0.8rem;
+  color: var(--on-surface-variant);
+  max-width: 280px;
+}
+
+.task-banner-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: none;
+  padding: 2px 4px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.88rem;
+  color: inherit;
+}
+
+.task-banner-pill .material-symbols-outlined {
+  font-size: 17px;
+  color: #5468ff;
+}
+
+html.dark .task-banner {
+  background: rgba(99, 122, 255, 0.1);
+  border-color: rgba(120, 140, 255, 0.3);
+}
+
 .welcome-overlay {
   position: fixed;
   inset: 0;

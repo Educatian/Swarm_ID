@@ -1045,6 +1045,163 @@ function startFirstRunGuidance() {
   if (showWelcome(false)) return;
   startTutorial(false);
 }
+
+// ---- Student task guidance ("지금 할 일" banner) ----
+// Usability feedback: "뭐부터 해야 할지 감이 안 옴", "목표 제시 기능", "단계별로
+// 하나씩 차근차근". The banner tracks five concrete actions per case and always
+// points at the next one.
+const STUDENT_TASK_STEPS = ["open", "inspect", "lens", "contribute", "reflect"];
+
+function studentTaskCopy(stepId) {
+  const ko = state.locale === "ko";
+  const copy = ko
+    ? {
+        open: { label: "케이스 열기", hint: "목록에서 공개된 케이스를 하나 골라 여세요." },
+        inspect: { label: "노드 눌러 쟁점 읽기", hint: "맵의 노드를 눌러 그 뒤에 있는 쟁점을 확인하세요." },
+        lens: { label: "관점 바꿔 보기", hint: "맵 아래 관점 버튼으로 다른 입장에서 같은 케이스를 살펴보세요." },
+        contribute: { label: "질문하거나 노드 추가", hint: "궁금한 점을 질문하거나, 케이스에 없는 관점을 내 노드로 추가하세요." },
+        reflect: { label: "생각 정리", hint: "리포트 화면에서 발견한 쟁점을 짧은 글로 정리하세요." },
+      }
+    : {
+        open: { label: "Open a case", hint: "Pick one published case from the list." },
+        inspect: { label: "Read issues on the map", hint: "Tap a node to see the issue behind it." },
+        lens: { label: "Switch perspectives", hint: "Use the lens buttons below the map to re-read the case." },
+        contribute: { label: "Ask or add a node", hint: "Ask a question, or add a concern the case is missing." },
+        reflect: { label: "Write a reflection", hint: "Summarize what you found in the Report view." },
+      };
+  return copy[stepId] || { label: stepId, hint: "" };
+}
+
+let taskProgressStore = null;
+
+function loadTaskProgressStore() {
+  if (taskProgressStore) return taskProgressStore;
+  try {
+    taskProgressStore = JSON.parse(window.localStorage.getItem(TASK_PROGRESS_STORAGE_KEY) || "{}") || {};
+  } catch (_) {
+    taskProgressStore = {};
+  }
+  return taskProgressStore;
+}
+
+function taskProgressKey() {
+  return `${state.activeCaseId || "none"}:${state.activeLearnerId || "anon"}`;
+}
+
+function getTaskProgress() {
+  const store = loadTaskProgressStore();
+  return store[taskProgressKey()] || {};
+}
+
+function markTaskProgress(stepId) {
+  if (state.activeRole !== "user") return;
+  if (!STUDENT_TASK_STEPS.includes(stepId)) return;
+  const store = loadTaskProgressStore();
+  const key = taskProgressKey();
+  const progress = store[key] || {};
+  if (progress[stepId]) return;
+  progress[stepId] = true;
+  store[key] = progress;
+  try {
+    window.localStorage.setItem(TASK_PROGRESS_STORAGE_KEY, JSON.stringify(store));
+  } catch (_) {}
+  logEvent("task.step", { step: stepId, case_id: state.activeCaseId || "" });
+  renderTaskBanner();
+}
+
+function isTaskBannerCollapsed() {
+  try {
+    return window.localStorage.getItem("task-banner-collapsed") === "1";
+  } catch (_) {
+    return false;
+  }
+}
+
+function setTaskBannerCollapsed(collapsed) {
+  try {
+    window.localStorage.setItem("task-banner-collapsed", collapsed ? "1" : "0");
+  } catch (_) {}
+  renderTaskBanner();
+}
+
+function renderTaskBanner() {
+  const banner = document.getElementById("task-banner");
+  if (!banner) return;
+  if (state.activeRole !== "user") {
+    banner.hidden = true;
+    return;
+  }
+  banner.hidden = false;
+  const ko = state.locale === "ko";
+  if (hasActiveCase()) {
+    // Opening a case is itself the first step — record it without a re-render loop.
+    const store = loadTaskProgressStore();
+    const key = taskProgressKey();
+    const progress = store[key] || {};
+    if (!progress.open) {
+      progress.open = true;
+      store[key] = progress;
+      try {
+        window.localStorage.setItem(TASK_PROGRESS_STORAGE_KEY, JSON.stringify(store));
+      } catch (_) {}
+    }
+  }
+  const progress = getTaskProgress();
+  const doneCount = STUDENT_TASK_STEPS.filter((stepId) => progress[stepId]).length;
+  const currentId = STUDENT_TASK_STEPS.find((stepId) => !progress[stepId]) || "";
+  const total = STUDENT_TASK_STEPS.length;
+
+  if (isTaskBannerCollapsed()) {
+    const currentLabel = currentId
+      ? studentTaskCopy(currentId).label
+      : ko ? "모든 단계 완료!" : "All steps done!";
+    banner.innerHTML = `
+      <button type="button" class="task-banner-pill" data-task-expand>
+        <span class="material-symbols-outlined" aria-hidden="true">flag</span>
+        <span>${ko ? "지금 할 일" : "Up next"}: <strong>${currentLabel}</strong></span>
+        <span class="task-banner-count">${doneCount}/${total}</span>
+      </button>
+    `;
+    return;
+  }
+
+  const stepsMarkup = STUDENT_TASK_STEPS.map((stepId, index) => {
+    const done = Boolean(progress[stepId]);
+    const isCurrent = stepId === currentId;
+    const { label, hint } = studentTaskCopy(stepId);
+    return `
+      <li class="task-step ${done ? "is-done" : ""} ${isCurrent ? "is-current" : ""}">
+        <span class="task-step-marker">${done ? '<span class="material-symbols-outlined" aria-hidden="true">check</span>' : index + 1}</span>
+        <span class="task-step-text">
+          <strong>${label}</strong>
+          ${isCurrent && hint ? `<em>${hint}</em>` : ""}
+        </span>
+      </li>
+    `;
+  }).join("");
+
+  banner.innerHTML = `
+    <div class="task-banner-head">
+      <span class="task-banner-title">
+        <span class="material-symbols-outlined" aria-hidden="true">flag</span>
+        ${ko ? "지금 할 일" : "What to do now"}
+        <span class="task-banner-count">${doneCount}/${total}</span>
+      </span>
+      <button type="button" class="icon-button task-banner-collapse" data-task-collapse aria-label="${ko ? "접기" : "Collapse"}" title="${ko ? "접기" : "Collapse"}">
+        <span class="material-symbols-outlined" aria-hidden="true">collapse_all</span>
+      </button>
+    </div>
+    <ol class="task-step-list">${stepsMarkup}</ol>
+  `;
+}
+
+document.getElementById("task-banner")?.addEventListener("click", (event) => {
+  if (event.target.closest("[data-task-collapse]")) {
+    setTaskBannerCollapsed(true);
+  } else if (event.target.closest("[data-task-expand]")) {
+    setTaskBannerCollapsed(false);
+  }
+});
 function createLearnerRunScaffold(caseRecord, learner) {
   return {
     id: `run-${caseRecord.id}-${learner.id}`,
@@ -6356,10 +6513,11 @@ function updateGraphRenderer(frame) {
     .select(".node-badge text")
     .text((node) => originBadgeText(node.origin, state.locale));
 
-  nodeMerge.on("click", (_, node) => {
+  nodeMerge.on("click", (event, node) => {
     if (node.type === "satellite") {
       return;
     }
+    markTaskProgress("inspect");
     state.selectedGraphNodeId = node.id;
     if (typeof resolveDensity === "function" && resolveDensity() === "simple") {
       window.requestAnimationFrame(() => openMapDrawer("insight"));
@@ -7265,6 +7423,7 @@ function renderAll() {
   applyTheme();
   renderSidebar();
   renderGraph();
+  renderTaskBanner();
   renderExportActions();
   renderCompareSummary();
   renderStakeholderFocus();
@@ -8073,6 +8232,9 @@ function setView(nextView) {
   if (previous !== nextView) {
     logEvent("view.switch", { from: previous, to: nextView });
   }
+  if (nextView === "report") {
+    markTaskProgress("reflect");
+  }
 }
 
 function resolveDensity() {
@@ -8129,6 +8291,7 @@ function setStakeholder(nextStakeholder) {
   renderAll();
   if (previous !== nextStakeholder) {
     logEvent("lens.change", { from: previous, to: nextStakeholder });
+    markTaskProgress("lens");
   }
 }
 
@@ -8864,6 +9027,7 @@ document.addEventListener("submit", async (event) => {
     const form = new FormData(event.target);
     try {
       await addAgendaNode(String(form.get("agendaTitle")).trim(), String(form.get("agendaBody")).trim());
+      markTaskProgress("contribute");
       event.target.reset();
       renderAll();
     } catch (error) {
@@ -8899,6 +9063,7 @@ document.addEventListener("submit", async (event) => {
         String(form.get("visibility") || "private"),
         String(form.get("annotationBody") || "")
       );
+      markTaskProgress("contribute");
       event.target.reset();
       renderAll();
     } catch (error) {
@@ -8920,6 +9085,7 @@ document.getElementById("visualizer-form").addEventListener("submit", async (eve
     }
     input.disabled = true;
     await handleAsk(input.value);
+    markTaskProgress("contribute");
     input.value = "";
   } catch (error) {
     state.auth.message = error.message || t("questionCouldNotBeProcessed");
@@ -8990,6 +9156,7 @@ document.getElementById("chat-form").addEventListener("submit", async (event) =>
     }
     input.disabled = true;
     await handleAsk(input.value);
+    markTaskProgress("contribute");
     input.value = "";
   } catch (error) {
     state.auth.message = error.message || t("questionCouldNotBeProcessed");
