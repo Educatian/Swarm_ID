@@ -15,9 +15,7 @@
 
 ## 1단계 · 케이스 만들기와 게시
 
-[audio](./audio/instructor-ko/01-create-case.mp3)
-
-![1단계 — 케이스 만들기](./screenshots/instructor-ko/01-create-case.png)
+[video](./videos/instructor-ko/01-create-case.mp4)
 
 **https://swarm-id-ko.pages.dev** 에 교수자 계정으로 로그인하면
 작업 공간이 열립니다. 왼쪽 **시작 패널**에서:
@@ -37,9 +35,7 @@
 
 ## 2단계 · "내 수업"에서 관리하기
 
-[audio](./audio/instructor-ko/02-manage.mp3)
-
-![2단계 — 내 수업](./screenshots/instructor-ko/02-manage.png)
+[video](./videos/instructor-ko/02-manage.mp4)
 
 사이드바의 **내 수업**이 교수자 관리 허브입니다. 한 화면에서:
 
@@ -53,9 +49,7 @@
 
 ## 3단계 · 케이스 정리: 게시 · 보관 · 삭제
 
-[audio](./audio/instructor-ko/03-actions.mp3)
-
-![3단계 — 케이스 액션](./screenshots/instructor-ko/03-manage-actions.png)
+[video](./videos/instructor-ko/03-actions.mp4)
 
 케이스마다 다섯 가지 액션이 있습니다:
 
@@ -76,9 +70,7 @@
 
 ## 4단계 · 참여 분석 읽기
 
-[audio](./audio/instructor-ko/04-analytics.mp3)
-
-![4단계 — 참여 분석](./screenshots/instructor-ko/04-analytics.png)
+[video](./videos/instructor-ko/04-analytics.mp4)
 
 **내 수업** 하단의 참여 분석은 학생들의 상호작용 로그를 집계해
 보여 줍니다 (60초 캐시, 새로고침 버튼):
@@ -101,7 +93,7 @@
 
 ## 5단계 · 수업 중 실시간 활용
 
-[audio](./audio/instructor-ko/05-realtime.mp3)
+[video](./videos/instructor-ko/05-realtime.mp4)
 
 같은 케이스를 학생들이 열어 두면 화면 위에 **"함께 보는 중 N명"**
 이 표시되고, 학생이 노드를 추가하면 다른 학생과 교수자의 맵에

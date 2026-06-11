@@ -19,9 +19,7 @@
 
 ## 1단계 · 접속과 로그인
 
-[audio](./audio/student-ko/01-landing.mp3)
-
-![1단계 — 랜딩 페이지](./screenshots/student-ko/01-landing.png)
+[video](./videos/student-ko/01-landing.mp4)
 
 **https://swarm-id-ko.pages.dev** 에 접속합니다. 랜딩 화면 왼쪽에서
 이 도구가 무엇을 하는지 3단계로 소개하고, 그 아래 카드에서 바로
@@ -41,9 +39,7 @@
 
 ## 2단계 · 첫 방문 안내
 
-[audio](./audio/student-ko/02-welcome.mp3)
-
-![2단계 — 환영 슬라이드](./screenshots/student-ko/02-welcome.png)
+[video](./videos/student-ko/02-welcome.mp4)
 
 처음 들어오면 짧은 안내 슬라이드 4장이 나타납니다. 이 도구가
 무엇인지, 네 가지 관점이 무엇인지, 오늘 할 일이 무엇인지 1분 안에
@@ -57,9 +53,7 @@
 
 ## 3단계 · 홈에서 이어하기
 
-[audio](./audio/student-ko/03-home.mp3)
-
-![3단계 — 홈](./screenshots/student-ko/03-home.png)
+[video](./videos/student-ko/03-home.mp4)
 
 로그인하면 **홈** 화면에서 시작합니다. 진행 중인 케이스가 있으면
 **"이어하기"** 한 번으로 바로 맵으로 돌아갑니다. 쟁점은 깔끔하게
@@ -70,9 +64,7 @@
 
 ## 4단계 · "지금 할 일" 따라가기
 
-[audio](./audio/student-ko/04-task-banner.mp3)
-
-![4단계 — 지금 할 일 배너](./screenshots/student-ko/04-task-banner.png)
+[video](./videos/student-ko/04-task-banner.mp4)
 
 맵 화면 위에는 **지금 할 일** 안내가 떠 있습니다. 다섯 단계 —
 **케이스 열기 → 노드 눌러 쟁점 읽기 → 관점 바꿔 보기 → 질문하거나
@@ -84,9 +76,7 @@
 
 ## 5단계 · 맵 읽는 법
 
-[audio](./audio/student-ko/05-map-read.mp3)
-
-![5단계 — 노드와 쟁점](./screenshots/student-ko/05-map-read.png)
+[video](./videos/student-ko/05-map-read.mp4)
 
 맵의 **노드 하나가 쟁점 하나**입니다. 노드를 누르면(또는 마우스를
 올리면) 그 쟁점의 설명이 떠요. 아이패드에서는 **탭하면 설명이
@@ -104,9 +94,7 @@
 
 ## 6단계 · 관점 바꿔 보기
 
-[audio](./audio/student-ko/06-lens-bar.mp3)
-
-![6단계 — 관점 바](./screenshots/student-ko/06-lens-bar.png)
+[video](./videos/student-ko/06-lens-bar.mp4)
 
 맵 아래 **관점 버튼**(교사 · 학생 · 에듀테크 · 행정)을 누르면 같은
 케이스가 그 입장에서 다시 읽힙니다. 강조되는 노드가 달라지고,
@@ -117,9 +105,7 @@
 
 ## 7단계 · 질문하고 응답 받기
 
-[audio](./audio/student-ko/07-swarm-round.mp3)
-
-![7단계 — 스웜 라운드와 활동 내역](./screenshots/student-ko/07-swarm-round.png)
+[video](./videos/student-ko/07-swarm-round.mp4)
 
 맵 아래 **질문하기** 입력창에 궁금한 점을 쓰면, 다섯 관점의
 에이전트가 **동시에** 답합니다. 응답은 맵에 새 노드로 나타나고,
@@ -134,9 +120,7 @@
 
 ## 8단계 · 내 노드와 메모 추가
 
-[audio](./audio/student-ko/08-add-node.mp3)
-
-![8단계 — 노드 추가](./screenshots/student-ko/08-add-node.png)
+[video](./videos/student-ko/08-add-node.mp4)
 
 왼쪽 아이콘(⊕)을 누르면 **노드 추가** 패널이 열립니다. 원본
 케이스에 빠져 있다고 생각하는 우려나 질문을 짧은 제목으로
@@ -150,9 +134,7 @@
 
 ## 9단계 · 목록으로 보기
 
-[audio](./audio/student-ko/09-list-view.mp3)
-
-![9단계 — 목록 보기](./screenshots/student-ko/09-list-view.png)
+[video](./videos/student-ko/09-list-view.mp4)
 
 맵이 한눈에 안 들어오면 **"목록"** 버튼으로 같은 쟁점들을 목록으로
 볼 수 있습니다. 검색하고, **관점별 · 유형별 · 이름순 · 출처별**로
@@ -163,9 +145,7 @@
 
 ## 10단계 · 학급 보기로 비교하기
 
-[audio](./audio/student-ko/10-class-view.mp3)
-
-![10단계 — 학급 보기](./screenshots/student-ko/10-class-view.png)
+[video](./videos/student-ko/10-class-view.mp4)
 
 **맵 레이어**를 "학급 보기"로 바꾸면 반 친구들이 추가한 쟁점이
 모여 보입니다. 여러 명이 반복해서 지적한 쟁점은 "(N명)"으로
@@ -179,9 +159,7 @@ N명"** 이 뜨고, 친구의 노드가 **실시간으로** 내 맵에 나타납
 
 ## 11단계 · 생각 정리 제출
 
-[audio](./audio/student-ko/11-report.mp3)
-
-![11단계 — 리포트](./screenshots/student-ko/11-report.png)
+[video](./videos/student-ko/11-report.mp4)
 
 **리포트** 화면에서 마무리합니다. 지금까지 맵에서 발견한 쟁점과
 근거가 요약돼 있고, **생각 정리 질문**에 답해 제출하면 교수자에게

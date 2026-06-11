@@ -128,6 +128,14 @@ function renderMarkdown(md) {
       i++; continue;
     }
 
+    // screen-recording line: [video](path.mp4)
+    const videoOnly = line.match(/^\[video\]\(([^)]+)\)\s*$/);
+    if (videoOnly) {
+      closeList(); closeBlockquote(); flushTable();
+      out.push(`<figure class="screencast"><video controls preload="metadata" playsinline src="${videoOnly[1]}"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>`);
+      i++; continue;
+    }
+
     // audio narration line: [audio](path.mp3)
     const audioOnly = line.match(/^\[audio\]\(([^)]+)\)\s*$/);
     if (audioOnly) {
@@ -305,6 +313,14 @@ blockquote {
   margin: 18px 0;
   border-radius: 0 var(--radius) var(--radius) 0;
 }
+.screencast video {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(42, 63, 200, 0.2);
+  background: #0b0d14;
+  box-shadow: 0 10px 30px rgba(20, 30, 80, 0.12);
+}
+
 .narration {
   display: flex;
   align-items: center;
