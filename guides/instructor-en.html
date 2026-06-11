@@ -103,6 +103,19 @@ blockquote {
   margin: 18px 0;
   border-radius: 0 var(--radius) var(--radius) 0;
 }
+.narration {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0 6px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(42, 63, 200, 0.06);
+  border: 1px solid rgba(42, 63, 200, 0.18);
+}
+.narration-label { font-size: 0.82rem; font-weight: 600; white-space: nowrap; }
+.narration audio { width: 100%; height: 36px; }
+
 figure {
   margin: 24px 0;
   padding: 14px;
@@ -181,12 +194,12 @@ footer {
 <body>
   <header class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">Swarm_ID · Classroom guide</p>
+      <p class="eyebrow">Design Tension Studio · Classroom guide</p>
       <h1>Swarm_ID — Instructor Guide</h1>
       <p>Step-by-step setup for instructors preparing a class session with Swarm_ID.</p>
     </div>
   </header>
-  <nav class="guide-nav"><a href="./instructor-en.html" class="active">instructor-en</a><a href="./instructor-ko.html">instructor-ko</a><a href="./student-en.html">student-en</a><a href="./student-ko.html">student-ko</a></nav>
+  <nav class="guide-nav"><a href="./instructor-en.html" class="active">Instructor Guide</a><a href="./instructor-ko.html">Instructor Guide (Korean)</a><a href="./student-en.html">Student Guide</a><a href="./student-ko.html">Student Guide (Korean)</a></nav>
   <main>
 <p>A step-by-step walkthrough for instructors preparing Swarm_ID for an instructional-design class. Each step shows what you will see, what to click, and what the underlying mechanic is doing in the background.</p>
 <blockquote>

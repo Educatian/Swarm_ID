@@ -16,9 +16,9 @@ const GUIDES = path.join(ROOT, "guides");
 
 const guides = [
   { slug: "instructor-en", md: "instructor-en.md", title: "Swarm_ID — Instructor Guide", lang: "en" },
-  { slug: "instructor-ko", md: "instructor-ko.md", title: "Swarm_ID — 교수자용 가이드", lang: "ko" },
+  { slug: "instructor-ko", md: "instructor-ko.md", title: "디자인 텐션 스튜디오 — 교수자용 가이드", lang: "ko" },
   { slug: "student-en",    md: "student-en.md",    title: "Swarm_ID — Student Guide",    lang: "en" },
-  { slug: "student-ko",    md: "student-ko.md",    title: "Swarm_ID — 학생용 가이드",    lang: "ko" },
+  { slug: "student-ko",    md: "student-ko.md",    title: "디자인 텐션 스튜디오 — 학생용 가이드",    lang: "ko" },
 ];
 
 // --- tiny markdown-to-HTML (purpose-built for these guides) ---
@@ -125,6 +125,14 @@ function renderMarkdown(md) {
       closeList(); closeBlockquote(); flushTable();
       const lvl = h[1].length;
       out.push(`<h${lvl}>${renderInline(escapeHtml(h[2]))}</h${lvl}>`);
+      i++; continue;
+    }
+
+    // audio narration line: [audio](path.mp3)
+    const audioOnly = line.match(/^\[audio\]\(([^)]+)\)\s*$/);
+    if (audioOnly) {
+      closeList(); closeBlockquote(); flushTable();
+      out.push(`<div class="narration"><span class="narration-label">나레이션 듣기</span><audio controls preload="none" src="${audioOnly[1]}"></audio></div>`);
       i++; continue;
     }
 
@@ -297,6 +305,19 @@ blockquote {
   margin: 18px 0;
   border-radius: 0 var(--radius) var(--radius) 0;
 }
+.narration {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0 6px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(42, 63, 200, 0.06);
+  border: 1px solid rgba(42, 63, 200, 0.18);
+}
+.narration-label { font-size: 0.82rem; font-weight: 600; white-space: nowrap; }
+.narration audio { width: 100%; height: 36px; }
+
 figure {
   margin: 24px 0;
   padding: 14px;
@@ -407,7 +428,7 @@ function wrap(title, lang, slug, bodyHtml, tagline) {
 <body>
   <header class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">${lang === "ko" ? "Swarm_ID · 수업용 가이드" : "Swarm_ID · Classroom guide"}</p>
+      <p class="eyebrow">${lang === "ko" ? "디자인 텐션 스튜디오 · 수업용 가이드" : "Design Tension Studio · Classroom guide"}</p>
       <h1>${escapeHtml(title)}</h1>
       <p>${escapeHtml(tagline)}</p>
     </div>
@@ -427,9 +448,9 @@ ${bodyHtml}
 
 const taglines = {
   "instructor-en": "Step-by-step setup for instructors preparing a class session with Swarm_ID.",
-  "instructor-ko": "Swarm_ID로 수업을 준비하는 교수자를 위한 단계별 안내서.",
+  "instructor-ko": "케이스 만들기부터 참여 분석까지 — 수업 운영의 전체 흐름.",
   "student-en": "What students see in Swarm_ID — from sign-in through swarm rounds to export.",
-  "student-ko": "Swarm_ID에서 학생이 보는 화면 — 로그인부터 스웜 라운드와 내보내기까지.",
+  "student-ko": "로그인부터 생각 정리 제출까지 — 학생이 보는 모든 화면.",
 };
 
 for (const g of guides) {
