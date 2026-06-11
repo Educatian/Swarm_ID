@@ -1,3 +1,29 @@
+/* Self-hosted Material Symbols: icons must not degrade to raw ligature text
+   ("tune", "fullscreen") when Google Fonts is blocked or offline. */
+@font-face {
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: block;
+  src: url("./assets/material-symbols-outlined.woff2") format("woff2");
+}
+
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
 :root {
   --surface-tint: #4361ee;
   --secondary-dim: #e76f51;
@@ -6777,4 +6803,19 @@ html:not(.theme-light) .landing-copy h2 #landing-hero-title {
 .home-brand-logo {
   object-fit: contain;
   filter: drop-shadow(0 0 6px rgba(151, 169, 255, 0.45));
+}
+
+/* Detailed mode: cap the sticky intake column to the viewport so a long
+   pipeline doesn't stretch the page far past the map (instructor view). */
+@media (min-width: 901px) {
+  .app-shell:not(.density-simple) .visualizer-layout > .intake-panel {
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .app-shell:not(.density-simple) .visualizer-layout > .insight-panel {
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
 }

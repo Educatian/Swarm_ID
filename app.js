@@ -1131,7 +1131,11 @@ function markTaskProgress(stepId) {
 
 function isTaskBannerCollapsed() {
   try {
-    return window.localStorage.getItem("task-banner-collapsed") === "1";
+    const stored = window.localStorage.getItem("task-banner-collapsed");
+    // No explicit preference yet: start collapsed on narrow screens where the
+    // expanded checklist would push the map below the fold.
+    if (stored === null) return window.innerWidth < 720;
+    return stored === "1";
   } catch (_) {
     return false;
   }
@@ -9021,11 +9025,17 @@ async function runSwarmRound(question) {
 
   let okCount = 0;
   const successfulResponses = [];
+  const allResponses = [];
   results.forEach((r, i) => {
     const stakeholderKey = SWARM_AGENTS[i];
     const stakeholder = stakeholders[stakeholderKey];
     const body =
       r.status === "fulfilled" && r.value ? r.value : generateAgentReply(stakeholderKey);
+    allResponses.push({
+      stakeholder: stakeholderKey,
+      source: r.status === "fulfilled" && r.value ? "ai" : "fallback",
+      text: String(body).slice(0, 400),
+    });
     if (r.status === "fulfilled") {
       okCount += 1;
       successfulResponses.push({ stakeholder: stakeholderKey, body });
@@ -9039,6 +9049,17 @@ async function runSwarmRound(question) {
       roundId: roundNumber,
       fixedNodeId: `swarm-r${roundNumber}-${stakeholderKey}`,
     });
+  });
+
+  // Research instrumentation: preserve the full AI turn (question + every
+  // agent's output verbatim) so turn-level prompt/output pairs are minable
+  // from analytics_events without reconstructing from learner_runs.chat.
+  logEvent("question.answer", {
+    round: roundNumber,
+    question: question.slice(0, 500),
+    ok_count: okCount,
+    agent_count: SWARM_AGENTS.length,
+    responses: allResponses,
   });
 
   // P1: classify inter-agent disagreements asynchronously; do not block the UI.
