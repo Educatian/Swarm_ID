@@ -16,10 +16,9 @@
   <a href="https://swarm-id-ko.pages.dev/guides/instructor-ko"><b>교수자 가이드</b></a>
 </p>
 
-> **이 `ko` 브랜치는 한국어 기본(Korean-default) 버전입니다.** 영어 원본은 `main` 브랜치
-> (swarmid.vercel.app)를 참고하세요. 두 브랜치는 같은 Supabase 백엔드를 공유하며,
-> `ko`는 한국어 UI·홈 대시보드·사용성 업그레이드·PWA·실시간 협업·AI 피드백 연구
-> 기능이 먼저 적용되는 선행 브랜치입니다.
+> **이 `ko` 브랜치는 한국어 기본(Korean-default) 캐노니컬 코드베이스입니다.**
+> 영어판은 `main` 브랜치(swarm-id-en.pages.dev)로, 같은 코드에 기본 로케일·첫
+> 페인트 정적 텍스트·매니페스트만 다릅니다. 동기화 규칙: ko에 커밋 → main에 체리픽.
 
 ---
 
@@ -79,9 +78,9 @@ The studio is intended to support students in seeing educational media not as ne
 
 - Plain HTML/CSS/JS + **D3.js** force-directed tension maps
 - **Supabase** — auth, course data, learner runs, append-only `analytics_events`, **Realtime** (동료 활동 라이브 반영 + 프레즌스)
-- **Gemini** — case structuring, swarm replies, disagreement classification, critique rounds (배포별 프록시: Vercel `api/gemini.js`, Cloudflare `_worker.js`) + 결정론적 로컬 폴백
+- **OpenRouter** — case structuring, swarm replies, disagreement classification, critique rounds (`_worker.js` Pages 워커, 모델 폴백 체인) + 결정론적 로컬 폴백
 - **PWA** — manifest + network-first service worker(미디어 우회), 홈 화면 설치, 오프라인 셸
-- 배포: Cloudflare Pages (`swarm-id-ko` 본판 / `dts-ko-preview` 데모), wrangler direct-upload
+- 배포: Cloudflare Pages (`swarm-id-en` EN / `swarm-id-ko` KO / `dts-ko-preview` 데모), wrangler direct-upload
 
 ## Data Model
 
