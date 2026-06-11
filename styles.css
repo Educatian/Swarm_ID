@@ -1267,6 +1267,7 @@ textarea:disabled {
 
 .canvas-panel {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
 }
 
@@ -1301,7 +1302,8 @@ textarea:disabled {
 .canvas-stats {
   display: flex;
   gap: 8px;
-  flex-wrap: nowrap;
+  row-gap: 8px;
+  flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
   min-width: 0;
@@ -6747,4 +6749,27 @@ html:not(.theme-light) .landing-copy h2 #landing-hero-title {
   .landing-visual {
     animation: none !important;
   }
+}
+
+/* Detailed mode: compact swarm activity log (was oversized slabs) */
+.swarm-activity-panel #graph-events {
+  max-height: 230px;
+  overflow-y: auto;
+  display: grid;
+  gap: 8px;
+}
+
+.swarm-activity-panel .evidence-item {
+  padding: 9px 12px;
+  border-radius: 12px;
+  border-left: 2px solid rgba(151, 169, 255, 0.4);
+}
+
+.swarm-activity-panel .evidence-item strong {
+  font-size: 0.82rem;
+}
+
+.swarm-activity-panel .evidence-item p {
+  font-size: 0.79rem;
+  line-height: 1.45;
 }

@@ -7315,8 +7315,11 @@ function regenerateGraph(reason = "manual refresh") {
   state.graph.nodes = snapshot.nodes;
   state.graph.links = snapshot.links;
   state.graph.events.unshift({
-    title: `Cycle ${state.graph.iteration}`,
-    body: `${snapshot.nodes.length} nodes and ${snapshot.links.length} links regenerated from "${reason}".`,
+    title: state.locale === "ko" ? `사이클 ${state.graph.iteration}` : `Cycle ${state.graph.iteration}`,
+    body:
+      state.locale === "ko"
+        ? `맵을 다시 그렸어요 · 노드 ${snapshot.nodes.length}개 · 연결 ${snapshot.links.length}개`
+        : `${snapshot.nodes.length} nodes and ${snapshot.links.length} links regenerated from "${reason}".`,
   });
   state.graph.events = state.graph.events.slice(0, 4);
 }
