@@ -6819,3 +6819,9 @@ html:not(.theme-light) .landing-copy h2 #landing-hero-title {
     overscroll-behavior: contain;
   }
 }
+
+.graph-events-empty {
+  margin: 4px 0;
+  font-size: 0.82rem;
+  color: var(--on-surface-variant);
+}

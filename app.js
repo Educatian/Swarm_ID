@@ -2319,6 +2319,10 @@ function syncRealtimeSubscription() {
       if (!row || row.learner_id === state.auth.userId) return;
       if (applyRemoteLearnerRunRow(row)) {
         const name = row.learner_name || (ko ? "동료" : "A peer");
+        pushGraphEvent(
+          ko ? "동료 활동" : "Peer activity",
+          ko ? `${name} 님의 활동이 맵에 반영됐어요` : `${name}'s activity just landed on the map`
+        );
         scheduleRealtimeRefresh(
           ko ? `${name} 님의 활동이 맵에 반영됐어요.` : `${name}'s activity just landed on the map.`
         );
@@ -7168,16 +7172,22 @@ function renderGraph() {
     ? (swarmRound > 0 ? `사이클 ${state.graph.iteration} · 라운드 ${swarmRound}` : `사이클 ${state.graph.iteration}`)
     : (swarmRound > 0 ? `cycle ${state.graph.iteration} · round ${swarmRound}` : `cycle ${state.graph.iteration}`);
   dom.graphCycle.textContent = cycleLabel;
-  dom.graphEvents.innerHTML = state.graph.events
-    .map(
-      (event) => `
+  dom.graphEvents.innerHTML = state.graph.events.length
+    ? state.graph.events
+        .map(
+          (event) => `
         <article class="evidence-item">
           <strong>${event.title}</strong>
           <p>${event.body}</p>
         </article>
       `
-    )
-    .join("");
+        )
+        .join("")
+    : `<p class="graph-events-empty">${
+        state.locale === "ko"
+          ? "아직 활동이 없어요. 질문하거나 노드를 추가하면 여기에 기록돼요."
+          : "No activity yet. Ask a question or add a node and it will show up here."
+      }</p>`;
 
   const scores = computeScores();
   const frame = buildRenderableGraph();
@@ -7317,19 +7327,53 @@ function getSelectedRenderableNode() {
 
 let graphLoop = null;
 
+// Activity feed: meaningful events only (student actions, AI rounds, real map
+// changes). Internal re-renders never appear here — that was debug noise.
+function pushGraphEvent(title, body) {
+  state.graph.events.unshift({ title, body });
+  state.graph.events = state.graph.events.slice(0, 5);
+}
+
 function regenerateGraph(reason = "manual refresh") {
+  const prevNodes = state.graph.nodes.length;
+  const prevLinks = state.graph.links.length;
   state.graph.iteration += 1;
   const snapshot = buildGraphSnapshot(reason);
   state.graph.nodes = snapshot.nodes;
   state.graph.links = snapshot.links;
-  state.graph.events.unshift({
-    title: state.locale === "ko" ? `사이클 ${state.graph.iteration}` : `Cycle ${state.graph.iteration}`,
-    body:
-      state.locale === "ko"
-        ? `맵을 다시 그렸어요 · 노드 ${snapshot.nodes.length}개 · 연결 ${snapshot.links.length}개`
-        : `${snapshot.nodes.length} nodes and ${snapshot.links.length} links regenerated from "${reason}".`,
-  });
-  state.graph.events = state.graph.events.slice(0, 4);
+
+  const dN = snapshot.nodes.length - prevNodes;
+  const dL = snapshot.links.length - prevLinks;
+  // Layout/lens refreshes with no structural change are render noise — stay silent.
+  if (dN === 0 && dL === 0) return;
+  // No open case = just the placeholder core node; nothing worth narrating.
+  if (!hasActiveCase()) return;
+  const ko = state.locale === "ko";
+  if (prevNodes <= 1 && snapshot.nodes.length > 1) {
+    pushGraphEvent(
+      ko ? "맵 준비 완료" : "Map ready",
+      ko
+        ? `노드 ${snapshot.nodes.length}개 · 연결 ${snapshot.links.length}개로 시작해요`
+        : `Starting with ${snapshot.nodes.length} nodes and ${snapshot.links.length} links`
+    );
+    return;
+  }
+  const parts = [];
+  if (dN !== 0) {
+    parts.push(
+      ko
+        ? `노드 ${Math.abs(dN)}개 ${dN > 0 ? "늘었어요" : "줄었어요"}`
+        : `${Math.abs(dN)} node${Math.abs(dN) === 1 ? "" : "s"} ${dN > 0 ? "added" : "removed"}`
+    );
+  }
+  if (dL !== 0) {
+    parts.push(
+      ko
+        ? `연결 ${Math.abs(dL)}개 ${dL > 0 ? "늘었어요" : "줄었어요"}`
+        : `${Math.abs(dL)} link${Math.abs(dL) === 1 ? "" : "s"} ${dL > 0 ? "added" : "removed"}`
+    );
+  }
+  pushGraphEvent(ko ? "맵 변화" : "Map changed", parts.join(" · "));
 }
 
 function ensureGraphCurrent() {
@@ -8472,6 +8516,13 @@ async function addAgendaNode(title, body = "") {
     run.updatedAt = new Date().toISOString();
   });
 
+  pushGraphEvent(
+    state.locale === "ko" ? "내 노드 추가됨" : "Your node was added",
+    state.locale === "ko"
+      ? `"${agendaNode.title}" 노드가 맵에 반영됐어요${expansions.length ? ` · AI가 관련 쟁점 ${expansions.length}개를 이어 붙였어요` : ""}`
+      : `"${agendaNode.title}" joined the map${expansions.length ? ` · AI linked ${expansions.length} related issue${expansions.length === 1 ? "" : "s"}` : ""}`
+  );
+
   state.timeline = [
     state.locale === "ko"
       ? `${agendaNode.title}이(가) 학습자 아젠다로 추가되고 관련 쟁점으로 확장되었습니다.`
@@ -8573,6 +8624,13 @@ function addNodeAnnotation(noteType, visibility, body) {
       : state.locale === "ko" ? "비공개 메모가 추가되었습니다" : "Private note added";
     run.updatedAt = new Date().toISOString();
   });
+
+  pushGraphEvent(
+    state.locale === "ko" ? "메모 저장됨" : "Note saved",
+    state.locale === "ko"
+      ? `"${selected.label}" 노드에 ${annotation.visibility === "cohort" ? "학급 공개" : "나만 보는"} 메모를 남겼어요`
+      : `You left a ${annotation.visibility === "cohort" ? "class-visible" : "private"} note on "${selected.label}"`
+  );
 
   state.timeline = [state.locale === "ko" ? `${selected.label}에 학습자 메모가 추가되었습니다.` : `${selected.label} was annotated from the learner view.`, ...state.timeline].slice(0, 8);
   state.evidence = [
@@ -9051,6 +9109,13 @@ async function runSwarmRound(question) {
     });
   });
 
+  pushGraphEvent(
+    isKorean ? `라운드 ${roundNumber} 응답 완료` : `Round ${roundNumber} complete`,
+    isKorean
+      ? `${okCount}/${SWARM_AGENTS.length} 관점이 질문에 답했어요`
+      : `${okCount}/${SWARM_AGENTS.length} perspectives answered your question`
+  );
+
   // Research instrumentation: preserve the full AI turn (question + every
   // agent's output verbatim) so turn-level prompt/output pairs are minable
   // from analytics_events without reconstructing from learner_runs.chat.
@@ -9070,6 +9135,15 @@ async function runSwarmRound(question) {
         state.graph.rounds = state.graph.rounds || [];
         state.graph.rounds.push({ round: roundNumber, edges });
         if (state.graph.rounds.length > 3) state.graph.rounds.shift();
+        const disagreements = edges.filter((edge) => edge.relation === "disagree").length;
+        if (disagreements > 0) {
+          pushGraphEvent(
+            isKorean ? "이견 감지" : "Disagreement detected",
+            isKorean
+              ? `관점 사이 이견 ${disagreements}건을 맵에 표시했어요`
+              : `Marked ${disagreements} disagreement${disagreements === 1 ? "" : "s"} between perspectives on the map`
+          );
+        }
         regenerateGraph(`swarm analysis round ${roundNumber}`);
         renderAll();
       })
