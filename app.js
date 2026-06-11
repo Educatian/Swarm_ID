@@ -1195,6 +1195,12 @@ function renderTaskBanner() {
   `;
 }
 
+document.getElementById("network-svg")?.addEventListener("click", (event) => {
+  if (event.target.id === "network-svg") {
+    hideNetworkTooltip(true);
+  }
+});
+
 document.getElementById("task-banner")?.addEventListener("click", (event) => {
   if (event.target.closest("[data-task-collapse]")) {
     setTaskBannerCollapsed(true);
@@ -5968,6 +5974,18 @@ function describeNodeIssue(node) {
   };
 }
 
+// Touch devices (iPads in the Ewha classroom) have no hover: tooltips become
+// tap-to-pin and are dismissed by tapping the map background.
+function isCoarsePointer() {
+  try {
+    return window.matchMedia("(hover: none), (pointer: coarse)").matches;
+  } catch (_) {
+    return false;
+  }
+}
+
+let networkTooltipPinned = false;
+
 function moveNetworkTooltip(event) {
   if (!dom.networkTooltip || dom.networkTooltip.hidden || !dom.networkStage) {
     return;
@@ -5985,7 +6003,7 @@ function moveNetworkTooltip(event) {
   dom.networkTooltip.style.top = `${clampedTop}px`;
 }
 
-function showNetworkTooltip(event, node) {
+function showNetworkTooltip(event, node, { pinned = false } = {}) {
   if (!dom.networkTooltip) {
     return;
   }
@@ -5995,13 +6013,18 @@ function showNetworkTooltip(event, node) {
   dom.networkTooltipTitle.textContent = issue.title;
   dom.networkTooltipBody.textContent = issue.body;
   dom.networkTooltip.hidden = false;
+  networkTooltipPinned = pinned;
   moveNetworkTooltip(event);
 }
 
-function hideNetworkTooltip() {
+function hideNetworkTooltip(force = false) {
   if (!dom.networkTooltip) {
     return;
   }
+  if (networkTooltipPinned && !force) {
+    return;
+  }
+  networkTooltipPinned = false;
   dom.networkTooltip.hidden = true;
 }
 
@@ -6458,6 +6481,8 @@ function updateGraphRenderer(frame) {
     .attr("r", (node) => nodeRadius(node));
 
   const majorNodes = nodeEnter.filter((node) => node.type !== "satellite");
+  // Invisible enlarged hit area so small nodes are tappable on touch screens.
+  majorNodes.append("circle").attr("class", "node-hit").attr("r", (node) => nodeRadius(node) + 12);
   majorNodes.append("circle").attr("class", "node-halo").attr("r", (node) => nodeRadius(node) + 6);
   majorNodes.append("circle").attr("class", "node-body").attr("r", (node) => nodeRadius(node));
   majorNodes.append("text").attr("class", "node-icon").attr("y", 0).text((node) => node.icon);
@@ -6518,6 +6543,11 @@ function updateGraphRenderer(frame) {
       return;
     }
     markTaskProgress("inspect");
+    if (isCoarsePointer()) {
+      // No hover on tablets: tapping a node pins its tooltip until the
+      // background (or another node) is tapped.
+      showNetworkTooltip(event, node, { pinned: true });
+    }
     state.selectedGraphNodeId = node.id;
     if (typeof resolveDensity === "function" && resolveDensity() === "simple") {
       window.requestAnimationFrame(() => openMapDrawer("insight"));
@@ -6631,11 +6661,11 @@ function renderGraph() {
         : "This view combines patterns shared across the class."
       : state.activeMapLayer === "personal"
         ? state.locale === "ko"
-          ? "노드에 호버해 쟁점을 보고 클릭해 메모를 추가하세요."
-          : "Hover to inspect an issue and click to add your notes."
+          ? (isCoarsePointer() ? "노드를 눌러 쟁점을 보고 메모를 추가하세요." : "노드에 호버해 쟁점을 보고 클릭해 메모를 추가하세요.")
+          : (isCoarsePointer() ? "Tap a node to inspect an issue and add your notes." : "Hover to inspect an issue and click to add your notes.")
         : state.locale === "ko"
-          ? "노드에 호버해 그 뒤의 쟁점을 살펴보세요."
-          : "Hover a node to inspect the issue behind it."
+          ? (isCoarsePointer() ? "노드를 누르면 그 뒤의 쟁점을 살펴볼 수 있어요." : "노드에 호버해 그 뒤의 쟁점을 살펴보세요.")
+          : (isCoarsePointer() ? "Tap a node to inspect the issue behind it." : "Hover a node to inspect the issue behind it.")
     : state.locale === "ko"
       ? "케이스를 만들거나 선택하면 네트워크가 생성됩니다."
       : "Create or choose a case to generate the network.";

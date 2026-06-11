@@ -2995,6 +2995,34 @@ body {
   margin-top: 18px;
 }
 
+.network-node .node-hit {
+  fill: transparent;
+  stroke: none;
+}
+
+/* Touch ergonomics: classroom iPads have no hover and need bigger targets. */
+@media (hover: none), (pointer: coarse) {
+  .map-dock-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .lens-pill-row button,
+  .token-row button {
+    min-height: 40px;
+  }
+
+  .toolbar-button,
+  .density-toggle-btn,
+  .panel-expand-toggle {
+    min-height: 40px;
+  }
+
+  .network-tooltip {
+    max-width: min(320px, 78vw);
+  }
+}
+
 .task-banner {
   margin: 10px 0 0;
   padding: 12px 14px;
