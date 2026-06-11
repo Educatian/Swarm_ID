@@ -1,215 +1,174 @@
-# Swarm_ID — Student Guide (English)
+# Design Tension Studio — Student Guide
 
-A step-by-step walkthrough for students using Swarm_ID during a class
-session. Each step shows **what you will see**, **what to click**, and
-**what is happening inside the system** — so you can understand the
-swarm, not just operate it.
+A step-by-step walkthrough for students using Design Tension Studio in class.
+Each step explains **what you see**, **what to press**, and **why it is
+designed that way**.
 
-> **What you are doing here.** You are designing an online lesson.
-> Swarm_ID is your "second brain" — when you ask a question, **five
-> different stakeholders** (a teacher, a student, an IT specialist,
-> an administrator, an accessibility expert) answer **at the same
-> time**. You then see where they **agree**, where they **disagree**,
-> and decide what *you* want to do with the tension. Every node you
-> see carries a badge that tells you who wrote it: `AI` (one of the
-> agents), `Me` (you), `Peer` (a classmate), or `Brief` (the original
-> case).
+> **What am I doing here?** You receive one instructional design case, and
+> your job is to uncover the **tensions** around it. The same case looks
+> different through four lenses — **teacher · student · edtech ·
+> administration**. Ask a question and five AI agents answer at once; you
+> watch where they **agree** and where they **collide**, then pick the single
+> most important tension and defend your choice **with evidence**. Every node
+> wears an origin badge: `AI` (an agent), `Me` (you), `Peer` (a classmate),
+> `Brief` (the original case).
 
----
-
-## Step 1 · Sign in
-
-![Step 1 — Sign in](./screenshots/student-en/01-login.png)
-
-Go to **https://swarmid.vercel.app** and sign in with the account
-your instructor provided. If your instructor gave you a course or
-join code instead of an account, enter it on the landing screen.
-
-**What the system is doing:** authenticating you through Supabase
-and loading your cohort context so you see the same course and
-cases as your classmates.
+[audio](./audio/student-en/00-intro.mp3)
 
 ---
 
-## Step 2 · Onboarding card
+## Step 1 · Getting in
 
-![Step 2 — Onboarding](./screenshots/student-en/02-onboarding.png)
+[video](./videos/student-en/01-landing.mp4)
 
-First-time students see a **"Welcome to Swarm_ID"** card at the top
-of the Studio. It lists four quick moves:
+Open **https://swarm-id-en.pages.dev**. The landing page introduces the tool
+in three steps, with the sign-in card right below.
 
-1. Pick a published case.
-2. Read the case brief and look at the map.
-3. Ask a question — the swarm answers from 5 lenses.
-4. Add your own agenda nodes and challenge the ones you disagree with.
+- **First time?** Tap *"First time here? Join with a course code"* under the
+  card and enter your email, a password, and the **course code** from your
+  instructor.
+- **Already enrolled?** Just email and password.
 
-Dismiss the card once you have read it — it will not come back for
-the same student account.
-
----
-
-## Step 3 · Pick a case
-
-![Step 3 — Pick a case](./screenshots/student-en/03-pick-case.png)
-
-Scroll the **Start here** panel to find the **Course cases** list.
-Only cards tagged **Published** are available to students. Click
-**Open case** on the one your instructor pointed you to.
-
-**Tip.** If the list is empty, the instructor has not published a
-case yet — let them know.
+> **Use it like an app on iPad**: open the site in Safari, tap the
+> **share button (⬆️) → "Add to Home Screen"**. You get a home-screen icon
+> and a full-screen app that launches instantly even on flaky wifi.
 
 ---
 
-## Step 4 · Case map
+## Step 2 · Your first visit
 
-![Step 4 — Case map](./screenshots/student-en/04-case-map.png)
+[video](./videos/student-en/02-welcome.mp4)
 
-The canvas now shows the case as a network:
+Four short welcome slides explain what the tool is, what the four lenses are,
+and what to do today — in under a minute. The last slide offers a **guided
+tour** that points out each part of the screen.
 
-- A center **core** node with the case title.
-- Five stakeholder nodes orbiting it (Teacher, Student, IT,
-  Administrator, Accessibility).
-- Signal nodes (goals, constraints, evidence) connected to the
-  relevant stakeholder.
-
-Read the case brief in the left panel first. Every node has a small
-**provenance badge** in its top-right corner — `Brief` means this
-content came from the original case document.
+Skipping is fine — the **"Show Tutorial"** button at the top reopens it
+anytime.
 
 ---
 
-## Step 5 · Ask your first question
+## Step 3 · Continue from Home
 
-![Step 5 — First question](./screenshots/student-en/05-first-question.png)
+[video](./videos/student-en/03-home.mp4)
 
-At the bottom of the canvas is a composer input:
-**"Ask a Question"**. Type something you genuinely want to think
-about — e.g.
-
-> *"How do student autonomy and teacher review load collide in this
-> design?"*
-
-Hit enter. Do **not** hit it twice — one click launches a swarm
-round, which costs five Gemini calls in parallel.
-
-**What the system is doing:** your question is sent to *all five*
-stakeholder agents simultaneously. Each agent answers from their own
-perspective — that is the swarm.
+You start on the **Home** screen. If a case is in progress, one tap on
+**"Continue"** takes you straight back to the map. Keep one thing in mind:
+tensions don't resolve neatly — the goal is to pick the one that matters most
+and build your reasoning on evidence.
 
 ---
 
-## Step 6 · Swarm round — 5 answers
+## Step 4 · Follow "What to do now"
 
-![Step 6 — Swarm round](./screenshots/student-en/06-swarm-round.png)
+[video](./videos/student-en/04-task-banner.mp4)
 
-Within 5–8 seconds you see **five new nodes** added to the network —
-one per stakeholder — with `AI` provenance badges. In the
-**Swarm activity** sidebar the `round` counter increments by 1, and
-in the chat you see five messages, each labeled with a stakeholder
-name.
-
-**Read them side by side.** The whole point of a swarm is that
-nobody's answer is "the" answer — they disagree, sometimes sharply.
+Above the map sits the **What to do now** banner with five steps — **open a
+case → read issues by tapping nodes → switch lenses → ask or add a node →
+write your reflection**. Steps check off automatically as you actually do
+them, and the next step is always highlighted. Collapse it with the button on
+the right if you want it out of the way.
 
 ---
 
-## Step 7 · Disagreement edges
+## Step 5 · Reading the map
 
-![Step 7 — Disagreement edges](./screenshots/student-en/07-disagreement-edges.png)
+[video](./videos/student-en/05-map-read.mp4)
 
-A few seconds after the five answers arrive, a second pass classifies
-every pair as **agree / disagree / tangential**:
+**One node is one issue.** Tap (or hover) a node to read it. On iPad the
+tooltip **stays pinned** until you tap the background.
 
-- **Green solid line** = agents agree.
-- **Red dashed line** = agents disagree — *this is where learning
-  lives*.
-- **Gray dotted line** = tangential (they are talking past each
-  other).
+- **Colors**: purple = instructional signals, red = constraint friction,
+  green = evidence
+- **Dashed lines between stakeholders**: their issues interlock — one side's
+  decision becomes the other side's burden
+- **Badges**: who created the node (`AI` / `Me` / `Peer` / `Brief`)
 
-Click the `ⓘ` button next to the round counter to see the legend.
-**Focus on red dashed lines.** Those are the genuine design tensions
-you will have to resolve in your lesson plan.
-
----
-
-## Step 8 · Challenge one lens
-
-![Step 8 — Challenge button](./screenshots/student-en/08-challenge-button.png)
-
-In the chat, each swarm response has a small **"Challenge this
-lens"** button. Click it to push back — the system will prompt you
-for a challenge sentence (e.g. *"That ignores our 40-minute class
-limit"*), then it sends the original answer + your challenge back
-to that same agent. You get a **round-2 refined response** from
-that specific stakeholder.
-
-**Why this matters:** this is where you stop being a passive reader
-of AI output and become a co-designer. Your challenge shapes the
-next answer.
+If the screen feels tight, the **"Focus map"** button collapses both side
+panels.
 
 ---
 
-## Step 9 · Add your own agenda node
+## Step 6 · Switch lenses
 
-![Step 9 — Add to map](./screenshots/student-en/09-add-agenda.png)
+[video](./videos/student-en/06-lens-bar.mp4)
 
-The **Selected lens** panel (right side) has an **"Add to map"**
-form. Give your node a short title, optionally a body. When you
-submit, the node appears on the canvas with a `Me` badge — that is
-how you show up in the shared cohort map.
-
-**Classroom rule of thumb:** aim for at least 2–3 `Me` nodes per
-session. Those are your design decisions, not the AI's.
+The **lens buttons** under the map (Teacher · Student · Edtech ·
+Administration) re-read the same case from that position. Highlighted nodes
+change, and so do the key issues in the side panel. **Read through at least
+two lenses** — tensions stay invisible from a single side.
 
 ---
 
-## Step 10 · Report & personal reflection
+## Step 7 · Ask and get answered
 
-![Step 10 — Report](./screenshots/student-en/10-report.png)
+[video](./videos/student-en/07-swarm-round.mp4)
 
-Click **Report** in the left navigation. The report pulls together
-your decisions, the swarm rounds you ran, and the evidence attached.
-This is what you can hand in or paste into your lesson-plan draft.
+Type a question into the **Ask** composer and five stakeholder agents answer
+**simultaneously**. Responses join the map as new nodes, and when agents
+**disagree, a red edge** marks the spot — exactly where a discussion is worth
+having.
 
----
-
-## Step 11 · Export / close out
-
-![Step 11 — Export](./screenshots/student-en/11-export.png)
-
-Use **Download PNG** to save the current network as an image (good
-for slides), or **Download HTML Snapshot** to get a standalone
-offline copy of the map in its current state.
-
-Sign out when you are done — your work is saved server-side via
-Supabase, so you can pick up where you left off next class.
+The **Activity** panel on the right records meaningful events only: round
+completed, disagreement detected, your node added, peer activity. Check there
+to see how your actions changed the map.
 
 ---
 
-## Troubleshooting
+## Step 8 · Add your own nodes and notes
 
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| Nothing happens after I hit "Ask" | Offline or Gemini quota exhausted | Check your wifi, then ask the instructor |
-| Only my question appears, no 5 answers | Swarm round failed silently | Open browser console, look for `runSwarmRound` warnings |
-| Red disagreement lines never show up | Second classifier pass failed | Reload the page and ask the question again |
-| Challenge button does nothing | You closed the prompt dialog | Click the button again and actually type a challenge |
-| I can't see the course case | The case is in Draft | Your instructor has to publish it |
+[video](./videos/student-en/08-add-node.mp4)
+
+Tap the **⊕ icon** on the left to open the add-node panel. Add a concern you
+think the original case is missing, as a short title. Your node joins the map
+with a `Me` badge, and the AI links related issues to it.
+
+With a node selected you can also leave **notes** — visible to you only, or
+shared with the class.
 
 ---
 
-## How to get the most out of a session
+## Step 9 · View as a list
 
-1. **Write a real question.** "What's hard?" is weak — "How does
-   teacher review time collide with student autonomy in my 40-min
-   class?" is strong.
-2. **Read all five answers before reacting.** Do not collapse into
-   "the AI said..." — there is no single AI voice here; there are
-   five.
-3. **Challenge at least one lens.** Turn-taking is where actual
-   learning happens.
-4. **Add your own nodes.** A map full of `AI` badges with no `Me`
-   badges means you have not taken a position yet.
-5. **Export at the end.** Your instructor can see activity, but the
-   report is easier to review than the raw map.
+[video](./videos/student-en/09-list-view.mp4)
+
+If the map feels overwhelming, the **"List"** button shows the same issues as
+a list — search, then sort **by lens · type · name · origin**. Tapping a row
+selects that node. Map and list are two views of the same content.
+
+---
+
+## Step 10 · Compare with class view
+
+[video](./videos/student-en/10-class-view.mp4)
+
+Switch the **map layer** to "Class view" to see the issues your classmates
+added — issues raised by several people are grouped with a count. "Compare
+view" separates **what only you saw** (your unique contribution) from **what
+only the team saw** (your blind spots).
+
+When a classmate has the same case open, a **"viewing now"** indicator
+appears and their nodes land on your map **in real time**.
+
+---
+
+## Step 11 · Submit your reflection
+
+[video](./videos/student-en/11-report.mp4)
+
+Finish in the **Report** view. The issues and evidence you found are
+summarized there; answer the **reflection prompt** and submit it to your
+instructor. One standard for a good reflection: *did you pick the single most
+important tension and explain your choice with evidence from the map?*
+
+---
+
+## Quick answers
+
+- **The screen feels busy** → stay in the default "Simple" mode; "Detailed"
+  is for when you need the process data. "Focus map" also helps.
+- **Dark/light mode** → the ☀/☾ button at the top right.
+- **Did my work save?** → if it appeared in the Activity panel, it saved.
+  Nodes, notes, and reflections live in your account and follow you across
+  devices.
+- **I want the tutorial again** → "Show Tutorial" at the top.

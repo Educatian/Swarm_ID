@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Swarm_ID — Instructor Guide</title>
-  <meta name="description" content="Step-by-step setup for instructors preparing a class session with Swarm_ID.">
+  <title>Design Tension Studio — Instructor Guide</title>
+  <meta name="description" content="From creating a case to reading engagement analytics — the whole course flow.">
   <style>
 :root {
   --bg: #fafafa;
@@ -203,115 +203,99 @@ footer {
   <header class="hero">
     <div class="hero-inner">
       <p class="eyebrow">Design Tension Studio · Classroom guide</p>
-      <h1>Swarm_ID — Instructor Guide</h1>
-      <p>Step-by-step setup for instructors preparing a class session with Swarm_ID.</p>
+      <h1>Design Tension Studio — Instructor Guide</h1>
+      <p>From creating a case to reading engagement analytics — the whole course flow.</p>
     </div>
   </header>
   <nav class="guide-nav"><a href="./instructor-en.html" class="active">Instructor Guide</a><a href="./instructor-ko.html">Instructor Guide (Korean)</a><a href="./student-en.html">Student Guide</a><a href="./student-ko.html">Student Guide (Korean)</a></nav>
   <main>
-<p>A step-by-step walkthrough for instructors preparing Swarm_ID for an instructional-design class. Each step shows what you will see, what to click, and what the underlying mechanic is doing in the background.</p>
+<p>A walkthrough for instructors running Design Tension Studio in a course — from creating a case to reading engagement analytics.</p>
 <blockquote>
-<strong>What makes Swarm_ID different.</strong> When a student asks a question,<br>
-Swarm_ID does <strong>not</strong> call an LLM once. It launches a <em>swarm round</em> —<br>
-five stakeholder agents (teacher, student, IT, administrator,<br>
-accessibility) answer the same question <strong>in parallel</strong>. A second pass<br>
-classifies every pair of answers as <strong>agree / disagree / tangential</strong><br>
-and draws the result onto the network. Students see pluralism, conflict,<br>
-and convergence at a glance, then can &quot;Challenge&quot; any single lens to<br>
-push for a refined second-round response. Every node on the map carries<br>
-a provenance badge (<code>AI</code>, <code>Me</code>, <code>Peer</code>, <code>Brief</code>) so the class never<br>
-loses track of who wrote what.<br>
+<strong>The operating model in one line</strong>: you create and <strong>publish</strong> a case;<br>
+students join with a course code, explore the map, and leave nodes,<br>
+questions, notes, and reflections; you manage cases and watch engagement<br>
+from the <strong>My Course</strong> view.<br>
 </blockquote>
+<div class="narration"><span class="narration-label">Listen to the narration</span><audio controls preload="none" src="./audio/instructor-en/00-intro.mp3"></audio></div>
 <hr>
-<h2>Step 1 · Sign in</h2>
-<figure><img src="./screenshots/instructor-en/01-login.png" alt="Step 1 — Sign in" loading="lazy"><figcaption>Step 1 — Sign in</figcaption></figure>
-<p>Open <strong>https://swarmid.vercel.app</strong> and sign in with your instructor account (Supabase-backed). If you do not have an account yet, ask your platform admin to create one — self-signup is disabled on purpose so course data stays inside the institution.</p>
-<p><strong>What the system is doing:</strong> authenticating you against Supabase and hydrating your institution + course context. Locally cached state (recent cases, tutorial progress) is also restored from <code>localStorage</code>.</p>
-<hr>
-<h2>Step 2 · Studio landing</h2>
-<figure><img src="./screenshots/instructor-en/02-studio-landing.png" alt="Step 2 — Studio landing" loading="lazy"><figcaption>Step 2 — Studio landing</figcaption></figure>
-<p>You land on the <strong>Case Network</strong> view in the Studio. The left sidebar shows navigation (Network · Perspectives · Trade-offs · Sandbox · Report) and the <strong>Current status</strong> health panel. The canvas center holds the D3 force-directed map. The right sidebar shows your <strong>Selected lens</strong> and <strong>Swarm activity</strong> feed.</p>
-<p><strong>Tip.</strong> The pill next to &quot;Swarm activity&quot; now reads <code>cycle N · round M</code>. <code>cycle</code> counts graph re-renders; <code>round</code> counts genuine multi-agent turns. After a class run, <code>round</code> should be well above zero — that is your proof the students engaged the swarm.</p>
-<hr>
-<h2>Step 3 · Review the case library</h2>
-<figure><img src="./screenshots/instructor-en/03-case-library.png" alt="Step 3 — Case library" loading="lazy"><figcaption>Step 3 — Case library</figcaption></figure>
-<p>Scroll the <strong>Start here</strong> (intake) panel to see the <strong>Course cases</strong> list. Each card shows title, summary, draft/published state, and Open / Publish buttons. Cards with <strong>Published</strong> are visible to your students; <strong>Draft</strong> cases are instructor-only.</p>
-<p><strong>Housekeeping:</strong> If students complain they cannot find a case, the most common cause is that it is still in Draft. One click on <strong>Publish</strong> fixes it.</p>
-<hr>
-<h2>Step 4 · Open a case</h2>
-<figure><img src="./screenshots/instructor-en/04-case-open.png" alt="Step 4 — Case opened" loading="lazy"><figcaption>Step 4 — Case opened</figcaption></figure>
-<p>Click <strong>Open case</strong> on the one you want to use in class (e.g. <em>Online Digital Literacy Module for 5th Graders</em>). The canvas re-renders with:</p>
-<ul>
-<li>A central <strong>core</strong> node carrying the case title.</li>
-<li>Stakeholder nodes (Teacher, Student, IT, Administrator, Accessibility)</li>
-</ul>
-<p>  orbiting the core.</p>
-<ul>
-<li>Signal nodes (goals, constraints, evidence) connected to the</li>
-</ul>
-<p>  relevant stakeholders.</p>
-<p>Every major node carries a small <strong>provenance badge</strong> in its top-right corner — <code>Brief</code> means the node came from the uploaded case brief.</p>
-<hr>
-<h2>Step 5 · Upload / structure a new brief</h2>
-<figure><img src="./screenshots/instructor-en/05-upload-brief.png" alt="Step 5 — Upload brief" loading="lazy"><figcaption>Step 5 — Upload brief</figcaption></figure>
-<p>If you need a new case for this class session, paste the brief into the <strong>Paste the case brief</strong> textarea in the intake panel and hit <strong>Structure the case</strong>. The system calls Gemini to extract goals, constraints, stakeholders, and seed evidence into the case record and drops the result in the case list as a Draft.</p>
-<p><strong>Pedagogical note.</strong> Brief quality directly shapes swarm quality. Include: target audience, learning objectives (ADDIE / 5E friendly language works well), constraints (time, tools, policies, workload), and at least one known tension (e.g. &quot;authorship policy vs AI-assisted drafting&quot;). The more tension you encode, the richer the disagreement edges the swarm will draw.</p>
-<hr>
-<h2>Step 6 · Board settings</h2>
-<figure><img src="./screenshots/instructor-en/06-board-settings.png" alt="Step 6 — Board settings" loading="lazy"><figcaption>Step 6 — Board settings</figcaption></figure>
-<p>Open <strong>Settings</strong> to configure the cohort board. Key knobs:</p>
-<ul>
-<li><strong>Max learner nodes</strong> — caps how many agenda nodes a single student</li>
-</ul>
-<p>  can add to their personal map.</p>
-<ul>
-<li><strong>Max AI expansions per node</strong> — caps how many follow-ups Gemini can</li>
-</ul>
-<p>  auto-generate under any one student node.</p>
-<ul>
-<li><strong>Governance gate / Accessibility gate</strong> — optional review gates</li>
-</ul>
-<p>  before learners can publish a decision.</p>
-<p>Defaults are safe for a 30-student section. Lower these if you want a tighter, more deliberate class.</p>
-<hr>
-<h2>Step 7 · Perspectives</h2>
-<figure><img src="./screenshots/instructor-en/07-perspectives.png" alt="Step 7 — Perspectives" loading="lazy"><figcaption>Step 7 — Perspectives</figcaption></figure>
-<p>Click <strong>Perspectives</strong> in the left nav. You now see a per-stakeholder digest of top conflicts, with quantitative tension scores. This is the best view to use in a lecture to walk through &quot;what each lens is worried about&quot; before the class runs their own swarm rounds.</p>
-<p><strong>Classroom prompt:</strong> <em>&quot;If the Teacher score is 74 and the Student score is 58, which stakeholder is currently carrying more load, and why do the constraints make that so?&quot;</em></p>
-<hr>
-<h2>Step 8 · Trade-offs</h2>
-<figure><img src="./screenshots/instructor-en/08-trade-offs.png" alt="Step 8 — Trade-offs" loading="lazy"><figcaption>Step 8 — Trade-offs</figcaption></figure>
-<p>The <strong>Trade-offs</strong> view shows a radar (personalization / privacy / accessibility / feasibility / teacher slack) and bar charts. The <strong>Matrix state</strong> label flags <em>Needs attention</em>, <em>Watch closely</em>, or <em>Balanced</em>.</p>
-<p>Use this view as the checkpoint between activity phases. &quot;Where is conflict spiking?&quot; is a good sensemaking prompt for the whole cohort.</p>
-<hr>
-<h2>Step 9 · Sandbox</h2>
-<figure><img src="./screenshots/instructor-en/09-sandbox.png" alt="Step 9 — Sandbox" loading="lazy"><figcaption>Step 9 — Sandbox</figcaption></figure>
-<p><strong>Sandbox</strong> lets you apply preset scenarios — <em>budget</em>, <em>accessibility</em>, <em>workload</em> — and watch how the metrics redistribute. You can also toggle <strong>autonomous iteration</strong> to let the system keep shuffling conflicts until it settles.</p>
-<p>This is the best view for &quot;what if&quot; exercises: apply a scenario, let students predict where tension will land, reveal, discuss.</p>
-<hr>
-<h2>Step 10 · Report &amp; export</h2>
-<figure><img src="./screenshots/instructor-en/10-report.png" alt="Step 10 — Report" loading="lazy"><figcaption>Step 10 — Report</figcaption></figure>
-<p><strong>Report</strong> assembles decisions, evidence, and memos into a shareable summary. Use <strong>Download PNG</strong> to grab the network as an image for a slide; <strong>Download HTML</strong> gives a standalone snapshot students can keep.</p>
-<p><strong>After class.</strong> Peek at <strong>Swarm activity</strong> — the <code>round</code> counter tells you whether the cohort genuinely engaged the 5-agent swarm or just browsed. A class that produced 30+ rounds across 30 students is engaged; one with only 5 rounds likely needs more explicit prompting.</p>
-<hr>
-<h2>Troubleshooting</h2>
-<div class="table-wrap"><table><thead><tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr></thead><tbody><tr><td>Students can't see a case</td><td>Case is Draft</td><td>Click <strong>Publish</strong> on the card</td></tr><tr><td>Network feels empty even after questions</td><td>Students didn't submit, or Gemini key not set</td><td>Check <code>/api/gemini</code> logs in Vercel</td></tr><tr><td>Disagreement edges never appear</td><td>Second Gemini pass failed silently</td><td>Open browser console — look for <code>classifySwarmEdges</code> warnings</td></tr><tr><td>Korean / English mixed in UI</td><td>Locale toggle mid-render</td><td>Click the locale button twice to force a full re-render</td></tr><tr><td>Left sidebar content cut off</td><td>Viewport height too small</td><td>Sidebar scrolls independently — drag the inner content</td></tr></tbody></table></div>
-<hr>
-<h2>Quick preflight before class</h2>
+<h2>Step 1 · Create and publish a case</h2>
+<figure class="screencast"><video controls preload="metadata" playsinline src="./videos/instructor-en/01-create-case.mp4"></video><figcaption>Screen recording with narration — press play</figcaption></figure>
+<p>Sign in at <strong>https://swarm-id-en.pages.dev</strong> with your instructor account. In the <strong>intake panel</strong> on the left:</p>
 <ol>
-<li>All case cards you need are <strong>Published</strong>.</li>
-<li>Board settings set (Max learner nodes ≥ 6 for a 50-min session).</li>
-<li>You have opened the class case yourself at least once (this warms the</li>
+<li>Paste a course brief (a design scenario, syllabus excerpt, policy note...).</li>
+<li>Click <strong>create</strong> — the AI converts it into a structured case:</li>
 </ol>
-<p>   cache and catches Gemini quota issues).</p>
+<p>   stakeholders, constraints, and issues become a map.</p>
 <ol>
-<li>Your projector / screen share window shows the Network view at full</li>
+<li>New cases start as <strong>drafts</strong>; <strong>publish</strong> to make them visible to</li>
 </ol>
-<p>   width — collapse both side panels via the chevrons so the map fills    the canvas when demonstrating.</p>
+<p>   students.</p>
+<p>Per-case board settings control max student nodes, AI expansions per node, class sharing mode, and the student-view lockdown (network-only).</p>
+<hr>
+<h2>Step 2 · Manage from &quot;My Course&quot;</h2>
+<figure class="screencast"><video controls preload="metadata" playsinline src="./videos/instructor-en/02-manage.mp4"></video><figcaption>Screen recording with narration — press play</figcaption></figure>
+<p>The <strong>My Course</strong> view in the sidebar is your management hub:</p>
+<ul>
+<li><strong>Join code</strong> with one-tap copy — students enter it on the landing page</li>
+<li>Case list with status (published / draft / archived) and per-case</li>
+</ul>
+<p>  participation summary (students · nodes · notes)</p>
+<ul>
+<li>Student interaction analytics (step 4)</li>
+</ul>
+<hr>
+<h2>Step 3 · Curate: publish, archive, delete</h2>
+<figure class="screencast"><video controls preload="metadata" playsinline src="./videos/instructor-en/03-actions.mp4"></video><figcaption>Screen recording with narration — press play</figcaption></figure>
+<p>Each case row offers five actions:</p>
+<div class="table-wrap"><table><thead><tr><th>Action</th><th>What it does</th></tr></thead><tbody><tr><td><strong>Open</strong></td><td>Jump to that case's map</td></tr><tr><td><strong>Rename</strong></td><td>Edit the case title</td></tr><tr><td><strong>Publish / Unpublish</strong></td><td>Toggle student visibility</td></tr><tr><td><strong>Archive</strong></td><td>Hide from lists and unpublish — <strong>student records are preserved</strong></td></tr><tr><td><strong>Delete</strong></td><td>Permanent — <strong>only for cases with no student activity</strong></td></tr></tbody></table></div>
+<p>Once any student has worked in a case, the delete button is disabled and archiving is the only way to tidy up — by design, so semester data can't be destroyed accidentally. Archived cases reappear under &quot;Show archived&quot; and can be <strong>restored</strong> anytime.</p>
+<hr>
+<h2>Step 4 · Read the engagement analytics</h2>
+<figure class="screencast"><video controls preload="metadata" playsinline src="./videos/instructor-en/04-analytics.mp4"></video><figcaption>Screen recording with narration — press play</figcaption></figure>
+<p>The analytics block at the bottom of <strong>My Course</strong> aggregates the interaction log (60s cache, refresh button):</p>
+<ul>
+<li><strong>KPI row</strong>: active students / nodes / questions / notes / reflections</li>
+<li><strong>Engagement funnel</strong>: enrolled → signed in → opened a case → explored</li>
+</ul>
+<p>  lenses → contributed → submitted reflection. <strong>The drop between stages is   your intervention point</strong> — if students open but rarely contribute, run a   node-adding activity in class.</p>
+<ul>
+<li><strong>Lens switches</strong>: which stakeholder lenses students visit — low-share</li>
+</ul>
+<p>  lenses (often Admin, Accessibility) are good candidates for explicit   discussion.</p>
+<ul>
+<li><strong>Per-student table</strong>: name · last active · nodes · questions · notes ·</li>
+</ul>
+<p>  reflections — spot quiet students early.</p>
+<p>The Report view's <strong>class analysis</strong> panel adds per-case progress with a section filter.</p>
+<hr>
+<h2>Step 5 · Live classroom patterns</h2>
+<figure class="screencast"><video controls preload="metadata" playsinline src="./videos/instructor-en/05-realtime.mp4"></video><figcaption>Screen recording with narration — press play</figcaption></figure>
+<p>When students keep the same case open, a <strong>&quot;viewing now&quot;</strong> count appears and their nodes stream onto everyone's map <strong>in real time</strong>. A pattern that works:</p>
 <ol>
-<li>Review the Student guide (<code>student-en.md</code> / <code>student-ko.md</code>) so you</li>
+<li>Project your screen and switch to the <strong>Class view</strong> layer</li>
+<li>Ask students to add the concerns the case is missing</li>
+<li>Watch nodes accumulate live, then discuss the recurring issues (grouped</li>
 </ol>
-<p>   know exactly what your class will see.</p>
+<p>   with counts) and the minority voices together</p>
+<p>Students see the <strong>What to do now</strong> banner, so the flow runs without much explanation; first-time classes get the welcome slides + guided tour automatically in the first five minutes.</p>
+<hr>
+<h2>Operating tips</h2>
+<ul>
+<li><strong>iPad classes</strong>: have students use Safari share (⬆️) → &quot;Add to Home</li>
+</ul>
+<p>  Screen&quot; — full-screen app, touch-optimized.</p>
+<ul>
+<li><strong>A student can't sign in</strong>: accounts must exist beforehand; one email to</li>
+</ul>
+<p>  the operator adds a missing student in about a minute.</p>
+<ul>
+<li><strong>Students can't see a case</strong>: check it's published — drafts and archived</li>
+</ul>
+<p>  cases are hidden.</p>
+<ul>
+<li><strong>New semester</strong>: archive last term's cases; student records remain</li>
+</ul>
+<p>  available for research analysis.</p>
   </main>
   <footer>
     <p>Generated from <code>guides/instructor-en.md</code>. Screenshots captured on <code>https://swarmid.vercel.app</code> via Playwright.</p>

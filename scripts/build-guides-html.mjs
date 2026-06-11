@@ -15,9 +15,9 @@ const ROOT = path.resolve(__dirname, "..");
 const GUIDES = path.join(ROOT, "guides");
 
 const guides = [
-  { slug: "instructor-en", md: "instructor-en.md", title: "Swarm_ID — Instructor Guide", lang: "en" },
+  { slug: "instructor-en", md: "instructor-en.md", title: "Design Tension Studio — Instructor Guide", lang: "en" },
   { slug: "instructor-ko", md: "instructor-ko.md", title: "디자인 텐션 스튜디오 — 교수자용 가이드", lang: "ko" },
-  { slug: "student-en",    md: "student-en.md",    title: "Swarm_ID — Student Guide",    lang: "en" },
+  { slug: "student-en",    md: "student-en.md",    title: "Design Tension Studio — Student Guide",    lang: "en" },
   { slug: "student-ko",    md: "student-ko.md",    title: "디자인 텐션 스튜디오 — 학생용 가이드",    lang: "ko" },
 ];
 
@@ -42,7 +42,7 @@ function renderInline(s) {
   return s;
 }
 
-function renderMarkdown(md) {
+function renderMarkdown(md, lang = "ko") {
   const lines = md.split(/\r?\n/);
   const out = [];
   let i = 0;
@@ -132,7 +132,7 @@ function renderMarkdown(md) {
     const videoOnly = line.match(/^\[video\]\(([^)]+)\)\s*$/);
     if (videoOnly) {
       closeList(); closeBlockquote(); flushTable();
-      out.push(`<figure class="screencast"><video controls preload="metadata" playsinline src="${videoOnly[1]}"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>`);
+      out.push(`<figure class="screencast"><video controls preload="metadata" playsinline src="${videoOnly[1]}"></video><figcaption>${lang === "ko" ? "나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요" : "Screen recording with narration — press play"}</figcaption></figure>`);
       i++; continue;
     }
 
@@ -140,7 +140,7 @@ function renderMarkdown(md) {
     const audioOnly = line.match(/^\[audio\]\(([^)]+)\)\s*$/);
     if (audioOnly) {
       closeList(); closeBlockquote(); flushTable();
-      out.push(`<div class="narration"><span class="narration-label">나레이션 듣기</span><audio controls preload="none" src="${audioOnly[1]}"></audio></div>`);
+      out.push(`<div class="narration"><span class="narration-label">${lang === "ko" ? "나레이션 듣기" : "Listen to the narration"}</span><audio controls preload="none" src="${audioOnly[1]}"></audio></div>`);
       i++; continue;
     }
 
@@ -463,9 +463,9 @@ ${bodyHtml}
 }
 
 const taglines = {
-  "instructor-en": "Step-by-step setup for instructors preparing a class session with Swarm_ID.",
+  "instructor-en": "From creating a case to reading engagement analytics — the whole course flow.",
   "instructor-ko": "케이스 만들기부터 참여 분석까지 — 수업 운영의 전체 흐름.",
-  "student-en": "What students see in Swarm_ID — from sign-in through swarm rounds to export.",
+  "student-en": "Every screen a student sees — from sign-in to submitting a reflection.",
   "student-ko": "로그인부터 생각 정리 제출까지 — 학생이 보는 모든 화면.",
 };
 
@@ -478,7 +478,7 @@ for (const g of guides) {
   // Skip the first H1 of the .md since the hero already shows the title.
   let md = readFileSync(mdPath, "utf8");
   md = md.replace(/^#\s+[^\r\n]+\r?\n(?:\r?\n)?/, "");
-  const body = renderMarkdown(md);
+  const body = renderMarkdown(md, g.lang);
   const html = wrap(g.title, g.lang, g.slug, body, taglines[g.slug] || "");
   const outPath = path.join(GUIDES, `${g.slug}.html`);
   writeFileSync(outPath, html, "utf8");
