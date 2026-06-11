@@ -160,6 +160,8 @@ const STUDENT = {
     await clickAt(page, "#composer-toggle");
     await typeSlow(page, "#visualizer-input", EN ? "How can AI personalization avoid eroding teacher autonomy?" : "AI 개인화가 교사 자율성을 침해하지 않으려면?");
     await clickAt(page, "#visualizer-form button[type='submit']");
+    await page.waitForTimeout(900);
+    await clickAt(page, "[data-jol='split']");
     await page.waitForTimeout(2600);
     await glideTo(page, "#graph-events", 900);
   },
@@ -197,6 +199,23 @@ const STUDENT = {
       showToast(localStorage.getItem("swarm-id-locale-v1") === "en" ? "Seo-yeon’s activity just landed on the map." : "서연 님의 활동이 맵에 반영됐어요.");
     });
     await glideTo(page, "#presence-pill", 800);
+  },
+  "12-critique": async (page) => {
+    await enterStudio(page);
+    await page.evaluate((en) => {
+      getCaseById(state.activeCaseId).reflectionPrompts = [en ? "What is the most important tension, and why?" : "가장 중요한 쟁점은 무엇이고, 왜 그렇게 판단했나요?"];
+      setView("report");
+      renderAll();
+    }, EN);
+    await page.waitForTimeout(900);
+    await typeSlow(page, "textarea.reflection-response", EN
+      ? "The core tension is teacher workload versus personalization."
+      : "핵심 쟁점은 교사 부담과 개인화의 충돌이다.");
+    await clickAt(page, "[data-reflection-feedback='0']");
+    await page.waitForTimeout(3200);
+    await glideTo(page, ".critique-item", 900);
+    await glideTo(page, ".critique-anchor", 800);
+    await glideTo(page, "#onepager-export", 900);
   },
   "11-report": async (page) => {
     await enterStudio(page);
@@ -281,6 +300,19 @@ const INSTRUCTOR = {
     await page.waitForTimeout(1200);
     await glideTo(page, ".manage-funnel", 900);
     await glideTo(page, ".manage-lens-row", 900);
+  },
+  "06-guide": async (page) => {
+    await enterStudio(page, { density: "detailed" });
+    await page.evaluate(() => {
+      state.activeRole = "admin";
+      setView("manage");
+      renderAll();
+    });
+    await page.waitForTimeout(900);
+    await glideTo(page, ".manage-case-row", 800);
+    await glideTo(page, "[data-manage-guide]", 800);
+    await clickAt(page, "[data-manage-guide]");
+    await page.waitForTimeout(2000);
   },
   "05-realtime": async (page) => {
     await enterStudio(page, { density: "detailed" });

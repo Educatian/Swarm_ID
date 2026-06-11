@@ -105,6 +105,22 @@ automatically in the first five minutes.
 
 ---
 
+## Step 6 · Print the discussion guide
+
+[video](./videos/instructor-en/06-guide.mp4)
+
+In **My Course**, press a case's **"Discussion guide"** button and a
+printable one-pager is generated automatically — the case constraints, the
+**stakeholder interlock points** worth projecting, the issues your class
+**repeated** (with counts), the **minority voices** (with author names), and
+the **under-visited lens**, each scene paired with a ready-to-use **talk
+move**.
+
+One minute before class and your discussion script for the day is ready. The
+more question rounds your students have run, the richer it gets.
+
+---
+
 ## Operating tips
 
 - **iPad classes**: have students use Safari share (⬆️) → "Add to Home
