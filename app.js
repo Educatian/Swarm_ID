@@ -119,6 +119,7 @@ const translations = {
     waitingForCourseData: "Waiting for course data.",
     caseTension: "Case tension",
     navNetwork: "Network",
+    navManage: "My Course",
     navPerspectives: "Perspectives",
     navTradeoffs: "Trade-offs",
     navSandbox: "Sandbox",
@@ -515,6 +516,7 @@ const translations = {
     waitingForCourseData: "수업 정보를 불러오는 중이에요.",
     caseTension: "케이스 쟁점도",
     navNetwork: "네트워크",
+    navManage: "내 수업",
     navPerspectives: "관점",
     navTradeoffs: "상충 관계",
     navSandbox: "실험 공간",
@@ -1629,6 +1631,7 @@ function applyStaticTranslations() {
     matrix: "navTradeoffs",
     sandbox: "navSandbox",
     report: "navReport",
+    manage: "navManage",
   };
   document.querySelectorAll("[data-view]").forEach((button) => {
     const label = button.querySelector("span:last-child");
@@ -4392,6 +4395,9 @@ function isViewAllowed(view) {
   // Home dashboard is always reachable — it is the clean entry point that routes
   // into whatever the student is allowed to open.
   if (view === "home") return true;
+  // Course management dashboard is instructor-only and reachable even before
+  // a case is open (it is where instructors create/curate cases).
+  if (view === "manage") return state.activeRole === "admin";
   if (!hasActiveCase()) {
     return view === "visualizer";
   }
@@ -8015,6 +8021,459 @@ function renderHome() {
     </div>`;
 }
 
+// ---- Instructor course management ("내 수업") ----
+
+function isCaseArchived(caseRecord) {
+  return Boolean(asObject(caseRecord?.boardSettings).archived);
+}
+
+async function renameCaseById(caseId) {
+  const course = getActiveCourse();
+  const targetCase = getCaseById(caseId, course);
+  if (!targetCase || state.activeRole !== "admin") return;
+  const promptText = state.locale === "ko" ? "새 케이스 제목을 입력하세요" : "Enter a new case title";
+  const nextTitle = window.prompt(promptText, targetCase.title);
+  if (nextTitle === null) return;
+  const trimmed = nextTitle.trim();
+  if (!trimmed || trimmed === targetCase.title) return;
+  const previousTitle = targetCase.title;
+  targetCase.title = trimmed;
+  persistPlatformState();
+  logEvent("case.rename", { case_id: caseId, from: previousTitle, to: trimmed });
+  if (isSupabaseSessionActive()) {
+    try {
+      await syncCaseToSupabase(targetCase, course?.id);
+    } catch (error) {
+      console.error("Failed to persist case rename", error);
+    }
+  }
+  renderAll();
+}
+
+// Archive = hide from every list + unpublish, while keeping learner runs
+// (research data) intact. Hard delete is reserved for cases with NO activity.
+async function setCaseArchived(caseId, archived) {
+  const course = getActiveCourse();
+  const targetCase = getCaseById(caseId, course);
+  if (!targetCase || state.activeRole !== "admin") return;
+  const ko = state.locale === "ko";
+  targetCase.boardSettings = { ...asObject(targetCase.boardSettings), archived: Boolean(archived) };
+  if (archived && targetCase.published) {
+    toggleCasePublish(caseId); // also syncs to Supabase
+  } else {
+    persistPlatformState();
+    if (isSupabaseSessionActive()) {
+      try {
+        await syncCaseToSupabase(targetCase, course?.id);
+      } catch (error) {
+        console.error("Failed to persist case archive state", error);
+      }
+    }
+  }
+  logEvent(archived ? "case.archive" : "case.unarchive", { case_id: caseId, title: targetCase.title });
+  showToast(
+    archived
+      ? ko ? `"${targetCase.title}" 케이스를 보관했어요. 학생 기록은 그대로 남아요.` : `"${targetCase.title}" archived. Student records are preserved.`
+      : ko ? `"${targetCase.title}" 케이스를 복원했어요.` : `"${targetCase.title}" restored.`
+  );
+  renderAll();
+}
+
+async function deleteCaseHard(caseId) {
+  const course = getActiveCourse();
+  const targetCase = getCaseById(caseId, course);
+  if (!targetCase || state.activeRole !== "admin") return;
+  const ko = state.locale === "ko";
+  const localRuns = asArray(course?.learnerRuns).filter((run) => run.caseId === caseId);
+  if (localRuns.length) {
+    showToast(ko ? "학생 활동이 있는 케이스는 삭제 대신 보관만 가능해요." : "Cases with student activity can only be archived.");
+    return;
+  }
+  const confirmText = ko
+    ? `"${targetCase.title}" 케이스를 완전히 삭제할까요? 되돌릴 수 없어요.`
+    : `Delete "${targetCase.title}" permanently? This cannot be undone.`;
+  if (!window.confirm(confirmText)) return;
+
+  if (isSupabaseSessionActive()) {
+    const client = initializeSupabase();
+    try {
+      // Server-side safety: never delete a case that has runs we haven't seen.
+      const { count, error: countError } = await client
+        .from("learner_runs")
+        .select("id", { count: "exact", head: true })
+        .eq("case_id", caseId);
+      if (!countError && (count || 0) > 0) {
+        showToast(ko ? "서버에 학생 기록이 있어 보관만 가능해요." : "Student records exist on the server — archive instead.");
+        return;
+      }
+      const { error } = await client.from("cases").delete().eq("id", caseId);
+      if (error) {
+        showToast(
+          ko
+            ? "삭제가 거부됐어요. 케이스 삭제 RLS 정책(docs/supabase_setup.md)이 적용됐는지 확인하세요."
+            : "Delete was rejected. Check that the case-delete RLS policy (docs/supabase_setup.md) is applied."
+        );
+        console.error("cases delete failed", error);
+        return;
+      }
+    } catch (error) {
+      console.error("cases delete threw", error);
+      showToast(ko ? "삭제 중 오류가 발생했어요." : "Something went wrong while deleting.");
+      return;
+    }
+  }
+
+  course.cases = course.cases.filter((item) => item.id !== caseId);
+  course.publishedCaseIds = course.publishedCaseIds.filter((id) => id !== caseId);
+  course.documents = course.documents.filter((document) => document.caseId !== caseId);
+  if (state.activeCaseId === caseId) {
+    state.activeCaseId = "";
+    ensureActiveSelections();
+    syncActiveCaseState();
+  }
+  persistPlatformState();
+  logEvent("case.delete", { case_id: caseId, title: targetCase.title });
+  showToast(ko ? `"${targetCase.title}" 케이스를 삭제했어요.` : `"${targetCase.title}" deleted.`);
+  renderAll();
+}
+
+const manageAnalyticsCache = {
+  courseId: "",
+  loadedAt: 0,
+  markup: "",
+  loading: false,
+};
+
+function manageMuted(text) {
+  return `<p class="muted">${escapeHtml(text)}</p>`;
+}
+
+function buildManageFunnel(stages) {
+  const max = Math.max(1, ...stages.map((s) => s.count));
+  return `
+    <div class="manage-funnel">
+      ${stages
+        .map(
+          (stage) => `
+        <div class="manage-funnel-row">
+          <span class="manage-funnel-label">${escapeHtml(stage.label)}</span>
+          <span class="manage-funnel-bar"><span style="width:${Math.round((stage.count / max) * 100)}%"></span></span>
+          <span class="manage-funnel-count">${stage.count}</span>
+        </div>`
+        )
+        .join("")}
+    </div>`;
+}
+
+async function loadManageAnalytics(force = false) {
+  const host = document.getElementById("manage-analytics-body");
+  const course = getActiveCourse();
+  if (!host || !course?.id) return;
+  const ko = state.locale === "ko";
+  if (!isSupabaseSessionActive()) {
+    host.innerHTML = manageMuted(ko ? "로그인하면 학생 상호작용 데이터가 표시돼요." : "Sign in to load interaction data.");
+    return;
+  }
+  if (manageAnalyticsCache.loading) return;
+  const fresh =
+    manageAnalyticsCache.courseId === course.id &&
+    Date.now() - manageAnalyticsCache.loadedAt < 60000;
+  if (fresh && !force) {
+    host.innerHTML = manageAnalyticsCache.markup;
+    return;
+  }
+  manageAnalyticsCache.loading = true;
+  host.innerHTML = manageMuted(ko ? "불러오는 중…" : "Loading…");
+  try {
+    const client = initializeSupabase();
+    const [membersRes, eventsRes, lensRes] = await Promise.all([
+      client
+        .from("course_memberships")
+        .select("user_id, display_name")
+        .eq("course_id", course.id)
+        .eq("role", "user")
+        .eq("status", "active"),
+      client
+        .from("analytics_events")
+        .select("user_id, event_type, created_at")
+        .eq("course_id", course.id)
+        .neq("event_type", "__smoke_test__")
+        .order("created_at", { ascending: false })
+        .limit(8000),
+      client
+        .from("analytics_events")
+        .select("payload")
+        .eq("course_id", course.id)
+        .eq("event_type", "lens.change")
+        .limit(3000),
+    ]);
+    if (membersRes.error) throw membersRes.error;
+    if (eventsRes.error) throw eventsRes.error;
+
+    const members = asArray(membersRes.data);
+    const events = asArray(eventsRes.data);
+    const nameByUser = new Map(members.map((m) => [m.user_id, m.display_name || (ko ? "학생" : "Student")]));
+
+    const perUser = new Map();
+    const ensureUser = (id) => {
+      if (!perUser.has(id)) {
+        perUser.set(id, { nodes: 0, questions: 0, notes: 0, reflections: 0, opened: false, explored: false, lastAt: "" });
+      }
+      return perUser.get(id);
+    };
+    let totalNodes = 0;
+    let totalQuestions = 0;
+    let totalNotes = 0;
+    let totalReflections = 0;
+    let lastActivity = "";
+    events.forEach((event) => {
+      if (!event.user_id || !nameByUser.has(event.user_id)) return;
+      const entry = ensureUser(event.user_id);
+      if (!entry.lastAt) entry.lastAt = event.created_at;
+      if (!lastActivity) lastActivity = event.created_at;
+      if (event.event_type === "case.open") entry.opened = true;
+      if (event.event_type === "lens.change" || event.event_type === "view.switch") entry.explored = true;
+      if (event.event_type === "node.add") { entry.nodes += 1; totalNodes += 1; }
+      if (event.event_type === "question.ask") { entry.questions += 1; totalQuestions += 1; }
+      if (event.event_type === "annotation.add") { entry.notes += 1; totalNotes += 1; }
+      if (event.event_type === "reflection.submit") { entry.reflections += 1; totalReflections += 1; }
+    });
+
+    const activeStudents = [...perUser.keys()].length;
+    const contributed = [...perUser.values()].filter((u) => u.nodes + u.questions + u.notes > 0).length;
+    const stages = [
+      { label: ko ? "코스 참여" : "Enrolled", count: members.length },
+      { label: ko ? "접속함" : "Signed in", count: activeStudents },
+      { label: ko ? "케이스 열람" : "Opened a case", count: [...perUser.values()].filter((u) => u.opened).length },
+      { label: ko ? "관점 탐색" : "Explored lenses", count: [...perUser.values()].filter((u) => u.explored).length },
+      { label: ko ? "기여 (노드·질문·메모)" : "Contributed", count: contributed },
+      { label: ko ? "성찰 제출" : "Submitted reflection", count: [...perUser.values()].filter((u) => u.reflections > 0).length },
+    ];
+
+    const lensCounts = {};
+    asArray(lensRes.data).forEach((row) => {
+      const to = asObject(row.payload).to;
+      if (!to) return;
+      lensCounts[to] = (lensCounts[to] || 0) + 1;
+    });
+    const lensTotal = Object.values(lensCounts).reduce((sum, n) => sum + n, 0);
+    const lensMarkup = lensTotal
+      ? Object.entries(lensCounts)
+          .sort((a, b) => b[1] - a[1])
+          .map(([key, count]) => {
+            const label = stakeholders[key] ? getCaseStakeholderMeta(key).label : key;
+            return `<span class="manage-lens-chip"><strong>${escapeHtml(label)}</strong> ${Math.round((count / lensTotal) * 100)}%</span>`;
+          })
+          .join("")
+      : manageMuted(ko ? "아직 관점 전환 기록이 없어요." : "No lens switches recorded yet.");
+
+    const studentRows = [...perUser.entries()]
+      .sort((a, b) => String(b[1].lastAt).localeCompare(String(a[1].lastAt)))
+      .map(([userId, u]) => `
+        <tr>
+          <td>${escapeHtml(nameByUser.get(userId) || "")}</td>
+          <td>${u.lastAt ? new Date(u.lastAt).toLocaleString(ko ? "ko-KR" : "en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "—"}</td>
+          <td>${u.nodes}</td><td>${u.questions}</td><td>${u.notes}</td><td>${u.reflections}</td>
+        </tr>`)
+      .join("");
+
+    const kpis = [
+      [ko ? "활동 학생" : "Active students", `${activeStudents}/${members.length}`],
+      [ko ? "노드 추가" : "Nodes added", totalNodes],
+      [ko ? "질문" : "Questions", totalQuestions],
+      [ko ? "메모" : "Notes", totalNotes],
+      [ko ? "성찰 제출" : "Reflections", totalReflections],
+    ];
+
+    const markup = `
+      <div class="manage-kpi-row">
+        ${kpis.map(([label, value]) => `<div class="manage-kpi"><strong>${escapeHtml(String(value))}</strong><span>${escapeHtml(String(label))}</span></div>`).join("")}
+      </div>
+      <div class="manage-analytics-grid">
+        <div>
+          <h4>${ko ? "참여 퍼널" : "Engagement funnel"}</h4>
+          ${buildManageFunnel(stages)}
+        </div>
+        <div>
+          <h4>${ko ? "관점 전환 분포" : "Lens switches"}</h4>
+          <div class="manage-lens-row">${lensMarkup}</div>
+          <p class="muted manage-hint">${ko ? "비중이 낮은 관점은 수업에서 명시적으로 다뤄볼 만해요." : "Low-share lenses are good candidates for explicit discussion."}</p>
+        </div>
+      </div>
+      ${
+        studentRows
+          ? `<h4>${ko ? "학생별 활동" : "Per-student activity"}</h4>
+            <div class="manage-table-wrap"><table class="manage-table">
+              <thead><tr><th>${ko ? "이름" : "Name"}</th><th>${ko ? "마지막 활동" : "Last active"}</th><th>${ko ? "노드" : "Nodes"}</th><th>${ko ? "질문" : "Questions"}</th><th>${ko ? "메모" : "Notes"}</th><th>${ko ? "성찰" : "Reflections"}</th></tr></thead>
+              <tbody>${studentRows}</tbody>
+            </table></div>`
+          : manageMuted(ko ? "아직 학생 활동이 없어요." : "No student activity yet.")
+      }
+    `;
+    manageAnalyticsCache.courseId = course.id;
+    manageAnalyticsCache.loadedAt = Date.now();
+    manageAnalyticsCache.markup = markup;
+    host.innerHTML = markup;
+  } catch (error) {
+    console.error("manage analytics failed", error);
+    host.innerHTML = manageMuted(
+      (ko ? "데이터를 불러오지 못했어요: " : "Could not load data: ") + (error?.message || error)
+    );
+  } finally {
+    manageAnalyticsCache.loading = false;
+  }
+}
+
+function renderManageView() {
+  const host = document.getElementById("manage-view");
+  if (!host) return;
+  if (state.activeRole !== "admin") {
+    host.innerHTML = "";
+    return;
+  }
+  const ko = state.locale === "ko";
+  const course = getActiveCourse();
+  if (!course) {
+    host.innerHTML = `<section class="panel manage-panel">${manageMuted(ko ? "수업을 먼저 선택하거나 만들어 주세요." : "Select or create a course first.")}</section>`;
+    return;
+  }
+  const learners = getLearners(course);
+  const showArchived = state.manageShowArchived === true;
+  const visibleCases = course.cases.filter((item) => showArchived || !isCaseArchived(item));
+  const archivedCount = course.cases.filter((item) => isCaseArchived(item)).length;
+
+  const caseRows = visibleCases
+    .map((item) => {
+      const runs = asArray(course.learnerRuns).filter((run) => run.caseId === item.id);
+      const nodeCount = runs.reduce((sum, run) => sum + asArray(run.agendaNodes).length, 0);
+      const noteCount = runs.reduce((sum, run) => sum + asArray(run.annotations).length, 0);
+      const archived = isCaseArchived(item);
+      const status = archived
+        ? `<span class="badge badge-neutral">${ko ? "보관됨" : "Archived"}</span>`
+        : item.published
+          ? `<span class="badge badge-ok">${ko ? "게시됨" : "Published"}</span>`
+          : `<span class="badge badge-secondary">${ko ? "초안" : "Draft"}</span>`;
+      const canDelete = runs.length === 0;
+      return `
+        <article class="manage-case-row ${archived ? "is-archived" : ""}">
+          <div class="manage-case-main">
+            <strong>${escapeHtml(item.title)}</strong>
+            <span class="manage-case-meta">${status} · ${ko ? `참여 학생 ${runs.length}명 · 노드 ${nodeCount} · 메모 ${noteCount}` : `${runs.length} students · ${nodeCount} nodes · ${noteCount} notes`}</span>
+          </div>
+          <div class="manage-case-actions">
+            <button type="button" class="toolbar-button" data-manage-open="${item.id}">${ko ? "열기" : "Open"}</button>
+            <button type="button" class="toolbar-button toolbar-button-quiet" data-manage-rename="${item.id}">${ko ? "이름변경" : "Rename"}</button>
+            ${
+              archived
+                ? `<button type="button" class="toolbar-button toolbar-button-quiet" data-manage-unarchive="${item.id}">${ko ? "복원" : "Restore"}</button>`
+                : `<button type="button" class="toolbar-button toolbar-button-quiet" data-manage-publish="${item.id}">${item.published ? (ko ? "공개 취소" : "Unpublish") : (ko ? "게시" : "Publish")}</button>
+                   <button type="button" class="toolbar-button toolbar-button-quiet" data-manage-archive="${item.id}">${ko ? "보관" : "Archive"}</button>`
+            }
+            <button type="button" class="toolbar-button toolbar-button-danger" data-manage-delete="${item.id}" ${canDelete ? "" : `disabled title="${ko ? "학생 활동이 있는 케이스는 보관만 가능해요" : "Cases with activity can only be archived"}"`}>${ko ? "삭제" : "Delete"}</button>
+          </div>
+        </article>`;
+    })
+    .join("");
+
+  host.innerHTML = `
+    <section class="panel manage-panel">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">${ko ? "수업 관리" : "Course management"}</p>
+          <h3>${escapeHtml(course.name)} <span class="manage-course-code">${escapeHtml(course.code || "")}</span></h3>
+        </div>
+        <div class="manage-join">
+          <span class="manage-join-label">${ko ? "참여 코드" : "Join code"}</span>
+          <code class="manage-join-code">${escapeHtml(course.joinCode || "—")}</code>
+          ${course.joinCode ? `<button type="button" class="toolbar-button toolbar-button-quiet" data-manage-copy-join>${ko ? "복사" : "Copy"}</button>` : ""}
+          <span class="badge badge-secondary">${ko ? `학생 ${learners.length}명` : `${learners.length} students`}</span>
+        </div>
+      </div>
+
+      <div class="manage-cases-head">
+        <h4>${ko ? "케이스" : "Cases"} <span class="numeric-pill">${visibleCases.length}</span></h4>
+        ${
+          archivedCount
+            ? `<label class="manage-archived-toggle"><input type="checkbox" data-manage-show-archived ${showArchived ? "checked" : ""}> ${ko ? `보관된 케이스 보기 (${archivedCount})` : `Show archived (${archivedCount})`}</label>`
+            : ""
+        }
+      </div>
+      ${caseRows || manageMuted(ko ? "아직 케이스가 없어요. 네트워크 화면의 시작 패널에서 브리프를 업로드해 만들 수 있어요." : "No cases yet — create one from the intake panel on the Network view.")}
+    </section>
+
+    <section class="panel manage-panel">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">${ko ? "학생 상호작용" : "Student interaction"}</p>
+          <h3>${ko ? "참여 분석" : "Engagement analytics"}</h3>
+        </div>
+        <button type="button" class="toolbar-button" data-manage-refresh>${ko ? "새로고침" : "Refresh"}</button>
+      </div>
+      <div id="manage-analytics-body">${manageAnalyticsCache.courseId === course.id ? manageAnalyticsCache.markup : ""}</div>
+    </section>
+  `;
+
+  if (state.activeView === "manage") {
+    loadManageAnalytics(false);
+  }
+}
+
+document.getElementById("manage-view")?.addEventListener("click", (event) => {
+  const openBtn = event.target.closest("[data-manage-open]");
+  if (openBtn) {
+    state.activeCaseId = openBtn.getAttribute("data-manage-open");
+    persistSessionState();
+    setView("visualizer");
+    renderAll();
+    return;
+  }
+  const renameBtn = event.target.closest("[data-manage-rename]");
+  if (renameBtn) {
+    renameCaseById(renameBtn.getAttribute("data-manage-rename"));
+    return;
+  }
+  const publishBtn = event.target.closest("[data-manage-publish]");
+  if (publishBtn) {
+    toggleCasePublish(publishBtn.getAttribute("data-manage-publish"));
+    renderAll();
+    return;
+  }
+  const archiveBtn = event.target.closest("[data-manage-archive]");
+  if (archiveBtn) {
+    setCaseArchived(archiveBtn.getAttribute("data-manage-archive"), true);
+    return;
+  }
+  const unarchiveBtn = event.target.closest("[data-manage-unarchive]");
+  if (unarchiveBtn) {
+    setCaseArchived(unarchiveBtn.getAttribute("data-manage-unarchive"), false);
+    return;
+  }
+  const deleteBtn = event.target.closest("[data-manage-delete]");
+  if (deleteBtn && !deleteBtn.disabled) {
+    deleteCaseHard(deleteBtn.getAttribute("data-manage-delete"));
+    return;
+  }
+  if (event.target.closest("[data-manage-refresh]")) {
+    loadManageAnalytics(true);
+    return;
+  }
+  if (event.target.closest("[data-manage-copy-join]")) {
+    const code = getActiveCourse()?.joinCode || "";
+    if (code && navigator.clipboard) {
+      navigator.clipboard.writeText(code).then(() => {
+        showToast(state.locale === "ko" ? "참여 코드를 복사했어요." : "Join code copied.");
+      });
+    }
+  }
+});
+
+document.getElementById("manage-view")?.addEventListener("change", (event) => {
+  if (event.target.matches("[data-manage-show-archived]")) {
+    state.manageShowArchived = event.target.checked;
+    renderManageView();
+  }
+});
+
 function renderAll() {
   if (dom.visualizerInput) {
     dom.visualizerInput.placeholder = t("askQuestionPlaceholder");
@@ -8044,6 +8503,7 @@ function renderAll() {
   renderMatrix();
   renderSandbox();
   renderReport();
+  renderManageView();
   syncRealtimeSubscription();
   renderPresencePill();
   normalizeRenderedCopy();

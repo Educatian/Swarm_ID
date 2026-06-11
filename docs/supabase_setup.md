@@ -37,6 +37,29 @@ The schema also includes a partial unique index so a learner account can have on
 
 Optional case-level text can now come from the database too. Put values into `cases.stakeholder_profiles`, `cases.matrix_insights`, `cases.sandbox_feed`, `cases.reflection_prompts`, `cases.network_meta`, and `cases.ui_copy` if you want the visible copy blocks to render from incoming data instead of the built-in fallback text.
 
+## Instructor case management (내 수업 view)
+
+The Korean build adds an instructor-only "내 수업" view: join-code sharing, case rename/publish/archive, hard delete for cases with no student activity, and engagement analytics (funnel, lens distribution, per-student table) aggregated client-side from `analytics_events`.
+
+Archiving needs no new policies (it is a `cases` update). **Hard delete needs one policy** (Supabase SQL editor, once):
+
+```sql
+create policy "course admins can delete cases"
+on public.cases
+for delete
+using (
+  exists (
+    select 1 from public.course_memberships m
+    where m.course_id = cases.course_id
+      and m.user_id = auth.uid()
+      and m.role = 'admin'
+      and m.status = 'active'
+  )
+);
+```
+
+The app refuses to delete any case that has `learner_runs` rows (checked locally AND against the server) — those can only be archived, so student research data is never destroyed from the UI.
+
 ## Realtime collaboration
 
 The Korean build streams peer activity (learner runs) and instructor case edits live into open workspaces, plus a presence count of who has the same case open. Realtime needs the tables added to the `supabase_realtime` publication once per project (Supabase SQL editor):
