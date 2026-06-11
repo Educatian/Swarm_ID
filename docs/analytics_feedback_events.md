@@ -48,8 +48,24 @@ where event_type <> '__smoke_test__'
 | `correct` | prediction matched outcome (`null` = skip/unclassified) |
 
 Related context events: `question.ask` (student question text),
-`question.answer` (full AI turn: question + 5 agent outputs verbatim),
-`node.add`, `annotation.add`, `lens.change`.
+`question.answer` (full AI turn: question + 5 agent outputs verbatim +
+`duration_ms` round latency), `node.add`, `annotation.add`, `lens.change`.
+
+### Spatial / social / temporal telemetry (added 2026-06-11)
+
+| event | payload | enables |
+|---|---|---|
+| `node.select` | node_id, label, kind, stakeholder, issue_type, origin, via(map\|list) | reading paths, per-issue attention, student×issue ENA |
+| `layer.change` | from, to (base\|personal\|cohort\|compare) | social-comparison view usage |
+| `peer.exposure` | peer_run_id, peer_name, peer_agenda_count, event, presence_count | social influence (exposure→behavior) treatment variable |
+| `visibility.change` | visibility (visible\|hidden), view | separates tab-hidden gaps from visible idle |
+| `session.heartbeat` | view, map_layer, stakeholder (60s, visible-only) | bounded dwell / time-on-task |
+| `drawer.open` | drawer (intake\|insight) | help-seeking / panel usage |
+
+Time-on-task recipe: within a `session_id`, sum gaps between consecutive
+events capped at 90s, excluding spans between `visibility.change:hidden` and
+the next `visible`. Heartbeats guarantee a visible-but-idle student still
+emits a bounded signal.
 
 ## Mining queries
 
