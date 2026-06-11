@@ -132,7 +132,7 @@ function renderMarkdown(md, lang = "ko") {
     const videoOnly = line.match(/^\[video\]\(([^)]+)\)\s*$/);
     if (videoOnly) {
       closeList(); closeBlockquote(); flushTable();
-      out.push(`<figure class="screencast"><video controls preload="metadata" playsinline src="${videoOnly[1]}"></video><figcaption>${lang === "ko" ? "나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요" : "Screen recording with narration — press play"}</figcaption></figure>`);
+      out.push(`<figure class="screencast"><video controls preload="metadata" playsinline poster="${videoOnly[1].replace(/\.mp4$/, ".jpg")}" src="${videoOnly[1]}"></video><figcaption>${lang === "ko" ? "나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요" : "Screen recording with narration — press play"}</figcaption></figure>`);
       i++; continue;
     }
 
