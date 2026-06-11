@@ -6624,3 +6624,127 @@ html.theme-light .landing-auth-mode-toggle:focus-visible {
 html:not(.theme-light) .landing-brand div p.landing-brand-kicker {
   color: rgba(222, 229, 246, 0.96);
 }
+
+/* ---- Landing visual effects (Higgsfield assets + motion) ---- */
+.brand-mark .brand-logo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(151, 169, 255, 0.55));
+  animation: logoBreath 5.5s ease-in-out infinite;
+}
+
+@keyframes logoBreath {
+  0%, 100% { filter: drop-shadow(0 0 5px rgba(151, 169, 255, 0.4)); transform: scale(1); }
+  50% { filter: drop-shadow(0 0 11px rgba(151, 169, 255, 0.75)); transform: scale(1.04); }
+}
+
+/* AI-generated constellation backdrop, slow cinematic drift (dark theme only) */
+.landing-shell::before {
+  content: "";
+  position: fixed;
+  inset: -7%;
+  z-index: -1;
+  pointer-events: none;
+  background: url("./assets/hero-bg.webp") center / cover no-repeat;
+  opacity: 0.5;
+  animation: heroDrift 75s ease-in-out infinite alternate;
+}
+
+.landing-shell::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 18% 38%, rgba(11, 13, 20, 0.82) 0%, rgba(11, 13, 20, 0.45) 45%, rgba(11, 13, 20, 0.15) 100%);
+}
+
+@keyframes heroDrift {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.09) translate(-1.6%, 1.1%); }
+}
+
+html.theme-light .landing-shell::before,
+html.theme-light .landing-shell::after {
+  display: none;
+}
+
+/* Headline: living gradient on the key phrase */
+html:not(.theme-light) .landing-copy h2 #landing-hero-title {
+  background: linear-gradient(100deg, #eef1ff 0%, #aab9ff 30%, #7de8c4 55%, #aab9ff 75%, #eef1ff 100%);
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: heroShimmer 9s ease-in-out infinite;
+}
+
+@keyframes heroShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Staggered entrance for the hero column */
+.landing-copy > .landing-kicker,
+.landing-copy > h2,
+.landing-copy > .landing-body,
+.landing-copy > .landing-steps,
+.landing-copy > .landing-login-card {
+  animation: riseIn 0.7s cubic-bezier(0.22, 0.9, 0.3, 1) both;
+}
+
+.landing-copy > h2 { animation-delay: 0.08s; }
+.landing-copy > .landing-body { animation-delay: 0.16s; }
+.landing-copy > .landing-steps { animation-delay: 0.26s; }
+.landing-copy > .landing-login-card { animation-delay: 0.38s; }
+
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.landing-visual {
+  animation: riseIn 0.9s cubic-bezier(0.22, 0.9, 0.3, 1) 0.2s both;
+}
+
+/* Step rows light up on hover */
+.landing-steps li {
+  padding: 6px 8px;
+  margin: -6px -8px;
+  border-radius: 12px;
+  transition: background 0.25s ease;
+}
+
+.landing-steps li:hover {
+  background: rgba(151, 169, 255, 0.07);
+}
+
+.landing-steps li:hover .landing-step-num {
+  background: rgba(151, 169, 255, 0.3);
+  color: #e6ebff;
+  box-shadow: 0 0 12px rgba(151, 169, 255, 0.35);
+  transition: all 0.25s ease;
+}
+
+/* Login card: soft glow when active */
+.landing-login-card {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.landing-login-card:focus-within {
+  border-color: rgba(151, 169, 255, 0.55);
+  box-shadow: 0 0 0 1px rgba(151, 169, 255, 0.25), 0 18px 48px rgba(20, 28, 60, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-shell::before,
+  .brand-mark .brand-logo,
+  html:not(.theme-light) .landing-copy h2 #landing-hero-title,
+  .landing-copy > *,
+  .landing-visual {
+    animation: none !important;
+  }
+}
