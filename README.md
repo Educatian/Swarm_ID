@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/logo.png" alt="Design Tension Studio logo" width="84" />
+  <img src="./docs/assets/readme/hero-en.png" alt="Design Tension Studio — read design tensions as a living map" width="100%" />
 </p>
 
 <h1 align="center">Design Tension Studio</h1>
@@ -29,11 +29,11 @@
 | | |
 |---|---|
 | **Landing** — 3-step product story + single auth card | **Student map** — "What to do now" banner + lens bar |
-| ![Landing](./guides/screenshots/student-en/01-landing.png) | ![Student map](./guides/screenshots/student-en/04-task-banner.png) |
+| ![Landing](./docs/assets/readme/framed/en/01-landing.png) | ![Student map](./docs/assets/readme/framed/en/02-map.png) |
 | **List view** — searchable companion to the map | **Class view** — peer issues aggregated, live updates |
-| ![List view](./guides/screenshots/student-en/09-list-view.png) | ![Class view](./guides/screenshots/student-en/10-class-view.png) |
+| ![List view](./docs/assets/readme/framed/en/03-list.png) | ![Class view](./docs/assets/readme/framed/en/04-class.png) |
 | **Swarm critique** — five lenses challenge a draft | **My Course** — instructor case curation + analytics |
-| ![Swarm critique](./docs/assets/readme/swarm-critique-en.png) | ![My Course](./guides/screenshots/instructor-en/02-manage.png) |
+| ![Swarm critique](./docs/assets/readme/framed/en/05-critique.png) | ![My Course](./docs/assets/readme/framed/en/06-manage.png) |
 
 The guides embed **16 narrated screen recordings** (ElevenLabs voices) of these flows.
 
