@@ -6623,10 +6623,210 @@ function updateGraphRenderer(frame) {
   graphRenderer.simulation.alpha(0.85).restart();
 }
 
+// ---- List view (보조 보기) ----
+// Usability feedback: "차라리 리스트 형식이 더 나을 것 같음", "여러 정렬".
+// The list never replaces the map pedagogy — it is a sortable, searchable
+// companion view over the same nodes.
+const nodeListState = {
+  query: "",
+  sort: "stakeholder",
+};
+
+function getMapViewMode() {
+  try {
+    const stored = window.localStorage.getItem(MAP_VIEW_MODE_STORAGE_KEY);
+    return stored === "list" ? "list" : "map";
+  } catch (_) {
+    return "map";
+  }
+}
+
+function setMapViewMode(mode) {
+  try {
+    window.localStorage.setItem(MAP_VIEW_MODE_STORAGE_KEY, mode === "list" ? "list" : "map");
+  } catch (_) {}
+  logEvent("map.mode", { mode });
+  renderAll();
+}
+
+function updateMapModeButton() {
+  const btn = document.getElementById("map-mode-btn");
+  if (!btn) return;
+  const isList = getMapViewMode() === "list";
+  const ko = state.locale === "ko";
+  const icon = btn.querySelector(".material-symbols-outlined");
+  if (icon) icon.textContent = isList ? "hub" : "list";
+  const label = document.getElementById("map-mode-label");
+  if (label) label.textContent = isList ? (ko ? "맵" : "Map") : (ko ? "목록" : "List");
+  const title = isList ? (ko ? "맵으로 보기" : "Back to the map") : (ko ? "목록으로 보기" : "View as a list");
+  btn.title = title;
+  btn.setAttribute("aria-label", title);
+  btn.setAttribute("aria-pressed", isList ? "true" : "false");
+}
+
+function describeNodeOrigin(origin) {
+  const ko = state.locale === "ko";
+  const map = ko
+    ? { brief: "케이스 설명", ai: "AI 추가", me: "내 노드", peer: "동료 노드" }
+    : { brief: "Case brief", ai: "AI added", me: "My node", peer: "Peer node" };
+  return map[origin] || map.brief;
+}
+
+function getNodeListEntries() {
+  const ko = state.locale === "ko";
+  const entries = state.graph.nodes
+    .filter((node) => node.kind === "signal")
+    .map((node) => ({
+      id: node.id,
+      label: node.label || "",
+      detail: node.detail || "",
+      meta: node.meta || "",
+      tone: node.tone || "neutral",
+      issueType: node.issueType || "",
+      origin: node.origin || "brief",
+      stakeholder: node.stakeholder || "",
+      stakeholderLabel: stakeholders[node.stakeholder]
+        ? getCaseStakeholderMeta(node.stakeholder).label
+        : node.stakeholder,
+    }));
+
+  const query = nodeListState.query.trim().toLowerCase();
+  const filtered = query
+    ? entries.filter((entry) =>
+        `${entry.label} ${entry.detail} ${entry.meta} ${entry.stakeholderLabel}`.toLowerCase().includes(query)
+      )
+    : entries;
+
+  const issueOrder = { constraint: 0, goal: 1, evidence: 2, timeline: 3 };
+  const originOrder = { me: 0, peer: 1, ai: 2, brief: 3 };
+  const sorted = [...filtered];
+  if (nodeListState.sort === "name") {
+    sorted.sort((a, b) => a.label.localeCompare(b.label, ko ? "ko" : "en"));
+  } else if (nodeListState.sort === "type") {
+    sorted.sort(
+      (a, b) =>
+        (issueOrder[a.issueType] ?? 9) - (issueOrder[b.issueType] ?? 9) ||
+        a.label.localeCompare(b.label, ko ? "ko" : "en")
+    );
+  } else if (nodeListState.sort === "origin") {
+    sorted.sort(
+      (a, b) =>
+        (originOrder[a.origin] ?? 9) - (originOrder[b.origin] ?? 9) ||
+        a.label.localeCompare(b.label, ko ? "ko" : "en")
+    );
+  } else {
+    sorted.sort(
+      (a, b) =>
+        (a.stakeholderLabel || "").localeCompare(b.stakeholderLabel || "", ko ? "ko" : "en") ||
+        a.label.localeCompare(b.label, ko ? "ko" : "en")
+    );
+  }
+  return sorted;
+}
+
+function renderNodeListRows() {
+  const rowsHost = document.querySelector("#node-list-panel .node-list-rows");
+  const countHost = document.querySelector("#node-list-panel .node-list-count");
+  if (!rowsHost) return;
+  const ko = state.locale === "ko";
+  const entries = getNodeListEntries();
+  if (countHost) {
+    countHost.textContent = ko ? `쟁점 ${entries.length}개` : `${entries.length} issues`;
+  }
+  if (!entries.length) {
+    rowsHost.innerHTML = `<p class="node-list-empty">${ko ? "조건에 맞는 쟁점이 없어요." : "No issues match the current filter."}</p>`;
+    return;
+  }
+  rowsHost.innerHTML = entries
+    .map((entry) => {
+      const detail = entry.detail.length > 160 ? `${entry.detail.slice(0, 160)}…` : entry.detail;
+      return `
+        <button type="button" class="node-list-row ${entry.id === state.selectedGraphNodeId ? "is-selected" : ""}" data-node-id="${entry.id}">
+          <span class="node-list-dot" data-tone="${entry.tone}"></span>
+          <span class="node-list-main">
+            <strong>${entry.label}</strong>
+            ${detail ? `<p>${detail}</p>` : ""}
+          </span>
+          <span class="node-list-tags">
+            <span class="badge badge-neutral">${entry.meta}</span>
+            <span class="badge badge-secondary">${entry.stakeholderLabel}</span>
+            <span class="badge badge-neutral">${describeNodeOrigin(entry.origin)}</span>
+          </span>
+        </button>
+      `;
+    })
+    .join("");
+}
+
+function renderNodeList() {
+  const panel = document.getElementById("node-list-panel");
+  const stage = document.getElementById("network-stage");
+  if (!panel || !stage) return;
+  const isList = getMapViewMode() === "list" && hasActiveCase();
+  stage.classList.toggle("is-list-mode", isList);
+  panel.hidden = !isList;
+  updateMapModeButton();
+  if (!isList) return;
+  if (!panel.dataset.wired) {
+    panel.dataset.wired = "1";
+    panel.addEventListener("input", (event) => {
+      if (event.target.id === "node-list-search") {
+        nodeListState.query = event.target.value || "";
+        renderNodeListRows();
+      }
+    });
+    panel.addEventListener("change", (event) => {
+      if (event.target.id === "node-list-sort") {
+        nodeListState.sort = event.target.value || "stakeholder";
+        renderNodeListRows();
+      }
+    });
+    panel.addEventListener("click", (event) => {
+      const row = event.target.closest(".node-list-row");
+      if (!row) return;
+      markTaskProgress("inspect");
+      state.selectedGraphNodeId = row.getAttribute("data-node-id") || "";
+      renderAll();
+    });
+  }
+  const ko = state.locale === "ko";
+  if (!panel.querySelector(".node-list-controls")) {
+    panel.innerHTML = `
+      <div class="node-list-controls">
+        <label class="mini-control node-list-search-control">
+          <span>${ko ? "검색" : "Search"}</span>
+          <input id="node-list-search" type="search" autocomplete="off" placeholder="${ko ? "쟁점, 키워드 검색..." : "Search issues..."}">
+        </label>
+        <label class="mini-control">
+          <span>${ko ? "정렬" : "Sort"}</span>
+          <select id="node-list-sort">
+            <option value="stakeholder">${ko ? "관점별" : "By perspective"}</option>
+            <option value="type">${ko ? "유형별" : "By type"}</option>
+            <option value="name">${ko ? "이름순" : "By name"}</option>
+            <option value="origin">${ko ? "출처별" : "By origin"}</option>
+          </select>
+        </label>
+        <span class="node-list-count"></span>
+      </div>
+      <div class="node-list-rows"></div>
+    `;
+    const searchInput = panel.querySelector("#node-list-search");
+    if (searchInput) searchInput.value = nodeListState.query;
+    const sortSelect = panel.querySelector("#node-list-sort");
+    if (sortSelect) sortSelect.value = nodeListState.sort;
+  }
+  renderNodeListRows();
+}
+
+document.getElementById("map-mode-btn")?.addEventListener("click", () => {
+  setMapViewMode(getMapViewMode() === "list" ? "map" : "list");
+});
+
 function renderGraph() {
   hideNetworkTooltip();
   const activeCase = getCaseById(state.activeCaseId, getActiveCourse());
   dom.networkEmptyPreview.hidden = Boolean(activeCase);
+  renderNodeList();
   const swarmRound = state.graph.swarmRound || 0;
   const cycleLabel = state.locale === "ko"
     ? (swarmRound > 0 ? `사이클 ${state.graph.iteration} · 라운드 ${swarmRound}` : `사이클 ${state.graph.iteration}`)
