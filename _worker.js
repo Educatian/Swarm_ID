@@ -21,14 +21,17 @@ export default {
   },
 };
 
-function mapModel(requested) {
+// Primary + automatic fallbacks (OpenRouter tries the list in order, which
+// covers transient provider 429s like Google's).
+const FALLBACK_MODELS = ["openai/gpt-4o-mini", "deepseek/deepseek-chat"];
+
+function buildModelList(requested) {
   const model = String(requested || "").trim();
-  if (!model) return "google/gemini-2.5-flash";
-  // Already an OpenRouter id (vendor/model) — pass through.
-  if (model.includes("/")) return model;
-  // Legacy Gemini ids from the client.
-  if (model.startsWith("gemini")) return `google/${model}`;
-  return model;
+  let primary = "google/gemini-2.5-flash";
+  if (model.includes("/")) primary = model;
+  else if (model.startsWith("gemini")) primary = `google/${model}`;
+  else if (model) primary = model;
+  return [primary, ...FALLBACK_MODELS.filter((m) => m !== primary)];
 }
 
 async function callOpenRouter(bodyText, apiKey, origin) {
@@ -57,7 +60,7 @@ async function callOpenRouter(bodyText, apiKey, origin) {
       "X-Title": "Design Tension Studio",
     },
     body: JSON.stringify({
-      model: mapModel(body.model),
+      models: buildModelList(body.model),
       messages,
       temperature,
       ...(responseMimeType === "application/json"
