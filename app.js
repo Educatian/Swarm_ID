@@ -1221,6 +1221,10 @@ function renderTaskBanner() {
   `;
 }
 
+document.getElementById("onepager-export")?.addEventListener("click", () => {
+  openStudentOnePager();
+});
+
 document.getElementById("network-svg")?.addEventListener("click", (event) => {
   if (event.target.id === "network-svg") {
     hideNetworkTooltip(true);
@@ -8055,6 +8059,12 @@ function renderReport() {
     reflectionPrompts.forEach((_, index) => renderReflectionCritique(index));
   }
 
+  const onePagerButton = document.getElementById("onepager-export");
+  if (onePagerButton) {
+    onePagerButton.hidden = !(isStudent && Boolean(activeCase));
+    onePagerButton.textContent = state.locale === "ko" ? "제출용 1장" : "One-page export";
+  }
+
   if (dom.instructorCohortBlock) {
     const showCohort = state.activeRole === "admin" && Boolean(activeCase);
     dom.instructorCohortBlock.hidden = !showCohort;
@@ -8197,6 +8207,206 @@ function renderHome() {
         </section>
       </div>
     </div>`;
+}
+
+// ---- Printable artifacts: discussion guide (instructor) & one-pager (student) ----
+// Learning-sciences rationale: structure the CLASSROOM TALK (orchestration
+// scripts) and let the tool GENERATE the deliverable, instead of adding
+// student fill-in worksheets that over-script the activity and leak cognition
+// out of the instrumented environment.
+
+function openPrintableWindow(title, bodyHtml) {
+  const win = window.open("", "_blank");
+  if (!win) {
+    showToast(state.locale === "ko" ? "팝업이 차단됐어요. 팝업을 허용해 주세요." : "Popup blocked — please allow popups.");
+    return;
+  }
+  const ko = state.locale === "ko";
+  win.document.write(`<!doctype html>
+<html lang="${ko ? "ko" : "en"}">
+<head>
+<meta charset="utf-8">
+<title>${escapeHtml(title)}</title>
+<style>
+  body { font-family: "Malgun Gothic", "Apple SD Gothic Neo", Inter, sans-serif; max-width: 760px; margin: 28px auto; padding: 0 20px; color: #1a2238; line-height: 1.6; }
+  h1 { font-size: 1.35rem; margin: 0 0 2px; }
+  .meta { color: #5a6781; font-size: 0.85rem; margin-bottom: 18px; }
+  h2 { font-size: 1rem; margin: 22px 0 8px; padding-bottom: 4px; border-bottom: 2px solid #e2e6f4; }
+  ul { margin: 6px 0; padding-left: 20px; }
+  li { margin: 4px 0; }
+  .talk { background: #f2f5ff; border-left: 3px solid #5468ff; padding: 8px 12px; border-radius: 0 8px 8px 0; margin: 8px 0; font-size: 0.92rem; }
+  .chip { display: inline-block; background: #eef1fb; border-radius: 999px; padding: 1px 9px; font-size: 0.78rem; margin-right: 4px; color: #44508a; }
+  .quote { background: #f8f9fd; border: 1px solid #e2e6f4; border-radius: 10px; padding: 10px 14px; margin: 8px 0; font-size: 0.92rem; white-space: pre-wrap; }
+  .muted { color: #7a849e; font-size: 0.85rem; }
+  .print-btn { position: fixed; top: 14px; right: 14px; padding: 8px 16px; border-radius: 999px; border: none; background: #5468ff; color: #fff; cursor: pointer; font-size: 0.9rem; }
+  @media print { .print-btn { display: none; } body { margin: 0 auto; } }
+</style>
+</head>
+<body>
+<button class="print-btn" onclick="window.print()">${ko ? "인쇄 / PDF 저장" : "Print / Save PDF"}</button>
+${bodyHtml}
+</body></html>`);
+  win.document.close();
+}
+
+function bucketAgendaTitles(course, caseId) {
+  const buckets = new Map();
+  asArray(course?.learnerRuns)
+    .filter((run) => run.caseId === caseId)
+    .forEach((run) => {
+      asArray(run.agendaNodes).forEach((node) => {
+        const key = tensionBucketKey(node.title || "");
+        if (!key) return;
+        if (!buckets.has(key)) buckets.set(key, { title: node.title, count: 0, authors: [] });
+        const bucket = buckets.get(key);
+        bucket.count += 1;
+        if (run.learnerName && !bucket.authors.includes(run.learnerName)) bucket.authors.push(run.learnerName);
+      });
+    });
+  return [...buckets.values()].sort((a, b) => b.count - a.count);
+}
+
+async function openDiscussionGuide(caseId) {
+  const course = getActiveCourse();
+  const targetCase = getCaseById(caseId, course);
+  if (!targetCase || state.activeRole !== "admin") return;
+  const ko = state.locale === "ko";
+  // Load the case context so the graph snapshot reflects this case.
+  if (state.activeCaseId !== caseId) {
+    state.activeCaseId = caseId;
+    syncActiveCaseState();
+    lastGraphSignature = "";
+    ensureGraphCurrent();
+  }
+  const buckets = bucketAgendaTitles(course, caseId);
+  const repeated = buckets.filter((b) => b.count >= 2).slice(0, 4);
+  const unique = buckets.filter((b) => b.count === 1).slice(0, 4);
+  const interEdges = state.graph.links.filter((link) => link.kind === "inter-stakeholder");
+  const interPairs = interEdges.slice(0, 4).map((link) => {
+    const a = stakeholders[link.source]; const b = stakeholders[link.target];
+    const la = a ? getCaseStakeholderMeta(link.source).label : link.source;
+    const lb = b ? getCaseStakeholderMeta(link.target).label : link.target;
+    return `${la} ↔ ${lb}`;
+  });
+
+  // Optional: least-visited lens from the live event log.
+  let coldLens = "";
+  if (isSupabaseSessionActive() && course?.id) {
+    try {
+      const client = initializeSupabase();
+      const { data } = await client
+        .from("analytics_events")
+        .select("payload")
+        .eq("course_id", course.id)
+        .eq("event_type", "lens.change")
+        .limit(2000);
+      const counts = {};
+      ["teacher", "student", "it", "administrator", "accessibility"].forEach((k) => { counts[k] = 0; });
+      asArray(data).forEach((row) => {
+        const to = asObject(row.payload).to;
+        if (to in counts) counts[to] += 1;
+      });
+      const min = Object.entries(counts).sort((x, y) => x[1] - y[1])[0];
+      if (min) coldLens = getCaseStakeholderMeta(min[0]).label;
+    } catch (_) {}
+  }
+
+  const t1 = ko ? "토론 가이드" : "Discussion Guide";
+  const list = (items, empty) => items.length
+    ? `<ul>${items.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`
+    : `<p class="muted">${empty}</p>`;
+
+  const body = `
+<h1>${escapeHtml(targetCase.title)} — ${t1}</h1>
+<p class="meta">${escapeHtml(course?.name || "")} · ${new Date().toLocaleDateString(ko ? "ko-KR" : "en-US")} · ${ko ? "수업 토론 오케스트레이션용 1장" : "One page for orchestrating class discussion"}</p>
+
+<h2>${ko ? "0. 케이스 핵심 제약" : "0. Core constraints of the case"}</h2>
+${list(normalizeStringList(targetCase.constraints).slice(0, 5), ko ? "제약 정보가 없습니다." : "No constraints recorded.")}
+
+<h2>${ko ? "1. 띄울 장면 ① — 이해관계자가 맞물리는 지점" : "1. Scene to project ① — where stakeholders interlock"}</h2>
+${list(interPairs, ko ? "교차 점선이 아직 없습니다. 학생 질문 라운드 후 다시 생성하세요." : "No cross edges yet — regenerate after a question round.")}
+<div class="talk">💬 ${ko
+    ? "talk move: “이 점선에서 한쪽이 이기면 다른 쪽은 무엇을 잃나요? 양쪽 다 만족시키려면 무엇을 포기해야 하죠?”"
+    : "talk move: “If one side wins on this dashed line, what does the other side lose? What would we have to give up to satisfy both?”"}</div>
+
+<h2>${ko ? "2. 띄울 장면 ② — 학급에서 반복된 쟁점" : "2. Scene to project ② — issues the class repeated"}</h2>
+${list(repeated.map((b) => `${b.title} (${b.count}${ko ? "명" : ""})`), ko ? "아직 반복 제기된 쟁점이 없습니다." : "No repeated issues yet.")}
+<div class="talk">💬 ${ko
+    ? "talk move: “여러 명이 같은 걱정을 했어요. 이게 진짜 핵심이라서일까요, 아니면 눈에 잘 띄어서일까요?”"
+    : "talk move: “Several of you raised the same concern. Is that because it's truly central — or just the most visible?”"}</div>
+
+<h2>${ko ? "3. 소수 의견 짚기" : "3. Surface the minority voices"}</h2>
+${list(unique.map((b) => `${b.title} — ${b.authors[0] || ""}`), ko ? "단독 제기 쟁점이 없습니다." : "No single-author issues yet.")}
+<div class="talk">💬 ${ko
+    ? "talk move: “한 명만 본 쟁점이에요. 본인에게 왜 그게 보였는지 설명을 부탁해 볼까요? 나머지는 왜 안 보였을까요?”"
+    : "talk move: “Only one person saw this. Ask them what made it visible to them — and why the rest of us missed it.”"}</div>
+
+<h2>${ko ? "4. 외면받은 관점" : "4. The under-visited lens"}</h2>
+<p>${coldLens
+    ? (ko ? `학급이 가장 적게 방문한 관점: <strong>${escapeHtml(coldLens)}</strong>` : `Least-visited lens in this class: <strong>${escapeHtml(coldLens)}</strong>`)
+    : `<span class="muted">${ko ? "관점 전환 로그가 충분하지 않습니다 (로그인 상태에서 다시 생성하세요)." : "Not enough lens-switch logs (regenerate while signed in)."}</span>`}</p>
+<div class="talk">💬 ${ko
+    ? "talk move: “이 관점에서 케이스를 30초만 다시 읽어 봅시다. 이 사람이 회의에 있었다면 뭐라고 했을까요?”"
+    : "talk move: “Re-read the case from this lens for 30 seconds. If this person were in the meeting, what would they say?”"}</div>
+
+<h2>${ko ? "5. 마무리 — 생각 정리로 연결" : "5. Close — hand off to reflections"}</h2>
+<p>${ko
+    ? "기준을 다시 말해 주세요: <strong>가장 중요한 쟁점 하나</strong>를 고르고, <strong>맵의 노드를 근거로</strong> 그 선택을 설명하기. 스웜 비평을 받았다면 도전에 답하도록 초안을 고친 뒤 제출."
+    : "Restate the bar: pick <strong>one most important tension</strong> and defend it <strong>citing nodes from the map</strong>. If they used swarm critique, revise to answer the challenges before submitting."}</p>
+`;
+  openPrintableWindow(`${targetCase.title} — ${t1}`, body);
+  logEvent("export.discussion_guide", { case_id: caseId, repeated: repeated.length, unique: unique.length, inter_edges: interPairs.length });
+}
+
+function openStudentOnePager() {
+  const activeCase = getActiveCaseRecord();
+  const run = getActiveLearnerRun();
+  if (!activeCase || state.activeRole !== "user") return;
+  const ko = state.locale === "ko";
+  const learner = getActiveLearner();
+  const prompts = asArray(activeCase.reflectionPrompts);
+
+  const reflectionBlocks = prompts.map((prompt, index) => {
+    const key = reflectionKey(index);
+    const draft = reflectionFeedbackState.drafts[key] || "";
+    const critique = reflectionFeedbackState.critiques[key];
+    const critiqueHtml = critique
+      ? `<p class="muted">${ko ? "스웜 비평 (도전 질문)" : "Swarm critique (challenges)"}:</p>
+         <ul>${critique.items.map((item) => `<li><span class="chip">${escapeHtml(item.label)}</span> ${escapeHtml(item.text)}</li>`).join("")}</ul>`
+      : "";
+    return `
+      <h2>${ko ? `생각 정리 ${index + 1}` : `Reflection ${index + 1}`}</h2>
+      <p class="muted">${escapeHtml(String(prompt))}</p>
+      <div class="quote">${draft ? escapeHtml(draft) : `<span class="muted">${ko ? "(작성한 내용이 여기에 들어갑니다)" : "(your answer goes here)"}</span>`}</div>
+      ${critiqueHtml}`;
+  }).join("");
+
+  const myNodes = asArray(run?.agendaNodes).map((node) => `${node.title}${node.body && node.body !== node.title ? ` — ${node.body}` : ""}`);
+  const myNotes = asArray(run?.annotations).map((a) => `[${a.targetLabel || ""}] ${a.body}`);
+
+  const body = `
+<h1>${escapeHtml(activeCase.title)} — ${ko ? "제출용 정리 1장" : "One-Page Summary"}</h1>
+<p class="meta">${escapeHtml(learner?.name || "")} · ${new Date().toLocaleDateString(ko ? "ko-KR" : "en-US")}</p>
+
+<h2>${ko ? "내가 추가한 쟁점 노드" : "Issues I added to the map"}</h2>
+${myNodes.length ? `<ul>${myNodes.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : `<p class="muted">${ko ? "추가한 노드가 없습니다." : "No nodes added."}</p>`}
+
+<h2>${ko ? "내 메모" : "My notes"}</h2>
+${myNotes.length ? `<ul>${myNotes.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : `<p class="muted">${ko ? "메모가 없습니다." : "No notes."}</p>`}
+
+${reflectionBlocks || `<p class="muted">${ko ? "생각 정리 질문이 없는 케이스입니다." : "This case has no reflection prompts."}</p>`}
+
+<p class="muted">${ko
+    ? "이 문서는 디자인 텐션 스튜디오 활동에서 자동 생성되었습니다."
+    : "Generated automatically from Design Tension Studio activity."}</p>
+`;
+  openPrintableWindow(`${activeCase.title} — ${ko ? "제출용 1장" : "One-Pager"}`, body);
+  logEvent("export.onepager", {
+    case_id: activeCase.id,
+    nodes: myNodes.length,
+    notes: myNotes.length,
+    drafts: prompts.filter((_, i) => reflectionFeedbackState.drafts[reflectionKey(i)]).length,
+  });
 }
 
 // ---- Instructor course management ("내 수업") ----
@@ -8540,6 +8750,7 @@ function renderManageView() {
           </div>
           <div class="manage-case-actions">
             <button type="button" class="toolbar-button" data-manage-open="${item.id}">${ko ? "열기" : "Open"}</button>
+            <button type="button" class="toolbar-button" data-manage-guide="${item.id}">${ko ? "토론 가이드" : "Discussion guide"}</button>
             <button type="button" class="toolbar-button toolbar-button-quiet" data-manage-rename="${item.id}">${ko ? "이름변경" : "Rename"}</button>
             ${
               archived
@@ -8608,6 +8819,11 @@ document.getElementById("manage-view")?.addEventListener("click", (event) => {
   const renameBtn = event.target.closest("[data-manage-rename]");
   if (renameBtn) {
     renameCaseById(renameBtn.getAttribute("data-manage-rename"));
+    return;
+  }
+  const guideBtn = event.target.closest("[data-manage-guide]");
+  if (guideBtn) {
+    openDiscussionGuide(guideBtn.getAttribute("data-manage-guide"));
     return;
   }
   const publishBtn = event.target.closest("[data-manage-publish]");
