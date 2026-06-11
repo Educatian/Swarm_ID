@@ -4671,6 +4671,36 @@ function buildGraphSnapshot(reason) {
     });
   });
 
+  // Usability feedback: "각 이해관계자끼리의 상호작용도 나타내줄 수 있는 연결이
+  // 있었으면 좋겠습니다". Stakeholders whose issues overlap in type are pulling
+  // on the same part of the design — draw that as a dashed cross edge.
+  const issueTypesByStakeholder = {};
+  issueEntries.forEach((entry) => {
+    if (!issueTypesByStakeholder[entry.stakeholder]) {
+      issueTypesByStakeholder[entry.stakeholder] = new Set();
+    }
+    issueTypesByStakeholder[entry.stakeholder].add(entry.issueType);
+  });
+  const stakeholderIds = stakeholderNodes.map((node) => node.id);
+  for (let i = 0; i < stakeholderIds.length; i += 1) {
+    for (let j = i + 1; j < stakeholderIds.length; j += 1) {
+      const a = stakeholderIds[i];
+      const b = stakeholderIds[j];
+      const typesA = issueTypesByStakeholder[a];
+      const typesB = issueTypesByStakeholder[b];
+      if (!typesA || !typesB) continue;
+      const shared = [...typesA].filter((type) => typesB.has(type));
+      if (!shared.length) continue;
+      links.push({
+        source: a,
+        target: b,
+        tone: shared.includes("constraint") ? "danger" : "neutral",
+        weight: 1 + Math.min(shared.length * 0.3, 1),
+        kind: "inter-stakeholder",
+      });
+    }
+  }
+
   return { nodes, links };
 }
 
@@ -6051,6 +6081,7 @@ function getNetworkExportSvgStyles() {
     .network-link[data-tone="ok"] { stroke: rgba(0, 239, 160, 0.48); }
     .network-link.is-active { opacity: 0.94; stroke-width: 2.4px; }
     .network-link.is-faded { opacity: 0.15; }
+    .network-link[data-kind="inter-stakeholder"] { stroke-dasharray: 6 5; }
     .network-node text {
       font-family: Inter, Arial, sans-serif;
       pointer-events: none;
@@ -6353,9 +6384,12 @@ function initializeGraphRenderer() {
         .id((node) => node.id)
         .distance((link) => {
           const sourceId = typeof link.source === "object" ? link.source.id : link.source;
+          if (link.kind === "inter-stakeholder") return 240;
           return link.kind === "satellite" ? 38 : sourceId === "proposal" ? 150 : 90;
         })
-        .strength((link) => (link.kind === "satellite" ? 0.95 : 0.28))
+        // Inter-stakeholder edges are visual annotations — keep them too weak
+        // to drag the stakeholder clusters into each other.
+        .strength((link) => (link.kind === "satellite" ? 0.95 : link.kind === "inter-stakeholder" ? 0.03 : 0.28))
     )
     .force("charge", d3.forceManyBody().strength((node) => (node.type === "satellite" ? -26 : node.type === "core" ? -620 : node.type === "stakeholder" ? -280 : -120)))
     .force("collide", d3.forceCollide().radius((node) => nodeRadius(node) + (node.type === "satellite" ? 4 : 16)))

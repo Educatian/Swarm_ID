@@ -3000,6 +3000,17 @@ body {
   stroke: none;
 }
 
+.network-link[data-kind="inter-stakeholder"] {
+  stroke-dasharray: 6 5;
+}
+
+.legend-swatch-dashed {
+  background: none;
+  border-top: 2px dashed rgba(151, 169, 255, 0.85);
+  height: 0;
+  align-self: center;
+}
+
 /* ---- Node list companion view ---- */
 .network-stage.is-list-mode .network-svg,
 .network-stage.is-list-mode .stage-overlay,
