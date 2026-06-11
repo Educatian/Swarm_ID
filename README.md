@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/logo.png" alt="Design Tension Studio logo" width="84" />
+  <img src="./docs/assets/readme/hero-ko.png" alt="디자인 텐션 스튜디오 — 설계의 쟁점을 살아 있는 맵으로" width="100%" />
 </p>
 
 <h1 align="center">디자인 텐션 스튜디오 (Design Tension Studio) — 한국어판</h1>
@@ -27,11 +27,11 @@
 | | |
 |---|---|
 | **랜딩** — 3단계 제품 스토리 + 단일 인증 카드 | **학생 맵** — "지금 할 일" 5단계 배너 + 관점 바 |
-| ![랜딩](./guides/screenshots/student-ko/01-landing.png) | ![학생 맵](./guides/screenshots/student-ko/04-task-banner.png) |
+| ![랜딩](./docs/assets/readme/framed/ko/01-landing.png) | ![학생 맵](./docs/assets/readme/framed/ko/02-map.png) |
 | **목록 보기** — 맵의 보조 뷰 (검색·4종 정렬) | **학급 보기** — 동료 쟁점 집계 + 실시간 반영 |
-| ![목록 보기](./guides/screenshots/student-ko/09-list-view.png) | ![학급 보기](./guides/screenshots/student-ko/10-class-view.png) |
+| ![목록 보기](./docs/assets/readme/framed/ko/03-list.png) | ![학급 보기](./docs/assets/readme/framed/ko/04-class.png) |
 | **스웜 비평** — 5관점이 초안에 도전 질문 | **내 수업** — 교수자 케이스 관리 + 참여 분석 |
-| ![스웜 비평](./docs/assets/readme/swarm-critique.png) | ![내 수업](./guides/screenshots/instructor-ko/02-manage.png) |
+| ![스웜 비평](./docs/assets/readme/framed/ko/05-critique.png) | ![내 수업](./docs/assets/readme/framed/ko/06-manage.png) |
 
 가이드 페이지에는 위 화면들의 **나레이션 포함 스크린 레코딩 16편**(ElevenLabs 한국어 음성)이 들어 있습니다.
 
