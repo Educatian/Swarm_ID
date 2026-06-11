@@ -98,7 +98,7 @@ window.__DTS_PREVIEW__ = true;
     if (!document.getElementById("preview-flag")) {
       const flag = document.createElement("div");
       flag.id = "preview-flag";
-      flag.textContent = "미리보기 · 데모 데이터 (로그인 없음)";
+      flag.textContent = EN ? "Preview · demo data (no sign-in)" : "미리보기 · 데모 데이터 (로그인 없음)";
       flag.style.cssText =
         "position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:9999;" +
         "background:rgba(67,97,238,0.92);color:#fff;font:600 12px/1 Inter,sans-serif;" +
