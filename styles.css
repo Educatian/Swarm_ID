@@ -1,3 +1,33 @@
+/* ============================================================
+   Responsive breakpoint scale — Figma audit 17:4 (P2)
+   ------------------------------------------------------------
+   The audit found the collapse breakpoints drifting: 14 distinct
+   max-width values, several of them 20-50px apart with no reason
+   (700/720/760, 860/900, 1050/1100, 1380/1400), so the same
+   collapse happened at a different width depending on the rule.
+
+   Canonical scale — use ONLY these, and pair a min-width with the
+   next value up (721, 901, 981, 1181) so no band is left uncovered:
+
+     420   very small phone
+     560   phone
+     640   large phone
+     720   phone / tablet boundary   (pairs with min-width: 721px)
+     760   instructor console only — see the note at that rule
+     900   tablet                    (pairs with min-width: 901px)
+     980   small laptop              (pairs with min-width: 981px)
+    1100   laptop
+    1180   desktop boundary          (pairs with min-width: 1181px)
+    1400   wide desktop
+
+   Merged into this scale: 700 -> 720, 860 -> 900, 1050 -> 1100,
+   1380 -> 1400. Every merge was checked by measuring element boxes at
+   the boundary widths before and after; 760 was kept because both
+   directions measurably degraded the console.
+
+   Adding a new value needs a reason written next to it.
+   ============================================================ */
+
 /* Self-hosted Material Symbols: icons must not degrade to raw ligature text
    ("tune", "fullscreen") when Google Fonts is blocked or offline. */
 @font-face {
@@ -2502,7 +2532,7 @@ textarea:disabled {
   padding: 9px 10px;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 720px) {
   .orbit-signal-head strong { font-size: 0.72rem; }
   .orbit-signal-bar { margin-left: 34px; }
 }
@@ -2535,7 +2565,7 @@ textarea:disabled {
 
 /* At laptop widths, stack the utility panels below the map instead of squeezing
    three columns into a tiny canvas. Remove nested viewport scroll traps here. */
-@media (max-width: 1380px) and (min-width: 721px) {
+@media (max-width: 1400px) and (min-width: 721px) {
   /* On the network workspace the map and its selected-case card are the
      primary context. Keep the persistent status footer for Home/Manage, but
      remove it from the map viewport so it does not become a clipped third
@@ -2665,6 +2695,35 @@ textarea:disabled {
   fill: var(--primary);
 }
 
+/* The state the last decision moved away from, drawn under the live shape so the
+   change reads as a shape difference rather than a sentence to parse. */
+.radar-ghost {
+  fill: rgba(151, 169, 255, 0.05);
+  stroke: rgba(151, 169, 255, 0.42);
+  stroke-width: 1.4;
+  stroke-dasharray: 4 4;
+}
+
+/* Per-axis movement badge. Every radar axis is normalised so up is good (the
+   fifth is teacher slack, not load), so one colour rule holds for all five. */
+.radar-delta {
+  display: inline-block;
+  margin-left: 5px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  vertical-align: middle;
+}
+
+.radar-delta[data-tone="good"] { color: #7de0c4; background: rgba(125, 224, 196, 0.16); }
+.radar-delta[data-tone="warn"] { color: #ff8f96; background: rgba(255, 143, 150, 0.16); }
+
+html.theme-light .radar-delta[data-tone="good"] { color: #0b6b52; background: rgba(11, 107, 82, 0.12); }
+html.theme-light .radar-delta[data-tone="warn"] { color: #a81f2c; background: rgba(168, 31, 44, 0.1); }
+
 .radar-label {
   position: absolute;
   font-size: 0.72rem;
@@ -2727,6 +2786,52 @@ textarea:disabled {
   height: 100%;
   border-radius: inherit;
 }
+
+/* Figma audit 17:4 (P1): tie the radar to the decision log so the screen states
+   what was changed and which metric moved, mirroring the sandbox delta card. */
+.matrix-latest-decision {
+  display: grid;
+  gap: 6px;
+  margin-top: 18px;
+  padding: 12px 14px;
+  border: 1px solid rgba(125, 224, 196, 0.22);
+  border-radius: 14px;
+  background: rgba(125, 224, 196, 0.06);
+}
+
+/* --on-surface is the light-theme token (#1e293b); using it here renders black
+   on the dark panel, the same trap the network labels hit. Default to light
+   text and hand the tokens back only under the light theme. */
+.matrix-latest-decision strong { color: rgba(246, 246, 252, 0.96); font-size: 0.86rem; }
+.matrix-latest-decision p { margin: 0; color: rgba(246, 246, 252, 0.72); font-size: 0.78rem; line-height: 1.45; }
+.matrix-latest-impact { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+.impact-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(246, 246, 252, 0.72);
+}
+
+/* The largest movement leads; the rest trail it at a lower weight so the row has
+   a reading order instead of four equal-looking numbers. */
+.impact-chip.is-lead { font-size: 0.82rem; padding: 4px 11px; }
+.impact-chip b { font-weight: 700; font-variant-numeric: tabular-nums; }
+.impact-chip[data-tone="good"] b { color: #7de0c4; }
+.impact-chip[data-tone="warn"] b { color: #ff8f96; }
+
+html.theme-light .impact-chip { background: rgba(15, 23, 42, 0.05); color: var(--on-surface-variant); }
+html.theme-light .impact-chip[data-tone="good"] b { color: #0b6b52; }
+html.theme-light .impact-chip[data-tone="warn"] b { color: #a81f2c; }
+
+html.theme-light .matrix-latest-decision strong { color: var(--on-surface); }
+html.theme-light .matrix-latest-decision p,
+html.theme-light .matrix-latest-impact { color: var(--on-surface-variant); }
 
 .matrix-insights {
   display: grid;
@@ -5331,7 +5436,7 @@ html.dark .welcome-card {
 .home-adv-item .material-symbols-outlined { font-size: 18px; color: rgba(150,175,255,0.9); }
 .home-adv-item:disabled { opacity: 0.45; cursor: default; }
 
-@media (max-width: 860px) {
+@media (max-width: 900px) {
   .home-task-grid { grid-template-columns: 1fr; }
   .home-bottom { grid-template-columns: 1fr; }
 }
@@ -7280,6 +7385,9 @@ html:not(.theme-light) .landing-copy h2 #landing-hero-title {
 .instructor-console-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .instructor-console-guardrail { display: flex; align-items: center; gap: 8px; margin-top: 14px; color: #e8cfaa; font-size: .74rem; }
 
+/* 760 stays its own step — measured, not assumed. Rounding down to 720 puts two
+   318px cards back at 721-760 (the crowding the audit removed); rounding up to
+   900 stretches the form inputs to 660px and doubles the scroll at 761-900. */
 @media (max-width: 760px) {
   .instructor-console-header { display: grid; }
   .instructor-console-grid { grid-template-columns: 1fr; }
@@ -8081,7 +8189,7 @@ html.theme-light .home-loop-card.is-active small {
   .landing-visual { display: none; }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 720px) {
   .landing-brand-copy h1 { font-size: clamp(1.7rem, 8vw, 2.1rem); letter-spacing: -0.04em; }
   .workspace-primary-nav-item { flex: 1; padding-inline: 8px; }
   .density-simple .topbar-side { display: none; }
@@ -8172,7 +8280,7 @@ html.theme-light .home-loop-card.is-active small {
   padding: 13px;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 720px) {
   .density-simple .matrix-main { grid-template-columns: 1fr; }
   .density-simple .radar-shell { min-height: 240px; }
   .density-simple .lens-layout .orbit-visual { min-height: 300px; }
@@ -8449,7 +8557,7 @@ html.theme-light .home-loop-card.is-active small {
   min-width: 0;
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1100px) {
   .role-admin[data-active-view="manage"] {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -8457,6 +8565,8 @@ html.theme-light .home-loop-card.is-active small {
   .role-admin[data-active-view="manage"] .mini-control:has(#course-select) { width: min(220px, 28vw); }
 }
 
+/* Same 760 step as the console grid above — the sticky stage tabs have to hold
+   for exactly the widths where the console is a single column. */
 @media (max-width: 760px) {
   .role-admin[data-active-view="manage"] .topbar-side .platform-switcher,
   .role-admin[data-active-view="manage"] #start-tutorial,
@@ -8639,7 +8749,7 @@ html.theme-light .home-loop-card.is-active small {
 .theme-light .agent-evidence-detail,
 .theme-light .agent-privacy-note { color: #5b6781; }
 
-@media (max-width: 700px) {
+@media (max-width: 720px) {
   .agent-coach-drawer { padding: 18px 16px 28px; }
   .agent-facilitator-tabs button { font-size: 0.62rem; }
   .agent-topic-meta { align-items: stretch; flex-direction: column; }
@@ -8709,7 +8819,7 @@ html.theme-light .home-loop-card.is-active small {
   letter-spacing: -0.02em;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 720px) {
   .density-simple .workspace { padding: 8px; gap: 8px; }
   .density-simple .topbar { top: 8px; border-radius: 14px; }
   .density-simple .main-content { padding-bottom: 18px; }
@@ -9054,7 +9164,7 @@ html.theme-light .home-recent-item span { color: #5a6781 !important; }
    Keep that reading order continuous: an empty related-activity block is not
    useful until a node is selected, and an inner scrollbar makes the page feel
    like a nested console. */
-@media (max-width: 1380px) and (min-width: 721px) {
+@media (max-width: 1400px) and (min-width: 721px) {
   .app-shell:not(.density-simple) .visualizer-layout > .intake-panel,
   .app-shell:not(.density-simple) .visualizer-layout > .insight-panel {
     max-height: none !important;

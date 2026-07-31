@@ -2012,12 +2012,20 @@ function applyStaticTranslations() {
       if (eyebrow) eyebrow.textContent = state.locale === "ko" ? "변경 이력" : "Change history";
       if (title) title.textContent = state.locale === "ko" ? "의사결정 로그" : "Decision log";
     }
+    // Write into the text span, not the label: the label also holds the movement
+    // badge, and assigning textContent to the label would delete it.
     const radarLabels = matrixView.querySelectorAll(".radar-label");
-    if (radarLabels[0]) radarLabels[0].textContent = t("personalization");
-    if (radarLabels[1]) radarLabels[1].textContent = state.locale === "ko" ? "프라이버시" : "Privacy";
-    if (radarLabels[2]) radarLabels[2].textContent = t("accessibility");
-    if (radarLabels[3]) radarLabels[3].textContent = t("feasibility");
-    if (radarLabels[4]) radarLabels[4].textContent = t("teacherSlack");
+    const setRadarLabel = (index, value) => {
+      const label = radarLabels[index];
+      if (!label) return;
+      const target = label.querySelector(".radar-label-text") || label;
+      target.textContent = value;
+    };
+    setRadarLabel(0, t("personalization"));
+    setRadarLabel(1, state.locale === "ko" ? "프라이버시" : "Privacy");
+    setRadarLabel(2, t("accessibility"));
+    setRadarLabel(3, t("feasibility"));
+    setRadarLabel(4, t("teacherSlack"));
   }
 
   const sandboxView = document.querySelector('[data-view-panel="sandbox"]');
@@ -3188,6 +3196,8 @@ const dom = {
   radarFill: document.getElementById("radar-fill"),
   decisionLog: document.getElementById("decision-log"),
   matrixInsights: document.getElementById("matrix-insights"),
+  matrixLatestDecision: document.getElementById("matrix-latest-decision"),
+  radarGhost: document.getElementById("radar-ghost"),
   matrixState: document.getElementById("matrix-state"),
   matrixResultSummary: document.getElementById("matrix-result-summary"),
   matrixResultMeta: document.getElementById("matrix-result-meta"),
@@ -5208,8 +5218,10 @@ function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
-function computeScores() {
-  const { personalization, teacherLoad, privacy, accessibility } = state.metrics;
+// `metrics` is overridable so the matrix can plot a past snapshot (the state a
+// decision moved away from) on the same axes as the live one.
+function computeScores(metrics = state.metrics) {
+  const { personalization, teacherLoad, privacy, accessibility } = metrics;
   const automationWeight = state.autonomousIteration ? 6 : -4;
   const alignment = Math.round(
     clamp(
@@ -5931,22 +5943,28 @@ function stakeholderRecommendations(key) {
   return map[key];
 }
 
-function radarValues() {
-  const { personalization, teacherLoad, privacy, accessibility } = state.metrics;
-  const { feasibility } = computeScores();
+function radarValues(metrics = state.metrics) {
+  const { personalization, teacherLoad, privacy, accessibility } = metrics;
+  const { feasibility } = computeScores(metrics);
   return [personalization, privacy, accessibility, feasibility, 100 - teacherLoad];
 }
 
-function polygonPoints(values) {
+// Pure: no DOM writes, so the ghost polygon can reuse it without dragging the
+// live dots onto the previous state.
+function polygonCoords(values) {
   const centerX = 120;
   const centerY = 120;
   const radius = 96;
-  return values
-    .map((value, index) => {
-      const angle = (-90 + index * 72) * (Math.PI / 180);
-      const scaled = (value / 100) * radius;
-      const x = centerX + Math.cos(angle) * scaled;
-      const y = centerY + Math.sin(angle) * scaled;
+  return values.map((value, index) => {
+    const angle = (-90 + index * 72) * (Math.PI / 180);
+    const scaled = (value / 100) * radius;
+    return [centerX + Math.cos(angle) * scaled, centerY + Math.sin(angle) * scaled];
+  });
+}
+
+function polygonPoints(values) {
+  return polygonCoords(values)
+    .map(([x, y], index) => {
       const dot = document.getElementById(`radar-dot-${index}`);
       dot.setAttribute("cx", String(x));
       dot.setAttribute("cy", String(y));
@@ -8665,7 +8683,36 @@ function renderMatrix() {
   const activeCase = getActiveCaseRecord();
   const { personalization, teacherLoad, privacy, accessibility } = state.metrics;
   const { feasibility, alignment, conflict } = computeScores();
-  dom.radarFill.setAttribute("points", polygonPoints(radarValues()));
+
+  // The radar itself carries the change: the state the last decision moved away
+  // from is drawn underneath, and only the axes that actually moved get a badge.
+  // Every radar axis is normalised so higher is better (the fifth is teacher
+  // slack, not load), which is why one arrow/colour rule covers all five.
+  const latestDecision = state.decisions[0];
+  const beforeAxis = latestDecision?.beforeMetrics ? radarValues(latestDecision.beforeMetrics) : null;
+  const currentAxis = radarValues();
+  dom.radarFill.setAttribute("points", polygonPoints(currentAxis));
+  if (dom.radarGhost) {
+    if (beforeAxis) {
+      dom.radarGhost.setAttribute("points", polygonCoords(beforeAxis).map(([x, y]) => `${x},${y}`).join(" "));
+      dom.radarGhost.hidden = false;
+    } else {
+      dom.radarGhost.hidden = true;
+    }
+  }
+  for (let axis = 0; axis < currentAxis.length; axis += 1) {
+    const badge = document.getElementById(`radar-delta-${axis}`);
+    if (!badge) continue;
+    const delta = beforeAxis ? Math.round(currentAxis[axis] - beforeAxis[axis]) : 0;
+    if (!delta) {
+      badge.hidden = true;
+      badge.textContent = "";
+      continue;
+    }
+    badge.textContent = `${delta > 0 ? "▲" : "▼"}${Math.abs(delta)}`;
+    badge.dataset.tone = delta > 0 ? "good" : "warn";
+    badge.hidden = false;
+  }
   dom.matrixState.textContent = conflict > 70 ? t("matrixNeedsAttention") : alignment > 75 ? t("matrixBalanced") : t("matrixWatchClosely");
   if (dom.matrixResultSummary) {
     dom.matrixResultSummary.textContent = state.locale === "ko"
@@ -8698,6 +8745,37 @@ function renderMatrix() {
       `
     )
     .join("");
+
+  if (dom.matrixLatestDecision) {
+    const ko = state.locale === "ko";
+    const latest = latestDecision;
+    if (!latest) {
+      dom.matrixLatestDecision.innerHTML = `<span class="eyebrow">${ko ? "최근 결정 → 움직인 지표" : "Latest decision → metrics moved"}</span><p class="muted">${
+        ko
+          ? "아직 기록된 결정이 없어요. 실험 공간에서 조정하면 무엇이 어떤 지표를 움직였는지 여기에 남습니다."
+          : "No decisions yet. Adjust the sandbox and the change-to-metric link lands here."
+      }</p>`;
+    } else {
+      // impact is already sorted largest-first, so the lead chip is the headline
+      // movement and the rest trail it at a smaller weight.
+      const impact = asArray(latest.impact);
+      const impactMarkup = impact.length
+        ? `<span class="matrix-latest-impact">${impact
+            .map(([label, delta, favorable], index) => `
+              <span class="impact-chip${index === 0 ? " is-lead" : ""}" data-tone="${favorable ? "good" : "warn"}">
+                <span class="impact-chip-label">${escapeHtml(String(label))}</span>
+                <b>${delta > 0 ? "▲" : "▼"}${Math.abs(delta)}</b>
+              </span>`)
+            .join("")}</span>`
+        : `<p class="muted">${ko ? "이 결정으로 움직인 지표는 없어요." : "No metric moved with this decision."}</p>`;
+      const latestTitle = localizeLegacyKoreanCopy(latest.title, ko ? "결정 기록" : latest.title);
+      dom.matrixLatestDecision.innerHTML = `
+        <span class="eyebrow">${ko ? "최근 결정 → 움직인 지표" : "Latest decision → metrics moved"}</span>
+        <strong>${escapeHtml(latestTitle)}</strong>
+        ${impactMarkup}
+      `;
+    }
+  }
 
   const rawMatrixInsights = asArray(activeCase?.matrixInsights);
   const uniqueMatrixInsights = rawMatrixInsights.filter((item, index, list) => {
@@ -11728,6 +11806,41 @@ async function handleAsk(question) {
   renderAll();
 }
 
+// Figma audit 17:4 (P1): the matrix showed a radar and a decision log that never
+// answered "what did I change, and which metric moved?". Decisions only carried
+// prose, so snapshot the metrics when a decision lands and diff it against the
+// previous snapshot to keep that link on the record itself.
+// `favor` is which direction is good for that metric. Without it a reader has to
+// know that teacher load going up is bad while the other three going up is good,
+// which is exactly the judgement the screen should be making for them.
+function decisionMetricFields() {
+  const ko = state.locale === "ko";
+  return [
+    ["personalization", ko ? "개인화" : "Personalization", 1],
+    ["teacherLoad", ko ? "교사 부담" : "Teacher load", -1],
+    ["privacy", ko ? "프라이버시" : "Privacy", 1],
+    ["accessibility", ko ? "접근성" : "Accessibility", 1],
+  ];
+}
+
+function recordDecision(entry) {
+  const metrics = { ...state.metrics };
+  const previous = state.decisions.find((item) => item && item.metrics);
+  const beforeMetrics = previous ? { ...previous.metrics } : null;
+  const impact = beforeMetrics
+    ? decisionMetricFields()
+        .map(([key, label, favor]) => {
+          const delta = metrics[key] - beforeMetrics[key];
+          return [label, delta, delta * favor > 0];
+        })
+        .filter(([, delta]) => delta !== 0)
+        // Largest movement first: the screen should lead with what moved most.
+        .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
+    : [];
+  state.decisions.unshift({ ...entry, metrics, beforeMetrics, impact });
+  state.decisions = state.decisions.slice(0, 5);
+}
+
 function applyScenario(name) {
   if (state.activeRole !== "admin") return;
   const scenarios = {
@@ -11748,14 +11861,13 @@ function applyScenario(name) {
       ? `실험 공간이 "${name}" 시나리오를 적용해 이해관계자 간 쟁점 분포가 어떻게 달라지는지 관찰했습니다.`
       : `The sandbox injected the "${name}" scenario to observe how stakeholder tension redistributed.`
   );
-  state.decisions.unshift({
+  recordDecision({
     stamp: state.locale === "ko" ? "지금" : "Now",
     title: state.locale === "ko" ? `시나리오 업데이트: ${name}` : `Scenario update: ${name}`,
     body: state.locale === "ko"
       ? `실험 공간이 ${name} 시나리오를 적용하고 정렬도, 실행 가능성, 쟁점 강도를 다시 계산했습니다.`
       : `The sandbox applied the ${name} scenario and recalculated alignment, feasibility, and conflict tension.`,
   });
-  state.decisions = state.decisions.slice(0, 5);
   persistActiveWorkspaceState();
   regenerateGraph(`scenario ${name}`);
   renderAll();
@@ -12633,7 +12745,7 @@ document.getElementById("autonomy-toggle").addEventListener("change", (event) =>
 
 ["regenerate-memo"].forEach((id) => {
   document.getElementById(id)?.addEventListener("click", () => {
-    state.decisions.unshift({
+    recordDecision({
       stamp: state.locale === "ko" ? "지금" : "Now",
       title: state.activeRole === "admin"
         ? state.locale === "ko" ? "메모 새로고침" : "Memo refreshed"
@@ -12647,7 +12759,6 @@ document.getElementById("autonomy-toggle").addEventListener("change", (event) =>
             ? `학습자 메모가 현재 ${stakeholders[state.activeStakeholder].label.toLowerCase()} 렌즈, 학생 증거 메모, 개인 메모를 바탕으로 다시 만들어졌습니다.`
             : `The learner memo was rebuilt using the current ${stakeholders[state.activeStakeholder].label.toLowerCase()} lens, student evidence notes, and the student's private notes.`,
     });
-    state.decisions = state.decisions.slice(0, 5);
     if (state.activeRole === "admin") {
       updateActiveCaseRecord((activeCase) => {
         activeCase.pipeline.reportStatus = state.locale === "ko" ? "교수자 검토용 메모 새로고침 완료" : "Memo refreshed for instructor review";

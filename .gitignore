@@ -27,3 +27,6 @@ dist-preview/
 
 # supabase CLI local link state
 supabase/.temp/
+
+# fablize goal-tracking state (local scratch, like .codex-goal.md)
+.fablize/

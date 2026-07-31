@@ -723,6 +723,7 @@
                   <svg id="radar-chart" viewBox="0 0 240 240" aria-label="상충 관계 레이더 차트">
                     <polygon class="radar-grid" points="120,24 200,80 170,190 70,190 40,80"></polygon>
                     <polygon class="radar-grid inner" points="120,52 172,88 155,164 85,164 68,88"></polygon>
+                    <polygon class="radar-ghost" id="radar-ghost" points="" hidden></polygon>
                     <polygon class="radar-fill" id="radar-fill" points=""></polygon>
                     <circle class="radar-dot" id="radar-dot-0" r="4"></circle>
                     <circle class="radar-dot" id="radar-dot-1" r="4"></circle>
@@ -730,15 +731,17 @@
                     <circle class="radar-dot" id="radar-dot-3" r="4"></circle>
                     <circle class="radar-dot" id="radar-dot-4" r="4"></circle>
                   </svg>
-                  <div class="radar-label radar-label-top">개인화</div>
-                  <div class="radar-label radar-label-right">프라이버시</div>
-                  <div class="radar-label radar-label-bottom-right">접근성</div>
-                  <div class="radar-label radar-label-bottom-left">실행 가능성</div>
-                  <div class="radar-label radar-label-left">교사 부담</div>
+                  <div class="radar-label radar-label-top"><span class="radar-label-text">개인화</span><span class="radar-delta" id="radar-delta-0" hidden></span></div>
+                  <div class="radar-label radar-label-right"><span class="radar-label-text">프라이버시</span><span class="radar-delta" id="radar-delta-1" hidden></span></div>
+                  <div class="radar-label radar-label-bottom-right"><span class="radar-label-text">접근성</span><span class="radar-delta" id="radar-delta-2" hidden></span></div>
+                  <div class="radar-label radar-label-bottom-left"><span class="radar-label-text">실행 가능성</span><span class="radar-delta" id="radar-delta-3" hidden></span></div>
+                  <div class="radar-label radar-label-left"><span class="radar-label-text">교사 부담</span><span class="radar-delta" id="radar-delta-4" hidden></span></div>
                 </div>
 
                 <div class="metric-bars" id="metric-bars"></div>
               </div>
+
+              <div class="matrix-latest-decision" id="matrix-latest-decision" aria-live="polite"></div>
 
               <div class="matrix-insights" id="matrix-insights"></div>
             </section>
