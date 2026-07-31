@@ -114,6 +114,43 @@ alter table public.profiles enable row level security;
 alter table public.institutions enable row level security;
 alter table public.courses enable row level security;
 alter table public.course_memberships enable row level security;
+
+create or replace function public.is_course_admin(target_course uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from public.course_memberships m
+    where m.course_id = target_course
+      and m.user_id = auth.uid()
+      and m.role = 'admin'
+      and m.status = 'active'
+  );
+$$;
+
+create or replace function public.is_institution_admin(target_institution uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from public.course_memberships m
+    where m.institution_id = target_institution
+      and m.user_id = auth.uid()
+      and m.role = 'admin'
+      and m.status = 'active'
+  );
+$$;
+
+revoke all on function public.is_course_admin(uuid) from public;
+revoke all on function public.is_institution_admin(uuid) from public;
+grant execute on function public.is_course_admin(uuid) to authenticated;
+grant execute on function public.is_institution_admin(uuid) to authenticated;
 alter table public.cases enable row level security;
 alter table public.documents enable row level security;
 alter table public.learner_runs enable row level security;
@@ -176,6 +213,8 @@ drop policy if exists "members can read same-course memberships" on public.cours
 drop policy if exists "platform admin can create institutions" on public.institutions;
 drop policy if exists "platform admin can create courses" on public.courses;
 drop policy if exists "platform admin can create memberships" on public.course_memberships;
+drop policy if exists "course admins can read course memberships" on public.course_memberships;
+drop policy if exists "course admins can create memberships" on public.course_memberships;
 drop policy if exists "authenticated users can read joinable courses" on public.courses;
 drop policy if exists "students can join a course by code" on public.course_memberships;
 
@@ -184,6 +223,7 @@ on public.course_memberships
 for select
 using (
   user_id = auth.uid()
+  or public.is_course_admin(course_memberships.course_id)
 );
 
 create policy "platform admin can create institutions"
@@ -193,18 +233,21 @@ with check (
   (auth.jwt() ->> 'email') = 'admin@swarm.io'
 );
 
-create policy "platform admin can create courses"
+create policy "course admins can create courses"
 on public.courses
 for insert
 with check (
   (auth.jwt() ->> 'email') = 'admin@swarm.io'
+  or public.is_institution_admin(courses.institution_id)
 );
 
-create policy "platform admin can create memberships"
+create policy "course admins can create memberships"
 on public.course_memberships
 for insert
 with check (
   (auth.jwt() ->> 'email') = 'admin@swarm.io'
+  or public.is_institution_admin(course_memberships.institution_id)
+  or public.is_course_admin(course_memberships.course_id)
 );
 
 create policy "authenticated users can read joinable courses"

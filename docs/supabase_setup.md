@@ -64,6 +64,8 @@ The app refuses to delete any case that has `learner_runs` rows (checked locally
 
 The Korean build streams peer activity (learner runs) and instructor case edits live into open workspaces, plus a presence count of who has the same case open. Realtime needs the tables added to the `supabase_realtime` publication once per project (Supabase SQL editor):
 
+Course administrators can also create courses inside an institution where they already have an active instructor membership, and can grant an existing account a course membership from **내 수업 → 코스 운영**. Apply the updated `supabase_schema.sql` so the `is_course_admin` / `is_institution_admin` security-definer checks and RLS policies are present. The `admin-manage-membership` Edge Function must be deployed before email-based instructor assignment is used.
+
 ```sql
 alter publication supabase_realtime add table public.learner_runs;
 alter publication supabase_realtime add table public.cases;
@@ -78,5 +80,27 @@ When `gemini-config.js` is present, the app uses Gemini for:
 - uploaded document to structured case conversion
 - learner agenda node to related issue expansion
 - stakeholder question responses
+
+## Research operations and real student invitations
+
+Run `docs/supabase_research_ops.sql` after the base schema. Deploy
+`supabase/functions/admin-invite-student` with the Supabase CLI and keep
+`SUPABASE_SERVICE_ROLE_KEY` only in the Edge Function environment. The browser
+invokes the function with the signed-in instructor session; it never receives
+the service-role key. The function checks the instructor's active course
+membership before calling `auth.admin.inviteUserByEmail`, then records the
+invite in `course_invites`. The same action supports revoking a pending invite.
+
+Deploy `supabase/functions/admin-manage-membership` as well. It lets an active
+course instructor grant an existing account either `admin` (co-instructor) or
+`user` (learner) membership by email. The service role stays inside the Edge
+Function, which refuses requests from non-instructors.
+
+Published topic, mediator, and open-question actions are stored in
+`facilitator_actions` and are readable by active learners only after the
+instructor publishes them. `research_consents` stores versioned consent, while
+`analytics_events` carries `session_id`, `seq`, consent version, course, case,
+and server/client timestamps. The top-bar controls provide JSON export and a
+confirmed deletion path for the signed-in learner's runs and analytics.
 
 If Gemini is not configured or a request fails, the app falls back to the built-in local generation logic.
