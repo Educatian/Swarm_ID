@@ -24,7 +24,20 @@ Figma 파일 `4WIyk1eds5QF6B8fV9fpTU`를 UI/UX 설계 기준으로 사용한다.
 | 리포트 | `34:2` |
 | 교수자 개요/관리 | `35:2`, `36:2` |
 
-감사 보드는 `40:2`, 개선 보드는 `40:25`, 운영 규칙 보드는 `44:2`다.
+## 파일 구조
+
+작업 페이지는 `17:2 · 03 · Full App UI UX Loop`이고, 그 아래 섹션은 다음과 같다.
+
+| 섹션 | 이름 | 주요 노드 |
+| --- | --- | --- |
+| `17:3` | 00 · Current Product Captures | 위 표의 Current 캡처 |
+| `17:4` | 01 · UX Audit & Decisions | 감사 보드 `50:2`–`50:19`, `51:4`–`51:9` |
+| `17:5` | 02 · Improved Full App | 구현 기록 `52:2`–`52:28`, 교사 관심사 시각화 제안 `46:2` |
+| `17:6` | 03 · DTS Design System | 운영 규칙 보드 `44:2 · Figma ↔ App Operating Loop` |
+
+정리된 교수자 콘솔 시안은 `26:41 · Instructor · Clean operations`다.
+
+교수자 콘솔 감사는 별도 파일 `uumUXm2LdFzra2VM5UDxiJ`(DTS Instructor Console — Hyeji UX Audit)에도 있다. 두 파일이 갈라지지 않도록, 화면 구조의 기준은 항상 `4WIyk1eds5QF6B8fV9fpTU`로 둔다.
 
 ## 검증 기준
 
