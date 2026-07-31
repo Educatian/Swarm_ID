@@ -8970,7 +8970,16 @@ function renderReport() {
 
   dom.reportSummary.textContent = summary || t("noSummary");
 
-  const reportAction = `<button type="button" class="toolbar-button toolbar-button-primary report-empty-action" data-report-action="network">${state.locale === "ko" ? "네트워크에서 근거 추가" : "Add evidence from network"}</button>`;
+  // Figma audit R1-5: one filled button per screen. The report's is "요약 다시
+  // 만들기" in the panel header, so every empty-state CTA here is quiet.
+  // R2-4: all three empty states shared one label, so two buttons reading
+  // "네트워크에서 근거 추가" could sit in the same column with no way to tell
+  // which gap each one filled. Each now names its own gap.
+  const reportEmptyAction = (label) =>
+    `<button type="button" class="toolbar-button report-empty-action" data-report-action="network">${label}</button>`;
+  const tensionsAction = reportEmptyAction(state.locale === "ko" ? "네트워크에서 쟁점 찾기" : "Find tensions in the network");
+  const recommendationsAction = reportEmptyAction(state.locale === "ko" ? "근거를 더해 추천 만들기" : "Add evidence to get recommendations");
+  const evidenceAction = reportEmptyAction(state.locale === "ko" ? "네트워크에서 근거 추가" : "Add evidence from network");
   dom.reportTensions.innerHTML = reportTensions.length
     ? reportTensions
         .map(
@@ -8985,7 +8994,7 @@ function renderReport() {
           }
         )
         .join("")
-    : `${emptyNoteMarkup(t("noTensions"))}${reportAction}`;
+    : `${emptyNoteMarkup(t("noTensions"))}${tensionsAction}`;
 
   dom.reportRecommendations.innerHTML = reportRecommendations.length
     ? reportRecommendations
@@ -8998,7 +9007,7 @@ function renderReport() {
           `
         )
         .join("")
-    : `${emptyNoteMarkup(t("noRecommendations"))}${reportAction}`;
+    : `${emptyNoteMarkup(t("noRecommendations"))}${recommendationsAction}`;
 
   const reportEvidenceItems = state.evidence
     .slice(-5)
@@ -9024,7 +9033,7 @@ function renderReport() {
           `
         )
         .join("")
-    : `${emptyNoteMarkup(t("noEvidence"))}${reportAction}`;
+    : `${emptyNoteMarkup(t("noEvidence"))}${evidenceAction}`;
 
   // A few legacy evidence rows localize to the same fallback copy even when
   // their raw records differ. Remove duplicate rendered cards so the report
@@ -9117,7 +9126,7 @@ function renderReport() {
           `;
         })
         .join("")
-    : `${emptyNoteMarkup(t("noPrompts"))}<button type="button" class="toolbar-button toolbar-button-primary report-empty-action report-empty-followup" data-report-action="network">${reportNetworkActionLabel}</button>`;
+    : `${emptyNoteMarkup(t("noPrompts"))}<button type="button" class="toolbar-button report-empty-action report-empty-followup" data-report-action="network">${reportNetworkActionLabel}</button>`;
 
   if (isStudent) {
     reflectionPrompts.forEach((_, index) => renderReflectionCritique(index));
@@ -9273,7 +9282,7 @@ function renderHome() {
             `<li class="home-recent-item"><strong>${escapeHtml(String(r.title).slice(0, 80))}</strong><span>${escapeHtml(r.meta)}</span></li>`,
         )
         .join("")}</ul>`
-    : `<div class="home-empty-action"><p class="muted home-recent-empty">${t("homeRecentEmpty")}</p><button class="toolbar-button toolbar-button-primary home-recent-cta" type="button" data-home-goto="visualizer">${state.locale === "ko" ? "네트워크에서 시작하기" : "Start from the network"}</button></div>`;
+    : `<div class="home-empty-action"><p class="muted home-recent-empty">${t("homeRecentEmpty")}</p><button class="toolbar-button home-recent-cta" type="button" data-home-goto="visualizer">${state.locale === "ko" ? "네트워크에서 시작하기" : "Start from the network"}</button></div>`;
 
   const advTradeoffs = isViewAllowed("matrix");
   const advSandbox = isViewAllowed("sandbox");
@@ -9903,7 +9912,7 @@ function renderInstructorSystemConsole(course, ko) {
           <div class="instructor-console-card-heading"><span class="instructor-console-step">00</span><div><h4>${ko ? "코스·권한 관리" : "Course & access"}</h4><p>${ko ? "새 코스를 만들고 기존 계정에 교수자 권한을 부여하세요." : "Create a course and grant instructor access to existing accounts."}</p></div></div>
           <form class="instructor-console-form" data-console-form="course-create">
             <div class="instructor-console-form-row"><label>${ko ? "코스 이름" : "Course name"}<input name="courseName" type="text" required></label><label>${ko ? "코드" : "Code"}<input name="courseCode" type="text" required></label></div>
-            <button type="submit" class="toolbar-button toolbar-button-primary">${ko ? "코스 만들기" : "Create course"}</button>
+            <button type="submit" class="toolbar-button">${ko ? "코스 만들기" : "Create course"}</button>
           </form>
           <form class="instructor-console-form" data-console-form="membership-grant">
             <div class="instructor-console-form-row"><label>${ko ? "교수자 이름" : "Instructor name"}<input name="memberName" type="text"></label><label>${ko ? "계정 이메일" : "Account email"}<input name="memberEmail" type="email" required></label></div>
@@ -9914,7 +9923,7 @@ function renderInstructorSystemConsole(course, ko) {
           <div class="instructor-console-card-heading"><span class="instructor-console-step">01</span><div><h4>${ko ? "학생 계정·초대" : "Student accounts & invites"}</h4><p>${ko ? "학생 정보를 등록하고 가입 링크를 전달하세요." : "Prepare a roster and share a secure join link."}</p></div></div>
           <form class="instructor-console-form" data-console-form="student-invite">
             <div class="instructor-console-form-row"><label>${ko ? "학생 이름" : "Student name"}<input name="studentName" type="text" placeholder="${ko ? "예: 김민서" : "e.g. Minseo Kim"}" required></label><label>${ko ? "이메일" : "Email"}<input name="studentEmail" type="email" placeholder="student@example.edu" required></label></div>
-            <button type="submit" class="toolbar-button toolbar-button-primary">${ko ? (canProvisionAccounts ? "계정 생성·초대" : "초대 준비") : (canProvisionAccounts ? "Create account & invite" : "Prepare invite")}</button>
+            <button type="submit" class="toolbar-button">${ko ? (canProvisionAccounts ? "계정 생성·초대" : "초대 준비") : (canProvisionAccounts ? "Create account & invite" : "Prepare invite")}</button>
           </form>
           <ul class="instructor-console-roster">${inviteRows}</ul>
           <p class="instructor-console-note">${ko ? (canProvisionAccounts ? "서버 초대 함수가 계정을 만들고 초대 메일을 보냅니다. 비밀번호는 학습자가 직접 설정해요." : "브라우저에서는 비밀번호를 만들지 않아요. 로그인 후 서버 초대 함수가 실제 계정 생성을 활성화합니다.") : (canProvisionAccounts ? "The server invite function creates the account and sends the email; learners set their own password." : "The browser never creates passwords. Sign in to enable server-side account provisioning.")}</p>
