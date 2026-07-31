@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html class="dark" lang="ko">
-<head>
+  <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>디자인 텐션 스튜디오</title>
@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="./assets/material-symbols-outlined.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=20260731-panel-final15">
 </head>
 <body>
   <a class="skip-link" href="#main-content">본문으로 바로가기</a>
@@ -266,6 +266,12 @@
           <span class="chevron">▾</span>
         </button>
 
+        <nav class="workspace-primary-nav" aria-label="핵심 학습 흐름">
+          <button class="workspace-primary-nav-item" type="button" data-view="home">홈</button>
+          <button class="workspace-primary-nav-item is-active" type="button" data-view="visualizer">네트워크</button>
+          <button class="workspace-primary-nav-item" type="button" data-view="report">생각 정리</button>
+        </nav>
+
         <div class="topbar-side">
           <div class="platform-switcher">
             <label class="mini-control" id="role-control">
@@ -294,6 +300,10 @@
           </div>
 
           <div class="toolbar-actions">
+            <button class="toolbar-button agent-coach-trigger" id="agent-coach-trigger" type="button" aria-label="AI 활동 코치" title="AI 활동 코치" aria-haspopup="dialog" aria-controls="agent-coach-drawer" aria-expanded="false">
+              <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
+              <span id="agent-coach-trigger-label">AI 활동 코치</span>
+            </button>
             <button class="toolbar-button toolbar-button-quiet toolbar-button-icon" id="workspace-locale-toggle" type="button" aria-label="주간(라이트) 모드로 전환" title="주간(라이트) 모드로 전환"><span class="material-symbols-outlined" aria-hidden="true">light_mode</span></button>
             <span class="topbar-identity" id="session-identity-label">교수자</span>
             <button class="toolbar-button toolbar-button-quiet" id="start-tutorial" type="button">튜토리얼 보기</button>
@@ -301,6 +311,11 @@
           </div>
         </div>
       </header>
+
+      <div class="agent-coach-scrim" id="agent-coach-scrim" hidden></div>
+      <aside class="agent-coach-drawer" id="agent-coach-drawer" role="dialog" aria-modal="true" aria-labelledby="agent-coach-title" hidden>
+        <div id="agent-coach-content"></div>
+      </aside>
 
       <main class="main-content" id="main-content">
         <section class="view home-view" data-view-panel="home" id="home-view"></section>
@@ -327,6 +342,12 @@
               </button>
               <button class="map-dock-btn" type="button" data-drawer="insight" title="관점과 메모" aria-label="관점과 메모">
                 <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
+              </button>
+              <button class="map-dock-btn" type="button" data-map-action="compare" title="나와 팀의 관점 비교" aria-label="나와 팀의 관점 비교">
+                <span class="material-symbols-outlined" aria-hidden="true">compare_arrows</span>
+              </button>
+              <button class="map-dock-btn" type="button" data-map-action="report" title="공동 종합과 생각 정리" aria-label="공동 종합과 생각 정리">
+                <span class="material-symbols-outlined" aria-hidden="true">edit_note</span>
               </button>
             </div>
             <section class="panel intake-panel" data-collapsible-panel="intake">
@@ -388,6 +409,7 @@
                       <option value="base">기본 맵</option>
                       <option value="personal">내 보기</option>
                       <option value="cohort">학급 보기</option>
+                      <option value="compare">나 ↔ 팀 비교</option>
                     </select>
                   </label>
                   <span id="active-stakeholder-pill" class="badge badge-secondary" data-density="advanced">교사 관점</span>
@@ -426,7 +448,7 @@
                   <button type="button" class="legend-close" id="stage-note-close" aria-label="정보 숨기기" title="정보 숨기기">
                     <span class="material-symbols-outlined" aria-hidden="true">close</span>
                   </button>
-                  <p class="eyebrow" id="stage-note-kicker">D3 포스 그래프</p>
+                  <p class="eyebrow" id="stage-note-kicker">관계 연결 맵</p>
                   <strong id="stage-note-title">실시간 네트워크 구조</strong>
                   <span id="stage-note-body">노드에 마우스를 올리면 쟁점을 확인할 수 있어요. 이해관계자 노드를 누르면 선택한 관점이 바뀝니다.</span>
                 </div>
@@ -495,7 +517,7 @@
                 </div>
                 <div class="swarm-info-panel" id="swarm-info-panel" hidden>
                   <div class="swarm-info-section">
-                    <strong class="swarm-info-heading">스웜 연결</strong>
+                    <strong class="swarm-info-heading">관점 간 연결</strong>
                     <ul class="swarm-info-list">
                       <li><span class="swarm-info-line swarm-info-line-ok"></span><span>에이전트 동의</span></li>
                       <li><span class="swarm-info-line swarm-info-line-danger"></span><span>에이전트 이견</span></li>
@@ -578,25 +600,22 @@
                   </div>
                 </div>
                 <form class="quick-note-form" id="quick-annotation-form">
-                  <div class="pipeline-form-row two-up" data-density="advanced">
-                    <label class="mini-control">
-                      <span>메모 유형</span>
-                      <select name="noteType">
-                        <option value="note">메모</option>
-                        <option value="question">질문</option>
-                        <option value="concern">우려</option>
-                      </select>
-                    </label>
-                    <label class="mini-control">
-                      <span>공개 범위</span>
-                      <select name="visibility">
-                        <option value="private">나만 보기</option>
-                        <option value="cohort">학급 보기</option>
-                      </select>
-                    </label>
+                  <div class="collab-goal-card">
+                    <span>공동 목표</span>
+                    <strong>관점 차이를 근거가 있는 공동 질문으로 바꾸기</strong>
                   </div>
-                  <textarea id="quick-annotation-body" name="annotationBody" rows="4" placeholder="선택한 노드에 메모를 추가하세요..." autocomplete="off"></textarea>
-                  <button class="toolbar-button toolbar-button-primary" id="quick-annotation-submit" type="submit">메모 저장</button>
+                  <fieldset class="annotation-stance" aria-label="이 근거에 대한 입장">
+                    <legend>이 근거를 어떻게 보나요?</legend>
+                    <label><input type="radio" name="noteType" value="note" checked><span>동의</span></label>
+                    <label><input type="radio" name="noteType" value="concern"><span>쟁점</span></label>
+                    <label><input type="radio" name="noteType" value="question"><span>질문</span></label>
+                  </fieldset>
+                  <textarea id="quick-annotation-body" name="annotationBody" rows="4" placeholder="근거를 인용해 생각을 더하세요..." autocomplete="off"></textarea>
+                  <div class="annotation-actions">
+                    <label class="annotation-share-toggle"><input type="checkbox" name="visibility" value="cohort" checked><span>팀과 공유</span></label>
+                    <button class="toolbar-button toolbar-button-primary" id="quick-annotation-submit" type="submit">공동 종합에 추가</button>
+                  </div>
+                  <p class="annotation-provenance">선택한 노드, 작성자, 관점, 작성 시각이 함께 기록됩니다.</p>
                 </form>
               </div>
 
@@ -609,6 +628,11 @@
             <button class="view-intro-close" type="button" data-view-intro-dismiss="perspectives" aria-label="닫기">×</button>
             <p class="view-intro-title" id="perspectives-intro-title">관점 — 한 사람의 시선으로 케이스 읽기</p>
             <p class="view-intro-body" id="perspectives-intro-body">이해관계자를 고르면 이 화면이 그 사람의 입장으로 케이스를 다시 읽어요. 왼쪽에는 그 사람이 걱정하는 점, 오른쪽 궤도에는 그 관점에서 주목하는 쟁점, 아래 대화창에는 그 사람의 목소리로 된 답변이 나타나요. 관점을 바꾸면 세 영역이 함께 바뀝니다.</p>
+          </div>
+          <div class="view-result-summary" aria-live="polite">
+            <span>현재 결과</span>
+            <strong id="perspectives-result-summary">선택한 관점의 핵심 우려를 확인하세요.</strong>
+            <small id="perspectives-result-meta">관점을 바꾸면 아래 카드와 궤도가 함께 갱신됩니다.</small>
           </div>
           <div class="lens-layout">
             <section class="panel card-column">
@@ -643,10 +667,11 @@
                   <span class="material-symbols-outlined" id="orbit-icon">school</span>
                 </div>
                 <div class="orbit-label" id="orbit-summary">수업 운영 부담과 진행 부담이 높아요.</div>
-                <div class="orbit-satellite orbit-satellite-a">LMS</div>
+                <div class="orbit-satellite orbit-satellite-a" id="orbit-sat-a">LMS</div>
                 <div class="orbit-satellite orbit-satellite-b" id="orbit-sat-b">동료 피드백</div>
                 <div class="orbit-satellite orbit-satellite-c" id="orbit-sat-c">평가</div>
               </div>
+              <div class="orbit-signal-list" id="orbit-signal-list" aria-label="관심사 우선순위"></div>
             </section>
 
             <aside class="panel chat-panel">
@@ -675,6 +700,11 @@
             <button class="view-intro-close" type="button" data-view-intro-dismiss="matrix" aria-label="닫기">×</button>
             <p class="view-intro-title" id="matrix-intro-title">상충 관계 — 무엇이 함께 움직이나요</p>
             <p class="view-intro-body" id="matrix-intro-body">수업 설계의 선택에는 거의 항상 비용이 따릅니다. 개인화를 높이면 교사 부담도 커질 수 있고, 프라이버시를 강화하면 개인화 폭이 줄어들 수 있어요. 이 레이더는 이 케이스의 다섯 지표가 어떻게 맞물리는지 보여줍니다. 오른쪽 결정 로그는 어떤 조정이 어떤 지표를 움직였는지 기록합니다.</p>
+          </div>
+          <div class="view-result-summary" aria-live="polite">
+            <span>현재 결과</span>
+            <strong id="matrix-result-summary">지표 간 균형과 가장 큰 충돌을 먼저 확인하세요.</strong>
+            <small id="matrix-result-meta">레이더와 결정 로그에서 조정의 영향을 확인할 수 있습니다.</small>
           </div>
           <div class="matrix-layout">
             <section class="panel matrix-panel">
@@ -729,6 +759,11 @@
             <button class="view-intro-close" type="button" data-view-intro-dismiss="sandbox" aria-label="닫기">×</button>
             <p class="view-intro-title" id="sandbox-intro-title">실험 공간 — 가정해 보기</p>
             <p class="view-intro-body" id="sandbox-intro-body">슬라이더로 한 차원을 조정하면 다른 지표가 어떻게 흔들리는지 볼 수 있어요. 자율 모드를 켜면 시스템이 재설계 방향을 먼저 제안해요. 여기서 바꾼 내용은 탐색용이라, 확정하기 전에는 케이스에 반영되지 않아요.</p>
+          </div>
+          <div class="view-result-summary" aria-live="polite">
+            <span>현재 결과</span>
+            <strong id="sandbox-result-summary">슬라이더를 바꾸면 결과 변화가 여기에 요약됩니다.</strong>
+            <small id="sandbox-result-meta">실험은 저장 전 탐색용이며 케이스를 바로 바꾸지 않습니다.</small>
           </div>
           <div class="sandbox-layout">
             <section class="panel control-panel">
@@ -958,7 +993,7 @@
     (function loadAppWithOptionalGeminiConfig() {
       const loadApp = () => {
         const appScript = document.createElement("script");
-        appScript.src = "./app.js";
+        appScript.src = "./app.js?v=20260731-map-dock-stage-header-compact";
         document.body.appendChild(appScript);
       };
 
@@ -978,6 +1013,6 @@
       document.body.appendChild(geminiScript);
     })();
   </script>
-  <script src="./preview-demo.js"></script>
+  <script src="./preview-demo.js?v=20260731-network-alias"></script>
 </body>
 </html>

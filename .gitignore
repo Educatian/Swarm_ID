@@ -24,3 +24,6 @@ gemini-config.js
 dist-preview/
 .wrangler/
 .codex-goal.md
+
+# supabase CLI local link state
+supabase/.temp/

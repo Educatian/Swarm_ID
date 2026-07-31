@@ -79,15 +79,15 @@ const translations = {
     labName: "Instructional design systems lab",
     signIn: "Sign In",
     signInSubmit: "Continue",
-    landingHeroKicker: "Critical Instructional-Design Studio",
-    landingHeroTitle: "Read design tensions as a living map.",
-    landingHeroBody: "Teacher, student, edtech, administration — see where the four perspectives pull against each other, then build your reasoning on evidence.",
-    landingStep1Title: "Open a case as a map",
-    landingStep1Body: "One design case unfolds into a network of stakeholders, constraints, and issues.",
-    landingStep2Title: "Re-read it through four lenses",
-    landingStep2Body: "Compare how the same issue looks from each side of the classroom.",
-    landingStep3Title: "Build your reasoning on evidence",
-    landingStep3Body: "Ask questions, add your own nodes, and submit a short reflection.",
+    landingHeroKicker: "Perspective-based collaborative learning",
+    landingHeroTitle: "See the dialogue. Shift perspective. Develop ideas together.",
+    landingHeroBody: "DTS turns team dialogue into a relationship map, anchors collaborative annotations to differences in interpretation, and develops them into shared questions and synthesis.",
+    landingStep1Title: "Shift perspective",
+    landingStep1Body: "Compare how you, your team, and each stakeholder interpret the same issue.",
+    landingStep2Title: "Annotate together",
+    landingStep2Body: "Anchor agreement, tension, and questions directly to the evidence.",
+    landingStep3Title: "Synthesize knowledge",
+    landingStep3Body: "Connect annotations into a shared claim, unresolved tension, and next inquiry.",
     landingAuthToJoin: "First time here? Join with a course code",
     landingAuthToLogin: "Already enrolled? Sign in with email",
     landingTutorialsKicker: "Guides",
@@ -157,7 +157,7 @@ const translations = {
     question: "Question",
     concern: "Concern",
     onlyMe: "Only me",
-    addNotePlaceholder: "Add a note to the selected node...",
+    addNotePlaceholder: "Cite the evidence and add your interpretation...",
     saveNote: "Save note",
     askQuestionPlaceholder: "Ask what conflict matters most in this case...",
     askQuestion: "Ask a Question",
@@ -476,15 +476,15 @@ const translations = {
     labName: "수업설계 시스템 연구실",
     signIn: "로그인",
     signInSubmit: "계속",
-    landingHeroKicker: "비판적 수업설계 스튜디오",
-    landingHeroTitle: "설계의 쟁점을 살아 있는 맵으로 읽어요.",
-    landingHeroBody: "교사 · 학생 · 에듀테크 · 행정 — 네 관점이 부딪히는 지점을 시각화하고, 근거로 생각을 정리하는 수업 설계 스튜디오예요.",
-    landingStep1Title: "케이스를 맵으로 펼쳐요",
-    landingStep1Body: "수업 설계 사례 하나가 이해관계자 · 제약 · 쟁점의 네트워크로 나타나요.",
-    landingStep2Title: "네 관점으로 다시 읽어요",
-    landingStep2Body: "같은 쟁점이 입장에 따라 어떻게 달라 보이는지 비교해요.",
-    landingStep3Title: "근거로 생각을 정리해요",
-    landingStep3Body: "질문하고, 내 노드를 더하고, 발견한 쟁점을 짧은 성찰로 제출해요.",
+    landingHeroKicker: "관점 기반 협업 학습",
+    landingHeroTitle: "대화를 보고, 관점을 바꾸고, 함께 생각을 발전시키세요.",
+    landingHeroBody: "DTS는 팀 대화를 관계 맵으로 바꾸고, 서로 다르게 본 지점에 공동 주석을 남겨 합의와 질문으로 발전시키는 학습 공간입니다.",
+    landingStep1Title: "관점 전환",
+    landingStep1Body: "나 · 팀 · 이해관계자가 같은 쟁점을 어떻게 다르게 해석하는지 비교해요.",
+    landingStep2Title: "공동 주석",
+    landingStep2Body: "동의 · 쟁점 · 질문을 원 대화와 근거에 직접 연결해요.",
+    landingStep3Title: "지식 종합",
+    landingStep3Body: "주석을 공동 주장, 남은 쟁점, 다음 탐구 질문으로 발전시켜요.",
     landingAuthToJoin: "처음 오셨나요? 코스 코드로 참여",
     landingAuthToLogin: "이미 참여했나요? 이메일로 로그인",
     landingTutorialsKicker: "가이드",
@@ -554,7 +554,7 @@ const translations = {
     question: "질문",
     concern: "걱정되는 점",
     onlyMe: "나만 보기",
-    addNotePlaceholder: "선택한 노드에 메모를 남겨보세요...",
+    addNotePlaceholder: "근거를 인용해 생각을 더하세요...",
     saveNote: "메모 저장",
     askQuestionPlaceholder: "이 케이스에서 가장 중요한 쟁점은 무엇일지 물어보세요...",
     askQuestion: "질문하기",
@@ -607,7 +607,7 @@ const translations = {
     passwordPlaceholder: "비밀번호",
     courseCodePlaceholder: "코스 참여 코드",
     workspaceRole: "워크스페이스",
-    stageD3: "D3 포스 그래프",
+    stageD3: "관계 연결 맵",
     processStep: "단계",
     nodeGoal: "목표",
     nodeConstraint: "제약",
@@ -621,18 +621,18 @@ const translations = {
     nodeLearnerNote: "학습자 메모",
     nodeRelatedIssue: "관련 쟁점",
     coreNodeFallback: "설계 제안",
-    nodeTitleProposal: "시스템 전반의 설계 쟁점",
-    nodeTitleTeacher: "교사 부담 핫스팟",
-    nodeTitleAdministrator: "정책 도입 체크포인트",
-    nodeTitleStudent: "학습자 주체성 신호",
-    nodeTitleIt: "통합 위험 군집",
-    nodeTitleAccessibility: "접근성 검토 플래그",
-    nodeTitleAdaptivePathing: "경로 개인화 급증",
-    nodeTitleModerationBurden: "조정 부담 과부하",
-    nodeTitleGovernance: "거버넌스 마찰",
-    nodeTitleEvidenceTrace: "근거 연속성 공백",
-    nodeTitleCaptionParity: "자막 동등성 우려",
-    nodeTitleTelemetryScope: "텔레메트리 범위 감시",
+    nodeTitleProposal: "전체 설계에서 아직 결정하지 못한 쟁점",
+    nodeTitleTeacher: "교사 부담이 커지는 지점",
+    nodeTitleAdministrator: "정책 도입 전 확인할 점",
+    nodeTitleStudent: "학습자가 스스로 선택하는지 확인",
+    nodeTitleIt: "시스템 통합 위험",
+    nodeTitleAccessibility: "접근성 확인이 필요한 지점",
+    nodeTitleAdaptivePathing: "개인화 경로가 빠르게 늘어나는 지점",
+    nodeTitleModerationBurden: "조정 업무가 과도하게 늘어난 지점",
+    nodeTitleGovernance: "운영 기준이 충돌하는 지점",
+    nodeTitleEvidenceTrace: "근거가 이어지지 않는 지점",
+    nodeTitleCaptionParity: "자막과 설명 제공 수준 차이",
+    nodeTitleTelemetryScope: "수집 데이터 범위 확인",
     showMore: "더보기",
     showLess: "접기",
     tlUploadParsed: "업로드한 문서에서 쟁점과 설계 신호를 분석했어요.",
@@ -694,7 +694,7 @@ const translations = {
     aiAdditionsPerNode: "노드 1개당 AI 제안 수",
     layout: "배치 방식",
     force: "물리 기반",
-    cluster: "군집형",
+    cluster: "주제별 묶음",
     radial: "방사형",
     saveSettings: "설정 저장",
     courseCases: "이 수업의 케이스",
@@ -718,7 +718,7 @@ const translations = {
     classViewTitle: "학급 보기",
     off: "끔",
     sharedPatterns: "공통 패턴",
-    sharedClustersCount: "공통 군집 {count}개",
+    sharedClustersCount: "공통 쟁점 묶음 {count}개",
     studentRunsCount: "학생 참여 {count}건",
     noInstitutionSelected: "선택된 기관이 없어요",
     noCourseSelected: "선택된 수업이 없어요",
@@ -794,14 +794,14 @@ const translations = {
     constraintFrictionDesc: "시간·도구·정책·업무 부담 같은 현실 제약이 수업 의도와 충돌하는 지점입니다.",
     alignedEvidenceDesc: "교사·학생·에듀테크 관점에서 설계 선택을 뒷받침하거나 반박하는 근거입니다.",
     interStakeholder: "이해관계자 간 상호작용",
-    interStakeholderDesc: "두 주체의 쟁점이 같은 유형에서 맞물릴 때 점선으로 이어집니다. 한쪽의 결정이 다른 쪽의 부담이 되는 지점이에요.",
+    interStakeholderDesc: "두 주체가 같은 문제를 다르게 볼 때 점선으로 연결돼요. 한쪽의 결정이 다른 쪽의 부담이나 제약으로 이어지는 관계를 보여줍니다.",
     conceptHelpTitle: "이 맵을 읽는 법",
-    conceptHelpBody: "모든 케이스는 네 주체(교사 · 학생 · 에듀테크 · 행정)의 관점으로 바라본 설계 문제예요. 관점을 바꿔 보면 같은 쟁점이 어떻게 달라 보이는지 알 수 있어요. 네 관점은 서로를 잡아당기기 때문에 한 면만 봐서는 충분하지 않아요.",
+    conceptHelpBody: "이 맵은 교사·학생·에듀테크·행정의 관점에서 같은 수업 문제를 비교해 보여줘요. 노드를 누르면 각 주체의 우려와 근거를 볼 수 있고, 관점을 바꾸면 같은 문제가 어떻게 다르게 보이는지 확인할 수 있어요.",
     perspectiveTeacherShort: "교사: 무엇을 계획하고 결정하는지.",
     perspectiveItShort: "에듀테크: 도구가 무엇을 허용하고 막는지.",
     perspectiveStudentShort: "학생: 학습자가 실제로 무엇을 경험하는지.",
     visualizerIntroTitle: "시각화 도구 — 케이스를 맵으로 펼치기",
-    visualizerIntroBody: "각 노드는 관계자의 우려, 제약, 설계 결정이에요. 선은 어떤 요소들이 서로 맞물리는지 보여줘요. 노드를 눌러 내용을 확인하고, 원래 케이스에서 빠진 걱정거리는 새 노드로 추가해 보세요.",
+    visualizerIntroBody: "노드는 사람·제약·설계 결정을 나타내고, 선은 서로 영향을 주는 관계를 보여줘요. 노드를 눌러 내용을 읽은 뒤, 빠진 우려나 질문이 있으면 새 노드로 추가하세요.",
     thinking: "생각 중이에요...",
     questionCouldNotBeProcessed: "질문을 처리하지 못했어요.",
     studentOnboardingTitle: "무엇부터 해볼까요",
@@ -852,12 +852,12 @@ const translations = {
     stakeholderSummaryTeacher: "교사 관점은 수업 진행 시간, 형성평가 피드백의 질, 그리고 AI가 만든 학습 경로를 교육적으로 일관되게 유지하는 부담을 봅니다.",
     stakeholderSummaryAdministrator: "행정 관점은 도입, 정책 적합성, 그리고 이 설계가 여러 분반에서 고르게 확장될 수 있는지를 살핍니다.",
     stakeholderSummaryStudent: "학생 관점은 관련성과 피드백 속도에 반응하지만, 자동화가 주체성을 줄이거나 선택의 이유를 가리지 않는지 묻습니다.",
-    stakeholderSummaryIt: "에듀테크 관점은 상호운용성, 데이터 이동, 벤더 의존성, 그리고 이 설계가 실제 학교 현장 시스템과 지원 역량에서 버틸 수 있는지를 살펴봅니다.",
-    stakeholderSummaryAccessibility: "접근성 관점은 양식 동등성, 인지 부하, 투명성, 그리고 개인화가 공평한 참여를 지키는지에 집중합니다.",
+    stakeholderSummaryIt: "에듀테크 관점은 다른 도구와의 연결, 데이터 이동, 특정 업체에 지나치게 의존하는지, 그리고 학교의 실제 시스템과 지원 인력으로 운영할 수 있는지를 살펴봅니다.",
+    stakeholderSummaryAccessibility: "접근성 관점은 자료 형식, 이해하기 쉬운 설명, 정보 공개, 개인화가 모든 학습자의 참여를 보장하는지에 집중합니다.",
     perspectivesIntroTitle: "관점 — 한 사람의 눈으로 케이스 읽기",
-    perspectivesIntroBody: "이해관계자(교사·학생·에듀테크·행정)를 고르면 이 화면이 그 사람의 입장으로 케이스를 다시 읽어요. 왼쪽에는 그 사람이 걱정하는 점, 가운데에는 그 관점에서 주목하는 쟁점, 아래 대화창에는 그 사람의 목소리로 된 답변이 나타나요. 렌즈를 바꾸면 세 영역이 함께 바뀝니다.",
+    perspectivesIntroBody: "이해관계자(교사·학생·에듀테크·행정)를 고르면 이 화면이 그 사람의 입장에서 케이스를 다시 읽어요. 왼쪽에는 걱정하는 점, 가운데에는 주목하는 쟁점, 아래 대화창에는 그 관점의 답변이 나타나요. 사람을 바꾸면 세 영역이 함께 바뀝니다.",
     matrixIntroTitle: "상충 관계 — 무엇이 함께 움직이나요",
-    matrixIntroBody: "설계 결정엔 공짜가 없어요. 개인화를 높이면 교사 부담이 같이 오르고, 프라이버시를 조이면 개인화가 떨어져요. 이 레이더는 다섯 차원이 어떻게 맞물리는지 보여주고, 의사결정 로그엔 당신이 바꾼 것과 그 결과 움직인 차원이 기록돼요.",
+    matrixIntroBody: "설계 선택은 서로 영향을 줘요. 개인화를 높이면 교사 부담이 늘 수 있고, 개인정보 보호를 강화하면 개인화가 줄 수 있어요. 이 차트는 다섯 요소가 어떻게 함께 움직이는지 보여주며, 기록에는 바꾼 내용과 그 결과가 남아요.",
     sandboxIntroTitle: "실험 공간 — 가정해 보기",
     sandboxIntroBody: "슬라이더로 한 차원을 조정하면 다른 지표가 어떻게 흔들리는지 볼 수 있어요. 자율 모드를 켜면 시스템이 재설계 방향을 먼저 제안해요. 여기서 바꾼 내용은 탐색용이라, 확정하기 전에는 케이스에 반영되지 않아요.",
     reportIntroTitle: "리포트 — 배운 것 정리하기",
@@ -888,6 +888,11 @@ const MAP_VIEW_MODE_STORAGE_KEY = "swarm-id-map-mode-v1";
 const PLATFORM_ADMIN_EMAIL = "admin@swarm.io";
 const DEFAULT_SUPABASE_CONFIG = window.SUPABASE_CONFIG || { url: "", anonKey: "" };
 const DEFAULT_GEMINI_CONFIG = window.GEMINI_CONFIG || { apiKey: "", model: "gemini-2.5-flash" };
+const FACILITATOR_TOPIC_FALLBACK = Object.freeze([
+  Object.freeze({ label: "비교 질문", prompt: "공정성을 높이는 자동화가 설명 책임을 약화시킬 수 있을까?", signal: "관점 4개 · 근거 7개" }),
+  Object.freeze({ label: "설계 쟁점", prompt: "효율성과 이의제기 가능성을 함께 보장하려면 어떤 원칙이 필요한가?", signal: "쟁점 3개 · 열린 질문 5개" }),
+  Object.freeze({ label: "반대 주장", prompt: "최종 승인을 없애도 학습자 주체성이 높아질까?", signal: "반대 근거 4개 · 미확인 2개" }),
+]);
 
 const state = {
   locale: window.localStorage.getItem(LOCALE_STORAGE_KEY) || "ko",
@@ -904,6 +909,7 @@ const state = {
   activeLearnerId: "",
   metrics: { ...emptyMetrics },
   autonomousIteration: true,
+  sandboxBaseline: { caseId: "", metrics: null },
   evidence: [],
   decisions: [],
   chat: [],
@@ -936,6 +942,26 @@ const state = {
     busy: false,
     status: "Gemini will use the app endpoint when available, or fall back to local logic.",
     lastError: "",
+  },
+  agentCoach: {
+    open: false,
+    facilitatorMode: "mediator",
+    topicGenerated: false,
+    topicBusy: false,
+    topicBrief: "AI 기반 평가의 공정성과 교수자의 설명 책임 사이의 쟁점을 근거로 토론하게 하고 싶어요.",
+    topicRequestId: 0,
+    topicCandidates: [],
+    mediatorBusy: false,
+    mediatorRequestId: 0,
+    mediatorSuggestion: null,
+    selectedTopic: null,
+    approvedAction: null,
+    consentVersion: "dts-research-v1",
+    consentGranted: false,
+    selectedTeam: "2팀",
+    evidenceOpen: false,
+    draftEdited: false,
+    reflectionEvidence: ["내가 남긴 관점", "동료의 재주석"],
   },
 };
 
@@ -1225,6 +1251,39 @@ document.getElementById("onepager-export")?.addEventListener("click", () => {
   openStudentOnePager();
 });
 
+document.getElementById("research-consent-toggle")?.addEventListener("click", () => {
+  const next = !state.agentCoach.consentGranted;
+  state.agentCoach.consentGranted = next;
+  if (dom.researchConsentToggle) {
+    dom.researchConsentToggle.setAttribute("aria-pressed", String(next));
+    dom.researchConsentToggle.textContent = state.locale === "ko" ? (next ? "연구 동의됨" : "연구 동의") : (next ? "Research consent on" : "Research consent");
+  }
+  void saveResearchConsent(next).then(() => {
+    showToast(state.locale === "ko" ? (next ? "연구 데이터 수집에 동의했어요." : "연구 데이터 수집 동의를 철회했어요.") : (next ? "Research consent recorded." : "Research consent withdrawn."));
+  }).catch((error) => {
+    state.agentCoach.consentGranted = !next;
+    if (dom.researchConsentToggle) dom.researchConsentToggle.setAttribute("aria-pressed", String(!next));
+    showToast(state.locale === "ko" ? `동의 상태를 저장하지 못했어요: ${error.message}` : `Could not save consent: ${error.message}`);
+  });
+});
+
+document.getElementById("research-export")?.addEventListener("click", () => {
+  void exportResearchData().then(() => {
+    showToast(state.locale === "ko" ? "연구 데이터 내보내기를 시작했어요." : "Research data export started.");
+  }).catch((error) => showToast(state.locale === "ko" ? `데이터를 내보내지 못했어요: ${error.message}` : `Could not export data: ${error.message}`));
+});
+
+document.getElementById("research-delete")?.addEventListener("click", () => {
+  const message = state.locale === "ko"
+    ? "내 학습 기록과 연구 로그를 삭제할까요? 이 작업은 되돌릴 수 없습니다."
+    : "Delete your learning records and research logs? This cannot be undone.";
+  if (!window.confirm(message)) return;
+  void deleteMyResearchData().then(() => {
+    showToast(state.locale === "ko" ? "내 데이터를 삭제했어요." : "Your data was deleted.");
+    renderAll();
+  }).catch((error) => showToast(state.locale === "ko" ? `데이터를 삭제하지 못했어요: ${error.message}` : `Could not delete data: ${error.message}`));
+});
+
 // ---- Session telemetry: tab visibility + visible-only heartbeat ----
 // Makes time-on-task computable: gaps between events split into "tab hidden"
 // vs "idle while visible", and dwell is bounded by heartbeats.
@@ -1291,6 +1350,9 @@ function createLearnerRunScaffold(caseRecord, learner) {
 function normalizeCourseData(course) {
   const nextCourse = course;
   nextCourse.joinCode = nextCourse.joinCode || "";
+  nextCourse.instructorInvites = Array.isArray(nextCourse.instructorInvites)
+    ? nextCourse.instructorInvites
+    : [];
   nextCourse.documents = Array.isArray(nextCourse.documents) ? nextCourse.documents : [];
   nextCourse.cases = (Array.isArray(nextCourse.cases) ? nextCourse.cases : []).map((item) => ({
     ...item,
@@ -1362,17 +1424,26 @@ function t(key, vars = {}) {
 // Per-pipeline-card collapsed state for the student view's "Add a node",
 // "AI additions", and "Class view" cards. Defaults to collapsed so the student
 // lands on a quieter panel and expands the one they actually need.
-const PIPELINE_CARD_DEFAULTS_COLLAPSED = new Set(["aiAdditions", "classView"]);
+const PIPELINE_CARD_DEFAULTS_COLLAPSED = new Set(["aiAdditions", "classView", "boardSettings", "courseCases", "courseSetup", "newCase"]);
+// Bump when adding a new default-collapsed card so existing sessions receive
+// the quieter layout once without overriding a user's later choice.
+const PIPELINE_CARD_COLLAPSE_VERSION = "v5";
 const pipelineCardCollapsed = new Set();
 (function restorePipelineCardCollapsed() {
   try {
     const stored = localStorage.getItem("pipeline-card-collapsed");
     if (stored) {
       JSON.parse(stored).forEach((key) => pipelineCardCollapsed.add(key));
+      if (localStorage.getItem("pipeline-card-collapse-version") !== PIPELINE_CARD_COLLAPSE_VERSION) {
+        ["boardSettings", "courseCases", "courseSetup", "newCase"].forEach((key) => pipelineCardCollapsed.add(key));
+        localStorage.setItem("pipeline-card-collapse-version", PIPELINE_CARD_COLLAPSE_VERSION);
+        localStorage.setItem("pipeline-card-collapsed", JSON.stringify([...pipelineCardCollapsed]));
+      }
       return;
     }
   } catch (_) {}
   PIPELINE_CARD_DEFAULTS_COLLAPSED.forEach((k) => pipelineCardCollapsed.add(k));
+  try { localStorage.setItem("pipeline-card-collapse-version", PIPELINE_CARD_COLLAPSE_VERSION); } catch (_) {}
 })();
 
 function isPipelineCardCollapsed(key) {
@@ -1397,7 +1468,7 @@ function resolveTimelineEntry(step) {
     const translated = t(key);
     return translated === key ? step : translated;
   }
-  return step;
+  return state.locale === "ko" ? localizeLegacyKoreanCopy(step, step) : step;
 }
 
 function escapeHtml(value) {
@@ -1411,8 +1482,12 @@ function escapeHtml(value) {
 
 function renderCaseSummary(text, openCaseId) {
   const summary = String(text ?? "");
+  const displaySummary = localizeLegacyKoreanCopy(
+    summary,
+    state.locale === "ko" ? "이 케이스의 핵심 쟁점과 이해관계자 관점을 확인할 수 있어요." : summary
+  );
   // Heuristic: only show toggle if summary is long enough to plausibly clamp.
-  const needsToggle = summary.length > 140;
+  const needsToggle = displaySummary.length > 140;
   const moreBtn = needsToggle
     ? `<button type="button" class="case-summary-more" data-summary-toggle data-label-more="${escapeHtml(t("showMore"))}" data-label-less="${escapeHtml(t("showLess"))}">${escapeHtml(t("showMore"))}</button>`
     : "";
@@ -1425,7 +1500,7 @@ function renderCaseSummary(text, openCaseId) {
   const textClass = needsToggle ? "case-summary-text" : "case-summary-text is-short";
   return `
     <div class="case-summary">
-      <p class="${textClass}">${escapeHtml(summary)}</p>
+      <p class="${textClass}">${escapeHtml(displaySummary)}</p>
       ${actions}
     </div>
   `;
@@ -1543,6 +1618,14 @@ function wireHeaderGuidesDropdown() {
 }
 
 function applyStaticTranslations() {
+  if (dom.researchConsentToggle) {
+    dom.researchConsentToggle.textContent = state.locale === "ko"
+      ? (state.agentCoach.consentGranted ? "연구 동의됨" : "연구 동의")
+      : (state.agentCoach.consentGranted ? "Research consent on" : "Research consent");
+    dom.researchConsentToggle.setAttribute("aria-pressed", String(state.agentCoach.consentGranted));
+  }
+  if (dom.researchExport) dom.researchExport.textContent = state.locale === "ko" ? "데이터 내보내기" : "Export data";
+  if (dom.researchDelete) dom.researchDelete.textContent = state.locale === "ko" ? "내 데이터 삭제" : "Delete my data";
   document.title = t("appName");
   document.documentElement.lang = state.locale;
   const skipLink = document.querySelector(".skip-link");
@@ -1674,6 +1757,15 @@ function applyStaticTranslations() {
       label.textContent = t(navMap[button.dataset.view]);
     }
   });
+  document.querySelectorAll(".workspace-primary-nav-item[data-view]").forEach((button) => {
+    if (button.dataset.view === "report") {
+      button.textContent = state.locale === "ko" ? "생각 정리" : "Reflection";
+    } else if (button.dataset.view === "visualizer") {
+      button.textContent = state.locale === "ko" ? "네트워크" : "Network";
+    } else if (navMap[button.dataset.view]) {
+      button.textContent = t(navMap[button.dataset.view]);
+    }
+  });
 
   const healthHeaderLabel = document.querySelector(".health-header span");
   if (healthHeaderLabel) healthHeaderLabel.textContent = t("currentStatus");
@@ -1726,17 +1818,25 @@ function applyStaticTranslations() {
   const activityEyebrows = document.querySelectorAll(".related-activity-columns .eyebrow");
   if (activityEyebrows[0]) activityEyebrows[0].textContent = t("myQuestions");
   if (activityEyebrows[1]) activityEyebrows[1].textContent = t("classPatterns");
-  const quickLabels = document.querySelectorAll("#quick-annotation-form .mini-control > span");
-  if (quickLabels[0]) quickLabels[0].textContent = t("noteType");
-  if (quickLabels[1]) quickLabels[1].textContent = t("share");
-  const noteTypeOptions = document.querySelectorAll('#quick-annotation-form select[name="noteType"] option');
-  if (noteTypeOptions[0]) noteTypeOptions[0].textContent = t("note");
-  if (noteTypeOptions[1]) noteTypeOptions[1].textContent = t("question");
-  if (noteTypeOptions[2]) noteTypeOptions[2].textContent = t("concern");
-  const shareOptions = document.querySelectorAll('#quick-annotation-form select[name="visibility"] option');
-  if (shareOptions[0]) shareOptions[0].textContent = t("onlyMe");
-  if (shareOptions[1]) shareOptions[1].textContent = t("shareToClass");
-  if (dom.quickAnnotationSubmit) dom.quickAnnotationSubmit.textContent = t("saveNote");
+  const annotationGoal = document.querySelector(".collab-goal-card");
+  if (annotationGoal) {
+    annotationGoal.querySelector("span").textContent = state.locale === "ko" ? "공동 목표" : "Shared goal";
+    annotationGoal.querySelector("strong").textContent = state.locale === "ko"
+      ? "관점 차이를 근거가 있는 공동 질문으로 바꾸기"
+      : "Turn a perspective difference into an evidence-based shared question";
+  }
+  const stanceLegend = document.querySelector(".annotation-stance legend");
+  if (stanceLegend) stanceLegend.textContent = state.locale === "ko" ? "이 근거를 어떻게 보나요?" : "How do you interpret this evidence?";
+  const stanceLabels = document.querySelectorAll(".annotation-stance label span");
+  const stanceText = state.locale === "ko" ? ["동의", "쟁점", "질문"] : ["Agree", "Tension", "Question"];
+  stanceLabels.forEach((label, index) => { if (stanceText[index]) label.textContent = stanceText[index]; });
+  const shareLabel = document.querySelector(".annotation-share-toggle span");
+  if (shareLabel) shareLabel.textContent = state.locale === "ko" ? "팀과 공유" : "Share with team";
+  const provenance = document.querySelector(".annotation-provenance");
+  if (provenance) provenance.textContent = state.locale === "ko"
+    ? "선택한 노드, 작성자, 관점, 작성 시각이 함께 기록됩니다."
+    : "The selected node, author, perspective, and timestamp are recorded together.";
+  if (dom.quickAnnotationSubmit) dom.quickAnnotationSubmit.textContent = state.locale === "ko" ? "공동 종합에 추가" : "Add to shared synthesis";
   if (dom.downloadPngButton) dom.downloadPngButton.textContent = t("downloadPng");
   if (dom.downloadHtmlButton) dom.downloadHtmlButton.textContent = t("downloadHtmlSnapshot");
   const swarmHead = document.querySelector(".swarm-activity-panel .subsection-head h4");
@@ -1987,7 +2087,7 @@ function defaultBoardSettings(overrides = {}) {
     agendaPrompt:
       state.locale === "ko"
         ? "재설계에 들어가기 전에, 가장 중요한 설계 쟁점을 짚어 보세요."
-        : "Identify the most important instructional tension before redesigning.",
+        : "재설계에 들어가기 전에 가장 중요한 수업 설계 쟁점을 짚어 보세요.",
     dueAt: "",
     maxLearnerNodes: 6,
     maxAiExpansionsPerNode: 3,
@@ -2009,6 +2109,8 @@ function buildRemotePlatform({
   cases = [],
   documents = [],
   learnerRuns = [],
+  facilitatorActions = [],
+  courseInvites = [],
 }) {
   const membershipIndex = new Map(allCourseMemberships.map((membership) => [membership.id, membership]));
   memberships.forEach((membership) => {
@@ -2079,6 +2181,23 @@ function buildRemotePlatform({
               joinCode: course.join_code || "",
             publishedCaseIds: courseCases.filter((item) => item.published).map((item) => item.id),
             settings: asObject(course.settings),
+            facilitatorActions: facilitatorActions.filter((action) => action.course_id === course.id).map((action) => ({
+              id: action.id,
+              caseId: action.case_id,
+              actionType: action.action_type,
+              status: action.status,
+              content: asObject(action.content),
+              createdAt: action.created_at,
+              publishedAt: action.published_at,
+            })),
+            instructorInvites: courseInvites.filter((invite) => invite.course_id === course.id).map((invite) => ({
+              id: invite.id,
+              name: invite.display_name || "",
+              email: invite.email,
+              status: invite.status,
+              authUserId: invite.auth_user_id || null,
+              createdAt: invite.created_at,
+            })),
             instructors: coursePeople
               .filter((membership) => membership.role === "admin")
               .map((membership) => ({
@@ -2281,10 +2400,12 @@ function renderPresencePill() {
   const count = realtimeState.presenceCount;
   if (!realtimeState.channel || count <= 1) {
     pill.hidden = true;
+    pill.style.display = "none";
     return;
   }
   const ko = state.locale === "ko";
   pill.hidden = false;
+  pill.style.display = "inline-flex";
   pill.textContent = ko ? `함께 보는 중 ${count}명` : `${count} viewing now`;
   pill.title = ko
     ? "지금 이 케이스를 함께 열어 둔 사람 수예요. 동료의 노드와 메모가 실시간으로 반영됩니다."
@@ -2479,8 +2600,12 @@ function serializeLearnerRunForSupabase(runRecord, caseId = state.activeCaseId, 
   };
 }
 
-function getAuthDisplayName() {
-  const email = state.auth.sessionEmail || "";
+function getAuthDisplayName(user = null) {
+  const metadataName = user?.user_metadata?.display_name || user?.user_metadata?.full_name;
+  if (metadataName && String(metadataName).trim()) {
+    return String(metadataName).replace(/^Dr\.\s*/i, "").trim();
+  }
+  const email = user?.email || state.auth.sessionEmail || "";
   const local = email.split("@")[0] || "Instructor";
   return local
     .split(/[._-]+/)
@@ -2509,7 +2634,7 @@ async function refreshRemotePlatformContext(preferredCaseId = "") {
 async function ensureSupabaseProfile(user = { id: state.auth.userId, email: state.auth.sessionEmail }) {
   const client = initializeSupabase();
   if (!client || !user?.id) return;
-  const fallbackName = getAuthDisplayName() || String(user.email || "").split("@")[0] || "User";
+  const fallbackName = getAuthDisplayName(user) || String(user.email || "").split("@")[0] || "User";
   const { error } = await client.from("profiles").upsert(
     {
       id: user.id,
@@ -2565,6 +2690,7 @@ function getAnalyticsSessionId() {
 
 function logEvent(eventType, payload = {}) {
   if (!isSupabaseSessionActive()) return;
+  if (state.activeRole === "user" && !state.agentCoach.consentGranted) return;
   const client = initializeSupabase();
   if (!client) return;
   const course = getActiveCourse();
@@ -2575,7 +2701,15 @@ function logEvent(eventType, payload = {}) {
     case_id: state.activeCaseId || null,
     role: state.activeRole || null,
     event_type: String(eventType || "unknown"),
-    payload: { ...basePayload, session_id: getAnalyticsSessionId(), seq: ++analyticsSeq },
+    payload: {
+      ...basePayload,
+      session_id: getAnalyticsSessionId(),
+      seq: ++analyticsSeq,
+      consent_version: state.agentCoach.consentVersion,
+      consent_granted: Boolean(state.agentCoach.consentGranted),
+    },
+    session_id: getAnalyticsSessionId(),
+    seq: analyticsSeq,
     client_ts: new Date().toISOString(),
   };
   try {
@@ -2723,12 +2857,18 @@ async function fetchSupabaseContext(userId) {
     { data: allCourseMemberships, error: allMembershipError },
     { data: caseRows, error: caseError },
     { data: documentRows, error: documentError },
+    { data: facilitatorActionRows, error: facilitatorActionError },
+    { data: courseInviteRows, error: courseInviteError },
+    { data: consentRows, error: consentError },
   ] = await Promise.all([
     client.from("courses").select("*").in("id", courseIds),
     client.from("institutions").select("*").in("id", institutionIds),
     client.from("course_memberships").select("*").in("course_id", courseIds).eq("status", "active"),
     client.from("cases").select("*").in("course_id", courseIds),
     client.from("documents").select("*").in("course_id", courseIds),
+    client.from("facilitator_actions").select("*").in("course_id", courseIds).eq("status", "published").order("published_at", { ascending: false }).limit(20),
+    client.from("course_invites").select("*").in("course_id", courseIds).order("created_at", { ascending: false }).limit(100),
+    client.from("research_consents").select("*").eq("user_id", userId).eq("consent_version", "dts-research-v1"),
   ]);
 
   if (courseError) throw courseError;
@@ -2736,6 +2876,9 @@ async function fetchSupabaseContext(userId) {
   if (allMembershipError) throw allMembershipError;
   if (caseError) throw caseError;
   if (documentError) throw documentError;
+  if (facilitatorActionError && !["42P01", "PGRST205"].includes(facilitatorActionError.code)) throw facilitatorActionError;
+  if (courseInviteError && !["42P01", "PGRST205"].includes(courseInviteError.code)) throw courseInviteError;
+  if (consentError && !["42P01", "PGRST205"].includes(consentError.code)) throw consentError;
 
   const caseIds = (caseRows || []).map((caseRow) => caseRow.id);
   let resolvedLearnerRuns = [];
@@ -2756,12 +2899,18 @@ async function fetchSupabaseContext(userId) {
       cases: caseRows || [],
       documents: documentRows || [],
       learnerRuns: resolvedLearnerRuns,
+      facilitatorActions: facilitatorActionRows || [],
+      courseInvites: courseInviteRows || [],
     }),
+    consent: (consentRows || [])[0] || null,
   };
 }
 
-function applyRemoteSessionContext({ profile, primaryMembership, platform }, sessionUser) {
+function applyRemoteSessionContext({ profile, primaryMembership, platform, consent }, sessionUser) {
   state.platform = platform;
+  state.agentCoach.consentGranted = Boolean(consent?.granted);
+  const remoteCourse = (platform.institutions || []).flatMap((institution) => institution.courses || []).find((course) => course.id === primaryMembership?.course_id);
+  state.agentCoach.approvedAction = asArray(remoteCourse?.facilitatorActions)[0] || null;
   state.activeRole = primaryMembership?.role || (isPlatformAdminAccount(sessionUser?.email) ? "admin" : "user");
   state.activeInstitutionId = primaryMembership?.institution_id || "";
   state.activeCourseId = primaryMembership?.course_id || "";
@@ -2963,6 +3112,9 @@ const dom = {
   topbarCollapseToggle: document.getElementById("topbar-collapse-toggle"),
   topbarCompactSummary: document.getElementById("topbar-compact-summary"),
   workspaceLocaleToggle: document.getElementById("workspace-locale-toggle"),
+  researchConsentToggle: document.getElementById("research-consent-toggle"),
+  researchExport: document.getElementById("research-export"),
+  researchDelete: document.getElementById("research-delete"),
   visualizerLayout: document.getElementById("visualizer-layout"),
   intakeTitle: document.getElementById("intake-title"),
   intakeBadge: document.getElementById("intake-badge"),
@@ -3024,6 +3176,12 @@ const dom = {
   orbitTitle: document.getElementById("orbit-title"),
   orbitIcon: document.getElementById("orbit-icon"),
   orbitSummary: document.getElementById("orbit-summary"),
+  orbitSatA: document.getElementById("orbit-sat-a"),
+  orbitSatB: document.getElementById("orbit-sat-b"),
+  orbitSatC: document.getElementById("orbit-sat-c"),
+  orbitSignalList: document.getElementById("orbit-signal-list"),
+  perspectivesResultSummary: document.getElementById("perspectives-result-summary"),
+  perspectivesResultMeta: document.getElementById("perspectives-result-meta"),
   chatBadge: document.getElementById("chat-badge"),
   chatThread: document.getElementById("chat-thread"),
   metricBars: document.getElementById("metric-bars"),
@@ -3031,11 +3189,15 @@ const dom = {
   decisionLog: document.getElementById("decision-log"),
   matrixInsights: document.getElementById("matrix-insights"),
   matrixState: document.getElementById("matrix-state"),
+  matrixResultSummary: document.getElementById("matrix-result-summary"),
+  matrixResultMeta: document.getElementById("matrix-result-meta"),
   cohesionScore: document.getElementById("cohesion-score"),
   cognitiveLoad: document.getElementById("cognitive-load"),
   inferenceLag: document.getElementById("inference-lag"),
   reactionFeed: document.getElementById("reaction-feed"),
   simulationState: document.getElementById("simulation-state"),
+  sandboxResultSummary: document.getElementById("sandbox-result-summary"),
+  sandboxResultMeta: document.getElementById("sandbox-result-meta"),
   reportSummary: document.getElementById("report-summary"),
   reportTensions: document.getElementById("report-tensions"),
   reportRecommendations: document.getElementById("report-recommendations"),
@@ -3218,6 +3380,7 @@ function createEmptyCourseTemplate({ id, name, code, joinCode = "" }) {
     name,
     code,
     joinCode,
+    instructorInvites: [],
     publishedCaseIds: [],
     settings: {
       learnerVisibility: "Published cases only",
@@ -3328,7 +3491,14 @@ function getActiveWorkspaceRecord(course = getActiveCourse()) {
 }
 
 function getCaseBoardSettings(caseRecord = getActiveCaseRecord()) {
-  return defaultBoardSettings(asObject(caseRecord?.boardSettings));
+  const settings = defaultBoardSettings(asObject(caseRecord?.boardSettings));
+  if (state.locale === "ko") {
+    const prompt = String(settings.agendaPrompt || "").trim();
+    if (prompt === "Identify the most important instructional tension before redesigning.") {
+      settings.agendaPrompt = "재설계에 들어가기 전에 가장 중요한 수업 설계 쟁점을 짚어 보세요.";
+    }
+  }
+  return settings;
 }
 
 function getCaseUiCopy() {
@@ -3342,13 +3512,29 @@ function getCaseStakeholderMeta(key) {
   const overrides = asObject(activeCase?.stakeholderProfiles?.[key]);
   const labelKey = stakeholderLabelKey(key);
   const statusKey = stakeholderStatusKey(overrides.status || base.status);
+  const localizedLabel = labelKey ? t(labelKey) : base.label;
+  const localizedSummary = base.summaryKey ? t(base.summaryKey) : base.summary;
+  // Case records created by the early prototype stored English copy directly
+  // in `stakeholderProfiles`. Keep explicit Korean overrides when present, but
+  // never let an old English override bypass the active locale.
+  const hasHangul = (value) => /[\u3131-\uD79D]/u.test(String(value || ""));
+  const overrideLabel = state.locale === "ko"
+    ? (hasHangul(overrides.labelKo) ? overrides.labelKo : (hasHangul(overrides.label) ? overrides.label : localizedLabel))
+    : (overrides.label || localizedLabel);
+  const overrideSummary = state.locale === "ko"
+    ? (hasHangul(overrides.summaryKo) ? overrides.summaryKo : (hasHangul(overrides.summary) ? overrides.summary : localizedSummary))
+    : (overrides.summary || localizedSummary);
   return {
     ...base,
     ...overrides,
-    label: overrides.label || (labelKey ? t(labelKey) : base.label),
+    label: overrideLabel,
     icon: overrides.icon || base.icon,
-    status: statusKey ? t(statusKey) : overrides.status || base.status,
-    summary: overrides.summary || (base.summaryKey ? t(base.summaryKey) : base.summary),
+    status: statusKey
+      ? t(statusKey)
+      : state.locale === "ko"
+        ? t("statusMixedSignals")
+        : overrides.status || base.status,
+    summary: overrideSummary,
   };
 }
 
@@ -3367,9 +3553,137 @@ function getCaseReflectionPrompts(fallback) {
   return asArray(activeCase?.reflectionPrompts).length ? activeCase.reflectionPrompts : fallback;
 }
 
+function getReflectionPromptCopy(value, index = 0) {
+  const raw = String(value || "").trim();
+  if (state.locale !== "ko") return raw;
+  const defaults = [
+    "이 관점에서 가장 큰 수업 설계 부담은 무엇인가요?",
+    "근거를 바탕으로 어떤 점을 먼저 바꾸고 싶나요?",
+    "다른 이해관계자와 조정할 때 무엇을 확인해야 하나요?",
+  ];
+  const generic = "이 관점에서 수업 설계를 어떻게 개선할 수 있을까요?";
+  const hasKorean = /[\u3131-\uD79D]/u.test(raw);
+  if (!raw || raw === generic || !hasKorean) return defaults[index % defaults.length];
+  return raw;
+}
+
+function getReportEvidenceCopy(item, index = 0) {
+  const ko = state.locale === "ko";
+  const titleFallbacks = ko
+    ? ["핵심 쟁점", "이해관계자 신호", "확인할 설계 조건"]
+    : ["Key tension", "Stakeholder signal", "Design condition to check"];
+  const bodyFallbacks = ko
+    ? [
+        "이 근거는 현재 케이스에서 먼저 확인할 설계 신호입니다.",
+        "이 근거는 서로 다른 이해관계자의 요구가 만나는 지점입니다.",
+        "이 근거는 다음 수정안을 검토할 때 확인할 조건입니다.",
+      ]
+    : [
+        "This evidence is the first design signal to check in the case.",
+        "This evidence marks where stakeholder needs meet.",
+        "This evidence is a condition to check in the next revision.",
+      ];
+  const rawTitle = String(item?.title || "").trim();
+  const rawBody = String(item?.body || "").trim();
+  const localizedTitle = localizeLegacyKoreanCopy(rawTitle, "");
+  const localizedBody = localizeLegacyKoreanCopy(rawBody, "");
+  const hasKorean = (value) => /[\u3131-\uD79D]/u.test(String(value || ""));
+  const title = ko
+    ? (hasKorean(localizedTitle) && localizedTitle !== "우선 쟁점" ? localizedTitle : titleFallbacks[index % titleFallbacks.length])
+    : (localizedTitle || titleFallbacks[index % titleFallbacks.length]);
+  const body = ko
+    ? (hasKorean(localizedBody) && localizedBody !== "현재 케이스에서 확인된 근거입니다." ? localizedBody : bodyFallbacks[index % bodyFallbacks.length])
+    : (localizedBody || bodyFallbacks[index % bodyFallbacks.length]);
+  return { title, body };
+}
+
+function getSandboxFeedCopy(item, index = 0) {
+  const ko = state.locale === "ko";
+  const titleFallbacks = ko
+    ? ["접근성 영향", "교사 부담 변화", "개인정보 보호", "조정 후 균형"]
+    : ["Accessibility impact", "Teacher-load change", "Privacy protection", "Post-adjustment balance"];
+  const bodyFallbacks = ko
+    ? [
+        "이 실험은 접근성 수준이 조정 후 어떻게 달라지는지 보여줍니다.",
+        "이 실험은 교사의 운영 부담이 늘거나 줄어드는 지점을 보여줍니다.",
+        "이 실험은 개인정보 보호와 개인화 수준 사이의 변화를 보여줍니다.",
+        "이 실험은 여러 지표를 함께 조정했을 때의 균형을 보여줍니다.",
+      ]
+    : [
+        "This experiment shows how accessibility changes after the adjustment.",
+        "This experiment shows where teacher workload rises or falls.",
+        "This experiment shows the shift between privacy and personalization.",
+        "This experiment shows the balance after multiple metrics change.",
+      ];
+  const rawTitle = String(item?.title || item?.label || "").trim();
+  const rawBody = String(item?.body || item?.note || item?.value || "").trim();
+  const localizedTitle = localizeLegacyKoreanCopy(rawTitle, "");
+  const localizedBody = localizeLegacyKoreanCopy(rawBody, "");
+  const hasKorean = (value) => /[\u3131-\uD79D]/u.test(String(value || ""));
+  const title = ko
+    ? (hasKorean(localizedTitle) && localizedTitle !== "실험 결과" ? localizedTitle : titleFallbacks[index % titleFallbacks.length])
+    : (localizedTitle || titleFallbacks[index % titleFallbacks.length]);
+  const body = ko
+    ? (hasKorean(localizedBody) && localizedBody !== "이 실험 결과는 현재 케이스의 조정 영향을 보여줍니다." ? localizedBody : bodyFallbacks[index % bodyFallbacks.length])
+    : (localizedBody || bodyFallbacks[index % bodyFallbacks.length]);
+  return { title, body };
+}
+
+function getReportTensionItems() {
+  const fromEvidence = asArray(state.evidence).slice(-3).reverse();
+  if (fromEvidence.length) return fromEvidence;
+  if (!hasActiveCase()) return [];
+
+  const seen = new Set();
+  const items = [];
+  ["teacher", "student", "it", "administrator"].forEach((stakeholderKey) => {
+    stakeholderConflicts(stakeholderKey).forEach((item) => {
+      const key = String(item.title || item.body || "").trim().toLowerCase();
+      if (!key || seen.has(key)) return;
+      seen.add(key);
+      items.push({ title: item.title, body: item.body, stakeholder: stakeholderKey });
+    });
+  });
+  return items.slice(0, 3);
+}
+
 function getCaseNetworkMeta(fallback) {
   const activeCase = getActiveCaseRecord();
   return asArray(activeCase?.networkMeta).length ? activeCase.networkMeta : fallback;
+}
+
+function localizeNetworkMeta(items) {
+  if (state.locale !== "ko") return items;
+  return asArray(items).map((item) => {
+    const rawTitle = String(item?.title || "").trim();
+    const rawBody = String(item?.body || "").trim();
+    const titleMap = {
+      "What You See": "현재 맵",
+      "Main Pressure Point": "가장 큰 압력 지점",
+      "When It Updates": "업데이트 시점",
+      "Current Layer": "현재 레이어",
+      "Before You Start": "시작 전에",
+    };
+    let body = rawBody;
+    const countsMatch = rawBody.match(/(\d+) nodes and (\d+) links are visible in the current (class|personal|base) map\.?/i);
+    if (countsMatch) {
+      const layer = countsMatch[3].toLowerCase() === "class" ? "클래스" : countsMatch[3].toLowerCase() === "personal" ? "개인" : "기본";
+      body = `${layer} 맵에 노드 ${countsMatch[1]}개와 연결 ${countsMatch[2]}개가 보여요.`;
+    } else if (/Teacher load and governance are driving the strongest tension/i.test(rawBody)) {
+      body = "지금 가장 큰 긴장은 교사 부담과 운영 기준에서 생겨요.";
+    } else if (/No single issue is dominating/i.test(rawBody)) {
+      body = "한 가지 이슈가 독점하지 않고 여러 작은 군집에 긴장이 나뉘어 있어요.";
+    } else if (/The map refreshes when the selected case changes/i.test(rawBody)) {
+      body = "선택한 케이스를 바꾸거나 새 질문을 남기면 맵이 갱신돼요.";
+    } else if (/Class view shows repeated agendas/i.test(rawBody)) {
+      body = "클래스 보기에서는 수업 전체의 반복 안건과 공통 메모를 보여줘요.";
+    } else if (/My view mixes the instructor base map/i.test(rawBody)) {
+      body = "내 보기에서는 교수자 기본 맵에 내 메모와 AI 쟁점을 함께 보여줘요.";
+    } else if (/Base map shows the instructor-authored case/i.test(rawBody)) {
+      body = "기본 맵에서는 학생 추가 전 교수자가 만든 케이스를 보여줘요.";
+    }
+    return { ...item, title: titleMap[rawTitle] || rawTitle, body };
+  });
 }
 
 function getVisibleCases(course = getActiveCourse()) {
@@ -3556,7 +3870,29 @@ function isPlaceholderEvidenceTitle(title) {
   if (!trimmed) return true;
   if (/^evidence\s+\d+$/i.test(trimmed)) return true;
   if (/^(teacher|student|administrator|it systems?|accessibility)\s+evidence\s+\d+$/i.test(trimmed)) return true;
+  if (/^(연결된 근거|관련 근거|근거 목록|evidence)$/i.test(trimmed)) return true;
   return false;
+}
+
+function isPlaceholderEvidenceBody(body) {
+  const trimmed = String(body || "").trim();
+  return /^(이 근거는 현재 케이스의 판단을 뒷받침합니다\.?|이 근거는 현재 케이스의 판단을 뒷받침해요\.?|this evidence supports the current case decision\.?|this evidence supports the current case\.?$)/i.test(trimmed);
+}
+
+function localizedEvidenceLensCopy(stakeholderKey, locale = "ko") {
+  const ko = {
+    teacher: { label: "교사 관점 근거", body: "수업 운영 부담과 피드백 가능성을 확인하는 근거입니다." },
+    student: { label: "학생 관점 근거", body: "참여와 학습 선택권이 실제로 보장되는지 확인하는 근거입니다." },
+    administrator: { label: "운영 관점 근거", body: "정책, 형평성, 확장 가능성을 확인하는 근거입니다." },
+    it: { label: "플랫폼 관점 근거", body: "구현 가능성과 데이터 추적 가능성을 확인하는 근거입니다." },
+  };
+  const en = {
+    teacher: { label: "Teacher lens evidence", body: "Evidence to check facilitation load and feedback capacity." },
+    student: { label: "Student lens evidence", body: "Evidence to check participation and learner agency." },
+    administrator: { label: "Operations lens evidence", body: "Evidence to check policy fit, equity, and scale." },
+    it: { label: "Platform lens evidence", body: "Evidence to check implementation and data traceability." },
+  };
+  return (locale === "ko" ? ko : en)[stakeholderKey] || (locale === "ko" ? ko.teacher : en.teacher);
 }
 
 function normalizeEvidenceList(value, fallback = []) {
@@ -3894,6 +4230,218 @@ async function generateAgentReplyWithAi(stakeholderKey, question) {
   }
 }
 
+async function invokeSupabaseFunction(name, body) {
+  const client = initializeSupabase();
+  if (!client || !isSupabaseSessionActive()) throw new Error("Login is not ready yet.");
+  const { data, error } = await client.functions.invoke(name, { body });
+  if (error) throw error;
+  if (data?.error) throw new Error(data.error);
+  return data;
+}
+
+async function createStudentInviteRemote({ courseId, name, email }) {
+  return invokeSupabaseFunction("admin-invite-student", {
+    action: "invite",
+    courseId,
+    displayName: name,
+    email,
+  });
+}
+
+async function grantCourseMembershipRemote({ courseId, name, email, role = "admin" }) {
+  return invokeSupabaseFunction("admin-manage-membership", {
+    action: "grant",
+    courseId,
+    displayName: name,
+    email,
+    role,
+  });
+}
+
+async function grantCourseMembership({ name, email, role = "admin" }) {
+  const course = getActiveCourse();
+  if (!course || state.activeRole !== "admin") throw new Error("Instructor permission required.");
+  const cleanEmail = String(email || "").trim().toLowerCase();
+  const cleanName = String(name || "").trim();
+  if (!cleanEmail || !cleanEmail.includes("@")) throw new Error("Enter a valid email address.");
+  if (isSupabaseSessionActive()) {
+    await grantCourseMembershipRemote({ courseId: course.id, name: cleanName, email: cleanEmail, role });
+    await refreshRemotePlatformContext(course.id);
+    return;
+  }
+  const id = `local-${slugify(cleanEmail)}-${slugify(course.id).slice(0, 10)}`;
+  const target = role === "admin" ? (course.instructors ||= []) : (course.learners ||= []);
+  const existing = target.find((item) => item.email === cleanEmail || item.id === id);
+  if (existing) {
+    existing.name = cleanName || existing.name;
+    existing.email = cleanEmail;
+  } else {
+    target.push(role === "admin"
+      ? { id, name: cleanName || cleanEmail, email: cleanEmail, title: "Course instructor" }
+      : { id, name: cleanName || cleanEmail, email: cleanEmail, focus: "Reflection run", section: course.code });
+  }
+  persistPlatformState();
+}
+
+async function revokeStudentInviteRemote({ courseId, email }) {
+  return invokeSupabaseFunction("admin-invite-student", {
+    action: "revoke",
+    courseId,
+    email,
+  });
+}
+
+async function persistFacilitatorAction({ actionType, status, content }) {
+  if (!isSupabaseSessionActive()) return null;
+  const client = initializeSupabase();
+  const course = getActiveCourse();
+  if (!client || !course?.id || !state.auth.userId) return null;
+  const { data, error } = await client.from("facilitator_actions").insert({
+    course_id: course.id,
+    case_id: state.activeCaseId || null,
+    instructor_id: state.auth.userId,
+    action_type: actionType,
+    status,
+    content: content || {},
+    approved_at: status === "approved" || status === "published" ? new Date().toISOString() : null,
+    published_at: status === "published" ? new Date().toISOString() : null,
+  }).select("*").single();
+  if (error) throw error;
+  logEvent("facilitator.action", { action_id: data.id, action_type: actionType, action_status: status });
+  return data;
+}
+
+async function loadPublishedFacilitatorActions(courseIds = []) {
+  if (!isSupabaseSessionActive() || !courseIds.length) return [];
+  const client = initializeSupabase();
+  const { data, error } = await client.from("facilitator_actions").select("*").in("course_id", courseIds).eq("status", "published").order("published_at", { ascending: false }).limit(20);
+  if (error) throw error;
+  return data || [];
+}
+
+async function saveResearchConsent(granted) {
+  if (!isSupabaseSessionActive() || !state.auth.userId || !getActiveCourse()?.id) return;
+  const client = initializeSupabase();
+  const now = new Date().toISOString();
+  const { error } = await client.from("research_consents").upsert({
+    user_id: state.auth.userId,
+    course_id: getActiveCourse().id,
+    consent_version: state.agentCoach.consentVersion,
+    granted: Boolean(granted),
+    granted_at: granted ? now : null,
+    withdrawn_at: granted ? null : now,
+  }, { onConflict: "user_id,course_id,consent_version" });
+  if (error) throw error;
+  state.agentCoach.consentGranted = Boolean(granted);
+}
+
+async function deleteMyResearchData() {
+  if (!isSupabaseSessionActive() || !state.auth.userId) return;
+  const client = initializeSupabase();
+  const { error: runError } = await client.from("learner_runs").delete().eq("learner_id", state.auth.userId);
+  if (runError) throw runError;
+  const { error: eventError } = await client.from("analytics_events").delete().eq("user_id", state.auth.userId);
+  if (eventError) throw eventError;
+  state.evidence = [];
+  state.timeline = [];
+  state.chat = [];
+  state.agentCoach.consentGranted = false;
+  await saveResearchConsent(false);
+}
+
+async function exportResearchData() {
+  let events = [];
+  if (isSupabaseSessionActive()) {
+    const client = initializeSupabase();
+    const { data, error } = await client.from("analytics_events").select("event_type, payload, course_id, case_id, client_ts, created_at").eq("user_id", state.auth.userId).order("created_at", { ascending: true }).limit(5000);
+    if (error) throw error;
+    events = data || [];
+  }
+  const payload = {
+    exported_at: new Date().toISOString(),
+    consent_version: state.agentCoach.consentVersion,
+    course_id: getActiveCourse()?.id || null,
+    case_id: state.activeCaseId || null,
+    learner_run: getActiveLearnerRun() || null,
+    events,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `dts-research-export-${new Date().toISOString().slice(0, 10)}.json`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+async function generateDiscussionTopicsWithAi(brief) {
+  const fallback = FACILITATOR_TOPIC_FALLBACK.map((item) => ({ ...item }));
+  setAiStatus(`Generating discussion topics with ${getGeminiConfig().model}...`, { busy: true });
+  try {
+    const activeCase = getActiveCaseRecord();
+    const payload = await requestGeminiJson({
+      systemInstruction: state.locale === "ko"
+        ? "당신은 CSCL 토론 퍼실리테이터입니다. 정답이나 결론이 아니라 서로 다른 관점이 근거를 통해 만나는 토론 주제 후보를 만드세요. JSON만 반환하세요."
+        : "You facilitate CSCL discussions. Generate topic candidates where different perspectives meet through evidence, not answers or conclusions. Return JSON only.",
+      prompt: [
+        "Return exactly three topic candidates in {topics:[{label,prompt,signal}]}.",
+        "label must be one of: 비교 질문, 설계 쟁점, 반대 주장.",
+        "prompt must be one concise open-ended discussion question.",
+        "signal must briefly describe the evidence or tension to inspect.",
+        `Professor brief: ${brief}`,
+        `Case title: ${activeCase?.title || ""}`,
+        `Case summary: ${activeCase?.summary || ""}`,
+        `Evidence: ${asArray(activeCase?.evidence).map((item) => item?.title || item?.body || "").join(" | ")}`,
+      ].join("\n"),
+      temperature: 0.55,
+    });
+    const topics = asArray(payload?.topics).map((item, index) => ({
+      label: String(item?.label || fallback[index]?.label || "토론 질문").trim(),
+      prompt: String(item?.prompt || "").trim(),
+      signal: String(item?.signal || fallback[index]?.signal || "근거 확인 필요").trim(),
+    })).filter((item) => item.prompt).slice(0, 3);
+    setAiStatus(`${getGeminiConfig().model} generated discussion topics.`, { busy: false });
+    return topics.length === 3 ? topics : fallback;
+  } catch (error) {
+    console.error(error);
+    setAiStatus(`Gemini fallback active. ${error.message}`, { busy: false, error: error.message });
+    return fallback;
+  }
+}
+
+async function generateMediatorTalkMoveWithAi(signal = "관점 충돌") {
+  const fallback = {
+    primary: "같은 자료를 다르게 읽은 이유를 서로의 말로 다시 설명해 볼까요?",
+    alternative: "반대 입장을 가장 설득력 있게 만들어 줄 근거는 무엇인가요?",
+  };
+  setAiStatus(`Generating a facilitation move with ${getGeminiConfig().model}...`, { busy: true });
+  try {
+    const activeCase = getActiveCaseRecord();
+    const payload = await requestGeminiJson({
+      systemInstruction: state.locale === "ko"
+        ? "당신은 교수자를 위한 CSCL 토론 중재 보조입니다. 학습자에게 직접 답하지 말고, 관점 연결·근거 요청·빠진 목소리 초대·생산적 불일치를 돕는 짧은 말걸기 2개를 JSON으로 반환하세요."
+        : "You assist a professor mediating a CSCL discussion. Do not answer learners; return two short talk moves that connect perspectives, request evidence, invite missing voices, or preserve productive disagreement as JSON.",
+      prompt: [
+        "Return {primary,alternative} with one sentence per field.",
+        `Signal: ${signal}`,
+        `Case: ${activeCase?.title || ""}`,
+        `Summary: ${activeCase?.summary || ""}`,
+      ].join("\n"),
+      temperature: 0.5,
+    });
+    const result = {
+      primary: String(payload?.primary || "").trim(),
+      alternative: String(payload?.alternative || "").trim(),
+    };
+    setAiStatus(`${getGeminiConfig().model} generated a facilitation move.`, { busy: false });
+    return result.primary && result.alternative ? result : fallback;
+  } catch (error) {
+    console.error(error);
+    setAiStatus(`Gemini fallback active. ${error.message}`, { busy: false, error: error.message });
+    return fallback;
+  }
+}
+
 setAiStatus();
 
 function structuredCaseFromDocument({ title, text, publish = true }) {
@@ -4026,12 +4574,11 @@ function syncActiveCaseState() {
   state.decisions = safeClone(activeRecord.decisions);
   state.chat = safeClone(activeRecord.chat);
   state.timeline = safeClone(activeRecord.timeline);
-  dom.caseTitle.textContent = activeCase.title;
-  dom.caseSubtitle.textContent =
-    getCaseUiCopy().caseSubtitle ||
-    activeCase.summary ||
-    course?.settings?.courseSummary ||
-    "Live case data is connected to this workspace.";
+  dom.caseTitle.textContent = getCaseDisplayTitle(activeCase, course?.cases || []);
+  dom.caseSubtitle.textContent = getCaseDisplaySummary(
+    activeCase,
+    getCaseUiCopy().caseSubtitle || activeCase.summary || course?.settings?.courseSummary,
+  );
   if (dom.caseTitleEdit) dom.caseTitleEdit.hidden = state.activeRole !== "admin";
 }
 
@@ -4094,7 +4641,7 @@ async function generateCritiqueWithAi(stakeholderKey, draft, promptText) {
   try {
     const response = await requestGeminiContent({
       systemInstruction: ko
-        ? "당신은 비판적 수업설계 세미나의 이해관계자입니다. 학생의 초안을 교정하거나 칭찬하지 말고, 당신의 입장에서 초안이 놓친 쟁점을 파고드는 도전 질문 또는 반박을 던지세요. '긴장'이라는 단어 대신 '쟁점'을 사용하세요. 정답을 제시하지 마세요. 글머리 기호와 마크다운 금지."
+        ? "당신은 비판적 수업설계 세미나의 이해관계자입니다. 학생의 초안을 교정하거나 칭찬하지 말고, 당신의 입장에서 초안이 놓친 쟁점을 파고드는 도전 질문 또는 반박을 던지세요. 쟁점이라는 표현을 일관되게 사용하세요. 정답을 제시하지 마세요. 글머리 기호와 마크다운 금지."
         : "You are a stakeholder in a critical design seminar. Do not correct or praise the student's draft — raise one pointed challenge or counter-question from your position that sharpens a tension the draft misses. Offer no answers. No bullets, no markdown.",
       prompt: [
         `Stakeholder lens: ${stakeholder.label}`,
@@ -4133,7 +4680,7 @@ function renderReflectionCritique(promptIndex) {
       ? `<p class="critique-anchor is-warn">${ko ? "맵의 노드를 근거로 인용하지 않았어요 — 주장마다 어느 노드가 뒷받침하는지 적어 보세요." : "No map nodes cited — name the node that backs each claim."}</p>`
       : `<p class="critique-anchor is-ok">${ko ? `근거 인용 ${record.anchors.cited}건 감지: ${record.anchors.matched.slice(0, 4).map(escapeHtml).join(", ")}` : `${record.anchors.cited} evidence anchors detected: ${record.anchors.matched.slice(0, 4).map(escapeHtml).join(", ")}`}</p>`;
   host.innerHTML = `
-    <p class="critique-title">${ko ? "스웜 피드백 — 다섯 관점의 도전" : "Swarm feedback — five challenges"}</p>
+    <p class="critique-title">${ko ? "다섯 관점의 피드백 — 확인할 질문" : "Five-perspective feedback — questions to check"}</p>
     ${anchorLine}
     ${record.items
       .map(
@@ -4198,7 +4745,7 @@ async function requestReflectionFeedback(promptIndex) {
   renderReflectionCritique(promptIndex);
   if (status) status.textContent = "";
   pushGraphEvent(
-    ko ? "스웜 피드백" : "Swarm feedback",
+    ko ? "다섯 관점의 피드백" : "Five-perspective feedback",
     ko ? "다섯 관점이 생각 정리 초안에 도전 질문을 남겼어요" : "Five lenses left challenges on your reflection draft"
   );
   logEvent("feedback.shown", {
@@ -4241,6 +4788,14 @@ function handleReflectionSubmit(promptIndex) {
     feedback_age_ms: critique ? Date.now() - critique.at : null,
     anchors_at_feedback: critique ? critique.anchors.cited : null,
     anchors_at_submit: detectDraftAnchors(answer).cited,
+  });
+  logEvent("synthesis_block_revised", {
+    block_id: `reflection-${promptIndex}`,
+    prompt_index: promptIndex,
+    source_count: asArray(state.evidence).length,
+    annotation_count: asArray(getActiveLearnerRun()?.annotations).length,
+    length: answer.length,
+    revised_after_feedback: critique ? answer !== critique.draftSnapshot : null,
   });
   if (status) status.textContent = state.locale === "ko" ? "제출됨 · 교수자에게 공유되었습니다." : "Submitted — shared with your instructor.";
 }
@@ -4369,8 +4924,41 @@ async function renderInstructorCohortPanel() {
       </table>
       <div id="cohort-drilldown" class="cohort-drilldown" hidden></div>
     `;
+    // Keep the compact report table inside its card even when a learner name or
+    // activity timestamp is unusually long. Inline constraints also protect
+    // against a stale stylesheet cache on an already-open published tab.
+    const cohortTable = panel.querySelector("table");
+    if (cohortTable) {
+      cohortTable.style.width = "100%";
+      cohortTable.style.minWidth = "0";
+      cohortTable.style.tableLayout = "fixed";
+      cohortTable.querySelectorAll("th, td").forEach((cell) => {
+        cell.style.whiteSpace = "normal";
+        cell.style.overflowWrap = "anywhere";
+        cell.style.wordBreak = "break-word";
+      });
+      cohortTable.querySelectorAll(".cohort-name-button").forEach((button) => {
+        button.style.display = "block";
+        button.style.width = "100%";
+        button.style.maxWidth = "100%";
+        button.style.whiteSpace = "nowrap";
+        button.style.overflow = "hidden";
+        button.style.textOverflow = "ellipsis";
+        button.style.overflowWrap = "normal";
+        button.style.wordBreak = "normal";
+      });
+      cohortTable.querySelectorAll("tbody tr td:last-child").forEach((cell) => {
+        cell.style.whiteSpace = "nowrap";
+        cell.style.overflow = "hidden";
+        cell.style.textOverflow = "ellipsis";
+      });
+    }
   } catch (error) {
     console.error("cohort panel load failed", error);
+    if (window.__DTS_PREVIEW__) {
+      panel.innerHTML = `<p class="muted">${state.locale === "ko" ? "아직 학습자 활동이 없어요. 네트워크에서 시작해 보세요." : "No learner activity yet. Start from the network."}</p><button type="button" class="toolbar-button report-empty-action report-empty-followup" data-report-action="network">${state.locale === "ko" ? "네트워크에서 활동 시작" : "Start from the network"}</button>`;
+      return;
+    }
     panel.innerHTML = `<p class="muted">${state.locale === "ko" ? "불러오기 실패" : "Failed to load cohort data."}</p>`;
   }
 }
@@ -4594,6 +5182,10 @@ function persistActiveWorkspaceState() {
 }
 
 function isViewAllowed(view) {
+  // Keep malformed deep links from leaving the shell with every panel hidden.
+  if (!["home", "visualizer", "perspectives", "matrix", "sandbox", "report", "manage"].includes(view)) {
+    return false;
+  }
   // Home dashboard is always reachable — it is the clean entry point that routes
   // into whatever the student is allowed to open.
   if (view === "home") return true;
@@ -4902,8 +5494,8 @@ function renderRelatedActivityList(items, emptyMessage) {
         .map(
           (item) => `
             <article class="evidence-item">
-              <strong>${item.title}</strong>
-              <p>${item.body}</p>
+              <strong>${escapeHtml(localizeLegacyKoreanCopy(item.title, state.locale === "ko" ? "관련 활동" : item.title))}</strong>
+              <p>${escapeHtml(localizeLegacyKoreanCopy(item.body, state.locale === "ko" ? "현재 케이스와 연결된 활동입니다." : item.body))}</p>
             </article>
           `
         )
@@ -5219,9 +5811,11 @@ function buildGraphSnapshot(reason) {
 }
 
 function tensionLevel(score) {
-  if (score >= 72) return "High";
-  if (score >= 52) return "Medium";
-  return "Low";
+  const english = score >= 72 ? "High" : score >= 52 ? "Medium" : "Low";
+  if (state.locale === "ko") {
+    return english === "High" ? "높음" : english === "Medium" ? "보통" : "낮음";
+  }
+  return english;
 }
 
 // Turn a 0–100 metric into a plain-language band so students read a phrase, not a bare number.
@@ -5256,8 +5850,8 @@ function stakeholderConflicts(key) {
           { level: "medium", title: "지원 역량 압박", body: "프라이버시가 낮아지면(대략 70점 아래) 에듀테크 연동의 예외 처리와 벤더 검토 부담이 커지는 경향이 있어요.", num: 70, mk: "threshold" },
         ],
         accessibility: [
-          { level: "critical", title: "다중양식 동등성 미흡", body: `접근성 보장 수준이 ${koBandWord(accessibility)} 편이에요(100점 만점에 ${accessibility}점). 대체 텍스트, 읽기 순서, 설명 명료성에 대한 더 강한 보장이 필요해요.`, num: accessibility, mk: "accessibility" },
-          { level: "medium", title: "인지 부하 급증 가능", body: "학생이 인간의 프레이밍 없이 너무 많은 자동 신호를 해석해야 할 때 쟁점이 커져요." },
+          { level: "critical", title: "자료 형식별 접근성 차이", body: `접근성 보장 수준이 ${koBandWord(accessibility)} 편이에요(100점 만점에 ${accessibility}점). 대체 텍스트, 읽기 순서, 설명이 모든 학습자에게 이해하기 쉬운지 더 확인해야 해요.`, num: accessibility, mk: "accessibility" },
+          { level: "medium", title: "정보가 너무 많아질 가능성", body: "학생이 교사의 설명 없이 자동으로 표시된 신호를 너무 많이 해석해야 하면 이해하기 어려울 수 있어요." },
         ],
       }
     : {
@@ -5324,7 +5918,7 @@ function stakeholderRecommendations(key) {
         teacher: ["재설계 배포 결정에 대한 인간의 승인을 유지하세요.", "AI 제안을 더 적고 질 높은 개입 순간으로 묶으세요."],
         administrator: ["모든 케이스에 루브릭에 보이는 거버넌스 체크포인트를 추가하세요.", "에스컬레이션 전에 이해관계자당 근거 메모 하나를 요구하세요."],
         student: ["앱이 왜 특정 재설계 경로를 우선하는지 설명하세요.", "최종 제출 전에 학생이 무를 수 있는 순간을 남기세요."],
-        it: ["원시 텔레메트리를 줄이고 시나리오 요약만 주고받으세요.", "통합을 현재 LMS와 감사 가능한 AI 한 겹으로 제한하세요."],
+        it: ["세부 사용 기록은 줄이고 필요한 상황 요약만 주고받으세요.", "현재 LMS와 확인 가능한 AI 기능만 우선 연결하세요."],
         accessibility: ["모든 재설계 라운드에 접근성 근거를 첨부하세요.", "각 권고에 쉬운 말 요약을 추가하세요."],
       }
     : {
@@ -5372,6 +5966,67 @@ function hasActiveCase() {
   return Boolean(getCaseById(state.activeCaseId, getActiveCourse()));
 }
 
+function getCaseDisplayTitle(item, siblings = []) {
+  const raw = String(item?.title || "").trim();
+  const isUntitled = !raw || raw.toLowerCase() === "xx";
+  const knownTitles = {
+    "Teachers' AI dependency in planning lesson plans": "수업 계획에서 교사의 AI 의존도",
+  };
+  const base = isUntitled
+    ? (state.locale === "ko" ? "제목 없는 케이스" : "Untitled case")
+    : (state.locale === "ko" ? (knownTitles[raw] || raw) : raw);
+  const sameTitle = siblings.filter((candidate) => {
+    const candidateRaw = String(candidate?.title || "").trim();
+    return (candidateRaw || "xx").toLowerCase() === (raw || "xx").toLowerCase();
+  });
+  const duplicateIndex = sameTitle.findIndex((candidate) => candidate?.id === item?.id);
+  return sameTitle.length > 1 && duplicateIndex >= 0
+    ? `${base} · ${duplicateIndex + 1}`
+    : base;
+}
+
+function getInstitutionDisplayName(item) {
+  const raw = String(item?.name || "").trim();
+  if (state.locale === "ko" && raw === "Ewha Womans University") return "이화여자대학교";
+  return raw;
+}
+
+function getCaseDisplaySummary(activeCase, fallback = "") {
+  const value = String(fallback || activeCase?.summary || "").trim();
+  if (state.locale !== "ko") return value || "Live case data is connected to this workspace.";
+  const hasKorean = /[가-힣]/.test(value);
+  return hasKorean
+    ? value
+    : "이 케이스의 핵심 쟁점과 이해관계자 관점을 확인할 수 있어요.";
+}
+
+function getLocalizedGraphLabel(node, index, activeCase) {
+  const raw = String(node?.label || "").trim();
+  if (state.locale !== "ko" || /[가-힣]/.test(raw)) return raw;
+  if (!raw || raw.toLowerCase() === "xx") return getCaseDisplayTitle(activeCase, getActiveCourse()?.cases || []);
+  const known = {
+    "Interview: Current Online Teaching Challenges": "온라인 수업 현장 인터뷰",
+    "Policy Review: Digital Equity & Budget": "디지털 형평성·예산 검토",
+    "System Audit: LMS Capabilities": "LMS 기능·운영 점검",
+  };
+  return known[raw] || `핵심 쟁점 ${index + 1}`;
+}
+
+function localizeLegacyKoreanCopy(value, fallback = "") {
+  const raw = String(value || "").trim();
+  if (!raw || state.locale !== "ko" || /[가-힣]/.test(raw)) return raw || fallback;
+  const known = {
+    "The uploaded brief has been structured. The next useful move is to test which stakeholder tension dominates before publishing to learners.": "업로드한 설명이 구조화되었어요. 학습자에게 공개하기 전에 어떤 이해관계자 쟁점이 가장 큰지 먼저 확인해 보세요.",
+    "The uploaded brief has been structured.": "업로드한 설명이 구조화되었어요.",
+    "Uploaded source document parsed into issue fragments and design signals.": "업로드한 자료를 쟁점 조각과 설계 신호로 정리했어요.",
+    "Ontology-like stakeholder and constraint structure extracted from the uploaded brief.": "업로드한 설명에서 이해관계자와 제약 조건 구조를 추출했어요.",
+    "Graph and report state synchronized to the latest published case.": "그래프와 리포트를 최신 케이스 상태에 맞게 동기화했어요.",
+    "Case structured from upload": "업로드 문서에서 케이스를 구조화했어요.",
+    "The admin intake pipeline converted the uploaded document into a canonical case record for graph rendering and report generation.": "관리자 입력 절차가 업로드 문서를 그래프와 리포트용 케이스 기록으로 변환했어요.",
+  };
+  return known[raw] || fallback || raw;
+}
+
 function renderNavigation() {
   if (!isViewAllowed(state.activeView)) {
     state.activeView = "visualizer";
@@ -5398,7 +6053,7 @@ function renderNavigation() {
         : t("workspace");
   }
   dom.topTitle.textContent = activeCase
-    ? activeCase.title
+    ? getCaseDisplayTitle(activeCase, course?.cases || [])
     : course
       ? `${course.code} · ${course.name}`
       : t("workspace");
@@ -5420,7 +6075,7 @@ function renderPlatformControlsLegacy() {
   dom.roleControl.classList.add("is-hidden");
   dom.roleSelect.disabled = true;
   dom.institutionSelect.innerHTML = state.platform.institutions
-    .map((item) => `<option value="${item.id}">${item.name}</option>`)
+    .map((item) => `<option value="${item.id}">${escapeHtml(getInstitutionDisplayName(item))}</option>`)
     .join("");
   dom.institutionSelect.value = institution?.id || "";
 
@@ -5433,7 +6088,7 @@ function renderPlatformControlsLegacy() {
     ? selectableCases
         .map(
           (item) =>
-            `<option value="${item.id}">${item.title}${
+            `<option value="${item.id}">${getCaseDisplayTitle(item, selectableCases)}${
               state.activeRole === "admin" ? ` (${item.published ? "Published" : "Draft"})` : ""
             }</option>`
         )
@@ -5450,7 +6105,9 @@ function renderPlatformControlsLegacy() {
   if (courseCtrl) courseCtrl.classList.toggle("is-hidden", isStudent && (institution?.courses || []).length <= 1);
   dom.caseControl.classList.toggle("is-hidden", !course || isStudent);
   dom.sidebarCaseLabel.textContent = state.activeRole === "admin" ? t("instructor") + " " + t("case").toLowerCase() : t("published") + " " + t("case").toLowerCase();
-  dom.sidebarCaseSelect.innerHTML = dom.caseSelect.innerHTML;
+  dom.sidebarCaseSelect.innerHTML = selectableCases.length
+    ? selectableCases.map((item) => `<option value="${item.id}">${getCaseDisplayTitle(item, selectableCases)}</option>`).join("")
+    : dom.caseSelect.innerHTML;
   dom.sidebarCaseSelect.value = dom.caseSelect.value;
   dom.sidebarCaseSelect.disabled = dom.caseSelect.disabled;
   dom.sidebarCaseControl.classList.toggle("is-hidden", !course);
@@ -5479,7 +6136,7 @@ function renderPlatformControlsLegacy() {
   dom.courseSelect.innerHTML = dom.courseSelect.innerHTML.replace(/\u00c3\u201a\u00c2\u00b7|\u00c2\u00b7/g, "·");
   dom.platformContext.innerHTML = `
     <article class="context-card">
-      <strong>${institution?.name || t("noInstitutionSelected")}</strong>
+      <strong>${escapeHtml(getInstitutionDisplayName(institution) || t("noInstitutionSelected"))}</strong>
       <p>${course ? `${course.code} · ${course.name}` : t("noCourseSelected")}.</p>
       <div class="card-meta">
         <span>${state.locale === "ko" ? `문서 ${course?.documents?.length || 0}개` : `${course?.documents?.length || 0} documents`}</span>
@@ -5505,8 +6162,8 @@ function renderPlatformControlsLegacy() {
 
   dom.platformContext.innerHTML = `
     <article class="context-card">
-      <strong>${course ? `${course.code} · ${course.name}` : institution?.name || t("noCourseSelected")}</strong>
-      <p>${institution?.name || t("noInstitutionSelected")}</p>
+      <strong>${course ? `${course.code} · ${course.name}` : escapeHtml(getInstitutionDisplayName(institution) || t("noCourseSelected"))}</strong>
+      <p>${escapeHtml(getInstitutionDisplayName(institution) || t("noInstitutionSelected"))}</p>
       ${
         state.activeRole === "admin" && activeInstructor
           ? `<div class="card-meta"><span>${activeInstructor.name}</span><span>${t("caseCount", { count: course?.cases?.length || 0 })}</span><span>${t("publishedCount", { count: visibleCases.length })}</span><span>${t("courseCode")} ${course?.joinCode || t("notSet")}</span></div>
@@ -5540,7 +6197,7 @@ function renderPlatformControls() {
   dom.roleSelect.disabled = true;
 
   dom.institutionSelect.innerHTML = state.platform.institutions
-    .map((item) => `<option value="${item.id}">${item.name}</option>`)
+    .map((item) => `<option value="${item.id}">${escapeHtml(getInstitutionDisplayName(item))}</option>`)
     .join("");
   dom.institutionSelect.value = institution?.id || "";
 
@@ -5554,7 +6211,7 @@ function renderPlatformControls() {
     ? selectableCases
         .map(
           (item) =>
-            `<option value="${item.id}">${item.title}${
+            `<option value="${item.id}">${getCaseDisplayTitle(item, selectableCases)}${
               state.activeRole === "admin" ? ` (${item.published ? t("published") : t("draft")})` : ""
             }</option>`
         )
@@ -5572,7 +6229,9 @@ function renderPlatformControls() {
   dom.caseControl.classList.toggle("is-hidden", !course || isStudent);
 
   dom.sidebarCaseLabel.textContent = state.activeRole === "admin" ? `${t("instructor")} ${t("case").toLowerCase()}` : t("publishedCase");
-  dom.sidebarCaseSelect.innerHTML = dom.caseSelect.innerHTML;
+  dom.sidebarCaseSelect.innerHTML = selectableCases.length
+    ? selectableCases.map((item) => `<option value="${item.id}">${getCaseDisplayTitle(item, selectableCases)}</option>`).join("")
+    : dom.caseSelect.innerHTML;
   dom.sidebarCaseSelect.value = dom.caseSelect.value;
   dom.sidebarCaseSelect.disabled = dom.caseSelect.disabled;
   dom.sidebarCaseControl.classList.toggle("is-hidden", !course);
@@ -5599,8 +6258,8 @@ function renderPlatformControls() {
 
   dom.platformContext.innerHTML = `
     <article class="context-card">
-      <strong>${course ? `${course.code} · ${course.name}` : institution?.name || t("noCourseSelected")}</strong>
-      <p>${institution?.name || t("noInstitutionSelected")}</p>
+      <strong>${course ? `${course.code} · ${course.name}` : escapeHtml(getInstitutionDisplayName(institution) || t("noCourseSelected"))}</strong>
+      <p>${escapeHtml(getInstitutionDisplayName(institution) || t("noInstitutionSelected"))}</p>
       ${
         state.activeRole === "admin" && activeInstructor
           ? `<div class="card-meta"><span>${activeInstructor.name}</span><span>${t("caseCount", { count: course?.cases?.length || 0 })}</span><span>${t("publishedCount", { count: visibleCases.length })}</span><span>${t("courseCode")} ${course?.joinCode || t("notSet")}</span></div>
@@ -5694,11 +6353,11 @@ function pipelineStatusMarkup(activeCase) {
 
   return `
     <article class="pipeline-card pipeline-card-highlight" data-density="advanced">
-      <strong>${activeCase.title}</strong>
-      <p>${activeCase.summary}</p>
+      <strong>${escapeHtml(getCaseDisplayTitle(activeCase, getActiveCourse()?.cases || []))}</strong>
+      <p>${escapeHtml(getCaseDisplaySummary(activeCase, "이 케이스의 핵심 쟁점과 이해관계자 관점을 확인할 수 있어요."))}</p>
       <div class="pipeline-chip-row">
         <span class="pipeline-chip">${activeCase.published ? t("published") : t("draft")}</span>
-        <span class="pipeline-chip">${activeCase.pipeline.graphStatus}</span>
+        <span class="pipeline-chip">${escapeHtml(localizeLegacyKoreanCopy(activeCase.pipeline?.graphStatus || "", state.locale === "ko" ? "케이스 맵 준비 완료" : activeCase.pipeline?.graphStatus || ""))}</span>
       </div>
     </article>
   `;
@@ -5715,33 +6374,51 @@ function renderPipelineConsole() {
   const visibleCases = getVisibleCases(course);
   const activeLearner = state.activeRole === "user" ? getActiveLearner() : null;
   const activeRun = state.activeRole === "user" ? getActiveLearnerRun() : null;
+  // Keep creation visible when there is no case yet; tuck it away after setup.
+  const newCaseCollapsed = activeCase ? isPipelineCardCollapsed("newCase") : false;
 
   if (state.activeRole === "admin") {
-    const canManageCourses = isPlatformAdminAccount();
+    const canManagePlatform = isPlatformAdminAccount();
+    const canManageCourses = Boolean(getActiveInstitution());
     dom.pipelineConsole.innerHTML = `
       ${pipelineStatusMarkup(activeCase)}
       ${
-        canManageCourses
+        canManagePlatform || canManageCourses
           ? `
-            <article class="pipeline-card">
-              <strong>${t("courseSetup")}</strong>
+            <article class="pipeline-card pipeline-card-collapsible ${isPipelineCardCollapsed("courseSetup") ? "is-collapsed" : ""}" data-pipeline-key="courseSetup">
+              <button type="button" class="pipeline-card-header" data-pipeline-toggle aria-expanded="${isPipelineCardCollapsed("courseSetup") ? "false" : "true"}">
+                <strong>${t("courseSetup")}</strong>
+                <span class="material-symbols-outlined chevron" aria-hidden="true">expand_more</span>
+              </button>
+              <div class="pipeline-card-body">
               <div class="pipeline-form-row two-up">
-                <form class="pipeline-form" id="add-institution-form">
-                  <input name="institutionName" type="text" placeholder="${t("institutionNamePlaceholder")}" required>
-                  <button class="toolbar-button" type="submit">${t("addInstitution")}</button>
-                </form>
+                ${canManagePlatform ? `<form class="pipeline-form" id="add-institution-form">
+                    <input name="institutionName" type="text" placeholder="${t("institutionNamePlaceholder")}" required>
+                    <button class="toolbar-button" type="submit">${t("addInstitution")}</button>
+                  </form>` : `<div class="empty-note">기관은 플랫폼 관리자만 추가할 수 있어요.</div>`}
                 <form class="pipeline-form" id="add-course-form">
                   <input name="courseName" type="text" placeholder="${t("courseNamePlaceholder")}" required>
                   <input name="courseCode" type="text" placeholder="${t("courseCode")}" required>
                   <button class="toolbar-button" type="submit">${t("addCourse")}</button>
                 </form>
+                <form class="pipeline-form" id="add-instructor-form">
+                  <input name="memberName" type="text" placeholder="교수자 이름 (선택)" autocomplete="off">
+                  <input name="memberEmail" type="email" placeholder="교수자 이메일" autocomplete="off" required>
+                  <input type="hidden" name="memberRole" value="admin">
+                  <button class="toolbar-button" type="submit">교수자 권한 부여</button>
+                </form>
+              </div>
               </div>
             </article>
           `
           : ""
       }
-      <article class="pipeline-card">
-        <strong>${t("newCase")}</strong>
+      <article class="pipeline-card pipeline-card-collapsible ${newCaseCollapsed ? "is-collapsed" : ""}" data-pipeline-key="newCase">
+        <button type="button" class="pipeline-card-header" data-pipeline-toggle aria-expanded="${newCaseCollapsed ? "false" : "true"}">
+          <strong>${t("newCase")}</strong>
+          <span class="material-symbols-outlined chevron" aria-hidden="true">expand_more</span>
+        </button>
+        <div class="pipeline-card-body">
         ${
           course
             ? `
@@ -5772,9 +6449,12 @@ function renderPipelineConsole() {
       ${
         activeCase
           ? `
-            <article class="pipeline-card">
-              <strong>${t("boardSettings")}</strong>
-              <p></p>
+            <article class="pipeline-card pipeline-card-collapsible ${isPipelineCardCollapsed("boardSettings") ? "is-collapsed" : ""}" data-pipeline-key="boardSettings">
+              <button type="button" class="pipeline-card-header" data-pipeline-toggle aria-expanded="${isPipelineCardCollapsed("boardSettings") ? "false" : "true"}">
+                <strong>${t("boardSettings")}</strong>
+                <span class="material-symbols-outlined chevron" aria-hidden="true">expand_more</span>
+              </button>
+              <div class="pipeline-card-body">
               <form class="pipeline-form" id="board-settings-form">
                 <textarea name="agendaPrompt" placeholder="${t("mainQuestionPlaceholder")}" autocomplete="off">${getCaseBoardSettings(activeCase).agendaPrompt || ""}</textarea>
                 <div class="pipeline-form-row two-up">
@@ -5814,12 +6494,17 @@ function renderPipelineConsole() {
                   <button class="toolbar-button toolbar-button-primary" type="submit">${t("saveSettings")}</button>
                 </div>
               </form>
+              </div>
             </article>
           `
           : ""
       }
-      <article class="pipeline-card">
-        <strong>${t("courseCases")}</strong>
+      <article class="pipeline-card pipeline-card-collapsible ${isPipelineCardCollapsed("courseCases") ? "is-collapsed" : ""}" data-pipeline-key="courseCases">
+        <button type="button" class="pipeline-card-header" data-pipeline-toggle aria-expanded="${isPipelineCardCollapsed("courseCases") ? "false" : "true"}">
+          <strong>${t("courseCases")}</strong>
+          <span class="material-symbols-outlined chevron" aria-hidden="true">expand_more</span>
+        </button>
+        <div class="pipeline-card-body">
         <p>${t("courseCasesHelp")}</p>
         <div class="case-list">
           ${
@@ -5828,7 +6513,7 @@ function renderPipelineConsole() {
                   .map(
                     (item) => `
                     <article class="case-card ${item.id === state.activeCaseId ? "is-selected" : ""}">
-                      <strong>${item.title}</strong>
+                      <strong>${escapeHtml(getCaseDisplayTitle(item, course?.cases || []))}</strong>
                       ${renderCaseSummary(item.summary, item.id)}
                       <div class="card-meta">
                         <span>${item.published ? t("published") : t("draft")}</span>
@@ -5844,6 +6529,8 @@ function renderPipelineConsole() {
                   .join("")
               : `<div class="empty-note">${t("noCasesYet")}</div>`
           }
+        </div>
+        </div>
         </div>
       </article>
     `;
@@ -5902,7 +6589,7 @@ function renderPipelineConsole() {
                   .map(
                     (item) => `
                     <article class="case-card ${item.id === state.activeCaseId ? "is-selected" : ""}">
-                      <strong>${item.title}</strong>
+                      <strong>${escapeHtml(getCaseDisplayTitle(item, course?.cases || []))}</strong>
                       ${renderCaseSummary(item.summary, item.id)}
                       <div class="card-meta">
                         <span>${item.published ? "Published" : "Draft"}</span>
@@ -5977,7 +6664,7 @@ function renderPipelineConsole() {
                 .map(
                   (item) => `
                   <article class="case-card ${item.id === state.activeCaseId ? "is-selected" : ""}">
-                    <strong>${item.title}</strong>
+                    <strong>${escapeHtml(localizeLegacyKoreanCopy(item.title, state.locale === "ko" ? "핵심 쟁점" : item.title))}</strong>
                     ${renderCaseSummary(item.summary, item.id)}
                     <div class="card-meta">
                       ${item.pipeline?.reportStatus ? `<span>${item.pipeline.reportStatus}</span>` : ""}
@@ -6016,7 +6703,7 @@ function renderPipelineConsole() {
                   .map(
                     (item) => `
                     <article class="case-card">
-                      <strong>${item.title}</strong>
+                      <strong>${escapeHtml(localizeLegacyKoreanCopy(item.title, state.locale === "ko" ? "핵심 쟁점" : item.title))}</strong>
                       <p>${item.body}</p>
                       <div class="card-meta">
                         <span>${getCaseStakeholderMeta(item.stakeholder || "student").label}</span>
@@ -6243,7 +6930,9 @@ function buildRenderableGraph() {
   const uiCopy = getCaseUiCopy();
   const proposalNode = {
     id: "proposal",
-    label: uiCopy.graphCoreLabel || activeCase?.title || t("coreNodeFallback"),
+    label: uiCopy.graphCoreLabel && /[가-힣]/.test(String(uiCopy.graphCoreLabel))
+      ? uiCopy.graphCoreLabel
+      : getCaseDisplayTitle(activeCase, getActiveCourse()?.cases || []),
     meta: state.locale === "ko" ? `사이클 ${state.graph.iteration}` : `cycle ${state.graph.iteration}`,
     type: "core",
     tone: "primary",
@@ -6252,8 +6941,14 @@ function buildRenderableGraph() {
     isHotspot: true,
   };
 
-  const baseNodes = state.graph.nodes.map((node) => ({
+  const baseNodes = state.graph.nodes.map((node, index) => ({
     ...node,
+    label: node.kind === "stakeholder"
+      ? getCaseStakeholderMeta(node.stakeholder).label
+      : getLocalizedGraphLabel(node, index, activeCase),
+    meta: node.kind === "stakeholder"
+      ? getCaseStakeholderMeta(node.stakeholder).status
+      : node.meta,
     type: node.kind === "stakeholder" ? "stakeholder" : "signal",
     isHotspot: node.tone === "danger" || node.id === state.activeStakeholder,
   }));
@@ -6321,14 +7016,28 @@ function describeNodeIssue(node) {
     "caption-parity": t("nodeTitleCaptionParity"),
     "telemetry-scope": t("nodeTitleTelemetryScope"),
   };
+  const localizeStoredNodeText = (value, fallback) => {
+    if (!value) return fallback;
+    if (state.locale !== "ko" || /[\u3131-\uD79D]/u.test(String(value))) return value;
+    const known = {
+      "Systemwide design conflict": titles.proposal,
+      "Pathway personalization spike": titles["adaptive-pathing"],
+      "Moderation overload": titles["moderation-burden"],
+      "Governance friction": titles.governance,
+      "Evidence continuity gap": titles["evidence-trace"],
+      "Caption parity concern": titles["caption-parity"],
+      "Telemetry scope watch": titles["telemetry-scope"],
+    };
+    return known[String(value)] || fallback || value;
+  };
 
   if (node.type === "core") {
     return {
       kicker: ko ? `쟁점 강도 · ${koBandWord(scores.conflict)}(${scores.conflict}%)` : `Conflict ${scores.conflict}%`,
       title: titles[node.id] || node.label,
       body: ko
-        ? "이 코어 노드는 지금의 스웜 프레임을 한데 모아요. 주변 군집이 조여올수록, 제안이 아직 풀리지 않은 수업 쟁점을 더 많이 끌어안고 있다는 뜻이에요."
-        : "This core node aggregates the current swarm frame. When nearby clusters tighten, the proposal is absorbing more unresolved instructional trade-offs.",
+        ? "이 노드는 지금까지 나온 설계 쟁점을 한곳에 모아 보여줘요. 주변 노드가 많고 서로 연결될수록, 아직 결정하지 못했거나 더 확인해야 할 문제가 많다는 뜻이에요."
+        : "This node summarizes the unresolved design issues in the case. More nearby nodes and connections mean more decisions still need evidence or agreement.",
     };
   }
 
@@ -6387,7 +7096,7 @@ function describeNodeIssue(node) {
         ],
         ko: [
           { t: "SSO·명단 동기화", b: "시스템 간 신원 연동이 취약하고, 오래된 명단이 유령 계정을 만듭니다." },
-          { t: "데이터 보존 모호함", b: "보존 정책이 이 도구의 기본 저장 기간과 깔끔하게 맞아떨어지지 않습니다." },
+          { t: "데이터 보관 기준이 불명확함", b: "데이터를 얼마 동안 보관할지 정한 기준과 도구의 기본 저장 기간이 일치하지 않습니다." },
           { t: "외부 업체 개인정보 검토", b: "벤더 DPA 승인이 지연되어 배포가 법무 확인 단계에서 멈춰 있습니다." },
           { t: "통합 유지보수 부담", b: "새 커넥터마다 에듀테크 연동을 맡은 쪽이 말없이 떠안는 온콜 표면이 늘어납니다." },
           { t: "네트워크 수준 접근성", b: "지연이나 방화벽 규칙이 교외 학습자의 경험을 조용히 떨어뜨립니다." },
@@ -6415,7 +7124,7 @@ function describeNodeIssue(node) {
           { t: "Time-bound tasks", b: "Rigid timers disadvantage learners with processing accommodations." },
         ],
         ko: [
-          { t: "자막 동등성", b: "자막은 존재하지만 정확성 검토가 없어, 동기화와 용어가 조금씩 어긋납니다." },
+          { t: "자막과 설명의 품질 차이", b: "자막은 있지만 정확성 검토가 없어 시간 맞춤과 용어가 조금씩 어긋납니다." },
           { t: "스크린리더 탐색 순서", b: "보조 기기에서 탐색 순서가 뛰어, 키보드만 쓰는 사용자는 맥락을 잃습니다." },
           { t: "색상·대비", b: "상태 표시가 색에만 의존하여, 저시력 학습자가 놓칩니다." },
           { t: "시간 제한 과제", b: "고정 타이머가 처리 속도 조정이 필요한 학습자에게 불리하게 작동합니다." },
@@ -6428,8 +7137,8 @@ function describeNodeIssue(node) {
         { t: "Edge-case signal", b: "A smaller pattern branching off the main topic — often hints at where the design hasn't been tested yet." },
       ],
       ko: [
-        { t: "보조 쟁점", b: "주요 군집에서 파생된 후속 쟁점입니다. 비슷한 노드가 계속 근처에 생긴다면 다시 들여다볼 가치가 있습니다." },
-        { t: "경계 신호", b: "본 주제에서 갈라진 작은 패턴입니다. 설계가 아직 검증되지 않은 구간을 시사하는 경우가 많습니다." },
+        { t: "보조 쟁점", b: "주요 쟁점에서 이어진 추가 문제예요. 비슷한 문제가 반복되면 별도로 확인해 보세요." },
+        { t: "경계 신호", b: "주요 쟁점에서 갈라져 나온 작은 패턴이에요. 아직 충분히 확인되지 않은 부분일 수 있어요." },
       ],
     };
     const pool = concernPool[node.stakeholder] || fallbackPool;
@@ -6448,8 +7157,12 @@ function describeNodeIssue(node) {
     const typeWord = ko ? issueTypeKo[node.issueType] || node.issueType : `${node.issueType[0].toUpperCase()}${node.issueType.slice(1)}`;
     return {
       kicker: `${typeWord} · ${stakeLabel || (ko ? "쟁점" : "Issue")}`,
-      title: node.label,
-      body: node.detail || node.meta || (ko ? "이 노드는 현재 케이스 구조에서 생성됐어요." : "This node was generated from the active case structure."),
+      title: localizeStoredNodeText(node.label, ko ? "생성된 쟁점" : node.label),
+      body: ko
+        ? (/[\u3131-\uD79D]/u.test(String(node.detail || node.meta || ""))
+          ? (node.detail || node.meta)
+          : "이 노드는 현재 케이스 구조에서 생성됐어요.")
+        : (node.detail || node.meta || "This node was generated from the active case structure."),
     };
   }
 
@@ -6458,7 +7171,7 @@ function describeNodeIssue(node) {
       kicker: ko ? `교사 업무 부담 · ${koBandWord(teacherLoad)}(${teacherLoad}점)` : `Teacher load ${teacherLoad}`,
       title: titles[node.id],
       body: ko
-        ? "퍼실리테이션, 예외 처리, 검토 업무가 지금의 수업 흐름이 흡수할 수 있는 속도보다 빠르게 쌓이고 있다고 스웜이 감지하고 있어요."
+        ? "진행 지원, 예외 처리, 검토 업무가 현재 수업 방식으로 처리할 수 있는 양보다 빠르게 늘고 있어요."
         : "The swarm is detecting that facilitation, exception handling, and review workload are accumulating faster than the current instructional flow can absorb.",
     };
   }
@@ -6468,7 +7181,7 @@ function describeNodeIssue(node) {
       kicker: ko ? `프라이버시 · ${koBandWord(privacy)}(${privacy}점)` : `Privacy ${privacy}`,
       title: titles[node.id] || node.label,
       body: ko
-        ? "이 쟁점 군집은 데이터 처리의 모호함을 가리켜요. 계속 커지면 에듀테크와 행정 검토 양쪽에서 도입 위험이 커져요."
+        ? "데이터를 언제, 왜, 얼마나 보관·사용하는지 기준이 아직 분명하지 않아요. 계속 커지면 기술·행정 검토에서 도입 위험이 커질 수 있어요."
         : "This issue cluster points to data handling ambiguity. If it keeps growing, adoption risk increases for both IT and administrative reviewers.",
     };
   }
@@ -6478,7 +7191,7 @@ function describeNodeIssue(node) {
       kicker: ko ? `개인화 · ${koBandWord(personalization)}(${personalization}점)` : `Personalization ${personalization}`,
       title: titles[node.id],
       body: ko
-        ? "스웜은 여기서 개인화 잠재력이 크다고 보지만, 근거가 드러나지 않으면 학습자의 선택을 과도하게 몰아갈 수 있어요."
+        ? "개인화 가능성은 크지만, 추천 이유가 보이지 않으면 학습자가 선택을 스스로 판단하기 어려워질 수 있어요."
         : "The swarm sees strong personalization potential here, but it may over-direct learner decisions if the rationale remains hidden.",
     };
   }
@@ -6498,7 +7211,7 @@ function describeNodeIssue(node) {
       kicker: ko ? `접근성 · ${koBandWord(accessibility)}(${accessibility}점)` : `Accessibility ${accessibility}`,
       title: titles[node.id],
       body: ko
-        ? "자막, 대체 텍스트, 속도, 설명 계층에 걸친 동등한 접근이 아직 취약하다고 스웜이 신호하고 있어요."
+        ? "자막·대체 텍스트·속도 조절·설명 방식이 모든 학습자에게 같은 수준으로 제공되는지 더 확인해야 해요."
         : "The swarm is flagging that equivalent access across captions, alt text, pacing, and explanation layers is still fragile.",
     };
   }
@@ -6514,7 +7227,7 @@ function describeNodeIssue(node) {
   return {
     kicker: node.meta || (ko ? "쟁점" : "Issue detected"),
     title: titles[node.id] || node.label,
-    body: stakeSummary || (ko ? "이 노드는 그래프 속 살아있는 쟁점 군집이에요." : "This node represents a live issue cluster in the swarm graph."),
+    body: stakeSummary || (ko ? "이 노드는 현재 케이스에서 확인된 설계 쟁점이에요." : "This node represents a design issue identified in the current case."),
   };
 }
 
@@ -7233,18 +7946,18 @@ function getNodeListEntries() {
   const ko = state.locale === "ko";
   const entries = state.graph.nodes
     .filter((node) => node.kind === "signal")
-    .map((node) => ({
+    .map((node, index) => ({
       id: node.id,
-      label: node.label || "",
-      detail: node.detail || "",
-      meta: node.meta || "",
+      label: localizeLegacyKoreanCopy(node.label || "", ko ? `핵심 쟁점 ${index + 1}` : node.label || ""),
+      detail: localizeLegacyKoreanCopy(node.detail || "", ko ? "현재 케이스의 설계 선택과 이해관계자 영향을 설명하는 쟁점입니다." : node.detail || ""),
+      meta: localizeLegacyKoreanCopy(node.meta || "", ko ? "근거" : node.meta || ""),
       tone: node.tone || "neutral",
       issueType: node.issueType || "",
       origin: node.origin || "brief",
       stakeholder: node.stakeholder || "",
       stakeholderLabel: stakeholders[node.stakeholder]
         ? getCaseStakeholderMeta(node.stakeholder).label
-        : node.stakeholder,
+        : localizeLegacyKoreanCopy(node.stakeholder || "", ko ? "이해관계자" : node.stakeholder || ""),
     }));
 
   const query = nodeListState.query.trim().toLowerCase();
@@ -7301,13 +8014,13 @@ function renderNodeListRows() {
         <button type="button" class="node-list-row ${entry.id === state.selectedGraphNodeId ? "is-selected" : ""}" data-node-id="${entry.id}">
           <span class="node-list-dot" data-tone="${entry.tone}"></span>
           <span class="node-list-main">
-            <strong>${entry.label}</strong>
-            ${detail ? `<p>${detail}</p>` : ""}
+            <strong>${escapeHtml(entry.label)}</strong>
+            ${detail ? `<p>${escapeHtml(detail)}</p>` : ""}
           </span>
           <span class="node-list-tags">
-            <span class="badge badge-neutral">${entry.meta}</span>
-            <span class="badge badge-secondary">${entry.stakeholderLabel}</span>
-            <span class="badge badge-neutral">${describeNodeOrigin(entry.origin)}</span>
+            <span class="badge badge-neutral">${escapeHtml(entry.meta)}</span>
+            <span class="badge badge-secondary">${escapeHtml(entry.stakeholderLabel)}</span>
+            <span class="badge badge-neutral">${escapeHtml(describeNodeOrigin(entry.origin))}</span>
           </span>
         </button>
       `;
@@ -7321,6 +8034,8 @@ function renderNodeList() {
   if (!panel || !stage) return;
   const isList = getMapViewMode() === "list" && hasActiveCase();
   stage.classList.toggle("is-list-mode", isList);
+  const mapDock = stage.querySelector(".map-dock");
+  if (mapDock) mapDock.style.display = isList ? "none" : "";
   panel.hidden = !isList;
   updateMapModeButton();
   if (!isList) return;
@@ -7354,6 +8069,9 @@ function renderNodeList() {
         via: "list",
       });
       renderAll();
+      if (typeof resolveDensity === "function" && resolveDensity() === "simple") {
+        window.requestAnimationFrame(() => openMapDrawer("insight"));
+      }
     });
   }
   const ko = state.locale === "ko";
@@ -7383,6 +8101,19 @@ function renderNodeList() {
     if (sortSelect) sortSelect.value = nodeListState.sort;
   }
   renderNodeListRows();
+  if (document.documentElement.classList.contains("theme-light")) {
+    const controls = panel.querySelector(".node-list-controls");
+    if (controls) {
+      controls.style.background = "rgba(255,255,255,0.96)";
+      controls.style.border = "1px solid rgba(121,140,171,0.16)";
+    }
+    panel.querySelectorAll(".node-list-row").forEach((row) => {
+      row.style.color = "#172033";
+      row.style.background = row.classList.contains("is-selected") ? "#eef2ff" : "#ffffff";
+      row.style.borderColor = row.classList.contains("is-selected") ? "rgba(67,97,238,0.5)" : "rgba(121,140,171,0.2)";
+    });
+    panel.querySelectorAll(".node-list-main p, .node-list-count, .node-list-empty").forEach((el) => { el.style.color = "#475569"; });
+  }
 }
 
 document.getElementById("map-mode-btn")?.addEventListener("click", () => {
@@ -7404,8 +8135,8 @@ function renderGraph() {
         .map(
           (event) => `
         <article class="evidence-item">
-          <strong>${event.title}</strong>
-          <p>${event.body}</p>
+          <strong>${escapeHtml(localizeLegacyKoreanCopy(event.title, state.locale === "ko" ? "맵 활동" : event.title))}</strong>
+          <p>${escapeHtml(localizeLegacyKoreanCopy(event.body, state.locale === "ko" ? "현재 케이스 맵이 업데이트되었습니다." : event.body))}</p>
         </article>
       `
         )
@@ -7495,7 +8226,8 @@ function renderGraph() {
         },
       ];
 
-  dom.networkMetaGrid.innerHTML = metaItems
+  const localizedMetaItems = localizeNetworkMeta(metaItems);
+  dom.networkMetaGrid.innerHTML = localizedMetaItems
     .map(
       (item) => `
         <article class="network-meta-card">
@@ -7631,6 +8363,30 @@ function syncGraphLoop() {
   }
 }
 
+function renderOrbitSignals(conflicts) {
+  if (!dom.orbitSignalList) return;
+  const items = Array.isArray(conflicts) ? conflicts.slice(0, 3) : [];
+  dom.orbitSignalList.innerHTML = items.length
+    ? items
+        .map((item, index) => {
+          const score = Math.max(8, Math.min(100, Number(item.num) || (item.level === "critical" ? 82 : 56)));
+          return `
+            <article class="orbit-signal" data-level="${item.level || "medium"}">
+              <div class="orbit-signal-head">
+                <span class="orbit-signal-index">0${index + 1}</span>
+                <strong>${item.title}</strong>
+                <span class="orbit-signal-score">${score}</span>
+              </div>
+              <div class="orbit-signal-bar" role="progressbar" aria-label="${item.title}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}">
+                <span style="width:${score}%"></span>
+              </div>
+            </article>
+          `;
+        })
+        .join("")
+    : `<p class="orbit-signal-empty">관심사 신호는 케이스를 선택하면 나타나요.</p>`;
+}
+
 function renderStakeholderFocus() {
   const activeCase = getCaseById(state.activeCaseId, getActiveCourse());
   if (!activeCase) {
@@ -7646,6 +8402,9 @@ function renderStakeholderFocus() {
     dom.orbitTitle.textContent = t("casePreview");
     dom.orbitIcon.textContent = "hub";
     dom.orbitSummary.textContent = t("panelUpdatesWhenCaseOpen");
+    if (dom.perspectivesResultSummary) dom.perspectivesResultSummary.textContent = t("pickCase");
+    if (dom.perspectivesResultMeta) dom.perspectivesResultMeta.textContent = t("openCaseShort");
+    renderOrbitSignals([]);
     dom.chatBadge.textContent = t("noCasePick");
     dom.topTensions.innerHTML = `
       <article class="tension-item">
@@ -7666,6 +8425,8 @@ function renderStakeholderFocus() {
     dom.selectedNodeKicker.textContent = t("hoverOrClick");
     dom.selectedNodeTitle.textContent = t("noNodeSelected");
     dom.selectedNodeCopy.textContent = t("hoverNodeHelp");
+    const emptyInsightPanel = document.querySelector(".insight-panel");
+    if (emptyInsightPanel) emptyInsightPanel.classList.remove("has-selected-node");
     if (dom.relatedPersonalActivity) {
       dom.relatedPersonalActivity.innerHTML = emptyNoteMarkup(t("selectNode"));
     }
@@ -7693,8 +8454,16 @@ function renderStakeholderFocus() {
   const riskScore = Math.round(scores.conflict * 0.65 + conflicts.length * 6);
   const selectedNode = getSelectedRenderableNode();
   const selectedNodeIssue = selectedNode ? describeNodeIssue(selectedNode) : null;
+  const activeInsightPanel = document.querySelector(".insight-panel");
+  if (activeInsightPanel) activeInsightPanel.classList.toggle("has-selected-node", Boolean(selectedNode));
   const comparableNode = getComparableNodeForActivity(selectedNode);
   const activeRun = state.activeRole === "user" ? getActiveLearnerRun() : null;
+  // Render-time guard: legacy case records can still carry English copy after
+  // metadata merging. Korean mode always uses the locale catalog for the
+  // primary node/orbit result.
+  const localizedStakeholderSummary = state.locale === "ko" && stakeholders[state.activeStakeholder]?.summaryKey
+    ? t(stakeholders[state.activeStakeholder].summaryKey)
+    : stakeholder.summary;
   const personalItems = comparableNode
     ? [
         ...asArray(activeRun?.agendaNodes).map((item) => ({
@@ -7726,13 +8495,28 @@ function renderStakeholderFocus() {
   dom.activeStakeholderPill.textContent = state.locale === "ko" ? `${stakeholder.label} 관점` : `${stakeholder.label} focus`;
   dom.activeStakeholderStatus.textContent = state.locale === "ko" ? `${stakeholder.status} · 사이클 ${state.graph.iteration}` : `${stakeholder.status} · cycle ${state.graph.iteration}`;
   dom.lensName.textContent = stakeholder.label;
-  dom.lensSummary.textContent = stakeholder.summary;
+  dom.lensSummary.textContent = localizedStakeholderSummary;
   dom.lensStatus.textContent = stakeholder.status;
   dom.lensScore.textContent = String(riskScore);
   dom.orbitTitle.textContent =
     state.locale === "ko" ? `${stakeholder.label}의 관심사` : `${stakeholder.label} orbit`;
   dom.orbitIcon.textContent = stakeholder.icon;
-  dom.orbitSummary.textContent = stakeholder.summary;
+  dom.orbitSummary.textContent = localizedStakeholderSummary;
+  if (dom.perspectivesResultSummary) {
+    dom.perspectivesResultSummary.textContent = state.locale === "ko"
+      ? `${stakeholder.label} 관점의 핵심 우려 ${conflicts.length}개를 확인하세요.`
+      : `${conflicts.length} key concerns from the ${stakeholder.label} perspective.`;
+  }
+  if (dom.perspectivesResultMeta) {
+    dom.perspectivesResultMeta.textContent = state.locale === "ko"
+      ? `현재 위험 점수 ${riskScore} · 아래 카드에서 근거와 질문을 이어가세요.`
+      : `Current risk ${riskScore} · continue with evidence and questions below.`;
+  }
+  const orbitLabels = conflicts.slice(0, 3).map((item) => item.title.replace(/\s+/g, " ").slice(0, 12));
+  if (dom.orbitSatA) dom.orbitSatA.textContent = orbitLabels[0] || "핵심 부담";
+  if (dom.orbitSatB) dom.orbitSatB.textContent = orbitLabels[1] || "보조 신호";
+  if (dom.orbitSatC) dom.orbitSatC.textContent = orbitLabels[2] || "결정 영향";
+  renderOrbitSignals(conflicts);
   dom.chatBadge.textContent = state.locale === "ko" ? `${stakeholder.label} 보기` : `${stakeholder.label} view`;
   dom.activeStakeholderStatus.textContent = stakeholder.status;
 
@@ -7751,12 +8535,23 @@ function renderStakeholderFocus() {
     .slice(-4)
     .reverse()
     .map(
-      (item) => `
+      (item, index) => {
+        const stakeholderKey = normalizeStakeholderKey(
+          item?.stakeholder,
+          EVIDENCE_LENS_ORDER[index] || EVIDENCE_LENS_ORDER[0]
+        );
+        const localizedCopy = localizedEvidenceLensCopy(stakeholderKey, state.locale);
+        const rawTitle = String(item?.title || "").trim();
+        const rawBody = String(item?.body || "").trim();
+        const title = isPlaceholderEvidenceTitle(rawTitle) ? localizedCopy.label : rawTitle;
+        const body = isPlaceholderEvidenceBody(rawBody) ? localizedCopy.body : rawBody;
+        return `
         <article class="evidence-item">
-          <strong>${item.title}</strong>
-          <p>${item.body}</p>
+          <strong>${escapeHtml(localizeLegacyKoreanCopy(title, localizedCopy.label))}</strong>
+          <p>${escapeHtml(localizeLegacyKoreanCopy(body, localizedCopy.body))}</p>
         </article>
-      `
+      `;
+      }
     )
     .join("");
 
@@ -7790,12 +8585,10 @@ function renderStakeholderFocus() {
   if (dom.quickAnnotationForm) {
     // Annotate only appears once a node is actually selected (no node = no form).
     dom.quickAnnotationForm.hidden = state.activeRole !== "user" || !state.selectedGraphNodeId;
-    const visibilitySelect = dom.quickAnnotationForm.querySelector('select[name="visibility"]');
-    if (visibilitySelect) {
-      const cohortOption = visibilitySelect.querySelector('option[value="cohort"]');
-      if (cohortOption) {
-        cohortOption.disabled = getCaseBoardSettings(activeCase).sharingMode === "private";
-      }
+    const cohortControl = dom.quickAnnotationForm.querySelector('[name="visibility"][value="cohort"]');
+    if (cohortControl) {
+      cohortControl.disabled = getCaseBoardSettings(activeCase).sharingMode === "private";
+      if (cohortControl.disabled) cohortControl.checked = false;
     }
   }
   if (dom.quickAnnotationSubmit) {
@@ -7829,7 +8622,7 @@ function renderChat() {
             : "";
           return `
             <article class="chat-message ${entry.role}" data-stakeholder="${entry.stakeholder || ""}">
-              <div>${entry.body}</div>
+              <div>${escapeHtml(localizeLegacyKoreanCopy(entry.body, t("noDialogueYet")))}</div>
               <small>${stakeholderLabel}</small>
               ${actions}
             </article>
@@ -7874,6 +8667,16 @@ function renderMatrix() {
   const { feasibility, alignment, conflict } = computeScores();
   dom.radarFill.setAttribute("points", polygonPoints(radarValues()));
   dom.matrixState.textContent = conflict > 70 ? t("matrixNeedsAttention") : alignment > 75 ? t("matrixBalanced") : t("matrixWatchClosely");
+  if (dom.matrixResultSummary) {
+    dom.matrixResultSummary.textContent = state.locale === "ko"
+      ? `${dom.matrixState.textContent} · 가장 큰 충돌은 ${conflict}%입니다.`
+      : `${dom.matrixState.textContent} · Largest conflict is ${conflict}%.`;
+  }
+  if (dom.matrixResultMeta) {
+    dom.matrixResultMeta.textContent = state.locale === "ko"
+      ? `개인화 ${state.metrics.personalization}% · 교사 부담 ${state.metrics.teacherLoad}% · 결정 로그 ${state.decisions.length}건`
+      : `Personalization ${state.metrics.personalization}% · Teacher load ${state.metrics.teacherLoad}% · ${state.decisions.length} decisions`;
+  }
 
   const bars = [
     { label: t("personalization"), value: personalization, color: "var(--primary)" },
@@ -7896,30 +8699,99 @@ function renderMatrix() {
     )
     .join("");
 
-  const matrixInsights = asArray(activeCase?.matrixInsights);
-  dom.matrixInsights.innerHTML = matrixInsights.length
-    ? matrixInsights
+  const rawMatrixInsights = asArray(activeCase?.matrixInsights);
+  const uniqueMatrixInsights = rawMatrixInsights.filter((item, index, list) => {
+    const key = `${String(item?.title || "").trim()}\n${String(item?.body || "").trim()}`.toLowerCase();
+    return list.findIndex((candidate) => `${String(candidate?.title || "").trim()}\n${String(candidate?.body || "").trim()}`.toLowerCase() === key) === index;
+  });
+  const repeatedPlaceholderInsights = uniqueMatrixInsights.length <= 1 && rawMatrixInsights.length > 1;
+  const matrixInsights = repeatedPlaceholderInsights
+    ? (state.locale === "ko"
+        ? [
+            { title: "교사 부담과 실행", body: `교사 부담 ${teacherLoad}%로, 피드백 조정과 예외 처리를 먼저 점검해야 해요.` },
+            { title: "개인화와 프라이버시", body: `개인화 ${personalization}%와 프라이버시 ${privacy}%의 균형을 함께 확인하세요.` },
+            { title: "실행 가능성과 접근성", body: `실행 가능성 ${feasibility}% · 접근성 ${accessibility}%를 기준으로 다음 결정을 비교할 수 있어요.` },
+          ]
+        : [
+            { title: "Teacher load and feasibility", body: `Teacher load is ${teacherLoad}%; review moderation and exception handling first.` },
+            { title: "Personalization and privacy", body: `Personalization is ${personalization}% and privacy is ${privacy}%; check the balance together.` },
+            { title: "Feasibility and access", body: `Feasibility is ${feasibility}% and accessibility is ${accessibility}%; use both for the next decision.` },
+          ])
+    : uniqueMatrixInsights.slice(0, 4);
+  const localizedInsightRows = matrixInsights.map((item) => ({
+    item,
+    title: localizeLegacyKoreanCopy(item?.title, state.locale === "ko" ? "핵심 분석" : item?.title),
+    body: localizeLegacyKoreanCopy(item?.body, state.locale === "ko" ? "이 분석은 현재 케이스의 설계 선택과 이해관계자 영향을 요약합니다." : item?.body),
+  }));
+  const allGenericInsightRows = localizedInsightRows.length > 1 && localizedInsightRows.every(({ title, body }) =>
+    /^(핵심 분석|key insight)$/i.test(String(title).trim()) &&
+    /^(이 분석은 현재 케이스의 설계 선택과 이해관계자 영향을 요약합니다\.|this analysis summarizes the current case design choices and stakeholder impact\.)$/i.test(String(body).trim())
+  );
+  const displayMatrixInsights = allGenericInsightRows
+    ? (state.locale === "ko"
+        ? [
+            { title: "교사 부담과 실행", body: `교사 부담 ${teacherLoad}%로, 피드백 조정과 예외 처리를 먼저 점검해야 해요.` },
+            { title: "개인화와 프라이버시", body: `개인화 ${personalization}%와 프라이버시 ${privacy}%의 균형을 함께 확인하세요.` },
+            { title: "실행 가능성과 접근성", body: `실행 가능성 ${feasibility}% · 접근성 ${accessibility}%를 기준으로 다음 결정을 비교할 수 있어요.` },
+          ]
+        : [
+            { title: "Teacher load and feasibility", body: `Teacher load is ${teacherLoad}%; review moderation and exception handling first.` },
+            { title: "Personalization and privacy", body: `Personalization is ${personalization}% and privacy is ${privacy}%; check the balance together.` },
+            { title: "Feasibility and access", body: `Feasibility is ${feasibility}% and accessibility is ${accessibility}%; use both for the next decision.` },
+          ])
+    : matrixInsights;
+  dom.matrixInsights.innerHTML = displayMatrixInsights.length
+    ? displayMatrixInsights
         .map(
           (item) => `
             <article class="insight-card">
-              <strong>${item.title}</strong>
-              <p>${item.body}</p>
+              <strong>${escapeHtml(localizeLegacyKoreanCopy(item.title, state.locale === "ko" ? "핵심 분석" : item.title))}</strong>
+              <p>${escapeHtml(localizeLegacyKoreanCopy(item.body, state.locale === "ko" ? "이 분석은 현재 케이스의 설계 선택과 이해관계자 영향을 요약합니다." : item.body))}</p>
             </article>
           `
         )
         .join("")
     : emptyNoteMarkup(t("noInsights"));
 
+  // Some legacy/demo records contain the same placeholder insight four times.
+  // Inspect the rendered copy as the final source of truth (after localization)
+  // and replace that repeated block with three actionable score summaries.
+  const renderedInsightCards = [...dom.matrixInsights.querySelectorAll(".insight-card")];
+  const renderedInsightKeys = renderedInsightCards.map((card) =>
+    `${card.querySelector("strong")?.textContent || ""}\n${card.querySelector("p")?.textContent || ""}`.trim()
+  );
+  if (renderedInsightCards.length > 1 && new Set(renderedInsightKeys).size === 1) {
+    const conciseInsights = state.locale === "ko"
+      ? [
+          { title: "교사 부담과 실행", body: `교사 부담 ${teacherLoad}%로, 피드백 조정과 예외 처리를 먼저 점검해야 해요.` },
+          { title: "개인화와 프라이버시", body: `개인화 ${personalization}%와 프라이버시 ${privacy}%의 균형을 함께 확인하세요.` },
+          { title: "실행 가능성과 접근성", body: `실행 가능성 ${feasibility}% · 접근성 ${accessibility}%를 기준으로 다음 결정을 비교할 수 있어요.` },
+        ]
+      : [
+          { title: "Teacher load and feasibility", body: `Teacher load is ${teacherLoad}%; review moderation and exception handling first.` },
+          { title: "Personalization and privacy", body: `Personalization is ${personalization}% and privacy is ${privacy}%; check the balance together.` },
+          { title: "Feasibility and access", body: `Feasibility is ${feasibility}% and accessibility is ${accessibility}%; use both for the next decision.` },
+        ];
+    dom.matrixInsights.innerHTML = conciseInsights
+      .map((item) => `<article class="insight-card"><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.body)}</p></article>`)
+      .join("");
+  }
+
   dom.decisionLog.innerHTML = state.decisions.length
     ? state.decisions
         .map(
-          (item) => `
+          (item) => {
+            const stamp = state.locale === "ko" && /^(now|NOW)$/i.test(String(item.stamp || "")) ? "지금" : String(item.stamp || "");
+            const title = localizeLegacyKoreanCopy(item.title, state.locale === "ko" ? "결정 기록" : item.title);
+            const body = localizeLegacyKoreanCopy(item.body, state.locale === "ko" ? "현재 케이스의 결정 기록입니다." : item.body);
+            return `
             <article class="decision-item">
-              <time>${item.stamp}</time>
-              <strong>${item.title}</strong>
-              <p>${item.body}</p>
+              <time>${escapeHtml(stamp)}</time>
+              <strong>${escapeHtml(title)}</strong>
+              <p>${escapeHtml(body)}</p>
             </article>
-          `
+          `;
+          }
         )
         .join("")
     : emptyNoteMarkup(t("noHistory"));
@@ -7932,6 +8804,17 @@ function renderSandbox() {
   const lag = Math.round(8 + conflict * 0.12);
   const instructorMode = state.activeRole === "admin";
 
+  if (state.sandboxBaseline.caseId !== state.activeCaseId || !state.sandboxBaseline.metrics) {
+    state.sandboxBaseline = { caseId: state.activeCaseId, metrics: { ...state.metrics } };
+  }
+  const baseline = state.sandboxBaseline.metrics;
+  const deltaItems = [
+    [state.locale === "ko" ? "개인화" : "Personalization", state.metrics.personalization - baseline.personalization],
+    [state.locale === "ko" ? "교사 부담" : "Teacher load", state.metrics.teacherLoad - baseline.teacherLoad],
+    [state.locale === "ko" ? "프라이버시" : "Privacy", state.metrics.privacy - baseline.privacy],
+    [state.locale === "ko" ? "접근성" : "Accessibility", state.metrics.accessibility - baseline.accessibility],
+  ].filter(([, delta]) => delta !== 0);
+
   dom.cohesionScore.textContent = `${alignment}%`;
   dom.cognitiveLoad.textContent = loadBand;
   dom.inferenceLag.textContent = `${lag}ms`;
@@ -7942,6 +8825,16 @@ function renderSandbox() {
         ? t("sandboxStable")
         : t("sandboxNeedsTuning")
     : t("instructorOnly");
+  if (dom.sandboxResultSummary) {
+    dom.sandboxResultSummary.textContent = state.locale === "ko"
+      ? `${dom.simulationState.textContent} · 정렬도 ${alignment}%`
+      : `${dom.simulationState.textContent} · Alignment ${alignment}%`;
+  }
+  if (dom.sandboxResultMeta) {
+    dom.sandboxResultMeta.textContent = state.locale === "ko"
+      ? `교사 부담 ${state.metrics.teacherLoad}% · 개인정보 보호 ${state.metrics.privacy}% · 조정 후 변화는 아래에 표시됩니다.`
+      : `Teacher load ${state.metrics.teacherLoad}% · Privacy ${state.metrics.privacy}% · Changes appear below.`;
+  }
 
   Object.entries(dom.metricLabels).forEach(([key, label]) => {
     label.textContent = String(state.metrics[key]);
@@ -7956,18 +8849,35 @@ function renderSandbox() {
   });
 
   const sandboxFeed = asArray(activeCase?.sandboxFeed);
-  dom.reactionFeed.innerHTML = sandboxFeed.length
+  const deltaMarkup = deltaItems.length
+    ? `<div class="reaction-delta"><strong>${state.locale === "ko" ? "이번 조정의 영향" : "Impact of this adjustment"}</strong><span>${deltaItems.map(([label, delta]) => `${label} ${delta > 0 ? "+" : ""}${delta}`).join(" · ")}</span></div>`
+    : `<div class="reaction-delta"><strong>${state.locale === "ko" ? "기준 상태" : "Baseline state"}</strong><span>${state.locale === "ko" ? "슬라이더나 시나리오를 조정하면 변화가 여기에 표시돼요." : "Adjust a slider or scenario to see the change here."}</span></div>`;
+  dom.reactionFeed.innerHTML = deltaMarkup + (sandboxFeed.length
     ? sandboxFeed
         .map(
-          (item) => `
+          (item, index) => {
+            const copy = getSandboxFeedCopy(item, index);
+            return `
             <article class="feed-item">
-              <strong>${item.title || item.label}</strong>
-              <p>${item.body || item.note || item.value || ""}</p>
+              <strong>${escapeHtml(copy.title)}</strong>
+              <p>${escapeHtml(copy.body)}</p>
             </article>
-          `
+          `;
+          }
         )
         .join("")
-    : emptyNoteMarkup(t("noNotes"));
+    : emptyNoteMarkup(t("noNotes")));
+
+  if (document.documentElement.classList.contains("theme-light")) {
+    document.querySelectorAll(".sandbox-layout .feed-item").forEach((el) => {
+      el.style.color = "#172033";
+      el.style.background = "#f8fbff";
+      el.style.borderColor = "rgba(121, 140, 171, 0.22)";
+      el.style.boxShadow = "0 8px 24px rgba(30, 55, 90, 0.08)";
+    });
+    document.querySelectorAll(".sandbox-layout .feed-item strong").forEach((el) => { el.style.color = "#172033"; });
+    document.querySelectorAll(".sandbox-layout .feed-item p").forEach((el) => { el.style.color = "#475569"; });
+  }
 }
 
 function renderReport() {
@@ -7976,24 +8886,28 @@ function renderReport() {
   const course = getActiveCourse();
   const activeLearner = getActiveLearner();
   const uiCopy = getCaseUiCopy();
-  const summary = uiCopy.reportSummary || activeCase?.summary || "";
-  const reportTensions = state.evidence.slice(-3).reverse();
+  const summary = getCaseDisplaySummary(activeCase, uiCopy.reportSummary || activeCase?.summary || "");
+  const reportTensions = getReportTensionItems();
   const reportRecommendations = state.chat.filter((item) => item.role === "agent").slice(-2).reverse();
 
   dom.reportSummary.textContent = summary || t("noSummary");
 
+  const reportAction = `<button type="button" class="toolbar-button toolbar-button-primary report-empty-action" data-report-action="network">${state.locale === "ko" ? "네트워크에서 근거 추가" : "Add evidence from network"}</button>`;
   dom.reportTensions.innerHTML = reportTensions.length
     ? reportTensions
         .map(
-          (item) => `
+          (item, index) => {
+            const copy = getReportEvidenceCopy(item, index);
+            return `
             <article class="memo-item">
-              <strong>${item.title}</strong>
-              <p>${item.body}</p>
+              <strong>${escapeHtml(copy.title)}</strong>
+              <p>${escapeHtml(copy.body)}</p>
             </article>
-          `
+          `;
+          }
         )
         .join("")
-    : emptyNoteMarkup(t("noTensions"));
+    : `${emptyNoteMarkup(t("noTensions"))}${reportAction}`;
 
   dom.reportRecommendations.innerHTML = reportRecommendations.length
     ? reportRecommendations
@@ -8001,27 +8915,48 @@ function renderReport() {
           (item) => `
             <article class="memo-item">
               <strong>${state.locale === "ko" ? "추천" : "Recommendation"}</strong>
-              <p>${item.body}</p>
+              <p>${escapeHtml(localizeLegacyKoreanCopy(item.body, state.locale === "ko" ? "추천 방향을 검토해 보세요." : item.body))}</p>
             </article>
           `
         )
         .join("")
-    : emptyNoteMarkup(t("noRecommendations"));
+    : `${emptyNoteMarkup(t("noRecommendations"))}${reportAction}`;
 
-  dom.reportEvidence.innerHTML = state.evidence.length
-    ? state.evidence
-        .slice(-5)
-        .reverse()
+  const reportEvidenceItems = state.evidence
+    .slice(-5)
+    .reverse()
+    .filter((item, index, list) => {
+      const key = `${String(item?.title || "").trim()}\n${String(item?.body || "").trim()}`.toLowerCase();
+      return list.findIndex((candidate) => `${String(candidate?.title || "").trim()}\n${String(candidate?.body || "").trim()}`.toLowerCase() === key) === index;
+    });
+  const reportEvidenceCopies = reportEvidenceItems
+    .map((item, index) => getReportEvidenceCopy(item, index))
+    .filter((copy, index, list) => {
+      const key = `${String(copy.title || "").trim()}\n${String(copy.body || "").trim()}`.toLowerCase();
+      return list.findIndex((candidate) => `${String(candidate.title || "").trim()}\n${String(candidate.body || "").trim()}`.toLowerCase() === key) === index;
+    });
+  dom.reportEvidence.innerHTML = reportEvidenceCopies.length
+    ? reportEvidenceCopies
         .map(
-          (item) => `
+          (copy) => `
             <article class="memo-item">
-              <strong>${item.title}</strong>
-              <p>${item.body}</p>
+              <strong>${escapeHtml(copy.title)}</strong>
+              <p>${escapeHtml(copy.body)}</p>
             </article>
           `
         )
         .join("")
-    : emptyNoteMarkup(t("noEvidence"));
+    : `${emptyNoteMarkup(t("noEvidence"))}${reportAction}`;
+
+  // A few legacy evidence rows localize to the same fallback copy even when
+  // their raw records differ. Remove duplicate rendered cards so the report
+  // reads as a short evidence trail instead of repeating the same note.
+  const seenReportEvidence = new Set();
+  dom.reportEvidence.querySelectorAll(".memo-item").forEach((card) => {
+    const key = `${card.querySelector("strong")?.textContent || ""}\n${card.querySelector("p")?.textContent || ""}`.trim();
+    if (seenReportEvidence.has(key)) card.remove();
+    else seenReportEvidence.add(key);
+  });
 
   const rubric = activeCase
     ? [
@@ -8060,7 +8995,10 @@ function renderReport() {
         .map(
           (item) => `
             <article class="rubric-item">
-              <header><span>${item.label}</span><strong>${item.value}%</strong></header>
+              <header>
+                <span>${item.label}</span>
+                <strong>${item.value}% <small class="rubric-provenance">${state.locale === "ko" ? "근거 보기" : "View evidence"}</small></strong>
+              </header>
               <div class="bar-track">
                 <div class="bar-fill" style="width:${item.value}%; background:var(--primary);"></div>
               </div>
@@ -8077,14 +9015,15 @@ function renderReport() {
 
   const reflectionPrompts = asArray(activeCase?.reflectionPrompts);
   const isStudent = state.activeRole === "user";
+  const reportNetworkActionLabel = state.locale === "ko" ? "네트워크에서 질문 만들기" : "Open the network to add a question";
   dom.reflectionPrompts.innerHTML = reflectionPrompts.length
     ? reflectionPrompts
         .map((item, index) => {
-          const safe = escapeHtml(String(item || ""));
+          const safe = escapeHtml(getReflectionPromptCopy(item, index));
           if (!isStudent) return `<article class="prompt-item">${safe}</article>`;
           const placeholder = state.locale === "ko" ? "여기에 답변을 적어보세요..." : "Type your reflection...";
           const submitLabel = state.locale === "ko" ? "제출" : "Submit";
-          const feedbackLabel = state.locale === "ko" ? "스웜 피드백 받기" : "Get swarm feedback";
+          const feedbackLabel = state.locale === "ko" ? "다섯 관점의 피드백 받기" : "Get five-perspective feedback";
           const savedDraft = reflectionFeedbackState.drafts[reflectionKey(index)] || "";
           return `
             <article class="prompt-item" data-prompt-index="${index}">
@@ -8100,7 +9039,7 @@ function renderReport() {
           `;
         })
         .join("")
-    : emptyNoteMarkup(t("noPrompts"));
+    : `${emptyNoteMarkup(t("noPrompts"))}<button type="button" class="toolbar-button toolbar-button-primary report-empty-action report-empty-followup" data-report-action="network">${reportNetworkActionLabel}</button>`;
 
   if (isStudent) {
     reflectionPrompts.forEach((_, index) => renderReflectionCritique(index));
@@ -8131,7 +9070,35 @@ function renderReport() {
           `
         )
         .join("")
-    : emptyNoteMarkup(t("noActivity"));
+    : `${emptyNoteMarkup(t("noActivity"))}${isStudent ? `<button type="button" class="toolbar-button report-empty-action report-empty-followup" data-report-action="network">${state.locale === "ko" ? "네트워크에서 활동 시작" : "Start from the network"}</button>` : ""}`;
+
+  // The report can be opened from a tab carrying an older cached stylesheet.
+  // Re-assert the light-theme text contrast at render time so summary cards
+  // never fall back to dark text on a muted surface.
+  if (document.documentElement.classList.contains("theme-light")) {
+    document.querySelectorAll(".report-layout .memo-item, .report-layout .memo-item strong, .report-layout .metric-card strong, .report-layout .metric-card p").forEach((el) => {
+      el.style.color = "#172033";
+    });
+    document.querySelectorAll(".report-layout .memo-item, .report-layout .metric-card, .rubric-item").forEach((el) => {
+      el.style.background = "#f8fbff";
+      el.style.borderColor = "rgba(121, 140, 171, 0.22)";
+      el.style.boxShadow = "0 8px 24px rgba(30, 55, 90, 0.08)";
+    });
+    document.querySelectorAll(".report-layout .reflection-item").forEach((el) => {
+      el.style.color = "#172033";
+      el.style.background = "#f8fbff";
+      el.style.borderColor = "rgba(121, 140, 171, 0.22)";
+      el.style.boxShadow = "0 8px 24px rgba(30, 55, 90, 0.08)";
+    });
+    document.querySelectorAll(".report-layout .reflection-item strong").forEach((el) => { el.style.color = "#172033"; });
+    document.querySelectorAll(".report-layout .reflection-item p").forEach((el) => { el.style.color = "#475569"; });
+    document.querySelectorAll(".rubric-item, .rubric-item header, .rubric-item strong, .rubric-item small").forEach((el) => {
+      el.style.color = "#172033";
+    });
+    document.querySelectorAll(".report-layout .memo-item p").forEach((el) => {
+      el.style.color = "#475569";
+    });
+  }
 }
 
 function getHomeRecentItems() {
@@ -8167,6 +9134,7 @@ function renderCompareSummary() {
   if (!on) return;
   buildComparisonEntries(); // refresh state.comparisonSummary
   const s = state.comparisonSummary || { shared: 0, mineOnly: 0, teamOnly: 0 };
+  const hasSelectedDifference = Boolean(state.selectedGraphNodeId);
   el.innerHTML = `
     <div class="compare-summary-head">
       <span class="compare-summary-title">${t("compareTitle")}</span>
@@ -8176,30 +9144,42 @@ function renderCompareSummary() {
         <span class="compare-chip compare-chip-team">${t("compareTeamOnly")} ${s.teamOnly}</span>
       </div>
     </div>
-    <p class="compare-summary-prompt">${t("comparePrompt")}</p>`;
+    <p class="compare-summary-prompt">${t("comparePrompt")}</p>
+    <button class="toolbar-button toolbar-button-primary compare-annotation-cta" type="button" data-compare-annotate ${hasSelectedDifference ? "" : "disabled"} aria-disabled="${!hasSelectedDifference}">
+      ${hasSelectedDifference
+        ? (state.locale === "ko" ? "선택한 차이에 공동 주석 시작" : "Annotate the selected difference")
+        : (state.locale === "ko" ? "차이를 선택하면 공동 주석을 시작할 수 있어요" : "Select a difference to start a shared annotation")}
+    </button>`;
 }
 
 function renderHome() {
   const host = document.getElementById("home-view");
   if (!host) return;
-  const learner = getActiveLearner();
+  const learner = state.activeRole === "user" ? getActiveLearner() : null;
+  const instructor = state.activeRole === "admin" ? getActiveInstructor() : null;
   const name =
-    learner && learner.name && learner.name.trim()
-      ? learner.name.trim()
-      : state.activeRole === "user"
-        ? t("student")
-        : t("instructor");
+    (state.activeRole === "admin" ? instructor?.name : learner?.name)?.trim() ||
+    (state.activeRole === "user" ? t("student") : t("instructor"));
   const course = getActiveCourse();
   const activeCase = getCaseById(state.activeCaseId, course);
   const courseLine = course ? `${course.code} · ${course.name}` : "";
+  const activeRun = typeof getActiveLearnerRun === "function" ? getActiveLearnerRun() : null;
+  const annotationCount = asArray(activeRun?.annotations).length;
+  const evidenceCount = asArray(state.evidence).length;
+  const completedSteps = activeCase ? Math.min(3, 1 + Number(annotationCount > 0) + Number(evidenceCount > 2)) : 0;
+  const progress = Math.round((completedSteps / 4) * 100);
 
   // The home is a quiet launcher into the case map — NOT a step-by-step checklist.
   // (README: "see design work as a network of tensions rather than a linear checklist".)
   const continueBlock = activeCase
     ? `<p class="home-continue-eyebrow">${t("homeContinueEyebrow")}</p>
-       <h2 class="home-continue-title">${escapeHtml(activeCase.title)}</h2>
+       <h2 class="home-continue-title">${escapeHtml(getCaseDisplayTitle(activeCase, course?.cases || []))}</h2>
        <p class="home-continue-sub">${escapeHtml(courseLine)}</p>
        <p class="home-task-framing">${t("homeTaskFraming")}</p>
+       <div class="home-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}">
+         <span style="width:${progress}%"></span>
+       </div>
+       <p class="home-progress-label">${state.locale === "ko" ? `학습 루프 ${progress}% · 다음: 팀의 관점 차이에 공동 주석 남기기` : `Learning loop ${progress}% · Next: annotate a perspective difference`}</p>
        <button class="toolbar-button toolbar-button-primary home-continue-cta" type="button" data-home-goto="visualizer">
          <span class="material-symbols-outlined" aria-hidden="true">play_arrow</span>${t("homeContinueCta")}
        </button>`
@@ -8215,7 +9195,7 @@ function renderHome() {
             `<li class="home-recent-item"><strong>${escapeHtml(String(r.title).slice(0, 80))}</strong><span>${escapeHtml(r.meta)}</span></li>`,
         )
         .join("")}</ul>`
-    : `<p class="muted home-recent-empty">${t("homeRecentEmpty")}</p>`;
+    : `<div class="home-empty-action"><p class="muted home-recent-empty">${t("homeRecentEmpty")}</p><button class="toolbar-button toolbar-button-primary home-recent-cta" type="button" data-home-goto="visualizer">${state.locale === "ko" ? "네트워크에서 시작하기" : "Start from the network"}</button></div>`;
 
   const advTradeoffs = isViewAllowed("matrix");
   const advSandbox = isViewAllowed("sandbox");
@@ -8226,6 +9206,13 @@ function renderHome() {
     <button class="home-adv-item" type="button" data-home-goto="sandbox"${advSandbox ? "" : " disabled"}>
       <span class="material-symbols-outlined" aria-hidden="true">science</span>${t("homeAdvancedSandbox")}
     </button>`;
+
+  const loop = [
+    { icon: "visibility", title: state.locale === "ko" ? "관점 살펴보기" : "Explore perspectives", state: activeCase ? "done" : "waiting" },
+    { icon: "difference", title: state.locale === "ko" ? "차이 발견하기" : "Notice differences", state: completedSteps >= 2 ? "done" : activeCase ? "active" : "waiting" },
+    { icon: "edit_note", title: state.locale === "ko" ? "공동 주석하기" : "Annotate together", state: annotationCount > 0 ? "done" : activeCase ? "active" : "waiting" },
+    { icon: "hub", title: state.locale === "ko" ? "생각 종합하기" : "Synthesize thinking", state: evidenceCount > 2 ? "active" : "waiting" },
+  ];
 
   host.innerHTML = `
     <div class="home-wrap">
@@ -8241,6 +9228,18 @@ function renderHome() {
       <section class="home-continue panel-soft">
         <p class="home-greeting">${escapeHtml(t("homeGreeting", { name }))}</p>
         ${continueBlock}
+      </section>
+      <section class="home-learning-loop" aria-labelledby="home-learning-loop-title">
+        <div class="home-loop-heading">
+          <div>
+            <p class="home-section-eyebrow">${state.locale === "ko" ? "학습 루프" : "Learning loop"}</p>
+            <h2 id="home-learning-loop-title">${state.locale === "ko" ? "관점 차이를 공동 지식으로 바꾸기" : "Turn perspective differences into shared knowledge"}</h2>
+          </div>
+          <button class="toolbar-button" type="button" data-home-goto="report">${state.locale === "ko" ? "공동 종합 보기" : "Open synthesis"}</button>
+        </div>
+        <div class="home-loop-grid">
+          ${loop.map((step, index) => `<article class="home-loop-card is-${step.state}"><span class="home-loop-index">${index + 1}</span><span class="material-symbols-outlined" aria-hidden="true">${step.icon}</span><strong>${step.title}</strong><small>${step.state === "done" ? (state.locale === "ko" ? "완료" : "Complete") : step.state === "active" ? (state.locale === "ko" ? "진행 중" : "In progress") : (state.locale === "ko" ? "대기" : "Waiting")}</small></article>`).join("")}
+        </div>
       </section>
       <div class="home-bottom">
         <section class="home-recent panel-soft">
@@ -8398,7 +9397,7 @@ ${list(unique.map((b) => `${b.title} — ${b.authors[0] || ""}`), ko ? "단독 �
 
 <h2>${ko ? "5. 마무리 — 생각 정리로 연결" : "5. Close — hand off to reflections"}</h2>
 <p>${ko
-    ? "기준을 다시 말해 주세요: <strong>가장 중요한 쟁점 하나</strong>를 고르고, <strong>맵의 노드를 근거로</strong> 그 선택을 설명하기. 스웜 비평을 받았다면 도전에 답하도록 초안을 고친 뒤 제출."
+    ? "기준을 다시 말해 주세요: <strong>가장 중요한 쟁점 하나</strong>를 고르고, <strong>맵의 노드를 근거로</strong> 그 선택을 설명하기. 피드백을 받았다면 확인 질문에 답하도록 초안을 고친 뒤 제출."
     : "Restate the bar: pick <strong>one most important tension</strong> and defend it <strong>citing nodes from the map</strong>. If they used swarm critique, revise to answer the challenges before submitting."}</p>
 `;
   openPrintableWindow(`${targetCase.title} — ${t1}`, body);
@@ -8418,12 +9417,12 @@ function openStudentOnePager() {
     const draft = reflectionFeedbackState.drafts[key] || "";
     const critique = reflectionFeedbackState.critiques[key];
     const critiqueHtml = critique
-      ? `<p class="muted">${ko ? "스웜 비평 (도전 질문)" : "Swarm critique (challenges)"}:</p>
+      ? `<p class="muted">${ko ? "확인 질문 피드백" : "Feedback questions"}:</p>
          <ul>${critique.items.map((item) => `<li><span class="chip">${escapeHtml(item.label)}</span> ${escapeHtml(item.text)}</li>`).join("")}</ul>`
       : "";
     return `
       <h2>${ko ? `생각 정리 ${index + 1}` : `Reflection ${index + 1}`}</h2>
-      <p class="muted">${escapeHtml(String(prompt))}</p>
+      <p class="muted">${escapeHtml(getReflectionPromptCopy(prompt, index))}</p>
       <div class="quote">${draft ? escapeHtml(draft) : `<span class="muted">${ko ? "(작성한 내용이 여기에 들어갑니다)" : "(your answer goes here)"}</span>`}</div>
       ${critiqueHtml}`;
   }).join("");
@@ -8759,11 +9758,121 @@ async function loadManageAnalytics(force = false) {
   }
 }
 
+function getInstructorConsoleInviteLink(course = getActiveCourse()) {
+  if (!course?.joinCode) return "";
+  const base = `${window.location.origin}${window.location.pathname}`;
+  return `${base}?join=${encodeURIComponent(course.joinCode)}`;
+}
+
+function renderInstructorSystemConsole(course, ko) {
+  const canProvisionAccounts = isSupabaseSessionActive();
+  const invites = asArray(course?.instructorInvites);
+  const pendingInvites = invites.filter((item) => item.status !== "joined");
+  const activeLearners = getLearners(course).length;
+  const publishedCases = asArray(course?.cases).filter((item) => item.published).length;
+  const inviteLink = getInstructorConsoleInviteLink(course);
+  const nextStep = pendingInvites.length === 0
+    ? { label: ko ? "학생 초대를 준비하세요" : "Prepare the first student invite", tab: "prepare" }
+    : publishedCases === 0
+      ? { label: ko ? "토론 주제를 만들어 수업을 시작하세요" : "Generate a topic to start the class", tab: "live" }
+      : { label: ko ? "학급 진행 상황을 검토하세요" : "Review class progress", tab: "review" };
+  const inviteRows = pendingInvites.length
+    ? pendingInvites
+        .slice(-4)
+        .reverse()
+        .map(
+          (invite) => `
+            <li class="instructor-console-roster-row">
+              <span class="instructor-console-avatar">${escapeHtml(String(invite.name || invite.email || "?").trim().slice(0, 1).toUpperCase())}</span>
+              <span class="instructor-console-roster-copy"><strong>${escapeHtml(invite.name || "학생")}</strong><small>${escapeHtml(invite.email || "")}</small></span>
+              <span class="badge badge-secondary">${invite.status === "revoked" ? (ko ? "취소됨" : "Revoked") : (invite.status === "pending" ? (ko ? "메일 발송됨" : "Email sent") : (ko ? "초대 준비됨" : "Invite ready"))}</span>
+              ${invite.status !== "revoked" ? `<span class="instructor-console-invite-actions"><button type="button" class="toolbar-button toolbar-button-quiet" data-console-invite-resend="${escapeHtml(invite.email || "")}">${ko ? "재전송" : "Resend"}</button><button type="button" class="toolbar-button toolbar-button-quiet" data-console-invite-revoke="${escapeHtml(invite.email || "")}">${ko ? "취소" : "Revoke"}</button></span>` : ""}
+            </li>`
+        )
+        .join("")
+    : `<li class="instructor-console-empty">${ko ? "아직 준비된 학생 초대가 없어요." : "No student invitations yet."}</li>`;
+
+  return `
+    <section class="panel instructor-console" id="instructor-system-console">
+      <div class="instructor-console-header">
+        <div>
+          <p class="eyebrow">${ko ? "교수자 운영 콘솔" : "Instructor control center"}</p>
+          <h3>${ko ? "수업을 열고, 초대하고, 촉진하세요" : "Set up, invite, and facilitate"}</h3>
+          <p class="muted">${ko ? "권한이 부여된 교수자의 작업을 하나의 안전한 워크플로우로 모았어요." : "A single, permission-aware workflow for course operations."}</p>
+        </div>
+        <span class="instructor-console-permission"><span class="status-dot"></span>${ko ? "교수자 권한" : "Instructor access"}</span>
+      </div>
+
+      <div class="instructor-console-kpis">
+        <div class="instructor-console-kpi"><strong>${activeLearners}</strong><span>${ko ? "등록 학생" : "Learners"}</span></div>
+        <div class="instructor-console-kpi"><strong>${pendingInvites.length}</strong><span>${ko ? "대기 초대" : "Pending invites"}</span></div>
+        <div class="instructor-console-kpi"><strong>${publishedCases}</strong><span>${ko ? "게시 활동" : "Published activities"}</span></div>
+      </div>
+
+      <div class="instructor-console-next-step">
+        <div><span class="eyebrow">${ko ? "다음 단계" : "Next step"}</span><strong>${nextStep.label}</strong></div>
+        <button type="button" class="toolbar-button toolbar-button-primary" data-console-tab="${nextStep.tab}">${ko ? "열기" : "Open"}</button>
+      </div>
+
+      <div class="instructor-console-tabs" role="tablist" aria-label="${ko ? "수업 운영 단계" : "Course operation stage"}">
+        <button type="button" role="tab" data-console-tab="prepare" aria-selected="${(state.manageConsoleTab || "prepare") === "prepare"}" class="${(state.manageConsoleTab || "prepare") === "prepare" ? "is-active" : ""}">${ko ? "준비" : "Prepare"}</button>
+        <button type="button" role="tab" data-console-tab="live" aria-selected="${state.manageConsoleTab === "live"}" class="${state.manageConsoleTab === "live" ? "is-active" : ""}">${ko ? "진행" : "Facilitate"}</button>
+        <button type="button" role="tab" data-console-tab="review" aria-selected="${state.manageConsoleTab === "review"}" class="${state.manageConsoleTab === "review" ? "is-active" : ""}">${ko ? "검토" : "Review"}</button>
+      </div>
+
+      <div class="instructor-console-grid">
+        <article class="instructor-console-card instructor-console-card-primary" data-console-stage="prepare">
+          <div class="instructor-console-card-heading"><span class="instructor-console-step">00</span><div><h4>${ko ? "코스·권한 관리" : "Course & access"}</h4><p>${ko ? "새 코스를 만들고 기존 계정에 교수자 권한을 부여하세요." : "Create a course and grant instructor access to existing accounts."}</p></div></div>
+          <form class="instructor-console-form" data-console-form="course-create">
+            <div class="instructor-console-form-row"><label>${ko ? "코스 이름" : "Course name"}<input name="courseName" type="text" required></label><label>${ko ? "코드" : "Code"}<input name="courseCode" type="text" required></label></div>
+            <button type="submit" class="toolbar-button toolbar-button-primary">${ko ? "코스 만들기" : "Create course"}</button>
+          </form>
+          <form class="instructor-console-form" data-console-form="membership-grant">
+            <div class="instructor-console-form-row"><label>${ko ? "교수자 이름" : "Instructor name"}<input name="memberName" type="text"></label><label>${ko ? "계정 이메일" : "Account email"}<input name="memberEmail" type="email" required></label></div>
+            <button type="submit" class="toolbar-button">${ko ? "교수자 권한 부여" : "Grant instructor access"}</button>
+          </form>
+        </article>
+        <article class="instructor-console-card instructor-console-card-primary" data-console-stage="prepare">
+          <div class="instructor-console-card-heading"><span class="instructor-console-step">01</span><div><h4>${ko ? "학생 계정·초대" : "Student accounts & invites"}</h4><p>${ko ? "학생 정보를 등록하고 가입 링크를 전달하세요." : "Prepare a roster and share a secure join link."}</p></div></div>
+          <form class="instructor-console-form" data-console-form="student-invite">
+            <div class="instructor-console-form-row"><label>${ko ? "학생 이름" : "Student name"}<input name="studentName" type="text" placeholder="${ko ? "예: 김민서" : "e.g. Minseo Kim"}" required></label><label>${ko ? "이메일" : "Email"}<input name="studentEmail" type="email" placeholder="student@example.edu" required></label></div>
+            <button type="submit" class="toolbar-button toolbar-button-primary">${ko ? (canProvisionAccounts ? "계정 생성·초대" : "초대 준비") : (canProvisionAccounts ? "Create account & invite" : "Prepare invite")}</button>
+          </form>
+          <ul class="instructor-console-roster">${inviteRows}</ul>
+          <p class="instructor-console-note">${ko ? (canProvisionAccounts ? "서버 초대 함수가 계정을 만들고 초대 메일을 보냅니다. 비밀번호는 학습자가 직접 설정해요." : "브라우저에서는 비밀번호를 만들지 않아요. 로그인 후 서버 초대 함수가 실제 계정 생성을 활성화합니다.") : (canProvisionAccounts ? "The server invite function creates the account and sends the email; learners set their own password." : "The browser never creates passwords. Sign in to enable server-side account provisioning.")}</p>
+        </article>
+
+        <article class="instructor-console-card" data-console-stage="prepare">
+          <div class="instructor-console-card-heading"><span class="instructor-console-step">02</span><div><h4>${ko ? "내 코스 초대" : "Invite to this course"}</h4><p>${ko ? "코드 또는 링크 하나로 학생을 같은 코스에 연결합니다." : "Connect learners to this course with one code or link."}</p></div></div>
+          <div class="instructor-console-join-box"><span>${ko ? "참여 코드" : "Join code"}</span><code>${escapeHtml(course.joinCode || "—")}</code><button type="button" class="toolbar-button toolbar-button-quiet" data-console-action="copy-join">${ko ? "코드 복사" : "Copy code"}</button></div>
+          <button type="button" class="toolbar-button" data-console-action="copy-invite-link" ${inviteLink ? "" : "disabled"}>${ko ? "가입 링크 복사" : "Copy invite link"}</button>
+          <p class="instructor-console-note">${ko ? "학생은 랜딩 화면에서 링크를 열고 본인 계정으로 가입합니다." : "Learners open the link and sign up with their own account."}</p>
+        </article>
+
+        <article class="instructor-console-card" data-console-stage="live">
+          <div class="instructor-console-card-heading"><span class="instructor-console-step">03</span><div><h4>${ko ? "AI 주제 스튜디오" : "AI topic studio"}</h4><p>${ko ? "학습목표와 쟁점을 입력하면 토론 후보를 생성합니다." : "Turn a learning goal and tension into discussion candidates."}</p></div></div>
+          <textarea class="instructor-console-textarea" data-console-topic-brief rows="3" placeholder="${ko ? "예: 자동화 평가의 공정성과 설명 책임을 비교하게 하고 싶어요." : "e.g. Compare fairness and explainability in automated assessment."}">${escapeHtml(state.agentCoach.topicBrief || "")}</textarea>
+          <button type="button" class="toolbar-button toolbar-button-primary" data-console-action="open-topic-coach">${ko ? "주제 후보 만들기" : "Generate topic candidates"}</button>
+          <span class="instructor-console-inline-status">${state.agentCoach.topicGenerated ? (ko ? "후보가 준비되어 있어요" : "Candidates are ready") : (ko ? "아직 생성 전" : "Not generated yet")}</span>
+        </article>
+
+        <article class="instructor-console-card" data-console-stage="live">
+          <div class="instructor-console-card-heading"><span class="instructor-console-step">04</span><div><h4>${ko ? "실시간 촉진·분석" : "Live facilitation & analytics"}</h4><p>${ko ? "AI는 제안하고 교수자는 승인·수정합니다." : "AI suggests; the instructor approves and edits."}</p></div></div>
+          <div class="instructor-console-actions"><button type="button" class="toolbar-button" data-console-action="open-mediator">${ko ? "중재 제안 열기" : "Open mediator"}</button><button type="button" class="toolbar-button toolbar-button-quiet" data-console-action="open-analytics">${ko ? "참여 분석 보기" : "View analytics"}</button></div>
+          <div class="instructor-console-guardrail"><span class="status-dot status-dot-warm"></span><span>${ko ? "게시·중재·초대는 교수자 승인 뒤 실행" : "Publish, mediate, and invite actions require instructor approval"}</span></div>
+        </article>
+      </div>
+    </section>`;
+}
+
 function renderManageView() {
   const host = document.getElementById("manage-view");
   if (!host) return;
   if (state.activeRole !== "admin") {
-    host.innerHTML = "";
+    host.innerHTML = `<section class="panel manage-panel manage-access-message" role="status">
+      <h2>${state.locale === "ko" ? "교수자 권한이 필요해요" : "Instructor access required"}</h2>
+      <p>${state.locale === "ko" ? "내 수업은 교수자 계정에서만 사용할 수 있습니다." : "Course management is available to instructor accounts only."}</p>
+    </section>`;
     return;
   }
   const ko = state.locale === "ko";
@@ -8812,7 +9921,8 @@ function renderManageView() {
     .join("");
 
   host.innerHTML = `
-    <section class="panel manage-panel">
+    ${renderInstructorSystemConsole(course, ko)}
+    <section class="panel manage-panel" data-console-review-panel>
       <div class="section-header">
         <div>
           <p class="eyebrow">${ko ? "수업 관리" : "Course management"}</p>
@@ -8849,12 +9959,130 @@ function renderManageView() {
     </section>
   `;
 
+  // Re-apply console contrast at render time for already-open tabs that may
+  // still hold the previous stylesheet query in cache.
+  if (document.documentElement.classList.contains("theme-light")) {
+    host.querySelectorAll(".instructor-console, .instructor-console-card, .instructor-console-kpi, .instructor-console-tabs").forEach((el) => {
+      el.style.color = "#172033";
+      el.style.background = el.classList.contains("instructor-console") ? "#f8fbff" : "#ffffff";
+      el.style.borderColor = "rgba(121, 140, 171, 0.22)";
+      el.style.boxShadow = "0 8px 24px rgba(30, 55, 90, 0.08)";
+    });
+    host.querySelectorAll(".instructor-console h3, .instructor-console h4, .instructor-console strong, .instructor-console label").forEach((el) => { el.style.color = "#172033"; });
+    host.querySelectorAll(".instructor-console p, .instructor-console span, .instructor-console small").forEach((el) => { el.style.color = "#475569"; });
+    host.querySelectorAll(".instructor-console-form input, .instructor-console-textarea").forEach((el) => {
+      el.style.color = "#172033";
+      el.style.background = "#ffffff";
+      el.style.borderColor = "rgba(121, 140, 171, 0.32)";
+    });
+  }
+
   if (state.activeView === "manage") {
     loadManageAnalytics(false);
   }
 }
 
+async function copyConsoleText(text, successMessage, unavailableMessage) {
+  const value = String(text || "").trim();
+  if (!value) {
+    showToast(unavailableMessage);
+    return false;
+  }
+  try {
+    if (!navigator.clipboard?.writeText) throw new Error("Clipboard API unavailable");
+    await navigator.clipboard.writeText(value);
+    showToast(successMessage);
+    return true;
+  } catch (error) {
+    console.warn("Clipboard copy unavailable", error);
+    showToast(unavailableMessage);
+    return false;
+  }
+}
+
 document.getElementById("manage-view")?.addEventListener("click", (event) => {
+  const consoleTab = event.target.closest("[data-console-tab]")?.getAttribute("data-console-tab");
+  if (consoleTab) {
+    state.manageConsoleTab = consoleTab;
+    renderManageView();
+    if (consoleTab === "review") {
+      window.requestAnimationFrame(() => document.querySelector("[data-console-review-panel]")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    }
+    return;
+  }
+  const resendEmail = event.target.closest("[data-console-invite-resend]")?.getAttribute("data-console-invite-resend");
+  if (resendEmail) {
+    const course = getActiveCourse();
+    const invite = asArray(course?.instructorInvites).find((item) => item.email === resendEmail);
+    void (async () => {
+      try {
+        if (isSupabaseSessionActive()) await createStudentInviteRemote({ courseId: course?.id, name: invite?.name || "", email: resendEmail });
+        if (invite) invite.lastSentAt = new Date().toISOString();
+        persistPlatformState();
+        showToast(state.locale === "ko" ? "초대 메일을 다시 보냈어요." : "Invitation resent.");
+        renderManageView();
+      } catch (error) {
+        showToast(state.locale === "ko" ? `초대 메일을 다시 보내지 못했어요: ${error.message}` : `Could not resend invitation: ${error.message}`);
+      }
+    })();
+    return;
+  }
+  const revokeEmail = event.target.closest("[data-console-invite-revoke]")?.getAttribute("data-console-invite-revoke");
+  if (revokeEmail) {
+    const course = getActiveCourse();
+    void (async () => {
+      try {
+        if (isSupabaseSessionActive()) await revokeStudentInviteRemote({ courseId: course?.id, email: revokeEmail });
+        if (course) {
+          const invite = asArray(course.instructorInvites).find((item) => item.email === revokeEmail);
+          if (invite) invite.status = "revoked";
+          persistPlatformState();
+        }
+        showToast(state.locale === "ko" ? "학생 초대를 취소했어요." : "Student invitation revoked.");
+        renderManageView();
+      } catch (error) {
+        showToast(state.locale === "ko" ? `초대를 취소하지 못했어요: ${error.message}` : `Could not revoke invite: ${error.message}`);
+      }
+    })();
+    return;
+  }
+  const consoleAction = event.target.closest("[data-console-action]")?.getAttribute("data-console-action");
+  if (consoleAction === "copy-join") {
+    const code = getActiveCourse()?.joinCode || "";
+    void copyConsoleText(
+      code,
+      state.locale === "ko" ? "참여 코드를 복사했어요." : "Join code copied.",
+      state.locale === "ko" ? "자동 복사를 사용할 수 없어요. 화면의 코드를 직접 선택해 복사해 주세요." : "Automatic copy is unavailable. Select the code on screen and copy it manually."
+    );
+    return;
+  }
+  if (consoleAction === "copy-invite-link") {
+    const link = getInstructorConsoleInviteLink();
+    void copyConsoleText(
+      link,
+      state.locale === "ko" ? "가입 링크를 복사했어요." : "Invite link copied.",
+      state.locale === "ko" ? "자동 복사를 사용할 수 없어요. 가입 링크를 직접 선택해 복사해 주세요." : "Automatic copy is unavailable. Select the invite link and copy it manually."
+    );
+    return;
+  }
+  if (consoleAction === "open-topic-coach") {
+    const brief = document.querySelector("[data-console-topic-brief]")?.value?.trim();
+    if (brief) state.agentCoach.topicBrief = brief;
+    state.agentCoach.facilitatorMode = "topic";
+    state.agentCoach.open = true;
+    renderAll();
+    return;
+  }
+  if (consoleAction === "open-mediator") {
+    state.agentCoach.facilitatorMode = "mediator";
+    state.agentCoach.open = true;
+    renderAll();
+    return;
+  }
+  if (consoleAction === "open-analytics") {
+    document.getElementById("manage-analytics-body")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
   const openBtn = event.target.closest("[data-manage-open]");
   if (openBtn) {
     state.activeCaseId = openBtn.getAttribute("data-manage-open");
@@ -8900,11 +10128,11 @@ document.getElementById("manage-view")?.addEventListener("click", (event) => {
   }
   if (event.target.closest("[data-manage-copy-join]")) {
     const code = getActiveCourse()?.joinCode || "";
-    if (code && navigator.clipboard) {
-      navigator.clipboard.writeText(code).then(() => {
-        showToast(state.locale === "ko" ? "참여 코드를 복사했어요." : "Join code copied.");
-      });
-    }
+    void copyConsoleText(
+      code,
+      state.locale === "ko" ? "참여 코드를 복사했어요." : "Join code copied.",
+      state.locale === "ko" ? "자동 복사를 사용할 수 없어요. 화면의 코드를 직접 선택해 복사해 주세요." : "Automatic copy is unavailable. Select the code on screen and copy it manually."
+    );
   }
 });
 
@@ -8915,7 +10143,260 @@ document.getElementById("manage-view")?.addEventListener("change", (event) => {
   }
 });
 
+document.getElementById("manage-view")?.addEventListener("submit", async (event) => {
+  const courseForm = event.target.closest('[data-console-form="course-create"]');
+  if (courseForm) {
+    event.preventDefault();
+    const data = new FormData(courseForm);
+    try {
+      await addCourse(String(data.get("courseName") || "").trim(), String(data.get("courseCode") || "").trim());
+      showToast(state.locale === "ko" ? "코스를 만들었어요." : "Course created.");
+      renderAll();
+    } catch (error) {
+      showToast(state.locale === "ko" ? `코스를 만들지 못했어요: ${error.message}` : `Could not create course: ${error.message}`);
+    }
+    return;
+  }
+  const membershipForm = event.target.closest('[data-console-form="membership-grant"]');
+  if (membershipForm) {
+    event.preventDefault();
+    const data = new FormData(membershipForm);
+    try {
+      await grantCourseMembership({
+        name: String(data.get("memberName") || "").trim(),
+        email: String(data.get("memberEmail") || "").trim(),
+        role: "admin",
+      });
+      membershipForm.reset();
+      showToast(state.locale === "ko" ? "교수자 권한을 부여했어요." : "Instructor access granted.");
+      renderAll();
+    } catch (error) {
+      showToast(state.locale === "ko" ? `권한을 부여하지 못했어요: ${error.message}` : `Could not grant access: ${error.message}`);
+    }
+    return;
+  }
+  const form = event.target.closest('[data-console-form="student-invite"]');
+  if (!form) return;
+  event.preventDefault();
+  const formData = new FormData(form);
+  const name = String(formData.get("studentName") || "").trim();
+  const email = String(formData.get("studentEmail") || "").trim().toLowerCase();
+  const course = getActiveCourse();
+  if (!course || !name || !email) return;
+  course.instructorInvites = asArray(course.instructorInvites);
+  const existing = course.instructorInvites.find((item) => item.email === email && item.status !== "joined");
+  if (existing) {
+    showToast(state.locale === "ko" ? "이미 준비된 초대가 있어요." : "An invite is already prepared for this email.");
+    return;
+  }
+  let remoteInvite = null;
+  if (isSupabaseSessionActive() && course.id) {
+    try {
+      remoteInvite = await createStudentInviteRemote({ courseId: course.id, name, email });
+    } catch (error) {
+      showToast(state.locale === "ko" ? `계정 초대를 만들지 못했어요: ${error.message}` : `Could not create the account invite: ${error.message}`);
+      return;
+    }
+  }
+  course.instructorInvites.push({
+    id: remoteInvite?.invite?.id || `invite-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    name,
+    email,
+    status: remoteInvite?.invite?.status || "ready",
+    authUserId: remoteInvite?.invite?.auth_user_id || null,
+    createdAt: new Date().toISOString(),
+  });
+  persistPlatformState();
+  showToast(state.locale === "ko" ? (remoteInvite ? "학생 계정을 만들고 초대 메일을 보냈어요." : "학생 초대를 준비했어요. 참여 코드나 링크를 전달하세요.") : (remoteInvite ? "Student account created and invitation sent." : "Invite prepared. Share the course code or link."));
+  renderManageView();
+});
+
+document.getElementById("manage-view")?.addEventListener("input", (event) => {
+  if (event.target.matches("[data-console-topic-brief]")) state.agentCoach.topicBrief = event.target.value;
+});
+
+function getAgentCoachStage() {
+  if (state.activeView === "home") return state.locale === "ko" ? "활동 공동기획" : "Activity co-planning";
+  if (state.activeView === "report") return state.locale === "ko" ? "분석과 성찰" : "Analytics and reflection";
+  return state.locale === "ko" ? "실시간 촉진" : "Live facilitation";
+}
+
+function renderAgentCoach() {
+  const drawer = document.getElementById("agent-coach-drawer");
+  const scrim = document.getElementById("agent-coach-scrim");
+  const content = document.getElementById("agent-coach-content");
+  const trigger = document.getElementById("agent-coach-trigger");
+  const triggerLabel = document.getElementById("agent-coach-trigger-label");
+  if (!drawer || !scrim || !content || !trigger) return;
+
+  const ko = state.locale === "ko";
+  const instructor = state.activeRole === "admin";
+  const activeCase = getCaseById(state.activeCaseId);
+  const caseTitleValue = activeCase
+    ? getCaseDisplayTitle(activeCase, getActiveCourse()?.cases || [])
+    : (ko ? "현재 활동" : "Current activity");
+  const caseTitle = escapeHtml(
+    /^(xx|untitled case)$/i.test(String(caseTitleValue).trim())
+      ? (ko ? "제목 없는 케이스" : "Untitled case")
+      : caseTitleValue
+  );
+  trigger.hidden = false;
+  trigger.setAttribute("aria-expanded", String(Boolean(state.agentCoach.open)));
+  const triggerAccessibleLabel = instructor ? (ko ? "AI 활동 코치" : "AI activity coach") : (ko ? "성찰 코치" : "Reflection coach");
+  trigger.setAttribute("aria-label", triggerAccessibleLabel);
+  trigger.setAttribute("title", triggerAccessibleLabel);
+  if (triggerLabel) triggerLabel.textContent = instructor ? (ko ? "AI 활동 코치" : "AI activity coach") : (ko ? "성찰 코치" : "Reflection coach");
+  drawer.hidden = !state.agentCoach.open;
+  scrim.hidden = !state.agentCoach.open;
+  document.body.classList.toggle("agent-coach-open", Boolean(state.agentCoach.open));
+  if (!state.agentCoach.open) return;
+
+  if (instructor) {
+    const facilitatorMode = state.agentCoach.facilitatorMode || "mediator";
+    const modeTabs = `
+      <div class="agent-facilitator-tabs" role="tablist" aria-label="AI 퍼실리테이터 단계">
+        <button id="agent-facilitator-tab-topic" type="button" role="tab" aria-controls="agent-facilitator-panel" tabindex="${facilitatorMode === "topic" ? "0" : "-1"}" aria-selected="${facilitatorMode === "topic"}" class="${facilitatorMode === "topic" ? "is-active" : ""}" data-agent-action="facilitator-mode" data-agent-mode="topic">토론 전 · 주제 생성</button>
+        <button id="agent-facilitator-tab-mediator" type="button" role="tab" aria-controls="agent-facilitator-panel" tabindex="${facilitatorMode === "mediator" ? "0" : "-1"}" aria-selected="${facilitatorMode === "mediator"}" class="${facilitatorMode === "mediator" ? "is-active" : ""}" data-agent-action="facilitator-mode" data-agent-mode="mediator">토론 중 · 중재 큐</button>
+        <button id="agent-facilitator-tab-after" type="button" role="tab" aria-controls="agent-facilitator-panel" tabindex="${facilitatorMode === "after" ? "0" : "-1"}" aria-selected="${facilitatorMode === "after"}" class="${facilitatorMode === "after" ? "is-active" : ""}" data-agent-action="facilitator-mode" data-agent-mode="after">토론 후 · 열린 질문</button>
+      </div>`;
+    if (facilitatorMode === "topic") {
+      const topicCandidates = state.agentCoach.topicCandidates.length
+        ? state.agentCoach.topicCandidates
+        : FACILITATOR_TOPIC_FALLBACK;
+      content.innerHTML = `
+        <header class="agent-coach-head">
+          <div><p class="agent-kicker">교수자 토론 퍼실리테이터</p><h2 id="agent-coach-title">Topic Generator</h2></div>
+          <button class="agent-icon-button" type="button" data-agent-action="close" aria-label="닫기"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+        </header>
+        <div class="agent-control-strip"><span class="agent-status-dot"></span><strong>교수자 승인 전 · 초안</strong><span>학습자에게 자동 공개되지 않음</span></div>
+        ${modeTabs}
+        <section id="agent-facilitator-panel" class="agent-context-card" role="tabpanel" aria-labelledby="agent-facilitator-tab-topic" tabindex="0"><span>토론 목표</span><strong>${caseTitle}</strong><p>학생들이 어떤 쟁점을 근거로 함께 탐구해야 하는지 자연어로 적으면 됩니다.</p></section>
+        <section class="agent-topic-brief">
+          <label for="agent-topic-brief-input">토론 목표를 자연어로 적어주세요</label>
+          <textarea id="agent-topic-brief-input" placeholder="예: 공정성과 설명 책임 사이의 쟁점을 근거로 토론하게 하고 싶어요.">${escapeHtml(state.agentCoach.topicBrief)}</textarea>
+          <div class="agent-topic-meta"><span>자료 3개 · 30분 · 4인 팀</span><button class="toolbar-button toolbar-button-primary" type="button" data-agent-action="topic-generate" ${state.agentCoach.topicBusy ? "disabled" : ""}>${state.agentCoach.topicBusy ? "후보 생성 중…" : "토론 후보 생성하기"}</button></div>
+        </section>
+        <section class="agent-topic-results" aria-live="polite">
+          <div class="agent-suggestion-meta"><span>AI가 제안한 토론 후보</span><span>교수자가 선택·수정</span></div>
+          ${state.agentCoach.topicGenerated ? topicCandidates.map((item, index) => `<button type="button" class="agent-topic-card ${index === 0 ? "is-selected" : ""}" data-agent-action="topic-select"><strong>${escapeHtml(item.label)}</strong><span>${escapeHtml(item.prompt)}</span><small>${escapeHtml(item.signal)}</small></button>`).join("") : `<div class="agent-topic-empty">목표를 입력하고 후보를 생성하면 세 가지 토론 방향을 비교할 수 있습니다.</div>`}
+        </section>
+        <div class="agent-caveat"><span class="material-symbols-outlined" aria-hidden="true">verified</span>AI는 논제를 결정하지 않습니다. 교수자가 문구와 토론 흐름을 승인한 뒤 공개합니다.</div>
+        <button class="toolbar-button toolbar-button-primary agent-full-button" type="button" data-agent-action="topic-publish">교수자가 승인한 주제만 학습자에게 공개</button>`;
+      return;
+    }
+    if (facilitatorMode === "after") {
+      content.innerHTML = `
+        <header class="agent-coach-head"><div><p class="agent-kicker">토론 리플렉션</p><h2 id="agent-coach-title">Open Questions</h2></div><button class="agent-icon-button" type="button" data-agent-action="close" aria-label="닫기"><span class="material-symbols-outlined" aria-hidden="true">close</span></button></header>
+        <div class="agent-control-strip"><span class="agent-status-dot"></span><strong>교수자 검토 대기</strong><span>다음 활동으로 보낼지 결정</span></div>
+        ${modeTabs}
+        <section id="agent-facilitator-panel" class="agent-context-card" role="tabpanel" aria-labelledby="agent-facilitator-tab-after" tabindex="0"><span>토론에서 드러난 구조</span><strong>합의보다 아직 답하지 못한 질문을 남깁니다</strong><p>AI는 토론을 닫지 않고 다음 탐구 주제와 아직 확인하지 못한 근거를 제안합니다.</p></section>
+        <section class="agent-topic-results"><div class="agent-suggestion-meta"><span>다음 토론 주제 후보</span><span>현재 근거에서 생성</span></div>
+          <button type="button" class="agent-topic-card is-selected" data-agent-action="topic-select"><strong>사용자 경험</strong><span>학습자가 설명을 실제로 이해했는지 어떻게 확인할까?</span><small>추가 확인이 필요한 근거 2개</small></button>
+          <button type="button" class="agent-topic-card" data-agent-action="topic-select"><strong>대안 설계</strong><span>설명 책임을 높이면서 교수자 부담을 줄이는 설계는?</span><small>쟁점 3개</small></button>
+          <button type="button" class="agent-topic-card" data-agent-action="topic-select"><strong>반례 찾기</strong><span>최종 승인이 학습자 주체성을 낮추는 경우는?</span><small>반대 근거 4개</small></button>
+        </section>
+        <div class="agent-caveat"><span class="material-symbols-outlined" aria-hidden="true">info</span>합의된 주장, 남은 쟁점, 아직 확인하지 못한 근거를 구분해 교수자가 다음 활동을 선택합니다.</div>
+        <button class="toolbar-button toolbar-button-primary agent-full-button" type="button" data-agent-action="topic-publish">선택한 질문을 다음 활동으로 보내기</button>`;
+      return;
+    }
+    const evidenceDetail = state.agentCoach.evidenceOpen
+      ? `<div class="agent-evidence-detail">
+          <strong>${ko ? "사용한 근거와 한계" : "Evidence and limitation"}</strong>
+          <ul>
+            <li>${ko ? "마지막 재주석 연결: 8분 전" : "Last re-annotation link: 8 minutes ago"}</li>
+            <li>${ko ? "현재 관점 간 연결: 0개" : "Current cross-perspective links: 0"}</li>
+            <li>${ko ? "화면 밖 대화는 데이터에 포함되지 않습니다." : "Off-screen talk is not represented in the data."}</li>
+          </ul>
+        </div>`
+      : "";
+    const mediatorSuggestion = state.agentCoach.mediatorSuggestion || {
+      primary: "같은 자료를 다르게 읽은 이유를 서로의 말로 다시 설명해 볼까요?",
+      alternative: "반대 입장을 가장 설득력 있게 만들어 줄 근거는 무엇인가요?",
+    };
+    content.innerHTML = `
+      <header class="agent-coach-head">
+        <div><p class="agent-kicker">${ko ? "교수자 오케스트레이션" : "Instructor orchestration"}</p><h2 id="agent-coach-title">${ko ? "AI 활동 코치" : "AI activity coach"}</h2></div>
+        <button class="agent-icon-button" type="button" data-agent-action="close" aria-label="${ko ? "닫기" : "Close"}"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+      </header>
+      <div class="agent-control-strip"><span class="agent-status-dot"></span><strong>${ko ? "제안만" : "Suggest only"}</strong><span>${ko ? "교수자가 최종 결정" : "Instructor makes the final decision"}</span></div>
+      ${modeTabs}
+      <section id="agent-facilitator-panel" class="agent-context-card" role="tabpanel" aria-labelledby="agent-facilitator-tab-mediator" tabindex="0">
+        <span>${getAgentCoachStage()}</span><strong>${caseTitle}</strong>
+        <p>${ko ? "개인 점수나 참여 순위를 만들지 않고, 협업 과정의 변화만 살펴봅니다." : "Examines changes in collaboration without individual scores or participation rankings."}</p>
+      </section>
+      <section class="agent-suggestion-card">
+        <div class="agent-suggestion-meta"><span>${ko ? "AI 제안 초안" : "AI suggestion draft"}</span><span>${ko ? "확신 중간" : "Medium confidence"}</span></div>
+        <h3>${ko ? "관점 충돌을 비교 질문으로 바꿔보세요" : "Turn the perspective conflict into a comparison question"}</h3>
+        <label class="agent-prompt-label" for="agent-prompt-draft">${ko ? "학습자에게 보낼 질문" : "Question to send learners"}</label>
+        <textarea id="agent-prompt-draft" class="agent-prompt-draft">${escapeHtml(mediatorSuggestion.primary)}</textarea>
+        <p class="agent-alternative">${ko ? "대안: " : "Alternative: "}${escapeHtml(mediatorSuggestion.alternative)}</p>
+        <button class="agent-evidence-toggle" type="button" data-agent-action="evidence" aria-expanded="${state.agentCoach.evidenceOpen}">${ko ? "왜 이 제안인가요?" : "Why this suggestion?"}<span class="material-symbols-outlined" aria-hidden="true">${state.agentCoach.evidenceOpen ? "expand_less" : "expand_more"}</span></button>
+        ${evidenceDetail}
+        <div class="agent-caveat"><span class="material-symbols-outlined" aria-hidden="true">info</span>${ko ? "이 제안은 로그에 보이는 행동만 사용합니다. 교수자의 맥락 판단이 우선합니다." : "This suggestion uses only logged behavior. Instructor context takes priority."}</div>
+        <div class="agent-actions">
+          <button class="toolbar-button" type="button" data-agent-action="mediator-generate" ${state.agentCoach.mediatorBusy ? "disabled" : ""}>${state.agentCoach.mediatorBusy ? "생성 중…" : "새 말걸기"}</button>
+          <button class="toolbar-button" type="button" data-agent-action="dismiss">${ko ? "건너뛰기" : "Dismiss"}</button>
+          <button class="toolbar-button" type="button" data-agent-action="revise">${ko ? "수정 기록" : "Record revision"}</button>
+          <button class="toolbar-button toolbar-button-primary" type="button" data-agent-action="accept">${ko ? "학습자에게 보내기" : "Send to learners"}</button>
+        </div>
+      </section>
+      <footer class="agent-privacy-note"><strong>${ko ? "학습자 보호 기본값" : "Learner protection defaults"}</strong><span>${ko ? "자동 채점 없음 · 위험 점수 없음 · 참여량 순위 없음" : "No auto-grading · no risk score · no participation ranking"}</span></footer>`;
+    return;
+  }
+
+  const approvedContent = asObject(state.agentCoach.approvedAction?.content);
+  const approvedPrompt = String(approvedContent.prompt || approvedContent.primary || "").trim();
+  const learnerCoachPrompt = approvedPrompt || (ko ? "어떤 관점이나 근거가 당신의 판단을 바꾸거나 더 복잡하게 만들었나요?" : "Which perspective or evidence changed or complicated your judgment?");
+  content.innerHTML = `
+    <header class="agent-coach-head">
+      <div><p class="agent-kicker">${ko ? "교수자가 승인한 학습 지원" : "Instructor-approved learning support"}</p><h2 id="agent-coach-title">${ko ? "성찰 코치" : "Reflection coach"}</h2></div>
+      <button class="agent-icon-button" type="button" data-agent-action="close" aria-label="${ko ? "닫기" : "Close"}"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+    </header>
+    <div class="agent-control-strip"><span class="agent-status-dot"></span><strong>${ko ? "질문만" : "Questions only"}</strong><span>${ko ? "답을 대신 쓰지 않음" : "Does not write answers"}</span></div>
+    <section class="agent-context-card"><span>${ko ? "현재 활동" : "Current activity"}</span><strong>${caseTitle}</strong><p>${ko ? "내 생각이 바뀐 장면을 먼저 고르고, 그 근거를 바탕으로 성찰합니다." : "Choose moments that changed your thinking, then reflect from that evidence."}</p></section>
+    <section class="agent-suggestion-card learner-agent-card">
+      <div class="agent-suggestion-meta"><span>${ko ? "교수자 승인 질문" : "Instructor-approved prompt"}</span><span>${ko ? "정답 없음" : "No single answer"}</span></div>
+      <h3>${escapeHtml(learnerCoachPrompt)}</h3>
+      <p class="agent-prompt-label">${ko ? "성찰에 사용할 활동 근거" : "Activity evidence for reflection"}</p>
+      <div class="agent-evidence-options">
+        <button type="button" class="is-selected" data-agent-action="toggle-reflection-evidence">✓ ${ko ? "내가 남긴 관점" : "My perspective"}</button>
+        <button type="button" class="is-selected" data-agent-action="toggle-reflection-evidence">✓ ${ko ? "동료의 재주석" : "Peer re-annotation"}</button>
+        <button type="button" data-agent-action="toggle-reflection-evidence">○ ${ko ? "팀의 공동 원칙" : "Team principle"}</button>
+      </div>
+      <div class="agent-caveat"><span class="material-symbols-outlined" aria-hidden="true">verified_user</span>${ko ? "AI가 제안한 표현은 표시되며, 제출 전 초안은 교수자에게 실시간 공개되지 않습니다." : "AI wording is labeled, and drafts are not live-monitored by the instructor."}</div>
+      <button class="toolbar-button toolbar-button-primary agent-full-button" type="button" data-agent-action="reflection-question">${ko ? "선택한 근거로 다음 질문 받기" : "Get the next question from selected evidence"}</button>
+    </section>`;
+}
+
+function setAgentCoachOpen(open) {
+  if (!open) {
+    state.agentCoach.topicRequestId += 1;
+    state.agentCoach.mediatorRequestId += 1;
+    state.agentCoach.topicBusy = false;
+    state.agentCoach.mediatorBusy = false;
+  }
+  state.agentCoach.open = Boolean(open);
+  renderAgentCoach();
+  if (open) {
+    window.requestAnimationFrame(() => document.querySelector("#agent-coach-drawer button")?.focus());
+  } else {
+    window.requestAnimationFrame(() => document.getElementById("agent-coach-trigger")?.focus());
+  }
+}
+
+// Keep the learner's icon dock anchored to the map itself.  The dock is
+// declared beside the visualizer panels for accessibility, but positioning it
+// from that outer layout made it cover the canvas title and task banner.
+function ensureMapDockInStage() {
+  const dock = document.getElementById("map-dock");
+  const stage = document.getElementById("network-stage");
+  if (dock && stage && !stage.contains(dock)) stage.prepend(dock);
+}
+
 function renderAll() {
+  dom.appShell?.classList.toggle("role-admin", state.activeRole === "admin");
+  dom.appShell?.classList.toggle("role-learner", state.activeRole === "user");
+  dom.appShell?.setAttribute("data-active-view", state.activeView);
   if (dom.visualizerInput) {
     dom.visualizerInput.placeholder = t("askQuestionPlaceholder");
   }
@@ -8935,7 +10416,11 @@ function renderAll() {
   applyDensity();
   applyTheme();
   renderSidebar();
+  ensureMapDockInStage();
   renderGraph();
+  // renderGraph may reveal/rebuild the stage after the first pass; re-anchor
+  // once more so the dock is never left in the outer visualizer layout.
+  ensureMapDockInStage();
   renderTaskBanner();
   renderExportActions();
   renderCompareSummary();
@@ -8945,6 +10430,7 @@ function renderAll() {
   renderSandbox();
   renderReport();
   renderManageView();
+  renderAgentCoach();
   syncRealtimeSubscription();
   renderPresencePill();
   normalizeRenderedCopy();
@@ -9085,16 +10571,16 @@ function getTutorialSteps() {
             selector: "#network-stage",
             title: state.locale === "ko" ? "케이스 맵 탐색" : "Explore the Case Map",
             body: state.locale === "ko"
-              ? "먼저 큰 클러스터(이해관계자·제약·쟁점)를 훑어보세요. 노드에 호버하면 내용을 보고, 이해관계자 노드를 클릭하면 선택된 렌즈가 그들의 시각으로 전환됩니다."
+              ? "먼저 큰 묶음(이해관계자·제약·쟁점)을 훑어보세요. 노드에 마우스를 올리면 내용을 보고, 이해관계자 노드를 클릭하면 그 사람의 관점으로 전환됩니다."
               : "Scan the main clusters first — stakeholders, constraints, and tensions. Hover any node to read its detail; click a stakeholder node to shift the Selected lens panel into their point of view.",
             view: "visualizer",
           },
           {
             selector: "#visualizer-form",
-            title: state.locale === "ko" ? "스웜에게 질문하기" : "Ask the Swarm",
+            title: state.locale === "ko" ? "여러 관점에 질문하기" : "Ask the perspectives",
             body: state.locale === "ko"
-              ? "가장 중요한 쟁점이나 트레이드오프, 이해관계자의 우려를 한 문장으로 물어보세요. 다섯 개의 AI 에이전트가 한 번의 라운드에서 서로 다른 관점으로 답하고, 동의·반대 연결이 맵에 자동으로 추가됩니다."
-              : "Ask one focused question — a tension you noticed, a tradeoff, or a stakeholder concern. Five AI agents answer in a single round with different stances, and their agreements and disagreements get wired into the map as new edges.",
+              ? "가장 중요한 쟁점이나 이해관계자의 우려를 한 문장으로 물어보세요. 다섯 개의 AI 관점이 동시에 답하고, 서로 동의하거나 다른 지점이 맵에 연결됩니다."
+              : "Ask one focused question — a tension, tradeoff, or stakeholder concern. Five AI perspectives answer at once, and agreements or disagreements appear as connections on the map.",
             view: "visualizer",
           },
           {
@@ -9117,8 +10603,8 @@ function getTutorialSteps() {
             selector: "#chat-form",
             title: state.locale === "ko" ? "한 이해관계자와 1:1로 대화" : "Go 1-on-1 with a Stakeholder",
             body: state.locale === "ko"
-              ? "상단의 관점 뷰로 전환하면 특정 이해관계자의 관점에서 답을 듣는 단일 채널 채팅이 열립니다. 스웜 라운드보다 더 깊이 파고들고 싶을 때 사용하세요."
-              : "Switch to the Perspectives view (top nav) for a single-channel chat that answers from one stakeholder's point of view. Use it to go deeper than the multi-agent swarm round — one voice, follow-up questions, full turn-by-turn.",
+              ? "상단의 관점 뷰로 전환하면 특정 이해관계자의 관점에서 답을 듣는 1:1 채팅이 열립니다. 한 주제를 더 깊이 확인하고 싶을 때 사용하세요."
+              : "Switch to the Perspectives view (top nav) for a 1:1 chat from one stakeholder's point of view. Use it to explore one topic in more depth.",
             view: "perspectives",
           },
           {
@@ -9136,7 +10622,7 @@ function getTutorialSteps() {
             selector: "#network-stage",
             title: state.locale === "ko" ? "케이스를 선택하면 맵이 열립니다" : "Pick a Case to Load the Map",
             body: state.locale === "ko"
-              ? "위의 목록에서 게시된 케이스를 하나 고르면 네트워크 맵이 이곳에 나타납니다. 그 뒤 튜토리얼을 다시 실행하면 설명요약 읽기, 스웜에 질문하기, 노드 추가, 생각 정리 작성까지 나머지 단계를 안내합니다."
+              ? "위의 목록에서 게시된 케이스를 하나 고르면 관계 맵이 이곳에 나타납니다. 그 뒤 튜토리얼을 다시 실행하면 설명요약 읽기, 여러 관점에 질문하기, 노드 추가, 생각 정리 작성까지 나머지 단계를 안내합니다."
               : "Pick one published case from the list above and its network map will load here. Replay the tutorial after you've opened a case — it will walk you through reading the brief, exploring the map, asking the swarm, challenging responses, adding your own node, and writing a reflection.",
             view: "visualizer",
           },
@@ -9520,7 +11006,12 @@ function addNodeAnnotation(noteType, visibility, body) {
     visibility: boardSettings.sharingMode === "private" ? "private" : visibility || "private",
     body: String(body || "").trim(),
     stakeholder: selected.stakeholder || state.activeStakeholder,
-    createdAt: "Now",
+    stance: noteType || "note",
+    sourceId: selected.id,
+    perspective: state.activeStakeholder,
+    parentId: null,
+    revision: 1,
+    createdAt: new Date().toISOString(),
   };
 
   if (!annotation.body) {
@@ -9567,6 +11058,16 @@ function addNodeAnnotation(noteType, visibility, body) {
     stakeholder: annotation.stakeholder,
     note_type: annotation.noteType,
     visibility: annotation.visibility,
+    body_length: annotation.body.length,
+  });
+  logEvent("annotation.created", {
+    annotation_id: annotation.id,
+    source_id: annotation.sourceId,
+    target_id: annotation.targetId,
+    perspective: annotation.perspective,
+    stance: annotation.stance,
+    visibility: annotation.visibility,
+    revision: annotation.revision,
     body_length: annotation.body.length,
   });
   if (isSupabaseSessionActive()) {
@@ -9775,11 +11276,16 @@ function setView(nextView) {
     renderNavigation();
     return;
   }
+  document.querySelectorAll("details.topbar-more[open]").forEach((details) => {
+    details.open = false;
+  });
   const previous = state.activeView;
   state.activeView = nextView;
   renderNavigation();
+  if (nextView === "manage") renderManageView();
   if (previous !== nextView) {
     logEvent("view.switch", { from: previous, to: nextView });
+    window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
   }
   if (nextView === "report") {
     markTaskProgress("reflect");
@@ -9840,6 +11346,12 @@ function setStakeholder(nextStakeholder) {
   renderAll();
   if (previous !== nextStakeholder) {
     logEvent("lens.change", { from: previous, to: nextStakeholder });
+    logEvent("perspective_switched", {
+      from: previous,
+      to: nextStakeholder,
+      layer: state.activeMapLayer,
+      source_id: state.selectedGraphNodeId || null,
+    });
     markTaskProgress("lens");
   }
 }
@@ -10077,7 +11589,7 @@ async function runSwarmRound(question) {
 
   setAiStatus(
     isKorean
-      ? `스웜 라운드 ${roundNumber} · ${SWARM_AGENTS.length}명의 에이전트가 동시에 응답 중…`
+      ? `AI 분석 라운드 ${roundNumber} · ${SWARM_AGENTS.length}명의 관점이 동시에 응답 중…`
       : `Swarm round ${roundNumber} · ${SWARM_AGENTS.length} agents responding in parallel…`,
     { busy: true }
   );
@@ -10177,14 +11689,14 @@ async function runSwarmRound(question) {
 
   state.timeline.push(
     isKorean
-      ? `스웜 라운드 ${roundNumber} 완료 — ${okCount}/${SWARM_AGENTS.length} 에이전트 응답`
+      ? `AI 분석 라운드 ${roundNumber} 완료 — ${okCount}/${SWARM_AGENTS.length}개 관점 응답`
       : `Swarm round ${roundNumber} complete — ${okCount}/${SWARM_AGENTS.length} agents answered`
   );
   if (state.timeline.length > 5) state.timeline.shift();
 
   setAiStatus(
     isKorean
-      ? `스웜 라운드 ${roundNumber} 완료 (${okCount}/${SWARM_AGENTS.length}명 응답)`
+      ? `AI 분석 라운드 ${roundNumber} 완료 (${okCount}/${SWARM_AGENTS.length}개 관점 응답)`
       : `Swarm round ${roundNumber} complete (${okCount}/${SWARM_AGENTS.length} agents answered)`,
     { busy: false }
   );
@@ -10281,7 +11793,7 @@ async function addInstitution(name) {
 }
 
 async function addCourse(name, code) {
-  if (isSupabaseSessionActive() && isPlatformAdminAccount()) {
+  if (isSupabaseSessionActive() && state.activeRole === "admin") {
     await createCourseInSupabase(name, code);
     persistSessionState();
     return;
@@ -10400,6 +11912,174 @@ document.getElementById("home-view")?.addEventListener("click", (event) => {
   setView(trigger.dataset.homeGoto);
 });
 
+document.querySelector('[data-view-panel="report"]')?.addEventListener("click", (event) => {
+  const trigger = event.target.closest("[data-report-action]");
+  if (!trigger) return;
+  setView(trigger.dataset.reportAction === "network" ? "visualizer" : "report");
+  window.requestAnimationFrame(() => document.getElementById("composer-toggle")?.focus());
+});
+
+document.getElementById("agent-coach-trigger")?.addEventListener("click", () => {
+  setAgentCoachOpen(!state.agentCoach.open);
+});
+
+document.getElementById("agent-coach-scrim")?.addEventListener("click", () => setAgentCoachOpen(false));
+
+document.getElementById("agent-coach-drawer")?.addEventListener("click", (event) => {
+  const action = event.target.closest("[data-agent-action]")?.dataset.agentAction;
+  if (!action) return;
+  const ko = state.locale === "ko";
+  if (action === "facilitator-mode") {
+    state.agentCoach.topicRequestId += 1;
+    state.agentCoach.mediatorRequestId += 1;
+    state.agentCoach.topicBusy = false;
+    state.agentCoach.mediatorBusy = false;
+    state.agentCoach.facilitatorMode = event.target.closest("[data-agent-mode]")?.dataset.agentMode || "mediator";
+    state.agentCoach.evidenceOpen = false;
+    renderAgentCoach();
+    return;
+  }
+  if (action === "topic-generate") {
+    const brief = document.getElementById("agent-topic-brief-input")?.value || "";
+    state.agentCoach.topicBrief = brief;
+    const requestId = ++state.agentCoach.topicRequestId;
+    const caseId = state.activeCaseId;
+    state.agentCoach.topicBusy = true;
+    renderAgentCoach();
+    void generateDiscussionTopicsWithAi(brief).then((topics) => {
+      if (requestId !== state.agentCoach.topicRequestId) return;
+      if (!state.agentCoach.open || state.agentCoach.facilitatorMode !== "topic" || state.activeCaseId !== caseId) {
+        state.agentCoach.topicBusy = false;
+        return;
+      }
+      state.agentCoach.topicCandidates = topics;
+      state.agentCoach.topicGenerated = true;
+      state.agentCoach.topicBusy = false;
+      renderAgentCoach();
+      window.requestAnimationFrame(() => document.querySelector(".agent-topic-card")?.focus());
+    });
+    return;
+  }
+  if (action === "mediator-generate") {
+    const requestId = ++state.agentCoach.mediatorRequestId;
+    const caseId = state.activeCaseId;
+    state.agentCoach.mediatorBusy = true;
+    renderAgentCoach();
+    void generateMediatorTalkMoveWithAi("관점 충돌과 근거 없는 주장").then((suggestion) => {
+      if (requestId !== state.agentCoach.mediatorRequestId) return;
+      if (!state.agentCoach.open || state.agentCoach.facilitatorMode !== "mediator" || state.activeCaseId !== caseId) {
+        state.agentCoach.mediatorBusy = false;
+        return;
+      }
+      state.agentCoach.mediatorSuggestion = suggestion;
+      state.agentCoach.mediatorBusy = false;
+      renderAgentCoach();
+    });
+    return;
+  }
+  if (action === "topic-select") {
+    document.querySelectorAll(".agent-topic-card").forEach((card) => card.classList.remove("is-selected"));
+    const card = event.target.closest(".agent-topic-card");
+    card?.classList.add("is-selected");
+    if (card) {
+      state.agentCoach.selectedTopic = {
+        label: card.querySelector("strong")?.textContent?.trim() || "",
+        prompt: card.querySelector("span")?.textContent?.trim() || "",
+        signal: card.querySelector("small")?.textContent?.trim() || "",
+      };
+    }
+    return;
+  }
+  if (action === "topic-publish") {
+    const topic = state.agentCoach.selectedTopic || state.agentCoach.topicCandidates[0] || FACILITATOR_TOPIC_FALLBACK[0];
+    const actionType = state.agentCoach.facilitatorMode === "after" ? "open_question" : "topic_candidate";
+    void persistFacilitatorAction({ actionType, status: "published", content: topic }).then((saved) => {
+      if (saved) state.agentCoach.approvedAction = { id: saved.id, actionType, status: saved.status, content: topic };
+      showToast(state.agentCoach.facilitatorMode === "after" ? (ko ? "선택한 열린 질문을 다음 활동으로 공유했습니다." : "The selected open question was shared as the next activity.") : (ko ? "승인한 토론 주제를 학습자 활동에 공유했습니다." : "The approved discussion topic was shared with learners."));
+    }).catch((error) => {
+      showToast(ko ? `공유 기록을 저장하지 못했어요: ${error.message}` : `Could not save the shared topic: ${error.message}`);
+    });
+    return;
+  }
+  if (action === "close") {
+    setAgentCoachOpen(false);
+    document.getElementById("agent-coach-trigger")?.focus();
+    return;
+  }
+  if (action === "evidence") {
+    state.agentCoach.evidenceOpen = !state.agentCoach.evidenceOpen;
+    renderAgentCoach();
+    return;
+  }
+  if (action === "dismiss") {
+    showToast(ko ? "제안을 건너뛰었습니다. 자동으로 실행된 작업은 없습니다." : "Suggestion dismissed. Nothing was run automatically.");
+    setAgentCoachOpen(false);
+    return;
+  }
+  if (action === "revise") {
+    state.agentCoach.draftEdited = true;
+    const draft = document.getElementById("agent-prompt-draft")?.value || "";
+    void persistFacilitatorAction({ actionType: "mediator_move", status: "draft", content: { primary: draft, alternative: state.agentCoach.mediatorSuggestion?.alternative || "" } }).catch((error) => console.warn("facilitator revision log failed", error));
+    showToast(ko ? "교수자의 수정 선택을 기록했습니다." : "Instructor revision recorded.");
+    return;
+  }
+  if (action === "accept") {
+    const primary = document.getElementById("agent-prompt-draft")?.value || state.agentCoach.mediatorSuggestion?.primary || "";
+    const alternative = state.agentCoach.mediatorSuggestion?.alternative || "";
+    void persistFacilitatorAction({ actionType: "mediator_move", status: "published", content: { primary, alternative } }).then((saved) => {
+      if (saved) state.agentCoach.approvedAction = { id: saved.id, actionType: "mediator_move", status: saved.status, content: { primary, alternative } };
+      showToast(ko ? "교수자가 승인한 질문을 학습자 활동에 보냈습니다." : "The instructor-approved question was sent to the learner activity.");
+    }).catch((error) => showToast(ko ? `질문 공유를 저장하지 못했어요: ${error.message}` : `Could not save the shared question: ${error.message}`));
+    setAgentCoachOpen(false);
+    return;
+  }
+  if (action === "toggle-reflection-evidence") {
+    const button = event.target.closest("button");
+    const selected = button.classList.toggle("is-selected");
+    button.firstChild.textContent = selected ? "✓ " : "○ ";
+    return;
+  }
+  if (action === "reflection-question") {
+    showToast(ko ? "선택한 근거를 비교하는 다음 질문을 생각 정리에 추가했습니다." : "A follow-up comparison question was added to reflection.");
+  }
+});
+
+document.getElementById("agent-coach-drawer")?.addEventListener("input", (event) => {
+  if (event.target.id === "agent-topic-brief-input") state.agentCoach.topicBrief = event.target.value;
+});
+
+document.getElementById("agent-coach-drawer")?.addEventListener("keydown", (event) => {
+  if (event.key === "Tab") {
+    const drawer = event.currentTarget;
+    const focusable = [...drawer.querySelectorAll("button:not([disabled]), textarea, input, select, [href], [tabindex]:not([tabindex='-1'])")];
+    if (focusable.length) {
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+    return;
+  }
+  const tab = event.target.closest('[role="tab"]');
+  if (!tab || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+  const tabs = [...document.querySelectorAll('#agent-coach-drawer [role="tab"]')];
+  if (!tabs.length) return;
+  const current = tabs.indexOf(tab);
+  const next = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : (current + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+  event.preventDefault();
+  tabs[next].focus();
+  tabs[next].click();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && state.agentCoach.open) setAgentCoachOpen(false);
+});
+
 // 간단히 / 자세히 (simple / detailed) map-density — single toggle button.
 document.getElementById("density-toggle-btn")?.addEventListener("click", () => {
   setDensity(resolveDensity() === "simple" ? "detailed" : "simple");
@@ -10433,8 +12113,34 @@ function openMapDrawer(target) {
   closeMapDrawers();
   panel.classList.add("is-open");
   document.querySelector(`#map-dock .map-dock-btn[data-drawer="${target}"]`)?.classList.add("is-active");
+  if (target === "insight" && state.selectedGraphNodeId && dom.quickAnnotationForm && !dom.quickAnnotationForm.hidden) {
+    window.requestAnimationFrame(() => {
+      panel.scrollTo({ top: Math.max(0, dom.quickAnnotationForm.offsetTop - 180), behavior: "auto" });
+    });
+  } else {
+    panel.scrollTop = 0;
+  }
 }
 document.getElementById("map-dock")?.addEventListener("click", (event) => {
+  const actionButton = event.target.closest("[data-map-action]");
+  if (actionButton) {
+    const action = actionButton.dataset.mapAction;
+    if (action === "compare") {
+      const previousLayer = state.activeMapLayer;
+      state.activeMapLayer = "compare";
+      state.selectedGraphNodeId = "";
+      persistSessionState();
+      renderAll();
+      logEvent("layer.change", { from: previousLayer, to: "compare", via: "map_dock" });
+      return;
+    }
+    if (action === "report") {
+      setView("report");
+      renderAll();
+      logEvent("synthesis.opened", { via: "map_dock" });
+      return;
+    }
+  }
   const btn = event.target.closest("[data-drawer]");
   if (!btn) return;
   const target = btn.dataset.drawer;
@@ -10533,6 +12239,16 @@ document.addEventListener("click", (event) => {
   if (reflectionFeedback) {
     const idx = Number(reflectionFeedback.getAttribute("data-reflection-feedback"));
     if (Number.isFinite(idx)) requestReflectionFeedback(idx);
+  }
+
+  const compareAnnotate = event.target.closest("[data-compare-annotate]");
+  if (compareAnnotate) {
+    if (!state.selectedGraphNodeId) {
+      showToast(state.locale === "ko" ? "먼저 맵에서 차이가 강조된 노드를 선택하세요." : "Select a highlighted difference on the map first.");
+    } else {
+      openMapDrawer("insight");
+      logEvent("annotation.scaffold_opened", { source_id: state.selectedGraphNodeId, layer: state.activeMapLayer });
+    }
   }
 
   const viewIntroDismiss = event.target.closest("[data-view-intro-dismiss]");
@@ -10653,6 +12369,25 @@ document.addEventListener("submit", async (event) => {
       renderAll();
     } catch (error) {
       state.auth.message = error.message || "Course could not be created.";
+      renderLandingLogin();
+    }
+    return;
+  }
+
+  if (event.target.id === "add-instructor-form") {
+    event.preventDefault();
+    const form = new FormData(event.target);
+    try {
+      await grantCourseMembership({
+        name: String(form.get("memberName") || "").trim(),
+        email: String(form.get("memberEmail") || "").trim(),
+        role: String(form.get("memberRole") || "admin"),
+      });
+      event.target.reset();
+      showToast(state.locale === "ko" ? "교수자 권한을 부여했어요." : "Instructor membership granted.");
+      renderAll();
+    } catch (error) {
+      state.auth.message = error.message || "Membership could not be granted.";
       renderLandingLogin();
     }
     return;
@@ -11146,7 +12881,12 @@ function setPanelCollapsed(panelKey, collapsed, { persist = true } = {}) {
   }
   const toggle = panel.querySelector(".panel-collapse-toggle");
   if (toggle) {
-    const label = collapsed ? "Expand panel" : "Collapse panel";
+    const panelName = panelKey === "intake"
+      ? (state.locale === "ko" ? "시작하기 패널" : "Start panel")
+      : (state.locale === "ko" ? "선택한 관점 패널" : "Selected perspective panel");
+    const label = collapsed
+      ? (state.locale === "ko" ? `${panelName} 열기` : `Open ${panelName}`)
+      : (state.locale === "ko" ? `${panelName} 접기` : `Collapse ${panelName}`);
     toggle.setAttribute("aria-label", label);
     toggle.setAttribute("title", label);
   }
@@ -11156,6 +12896,12 @@ function setPanelCollapsed(panelKey, collapsed, { persist = true } = {}) {
     expandBtn.hidden = false;
     expandBtn.classList.toggle("is-panel-open", !collapsed);
     expandBtn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+    const panelName = panelKey === "intake"
+      ? (state.locale === "ko" ? "시작하기 패널" : "Start panel")
+      : (state.locale === "ko" ? "선택한 관점 패널" : "Selected perspective panel");
+    expandBtn.setAttribute("aria-label", collapsed
+      ? (state.locale === "ko" ? `${panelName} 열기` : `Open ${panelName}`)
+      : (state.locale === "ko" ? `${panelName} 접기` : `Collapse ${panelName}`));
   }
   if (persist) {
     try { localStorage.setItem(`panel-collapsed:${panelKey}`, collapsed ? "1" : "0"); } catch (_) {}
@@ -11230,22 +12976,82 @@ document.getElementById("map-focus-btn")?.addEventListener("click", () => {
 });
 
 function restoreCollapsiblePanels() {
-  // One-time reset for this version: earlier builds could persist a broken collapsed state,
-  // and students benefit from rediscovering the tutorial once more. Runs once per browser.
+  // At laptop widths the map is the primary reading surface. Start with both
+  // utility panels folded, while keeping the existing header toggles available.
+  // A versioned migration also clears the older expanded default once, so a
+  // previously cached tab does not bring back the dense three-panel stack.
+  const compactViewport = window.matchMedia?.("(max-width: 1380px)").matches;
   try {
-    if (!localStorage.getItem("panel-collapsed-v2")) {
+    if (!localStorage.getItem("panel-collapsed-v6")) {
       localStorage.removeItem("panel-collapsed:intake");
       localStorage.removeItem("panel-collapsed:insight");
-      localStorage.removeItem("swarm-id-tutorial-v1");
-      localStorage.setItem("panel-collapsed-v2", "1");
+      localStorage.setItem("panel-collapsed-v6", "1");
     }
   } catch (_) {}
   document.querySelectorAll("[data-collapsible-panel]").forEach((panel) => {
     const key = panel.getAttribute("data-collapsible-panel");
-    let stored = "0";
-    try { stored = localStorage.getItem(`panel-collapsed:${key}`) || "0"; } catch (_) {}
+    // Keep the deterministic preview fixture expanded for interaction checks;
+    // production opens on the map-first state so the first read is calmer.
+    let stored = window.__DTS_PREVIEW__ ? "0" : (compactViewport ? "1" : "0");
+    try {
+      const saved = localStorage.getItem(`panel-collapsed:${key}`);
+      if (saved) stored = saved;
+    } catch (_) {}
     setPanelCollapsed(key, stored === "1", { persist: false });
   });
+}
+
+// Keep the working context visible while grouping rarely-used account and
+// research controls behind one intentional disclosure. The controls retain
+// their IDs, so existing listeners and keyboard access continue to work.
+function organizeTopbarControls() {
+  const side = document.querySelector(".topbar-side");
+  const switcher = side?.querySelector(".platform-switcher");
+  const actions = side?.querySelector(".toolbar-actions");
+  if (!side || !switcher || !actions || side.querySelector(".topbar-more")) return;
+  const institution = document.getElementById("institution-select")?.closest(".mini-control");
+  const learner = document.getElementById("learner-select")?.closest(".mini-control");
+  const utility = [...actions.children].filter((node) => !node.classList.contains("agent-coach-trigger"));
+  const details = document.createElement("details");
+  details.className = "topbar-more";
+  const summary = document.createElement("summary");
+  const moreLabel = state.locale === "en" ? "More settings" : "추가 설정";
+  summary.setAttribute("aria-label", moreLabel);
+  summary.setAttribute("title", moreLabel);
+  summary.textContent = state.locale === "en" ? "More" : "추가 설정";
+  const body = document.createElement("div");
+  body.className = "topbar-more-body";
+  body.id = "topbar-more-body";
+  summary.setAttribute("aria-controls", body.id);
+  summary.setAttribute("aria-expanded", "false");
+  details.addEventListener("toggle", () => {
+    summary.setAttribute("aria-expanded", String(details.open));
+  });
+  document.addEventListener("click", (event) => {
+    if (details.open && !details.contains(event.target)) {
+      details.open = false;
+    }
+  });
+  const extraSwitcher = document.createElement("div");
+  extraSwitcher.className = "platform-switcher topbar-more-switcher";
+  [institution, learner].forEach((control) => {
+    if (!control) return;
+    if (window.innerWidth > 720) {
+      control.style.minWidth = "240px";
+      const select = control.querySelector("select");
+      if (select) {
+        select.style.minWidth = "240px";
+        select.style.textOverflow = "clip";
+      }
+    }
+    extraSwitcher.append(control);
+  });
+  const extraActions = document.createElement("div");
+  extraActions.className = "topbar-more-actions";
+  utility.forEach((node) => extraActions.append(node));
+  body.append(extraSwitcher, extraActions);
+  details.append(summary, body);
+  actions.append(details);
 }
 
 function wirePipelineCardToggles() {
@@ -11255,7 +13061,10 @@ function wirePipelineCardToggles() {
   // render, so we can't attach listeners to each button. One body-level listener
   // handles them all.
   document.body.addEventListener("click", (event) => {
-    const summaryBtn = event.target.closest("[data-summary-toggle]");
+    // Normalize text-node targets from keyboard/browser activation before closest().
+    const eventTarget = event.target?.closest ? event.target : event.target?.parentElement;
+    if (!eventTarget) return;
+    const summaryBtn = eventTarget.closest("[data-summary-toggle]");
     if (summaryBtn) {
       const wrap = summaryBtn.closest(".case-summary");
       if (wrap) {
@@ -11267,7 +13076,7 @@ function wirePipelineCardToggles() {
       }
       return;
     }
-    const header = event.target.closest("[data-pipeline-toggle]");
+    const header = eventTarget.closest("[data-pipeline-toggle]");
     if (!header) return;
     const card = header.closest(".pipeline-card-collapsible");
     if (!card) return;
@@ -11342,7 +13151,11 @@ function wireLegendToggle() {
   }
   try {
     const saved = localStorage.getItem("legend-collapsed");
-    if (saved === "1") {
+    const version = localStorage.getItem("legend-collapse-version");
+    if (version !== "v3") {
+      localStorage.setItem("legend-collapse-version", "v3");
+      setLegendCollapsed(true);
+    } else if (saved === "1") {
       setLegendCollapsed(true);
     } else if (saved === null && state.activeRole === "user") {
       // Students default to collapsed — the color legend duplicates info already
@@ -11383,6 +13196,7 @@ function wireLegendToggle() {
 
 async function boot() {
   applyStaticTranslations();
+  organizeTopbarControls();
   restoreDismissedViewIntros();
   restoreTopbarCollapse();
   restoreCollapsiblePanels();

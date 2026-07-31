@@ -71,6 +71,9 @@ await firstRow.click();
 await page.waitForTimeout(400);
 const selectedAfterClick = await page.evaluate(() => state.selectedGraphNodeId);
 check("list row click selects node", Boolean(selectedAfterClick), selectedAfterClick || "");
+// Selecting a row now opens the collaborative-annotation drawer in simple mode.
+// Close it before returning to the map so the mode toggle is actionable.
+await page.evaluate(() => closeMapDrawers());
 await page.fill("#node-list-search", "");
 await page.click("#map-mode-btn");
 await page.waitForTimeout(400);
@@ -100,7 +103,114 @@ const tooltipShown = await page.evaluate(() => {
 });
 check("pinned tooltip survives soft hide, closes on force", tooltipShown);
 
-// 9. Console errors (ignore expected offline/demo noise)
+// 9. Learner sees only the approved reflection coach.
+await page.click("#agent-coach-trigger");
+await page.waitForTimeout(250);
+const learnerCoach =
+  (await page.locator("#agent-coach-drawer:not([hidden])").count()) === 1 &&
+  (await page.locator("#agent-coach-title").textContent())?.includes("성찰 코치") &&
+  (await page.locator(".agent-control-strip").textContent())?.includes("질문만");
+check("learner receives approved questions-only coach", Boolean(learnerCoach));
+await page.click('[data-agent-action="close"]');
+
+// 10. Professor gets evidence, limitations, and approval controls.
+await page.evaluate(() => {
+  state.activeRole = "admin";
+  renderAll();
+});
+await page.click("#agent-coach-trigger");
+await page.click('[data-agent-action="evidence"]');
+const professorCoach =
+  (await page.locator("#agent-coach-title").textContent())?.includes("AI 활동 코치") &&
+  (await page.locator(".agent-evidence-detail").count()) === 1 &&
+  (await page.locator(".agent-privacy-note").textContent())?.includes("자동 채점 없음");
+check("professor coach exposes evidence and human-control guardrails", Boolean(professorCoach));
+await page.click('[data-agent-action="facilitator-mode"][data-agent-mode="mediator"]');
+await page.click('[data-agent-action="mediator-generate"]');
+await page.waitForFunction(() => document.querySelector(".agent-alternative")?.textContent?.length > 12, null, { timeout: 5000 }).catch(() => {});
+const mediatorMove =
+  (await page.locator("#agent-prompt-draft").count()) === 1 &&
+  (await page.locator(".agent-alternative").textContent())?.includes("대안");
+check("professor can refresh an evidence-based mediator move", Boolean(mediatorMove));
+await page.click('[data-agent-action="facilitator-mode"][data-agent-mode="topic"]');
+await page.fill("#agent-topic-brief-input", "교수자 부담과 학습자 설명 책임을 비교하게 하고 싶어요.");
+await page.click('[data-agent-action="facilitator-mode"][data-agent-mode="mediator"]');
+await page.click('[data-agent-action="facilitator-mode"][data-agent-mode="topic"]');
+const briefPersists = (await page.inputValue("#agent-topic-brief-input")) === "교수자 부담과 학습자 설명 책임을 비교하게 하고 싶어요.";
+check("topic brief survives facilitator tab switches", briefPersists);
+await page.click('[data-agent-action="topic-generate"]');
+await page.waitForFunction(() => document.querySelectorAll(".agent-topic-card").length === 3, null, { timeout: 5000 }).catch(() => {});
+const topicGenerator =
+  (await page.locator(".agent-topic-results").count()) === 1 &&
+  (await page.locator(".agent-topic-card").count()) === 3 &&
+  (await page.locator(".agent-facilitator-tabs [data-agent-mode=topic]").getAttribute("aria-selected")) === "true";
+check("professor can generate and choose discussion topics", topicGenerator);
+await page.click('[data-agent-action="facilitator-mode"][data-agent-mode="after"]');
+const openQuestions =
+  (await page.locator("#agent-coach-title").textContent())?.includes("Open Questions") &&
+  (await page.locator(".agent-topic-card").count()) === 3;
+check("discussion closes into next open questions", Boolean(openQuestions));
+await page.click('[data-agent-action="close"]');
+
+// 11. Instructor control center covers roster, course invite, topic, and mediation actions.
+await page.evaluate(() => {
+  state.activeRole = "admin";
+  setView("manage");
+  renderAll();
+});
+await page.waitForTimeout(400);
+const consoleReady =
+  (await page.locator("#instructor-system-console").count()) === 1 &&
+  (await page.locator('[data-console-form="student-invite"]').count()) === 1 &&
+  (await page.locator('[data-console-action="open-topic-coach"]').count()) === 1;
+check("instructor console renders authorized workflow", consoleReady);
+await page.fill('[data-console-form="student-invite"] input[name="studentName"]', "테스트 학생");
+await page.fill('[data-console-form="student-invite"] input[name="studentEmail"]', "test.student@example.edu");
+await page.click('[data-console-form="student-invite"] button[type="submit"]');
+await page.waitForTimeout(250);
+const inviteReady = await page.locator(".instructor-console-roster-row").count();
+check("instructor can prepare a student invite", inviteReady > 0, `rows=${inviteReady}`);
+await page.click('[data-console-tab="live"]');
+await page.fill("[data-console-topic-brief]", "학습자 설명 책임과 자동화 평가의 공정성을 비교하게 하고 싶어요.");
+await page.click('[data-console-action="open-topic-coach"]');
+const topicCoachOpened =
+  (await page.locator("#agent-coach-drawer:not([hidden])").count()) === 1 &&
+  (await page.locator('[data-agent-mode="topic"]').getAttribute("aria-selected")) === "true";
+check("instructor console opens topic studio", topicCoachOpened);
+await page.click('[data-agent-action="close"]');
+
+// 12. The coach remains reachable in the learner's compact mobile layout.
+await page.setViewportSize({ width: 390, height: 844 });
+await page.evaluate(() => {
+  state.activeRole = "user";
+  state.density = "simple";
+  renderAll();
+});
+const mobileTriggerVisible = await page.locator("#agent-coach-trigger").isVisible();
+check("reflection coach remains reachable on mobile", mobileTriggerVisible);
+
+// 12b. Accessibility and cross-view handoff guards.
+await page.click("#agent-coach-trigger");
+const dialogA11y =
+  (await page.locator("#agent-coach-drawer[role=dialog][aria-modal=true]").count()) === 1 &&
+  (await page.locator("#agent-coach-drawer [role=tab]").count()) === 0;
+check("reflection coach exposes a modal accessibility contract", dialogA11y);
+await page.click('[data-agent-action="close"]');
+await page.evaluate(() => {
+  state.activeRole = "user";
+  state.activeMapLayer = "compare";
+  state.selectedGraphNodeId = "";
+  setView("visualizer");
+  renderAll();
+});
+check("comparison annotation waits for a selected difference", await page.locator("[data-compare-annotate][disabled]").count() === 1);
+await page.evaluate(() => {
+  state.activeView = "report";
+  renderAll();
+});
+check("reflection report carries case tensions into an empty learner run", await page.locator("#report-tensions .memo-item").count() > 0);
+
+// 13. Console errors (ignore expected offline/demo noise)
 const realErrors = consoleErrors.filter(
   (e) => !/supabase|gemini|favicon|fonts|net::|Failed to load resource/i.test(e)
 );

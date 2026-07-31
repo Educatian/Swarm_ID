@@ -4,6 +4,7 @@
 window.__DTS_PREVIEW__ = true;
 (function () {
   function inject() {
+    const previewParams = new URLSearchParams(window.location.search);
     const EN = (function () {
       try { return localStorage.getItem("swarm-id-locale-v1") === "en"; } catch (_) { return false; }
     })();
@@ -77,19 +78,31 @@ window.__DTS_PREVIEW__ = true;
 
     state.platform.institutions = [{ id: "i", name: EN ? "Ewha Womans University" : "이화여자대학교", courses: [course] }];
     state.locale = EN ? "en" : "ko";
-    state.activeRole = "user";
+    state.activeRole = previewParams.get("role") === "admin" ? "admin" : "user";
     state.activeInstitutionId = "i";
     state.activeCourseId = "c";
     state.activeCaseId = "ca";
     state.activeLearnerId = "l";
     state.activeMapLayer = "compare";
-    state.activeView = "home";
+    const requestedViewRaw = previewParams.get("view");
+    const requestedView = requestedViewRaw === "network" ? "visualizer" : requestedViewRaw;
+    state.activeView = ["home", "visualizer", "perspectives", "matrix", "sandbox", "report", "manage"].includes(requestedView)
+      ? requestedView
+      : "home";
+    state.density = previewParams.get("density") === "advanced" ? "advanced" : "simple";
 
     if (typeof applyStaticTranslations === "function") applyStaticTranslations();
     document.getElementById("landing-shell")?.classList.add("is-hidden");
     document.getElementById("app-shell")?.classList.remove("is-hidden");
     try {
       renderAll();
+      window.setTimeout(() => {
+        state.activeRole = previewParams.get("role") === "admin" ? "admin" : "user";
+        state.density = previewParams.get("density") === "advanced" ? "advanced" : "simple";
+        if (requestedView && typeof setView === "function") setView(requestedView);
+        renderAll();
+        if (previewParams.get("coach") === "1" && typeof openAgentCoach === "function") openAgentCoach();
+      }, 400);
     } catch (e) {
       console.error("preview render error", e);
     }
@@ -100,9 +113,12 @@ window.__DTS_PREVIEW__ = true;
       flag.id = "preview-flag";
       flag.textContent = EN ? "Preview · demo data (no sign-in)" : "미리보기 · 데모 데이터 (로그인 없음)";
       flag.style.cssText =
-        "position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:9999;" +
-        "background:rgba(67,97,238,0.92);color:#fff;font:600 12px/1 Inter,sans-serif;" +
-        "padding:8px 16px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,0.25);";
+        "position:fixed;top:94px;right:16px;z-index:20;max-width:calc(100vw - 32px);" +
+        "background:rgba(67,97,238,0.78);color:#fff;font:600 11px/1 Inter,sans-serif;" +
+        "padding:6px 10px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,0.2);pointer-events:none;opacity:.86;";
+      // The preview URL already communicates demo mode; do not pin a badge
+      // over the report or instructor console once the app shell is visible.
+      if (document.querySelector(".app-shell")) flag.style.display = "none";
       document.body.appendChild(flag);
     }
   }

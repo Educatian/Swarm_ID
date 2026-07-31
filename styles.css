@@ -558,6 +558,7 @@ textarea:focus-visible,
   align-items: center;
   gap: 10px;
   flex: 0 1 auto;
+  min-width: 0;
 }
 
 .platform-switcher {
@@ -1067,20 +1068,20 @@ textarea:focus-visible,
 /* Detailed mode: the map gets the flexible space and dominates; side panels are
    fixed professional widths (work tool, not a dense dashboard). */
 .visualizer-layout {
-  grid-template-columns: 244px minmax(0, 1fr) 288px;
+  grid-template-columns: 220px minmax(0, 1fr) 260px;
   align-items: start;
 }
 
 .visualizer-layout.is-focused {
-  grid-template-columns: 244px minmax(0, 1fr) 288px;
+  grid-template-columns: 220px minmax(0, 1fr) 260px;
 }
 
 .visualizer-layout.intake-collapsed {
-  grid-template-columns: 0 minmax(0, 1fr) 288px;
+  grid-template-columns: 0 minmax(0, 1fr) 260px;
 }
 
 .visualizer-layout.insight-collapsed {
-  grid-template-columns: 244px minmax(0, 1fr) 0;
+  grid-template-columns: 220px minmax(0, 1fr) 0;
 }
 
 .visualizer-layout.intake-collapsed.insight-collapsed {
@@ -1446,8 +1447,10 @@ textarea:disabled {
 .network-tooltip {
   position: absolute;
   z-index: 4;
-  width: min(280px, calc(100% - 24px));
-  padding: 14px 16px;
+  width: min(240px, calc(100% - 24px));
+  max-height: min(220px, calc(100% - 24px));
+  overflow: auto;
+  padding: 12px 14px;
   border-radius: 18px;
   background: rgba(11, 14, 19, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1492,7 +1495,7 @@ textarea:disabled {
   margin: 0;
   color: rgba(246, 246, 252, 0.74);
   line-height: 1.55;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
 }
 
 .stage-overlay {
@@ -2320,6 +2323,260 @@ textarea:disabled {
   top: 60%;
 }
 
+.orbit-signal-list {
+  display: grid;
+  gap: 8px;
+}
+
+.orbit-signal {
+  padding: 11px 12px;
+  border: 1px solid rgba(151, 169, 255, 0.14);
+  border-radius: 14px;
+  background: rgba(17, 19, 24, 0.62);
+}
+
+.orbit-signal[data-level="critical"] {
+  border-color: rgba(255, 126, 145, 0.36);
+}
+
+.orbit-signal-head {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.orbit-signal-index {
+  color: var(--primary);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.orbit-signal-head strong {
+  overflow: hidden;
+  color: var(--on-surface);
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orbit-signal-score {
+  color: var(--on-surface-variant);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.orbit-signal-bar {
+  height: 5px;
+  margin: 9px 0 0 36px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.orbit-signal-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--primary), #7de0c4);
+}
+
+.orbit-signal[data-level="critical"] .orbit-signal-bar span {
+  background: linear-gradient(90deg, #ff7e91, #ffc06b);
+}
+
+.orbit-signal-empty {
+  margin: 0;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--on-surface-variant);
+  font-size: 0.78rem;
+}
+
+.reaction-delta {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(125, 224, 196, 0.22);
+  border-radius: 14px;
+  background: rgba(125, 224, 196, 0.06);
+}
+
+.reaction-delta strong { color: var(--on-surface); font-size: 0.82rem; }
+.reaction-delta span { color: var(--on-surface-variant); font-size: 0.78rem; line-height: 1.45; }
+.report-empty-action { margin-top: 10px; }
+
+/* ===== Figma de-clutter pass · 2026-07-31 =====
+   Source: 08 · 교수자 실시간 촉진 · 승인형 코치 (13:4) and
+   Instructor · Clean operations (26:41). Keep one clear reading surface,
+   avoid three narrow columns, and let Korean copy breathe. */
+@media (min-width: 1181px) {
+  .topbar {
+    gap: 12px;
+    padding: 12px 16px;
+    align-items: flex-start;
+  }
+
+  .topbar-heading {
+    flex: 1 1 240px;
+    max-width: 320px;
+    padding-top: 2px;
+  }
+
+  .topbar-side {
+    flex: 1 1 600px;
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+
+  .platform-switcher {
+    gap: 6px;
+    justify-content: flex-end;
+  }
+
+  .platform-switcher .mini-control {
+    min-width: 104px;
+    padding: 4px 8px;
+  }
+
+  .toolbar-actions {
+    gap: 6px;
+  }
+
+  .visualizer-layout:not(.is-focused) {
+    gap: 16px;
+  }
+
+  /* The map is the decision surface; side panels are available via toggles. */
+  .visualizer-layout.is-focused .network-stage {
+    min-height: clamp(600px, 72vh, 820px);
+  }
+
+  /* Perspective: keep the visual orbit readable instead of squeezing three
+     equal columns. The question composer follows the concern list. */
+  .lens-layout {
+    grid-template-columns: minmax(0, 1.08fr) minmax(420px, 0.92fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  .lens-layout > .card-column,
+  .lens-layout > .chat-panel {
+    grid-column: 1;
+  }
+
+  .lens-layout > .orbit-panel {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .orbit-visual {
+    min-height: 0;
+    height: clamp(420px, 52vh, 560px);
+  }
+}
+
+@media (max-width: 1180px) and (min-width: 721px) {
+  .topbar {
+    padding: 12px 14px;
+  }
+
+  .topbar-heading {
+    flex-basis: 100%;
+  }
+
+  .topbar-side {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+.density-simple .orbit-signal-list {
+  gap: 6px;
+}
+
+.density-simple .orbit-signal {
+  padding: 9px 10px;
+}
+
+@media (max-width: 700px) {
+  .orbit-signal-head strong { font-size: 0.72rem; }
+  .orbit-signal-bar { margin-left: 34px; }
+}
+
+/* ===== Readability follow-up: map-first network + result-first secondary views ===== */
+.view-result-summary {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 12px;
+  padding: 14px 16px;
+  border: 1px solid rgba(151, 169, 255, 0.22);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(67, 97, 238, 0.14), rgba(27, 156, 133, 0.08));
+}
+.view-result-summary span {
+  color: #9ab2ff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.view-result-summary strong { color: #f6f6fc; font-size: 0.94rem; line-height: 1.35; }
+.view-result-summary small { color: rgba(246, 246, 252, 0.68); line-height: 1.45; }
+
+/* The selected-node panel is the durable home for explanations. Keep the map
+   itself free of instructional cards and hover copy. */
+.app-shell #stage-note,
+.app-shell #stage-note-reopen { display: none !important; }
+.app-shell .network-tooltip { width: min(210px, calc(100% - 24px)); max-height: 120px; opacity: 0.96; }
+
+/* At laptop widths, stack the utility panels below the map instead of squeezing
+   three columns into a tiny canvas. Remove nested viewport scroll traps here. */
+@media (max-width: 1380px) and (min-width: 721px) {
+  /* On the network workspace the map and its selected-case card are the
+     primary context. Keep the persistent status footer for Home/Manage, but
+     remove it from the map viewport so it does not become a clipped third
+     panel at the bottom of the sidebar. */
+  .app-shell:has(.view.is-active:not(.home-view):not(.manage-view)) .sidebar-footer { display: none !important; }
+
+  .app-shell:not(.density-simple) .visualizer-layout,
+  .app-shell:not(.density-simple) .visualizer-layout.is-focused {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .app-shell:not(.density-simple) .visualizer-layout > .canvas-panel { grid-column: 1; order: 1; }
+  .app-shell:not(.density-simple) .visualizer-layout > .intake-panel,
+  .app-shell:not(.density-simple) .visualizer-layout > .insight-panel { grid-column: 1; order: 2; max-height: none; overflow: visible; }
+  .app-shell:not(.density-simple) .network-stage { min-height: clamp(500px, 64vh, 720px); }
+}
+
+/* Preview/demo notice should never compete with report content or cover a card. */
+#preview-flag {
+  top: auto !important;
+  right: 12px !important;
+  bottom: 12px !important;
+  max-width: min(220px, calc(100vw - 24px)) !important;
+  padding: 5px 8px !important;
+  font-size: 10px !important;
+  opacity: 0.58 !important;
+}
+
+/* The preview URL already identifies the demo; once the app shell is active,
+   remove the fixed notice so it cannot cover the last row of a report or
+   management card. */
+.app-shell #preview-flag {
+  display: none !important;
+}
+
+.report-empty-action { min-height: 38px; margin-top: 12px; }
+.memo-section .empty-note + .report-empty-action { display: inline-flex; }
+.theme-light .view-result-summary { background: linear-gradient(135deg, #eef1ff, #effaf7); border-color: #d8deef; }
+.theme-light .view-result-summary strong { color: #17213b; }
+.theme-light .view-result-summary small { color: #5b6781; }
+
 .chat-thread {
   min-height: 380px;
   max-height: 480px;
@@ -2741,6 +2998,20 @@ textarea:disabled {
     justify-content: flex-start;
   }
 
+  /* The topbar becomes a stacked layout before the viewport reaches the
+     mobile breakpoint. Give the learning-flow nav a full row so Korean labels
+     never collapse into one character per line. */
+  .workspace-primary-nav {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .workspace-primary-nav-item {
+    flex: 1 1 0;
+    min-width: 0;
+    white-space: nowrap;
+  }
+
   .platform-switcher,
   .pipeline-form-row.two-up,
   .settings-grid,
@@ -3037,6 +3308,9 @@ body {
 .presence-pill {
   white-space: nowrap;
 }
+.presence-pill[hidden] {
+  display: none !important;
+}
 
 .toast-host {
   position: fixed;
@@ -3084,6 +3358,9 @@ body {
 .network-stage.is-list-mode .network-tooltip,
 .network-stage.is-list-mode .network-empty-preview {
   display: none;
+}
+.visualizer-layout:has(.network-stage.is-list-mode) .map-dock {
+  display: none !important;
 }
 
 .node-list-panel {
@@ -3205,6 +3482,28 @@ html.dark .node-list-row {
   margin: 24px 0;
   text-align: center;
   color: var(--on-surface-variant);
+}
+
+/* The compact list inherits the dark-theme row override because the document
+   keeps `html.dark` for the design system. Reassert readable light surfaces
+   when the user has selected the light theme. */
+html.theme-light .node-list-controls {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(121, 140, 171, 0.16);
+}
+html.theme-light .node-list-row {
+  color: #172033;
+  background: #ffffff;
+  border-color: rgba(121, 140, 171, 0.2);
+}
+html.theme-light .node-list-row.is-selected {
+  background: #eef2ff;
+  border-color: rgba(67, 97, 238, 0.5);
+}
+html.theme-light .node-list-main p,
+html.theme-light .node-list-count,
+html.theme-light .node-list-empty {
+  color: #475569;
 }
 
 /* Touch ergonomics: classroom iPads have no hover and need bigger targets. */
@@ -3950,12 +4249,16 @@ html.dark .welcome-card {
 /* Header dropdown: Guides menu in the landing topbar */
 .header-guides {
   position: relative;
+  flex: 0 0 auto;
 }
 
 .header-guides-trigger {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  flex: 0 0 auto;
+  min-width: max-content;
+  white-space: nowrap;
 }
 
 .header-guides-caret {
@@ -4413,6 +4716,12 @@ html.dark .welcome-card {
   background: rgba(255, 255, 255, 0.84);
 }
 
+/* Keep the perspective orbit on the dark visual surface. */
+.orbit-visual {
+  background: radial-gradient(circle at center, rgba(151, 169, 255, 0.18), transparent 22%), rgba(12, 14, 18, 0.92);
+  border-color: rgba(151, 169, 255, 0.18);
+}
+
 .mobile-dock {
   background: rgba(255, 255, 255, 0.9);
   border-color: rgba(121, 140, 171, 0.18);
@@ -4490,13 +4799,14 @@ html.dark .welcome-card {
 
 .cohort-panel {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: hidden;
   font-size: 0.88rem;
 }
 
 .cohort-panel table {
   border-collapse: collapse;
   width: 100%;
+  table-layout: fixed;
 }
 
 .cohort-panel th,
@@ -4504,7 +4814,9 @@ html.dark .welcome-card {
   text-align: left;
   padding: 6px 8px;
   border-bottom: 1px solid rgba(121, 140, 171, 0.16);
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .cohort-panel th {
@@ -4544,11 +4856,42 @@ html.dark .welcome-card {
   text-align: left;
   cursor: pointer;
   text-decoration: none;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Keep compact learner identifiers on one readable line in the report table;
+   the full value remains available in the drill-down opened from the row. */
+.cohort-panel td:first-child .cohort-name-button {
+  display: block;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.cohort-panel td:last-child {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 .cohort-panel .cohort-name-button:hover {
   text-decoration: underline;
 }
+
+/* The cohort panel is a compact scan, not a spreadsheet. Keep the identity,
+   participation, total activity, and latest activity visible; the individual
+   event counters remain available in the learner detail view. */
+.cohort-panel th:nth-child(3),
+.cohort-panel td:nth-child(3),
+.cohort-panel th:nth-child(4),
+.cohort-panel td:nth-child(4),
+.cohort-panel th:nth-child(5),
+.cohort-panel td:nth-child(5),
+.cohort-panel th:nth-child(6),
+.cohort-panel td:nth-child(6) { display: none; }
 
 .cohort-drilldown {
   margin-top: 14px;
@@ -4877,6 +5220,15 @@ html.dark .welcome-card {
 .home-brand-title { margin: 0; font-size: 1.15rem; color: #fff; letter-spacing: -0.01em; }
 .home-brand-sub { margin: 2px 0 0; font-size: 0.82rem; color: rgba(246,246,252,0.55); }
 
+/* The persistent sidebar already carries the product identity on desktop.
+   Keep the in-content brand for compact/mobile layouts where that sidebar is
+   hidden, but remove the duplicate stop in the main reading flow. */
+@media (min-width: 721px) {
+  .app-shell:not(.density-simple) .home-view.is-active .home-head {
+    display: none;
+  }
+}
+
 .home-continue {
   border-radius: 22px;
   padding: 26px 28px;
@@ -4963,6 +5315,8 @@ html.dark .welcome-card {
 .home-recent-item strong { font-size: 0.9rem; color: #fff; font-weight: 500; }
 .home-recent-item span { font-size: 0.76rem; color: rgba(246,246,252,0.5); }
 .home-recent-empty { font-size: 0.86rem; color: rgba(246,246,252,0.5); }
+.home-empty-action { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.home-recent-cta { min-height: 36px; }
 .home-advanced-body { margin: 0 0 14px; font-size: 0.84rem; line-height: 1.5; color: rgba(246,246,252,0.58); }
 .home-adv-grid { display: flex; flex-wrap: wrap; gap: 10px; }
 .home-adv-item {
@@ -5952,6 +6306,48 @@ svg text.node-icon {
 svg text.node-meta {
   fill: rgba(202, 208, 224, 0.92) !important;
 }
+
+/* Mobile detailed mode: never preserve the desktop 220px / 260px rails.
+   Keeping those columns at phone widths squeezed the map to a few pixels and
+   created a horizontal scrollbar.  Stack the map first, then the two utility
+   panels in one readable column. */
+@media (max-width: 720px) {
+  .app-shell:not(.density-simple) .visualizer-layout,
+  .app-shell:not(.density-simple) .visualizer-layout.is-focused {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+    overflow-x: clip;
+  }
+
+  .app-shell:not(.density-simple) .visualizer-layout > .canvas-panel,
+  .app-shell:not(.density-simple) .visualizer-layout > .intake-panel,
+  .app-shell:not(.density-simple) .visualizer-layout > .insight-panel {
+    grid-column: 1;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .app-shell:not(.density-simple) .visualizer-layout > .canvas-panel {
+    order: 1;
+  }
+
+  .app-shell:not(.density-simple) .visualizer-layout > .intake-panel,
+  .app-shell:not(.density-simple) .visualizer-layout > .insight-panel {
+    order: 2;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .app-shell:not(.density-simple) .network-stage {
+    width: 100%;
+    min-width: 0;
+    min-height: 420px;
+  }
+}
 /* Landing-page network labels share the same risk. */
 .landing-network text,
 .landing-node-label {
@@ -6063,8 +6459,10 @@ svg text.node-meta {
 .theme-light .insight-card,
 .theme-light .metric-bar,
 .theme-light .reflection-block,
+.theme-light .reflection-item,
 .theme-light .memo-section,
 .theme-light .evidence-item,
+.theme-light .feed-item,
 .theme-light .prompt-item,
 .theme-light .rubric-item,
 .theme-light .decision-item,
@@ -6840,6 +7238,54 @@ html:not(.theme-light) .landing-copy h2 #landing-hero-title {
   gap: 18px;
 }
 
+.instructor-console {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(103, 123, 255, 0.14), rgba(18, 22, 39, 0.84) 48%, rgba(39, 180, 164, 0.08));
+  border-color: rgba(151, 169, 255, 0.28);
+}
+
+.instructor-console-header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 18px; }
+.instructor-console-header h3 { margin: 2px 0 5px; }
+.instructor-console-permission { display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; border-radius: 999px; color: #c9d2ff; background: rgba(101, 121, 255, 0.14); border: 1px solid rgba(151, 169, 255, 0.25); font-size: .76rem; white-space: nowrap; }
+.status-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #54d6a5; box-shadow: 0 0 0 3px rgba(84, 214, 165, .12); }
+.status-dot-warm { background: #f4b860; box-shadow: 0 0 0 3px rgba(244, 184, 96, .12); }
+.instructor-console-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; margin-bottom: 16px; }
+.instructor-console-kpi { padding: 10px 12px; border-radius: 12px; background: rgba(10, 14, 27, .3); border: 1px solid rgba(255, 255, 255, .07); }
+.instructor-console-kpi strong { display: block; font: 700 1.25rem/1.1 "Space Grotesk", sans-serif; }
+.instructor-console-kpi span { color: var(--on-surface-variant); font-size: .75rem; }
+.instructor-console-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.instructor-console-card { min-width: 0; padding: 15px; border-radius: 15px; background: rgba(8, 12, 24, .45); border: 1px solid rgba(255, 255, 255, .08); }
+.instructor-console-card-primary { border-color: rgba(151, 169, 255, .28); }
+.instructor-console-card-heading { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+.instructor-console-card-heading h4 { margin: 0 0 3px; }
+.instructor-console-card-heading p { margin: 0; color: var(--on-surface-variant); font-size: .78rem; line-height: 1.45; }
+.instructor-console-step { display: grid; place-items: center; flex: 0 0 28px; height: 28px; border-radius: 9px; color: #dbe1ff; background: rgba(116, 135, 255, .2); font: 700 .72rem "Space Grotesk", sans-serif; }
+.instructor-console-form { display: grid; gap: 9px; }
+.instructor-console-form-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.instructor-console-form label { display: grid; gap: 5px; color: var(--on-surface-variant); font-size: .72rem; }
+.instructor-console-form input, .instructor-console-textarea { width: 100%; box-sizing: border-box; border: 1px solid rgba(255, 255, 255, .12); border-radius: 9px; padding: 9px 10px; color: var(--on-surface); background: rgba(255, 255, 255, .045); font: inherit; font-size: .8rem; }
+.instructor-console-form input:focus, .instructor-console-textarea:focus { outline: 2px solid rgba(151, 169, 255, .55); outline-offset: 1px; }
+.instructor-console-roster { display: grid; gap: 6px; list-style: none; padding: 0; margin: 13px 0 0; }
+.instructor-console-roster-row { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 10px; background: rgba(255, 255, 255, .035); }
+.instructor-console-avatar { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 8px; color: #dce4ff; background: rgba(117, 137, 255, .25); font-size: .72rem; font-weight: 700; }
+.instructor-console-roster-copy { display: grid; flex: 1; min-width: 0; }
+.instructor-console-roster-copy strong, .instructor-console-roster-copy small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.instructor-console-roster-copy small { color: var(--on-surface-variant); font-size: .72rem; }
+.instructor-console-empty { color: var(--on-surface-variant); font-size: .78rem; }
+.instructor-console-note { margin: 10px 0 0; color: var(--on-surface-variant); font-size: .72rem; line-height: 1.45; }
+.instructor-console-join-box { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; margin-bottom: 9px; color: var(--on-surface-variant); font-size: .75rem; }
+.instructor-console-join-box code { justify-self: start; padding: 7px 9px; border-radius: 8px; color: #dbe1ff; background: rgba(151, 169, 255, .13); letter-spacing: .08em; }
+.instructor-console-inline-status { display: block; margin-top: 8px; color: var(--on-surface-variant); font-size: .74rem; }
+.instructor-console-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.instructor-console-guardrail { display: flex; align-items: center; gap: 8px; margin-top: 14px; color: #e8cfaa; font-size: .74rem; }
+
+@media (max-width: 760px) {
+  .instructor-console-header { display: grid; }
+  .instructor-console-grid { grid-template-columns: 1fr; }
+  .instructor-console-form-row { grid-template-columns: 1fr; }
+}
+
 .manage-panel .muted {
   color: var(--on-surface-variant);
   font-size: 0.88rem;
@@ -7165,4 +7611,1535 @@ html.theme-light .manage-lens-chip {
 .jol-bar-actions .toolbar-button {
   padding: 6px 12px;
   font-size: 0.8rem;
+}
+
+/* ============================================================
+   DTS 2026 Figma implementation — perspective → annotation → synthesis
+   ============================================================ */
+:root {
+  --dts-app: #0b0d12;
+  --dts-base: #10131a;
+  --dts-raised: #151820;
+  --dts-subtle: #1b1f2a;
+  --dts-border: #2a3040;
+  --dts-text: #ffffff;
+  --dts-text-secondary: #d9dfeb;
+  --dts-muted: #a9b6cc;
+  --dts-primary: #4361ee;
+  --dts-success: #1b9c85;
+  --dts-warning: #e76f51;
+}
+
+/* The responsive top navigation now carries the complete core flow. */
+.mobile-dock { display: none !important; }
+
+/* Landing: one clear learning promise and one clear access panel. */
+@media (min-width: 981px) {
+  .landing-shell {
+    padding: 24px 48px 32px;
+    gap: 16px;
+  }
+
+  .landing-hero {
+    display: block;
+  }
+
+  .landing-copy {
+    min-height: calc(100vh - 172px);
+    padding: clamp(48px, 6vw, 88px);
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(390px, 0.75fr);
+    grid-template-areas:
+      "kicker login"
+      "headline login"
+      "body login"
+      "steps login";
+    grid-template-rows: auto auto auto 1fr;
+    align-items: start;
+    align-content: center;
+    column-gap: clamp(56px, 7vw, 112px);
+    row-gap: 18px;
+    border-radius: 0;
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+    overflow: visible;
+  }
+
+  .landing-copy > .landing-kicker { grid-area: kicker; align-self: end; }
+  .landing-copy > .hero-headline { grid-area: headline; }
+  .landing-copy > .landing-body { grid-area: body; }
+  .landing-copy > .landing-steps { grid-area: steps; }
+  .landing-copy > .landing-login-card {
+    grid-area: login;
+    align-self: center;
+    margin: 0;
+    padding: 32px;
+    min-height: 530px;
+    border-radius: 16px;
+  }
+
+  .landing-copy h2 {
+    max-width: 13ch;
+    font-size: clamp(3.2rem, 5vw, 5.4rem);
+    line-height: 1.02;
+  }
+
+  .landing-body {
+    max-width: 62ch;
+    font-size: 1.04rem;
+    line-height: 1.68;
+  }
+
+  .landing-visual { display: none; }
+}
+
+.landing-login-card,
+html:not(.theme-light) .landing-login-card {
+  background: var(--dts-raised);
+  border: 1px solid var(--dts-border);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+}
+
+.landing-login-form,
+.landing-join-form { align-content: start; }
+
+.landing-login-grid,
+.auth-grid { grid-template-columns: 1fr; }
+
+.landing-login-row { grid-template-columns: 1fr; }
+.landing-login-row .toolbar-button { width: 100%; min-height: 44px; }
+
+/* Top navigation reflects the shortened learning flow. */
+.workspace-primary-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  padding: 4px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.workspace-primary-nav-item {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: rgba(246, 246, 252, 0.64);
+  font-size: 0.82rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.workspace-primary-nav-item:hover,
+.workspace-primary-nav-item.is-active {
+  background: rgba(67, 97, 238, 0.16);
+  color: #ffffff;
+}
+
+/* Student simple mode: remove the persistent dashboard rail; map tools become the rail. */
+.app-shell.density-simple { grid-template-columns: minmax(0, 1fr); }
+.density-simple > .sidebar { display: none; }
+.density-simple .workspace { padding: 12px; gap: 12px; }
+.density-simple .topbar { min-height: 58px; padding: 9px 14px; }
+.density-simple .topbar-heading { max-width: 330px; }
+.density-simple .topbar-side { flex: 0 1 auto; }
+
+/* Figma declutter pass: keep the active context in the header and disclose
+   account/research utilities only when needed. */
+.topbar-more {
+  position: relative;
+  flex: 0 0 auto;
+}
+.topbar-more > summary {
+  list-style: none;
+  cursor: pointer;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 10px;
+  border: 1px solid rgba(142, 158, 194, 0.24);
+  border-radius: 10px;
+  color: var(--muted, #9ca7c0);
+  font-size: 0.72rem;
+  font-weight: 750;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.topbar-more > summary::-webkit-details-marker { display: none; }
+.topbar-more > summary::after { content: "▾"; font-size: 0.7rem; opacity: 0.7; }
+.topbar-more > summary:focus-visible {
+  outline: 3px solid rgba(67, 97, 238, 0.46);
+  outline-offset: 2px;
+}
+.topbar-more[open] > summary { color: var(--text, #f4f6ff); border-color: rgba(61, 199, 166, 0.46); }
+.topbar-more-body {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(470px, calc(100vw - 32px));
+  max-height: min(520px, calc(100dvh - 112px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(142, 158, 194, 0.22);
+  border-radius: 14px;
+  background: rgba(18, 24, 40, 0.98);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.26);
+}
+.topbar-more-switcher { gap: 8px; }
+.topbar-more-actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.topbar-more-actions .topbar-identity { margin-right: auto; }
+.theme-light .topbar-more-body { background: rgba(255, 255, 255, 0.98); }
+@media (max-width: 720px) {
+  .topbar-more-body { position: fixed; top: 68px; right: 12px; }
+  .topbar-more-switcher { display: grid; grid-template-columns: 1fr 1fr; }
+}
+.density-simple .platform-switcher { display: none; }
+.density-simple .visualizer-layout { min-height: calc(100vh - 94px); }
+.density-simple .canvas-panel { padding: 14px; }
+.density-simple .canvas-header { padding-left: 62px; }
+.density-simple .network-stage { min-height: calc(100vh - 245px); }
+
+.density-simple .map-dock {
+  top: 18px;
+  left: 12px;
+  transform: none;
+}
+
+/* The network header sits inside a narrower work column than the browser
+   viewport. Keep its controls legible without turning the case-to-map seam
+   into a second toolbar. Labels remain available through title/aria-label. */
+ .canvas-panel { container-type: inline-size; }
+@container (max-width: 980px) {
+  .app-shell:not(.density-simple) .canvas-header {
+    min-height: 52px;
+    padding: 9px 14px;
+    gap: 10px;
+  }
+  .app-shell:not(.density-simple) .canvas-header-left .eyebrow {
+    display: none;
+  }
+  .app-shell:not(.density-simple) .canvas-header-left h3 {
+    font-size: 0.98rem;
+  }
+  .app-shell:not(.density-simple) .canvas-stats {
+    gap: 4px;
+  }
+  .app-shell:not(.density-simple) .canvas-stats .density-toggle-btn {
+    width: 34px;
+    min-width: 34px;
+    padding-inline: 0;
+  }
+  .app-shell:not(.density-simple) .canvas-stats .density-toggle-btn > span:not(.material-symbols-outlined) {
+    display: none;
+  }
+  .app-shell:not(.density-simple) #map-layer-control {
+    width: 94px;
+    min-width: 94px;
+  }
+  .app-shell:not(.density-simple) #map-layer-control > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .app-shell:not(.density-simple) #map-layer-select {
+    width: 94px;
+  }
+  .app-shell:not(.density-simple) #active-stakeholder-pill {
+    max-width: 78px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* Map-first task prompt and transparent comparison summary. */
+.task-banner:not([hidden]) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 12px;
+  padding: 13px 16px;
+  border-radius: 12px;
+  background: var(--dts-base);
+  border: 1px solid var(--dts-border);
+}
+
+.compare-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px 18px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: var(--dts-raised);
+  border: 1px solid var(--dts-border);
+}
+
+.compare-summary-head,
+.compare-summary-prompt { grid-column: 1; }
+.compare-summary-prompt { margin: 0; }
+.compare-annotation-cta { grid-column: 2; grid-row: 1 / span 2; }
+
+/* Collaborative annotation: anchored evidence, stance, and shared synthesis. */
+.collab-goal-card {
+  display: grid;
+  gap: 5px;
+  padding: 13px 14px;
+  border-radius: 12px;
+  background: rgba(27, 156, 133, 0.1);
+  border: 1px solid rgba(27, 156, 133, 0.3);
+}
+
+.collab-goal-card span {
+  color: #5fe3c4;
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.collab-goal-card strong { color: var(--dts-text); font-size: 0.83rem; line-height: 1.45; }
+
+.annotation-stance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.annotation-stance legend {
+  width: 100%;
+  margin-bottom: 2px;
+  color: var(--dts-text-secondary);
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.annotation-stance label { cursor: pointer; }
+.annotation-stance input { position: absolute; opacity: 0; pointer-events: none; }
+.annotation-stance span {
+  display: inline-flex;
+  min-width: 76px;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid var(--dts-border);
+  background: var(--dts-subtle);
+  color: var(--dts-text-secondary);
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.annotation-stance input:checked + span {
+  background: var(--dts-success);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.annotation-stance input:focus-visible + span {
+  outline: 3px solid rgba(151, 169, 255, 0.95);
+  outline-offset: 2px;
+}
+
+.annotation-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.annotation-share-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dts-text-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.annotation-share-toggle input { accent-color: var(--dts-primary); }
+.annotation-share-toggle input:disabled + span { opacity: 0.45; }
+.annotation-provenance { margin: -2px 0 0; color: var(--dts-muted); font-size: 0.68rem; line-height: 1.45; }
+
+.density-simple .insight-panel {
+  width: min(510px, 92vw);
+  border-radius: 0;
+  background: rgba(16, 19, 26, 0.98);
+}
+
+.density-simple .insight-panel .selected-node-card {
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--dts-border);
+  background: var(--dts-raised);
+}
+
+.density-simple .insight-panel .related-activity-columns { grid-template-columns: 1fr; }
+
+/* Home: one current case, then the four-stage collaborative learning loop. */
+.home-wrap { max-width: 1320px; gap: 18px; }
+.home-continue {
+  padding: 28px;
+  border-radius: 16px;
+  background: var(--dts-raised);
+  border-color: var(--dts-border);
+}
+
+.home-progress {
+  height: 8px;
+  margin-top: 18px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--dts-subtle);
+}
+.home-progress span { display: block; height: 100%; border-radius: inherit; background: var(--dts-primary); }
+.home-progress-label { margin: 8px 0 0; color: var(--dts-text-secondary); font-size: 0.78rem; }
+
+.home-learning-loop { display: grid; gap: 14px; }
+.home-loop-heading { display: flex; justify-content: space-between; align-items: end; gap: 16px; }
+.home-loop-heading h2 { margin: 3px 0 0; font-size: 1.14rem; color: #ffffff; }
+.home-loop-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.home-loop-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  align-items: center;
+  gap: 5px 12px;
+  min-height: 136px;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--dts-raised);
+  border: 1px solid var(--dts-border);
+}
+.home-loop-index { position: absolute; top: 14px; right: 16px; color: var(--dts-muted); font-size: 0.72rem; font-weight: 700; }
+.home-loop-card .material-symbols-outlined { grid-row: 1 / span 2; color: var(--dts-muted); font-size: 28px; }
+.home-loop-card strong { align-self: end; color: #fff; font-size: 0.9rem; }
+.home-loop-card small { align-self: start; color: var(--dts-muted); }
+.home-loop-card.is-done .material-symbols-outlined,
+.home-loop-card.is-done small { color: #5fe3c4; }
+.home-loop-card.is-active { border-color: rgba(67, 97, 238, 0.62); background: rgba(67, 97, 238, 0.1); }
+.home-loop-card.is-active .material-symbols-outlined,
+.home-loop-card.is-active small { color: #9ab2ff; }
+
+/* Light theme: active learning-loop cards use a pale surface, so the dark
+   surface's white heading token must be reasserted for readable contrast. */
+html.theme-light .home-loop-heading h2,
+html.theme-light .home-loop-card.is-active strong {
+  color: #172033;
+}
+html.theme-light .home-loop-card.is-active .material-symbols-outlined,
+html.theme-light .home-loop-card.is-active small {
+  color: #4058c8;
+}
+
+/* Reflection reads as evidence → synthesis → readiness. */
+.report-layout { grid-template-columns: minmax(0, 1.35fr) minmax(360px, 0.78fr); align-items: start; }
+.memo-panel,
+.reflection-panel { border-radius: 16px; }
+.memo-section { border-radius: 12px; background: var(--dts-subtle); border: 1px solid var(--dts-border); padding: 16px; }
+.reflection-panel .rubric-item { border-radius: 12px; background: var(--dts-subtle); border: 1px solid var(--dts-border); }
+.rubric-provenance { color: #9ab2ff; font-size: 0.68rem; font-weight: 600; }
+.prompt-item { border-radius: 12px; }
+.prompt-item .reflection-submit { min-width: 132px; }
+
+@media (max-width: 1100px) {
+  .workspace-primary-nav { order: 3; width: 100%; justify-content: center; }
+  .home-loop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .compare-summary { grid-template-columns: 1fr; }
+  .compare-summary-head,
+  .compare-summary-prompt,
+  .compare-annotation-cta { grid-column: 1; grid-row: auto; }
+}
+
+@media (max-width: 980px) {
+  .landing-copy {
+    display: grid;
+    gap: 18px;
+    min-height: 0;
+    padding: 28px;
+  }
+  .landing-copy h2 { font-size: clamp(2.4rem, 10vw, 4rem); }
+  .landing-body { max-width: 58ch; }
+  .landing-visual { display: none; }
+}
+
+@media (max-width: 700px) {
+  .landing-brand-copy h1 { font-size: clamp(1.7rem, 8vw, 2.1rem); letter-spacing: -0.04em; }
+  .workspace-primary-nav-item { flex: 1; padding-inline: 8px; }
+  .density-simple .topbar-side { display: none; }
+  .density-simple .topbar-heading { max-width: none; }
+  .density-simple .visualizer-layout .intake-panel,
+  .density-simple .visualizer-layout.is-focused .intake-panel,
+  .density-simple .visualizer-layout .insight-panel,
+  .density-simple .visualizer-layout.is-focused .insight-panel {
+    position: fixed;
+    top: 130px;
+    bottom: 12px;
+    width: min(360px, calc(100vw - 24px));
+    height: auto;
+    max-height: none;
+  }
+  .density-simple .visualizer-layout .intake-panel,
+  .density-simple .visualizer-layout.is-focused .intake-panel { left: 12px; }
+  .density-simple .visualizer-layout .insight-panel,
+  .density-simple .visualizer-layout.is-focused .insight-panel { right: 12px; }
+  .home-loop-grid { grid-template-columns: 1fr; }
+  .annotation-actions { align-items: stretch; flex-direction: column; }
+  .annotation-actions .toolbar-button { width: 100%; }
+  .report-layout { grid-template-columns: 1fr; }
+}
+
+/* ===== Remaining-view Figma pass =====
+   Keep the visual anchor and the next action visible while secondary detail
+   remains available below without taking over the first viewport. */
+.density-simple .lens-layout,
+.density-simple .matrix-layout,
+.density-simple .sandbox-layout,
+.density-simple .report-layout {
+  gap: 12px;
+}
+
+.density-simple .lens-layout .card-column,
+.density-simple .lens-layout .orbit-panel,
+.density-simple .lens-layout .chat-panel,
+.density-simple .matrix-panel,
+.density-simple .decision-panel,
+.density-simple .control-panel,
+.density-simple .reaction-panel,
+.density-simple .memo-panel,
+.density-simple .reflection-panel {
+  padding: 14px;
+}
+
+.density-simple .lens-layout .orbit-panel { order: 2; }
+.density-simple .lens-layout .chat-panel { order: 3; }
+.density-simple .lens-layout .orbit-visual {
+  min-height: 360px;
+  border-radius: 16px;
+}
+
+.density-simple .matrix-main {
+  display: grid;
+  grid-template-columns: minmax(220px, .8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: 14px;
+}
+
+.density-simple .radar-shell {
+  min-height: 280px;
+}
+
+.density-simple .metric-bars {
+  align-self: stretch;
+  padding: 12px;
+  border: 1px solid var(--dts-border);
+  border-radius: 12px;
+  background: var(--dts-base);
+}
+
+.density-simple .reaction-grid {
+  gap: 8px;
+}
+
+.density-simple .reflection-feed,
+.density-simple .cohort-panel {
+  max-height: 260px;
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+
+.density-simple .memo-section,
+.density-simple .rubric-item,
+.density-simple .prompt-item {
+  padding: 13px;
+}
+
+@media (max-width: 700px) {
+  .density-simple .matrix-main { grid-template-columns: 1fr; }
+  .density-simple .radar-shell { min-height: 240px; }
+  .density-simple .lens-layout .orbit-visual { min-height: 300px; }
+  .density-simple .reflection-feed,
+  .density-simple .cohort-panel { max-height: 220px; }
+}
+
+/* ===== Clean operations pass (Figma loop 2026-07-30) =====
+   One navigation system, one current task, and one operation stage at a time. */
+.role-admin[data-active-view="manage"] {
+  grid-template-columns: 248px minmax(0, 1fr);
+}
+
+.role-admin[data-active-view="manage"] .workspace {
+  padding: 14px 18px 24px;
+  gap: 14px;
+}
+
+.role-admin[data-active-view="manage"] .topbar {
+  min-height: 60px;
+  padding: 8px 14px;
+  border-radius: 14px;
+}
+
+.role-admin[data-active-view="manage"] .workspace-primary-nav,
+.role-admin[data-active-view="manage"] .topbar-collapse-toggle,
+.role-admin[data-active-view="manage"] #role-control,
+.role-admin[data-active-view="manage"] #case-control,
+.role-admin[data-active-view="manage"] #learner-control,
+.role-admin[data-active-view="manage"] .mini-control:has(#institution-select) {
+  display: none;
+}
+
+.role-admin[data-active-view="manage"] .topbar-heading {
+  min-width: 190px;
+  max-width: 270px;
+}
+
+.role-admin[data-active-view="manage"] .topbar-heading .eyebrow {
+  margin-bottom: 2px;
+  font-size: .62rem;
+}
+
+.role-admin[data-active-view="manage"] .topbar h2 {
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.role-admin[data-active-view="manage"] .topbar-side,
+.role-admin[data-active-view="manage"] .platform-switcher,
+.role-admin[data-active-view="manage"] .toolbar-actions {
+  flex-wrap: nowrap;
+}
+
+.role-admin[data-active-view="manage"] .mini-control:has(#course-select) {
+  width: min(250px, 24vw);
+}
+
+.role-admin[data-active-view="manage"] .mini-control:has(#course-select) span {
+  display: none;
+}
+
+.role-admin[data-active-view="manage"] .mini-control:has(#course-select) select {
+  min-height: 38px;
+}
+
+.role-admin[data-active-view="manage"] #start-tutorial,
+.role-admin[data-active-view="manage"] #return-to-landing {
+  padding-inline: 10px;
+  font-size: .74rem;
+}
+
+.manage-view {
+  width: min(1180px, 100%);
+  margin-inline: auto;
+  gap: 14px;
+}
+
+/* The management console is a full view, not a second dashboard beneath the
+   workspace. Keep it out of the document flow until “내 수업” is active. */
+.view.manage-view:not(.is-active) {
+  display: none !important;
+}
+
+.instructor-console {
+  padding: 22px;
+  border-radius: 16px;
+}
+
+.instructor-console-header {
+  margin-bottom: 14px;
+}
+
+.instructor-console-header .muted {
+  max-width: 62ch;
+  margin-bottom: 0;
+}
+
+.instructor-console-kpis {
+  margin-bottom: 14px;
+}
+
+.instructor-console-next-step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(125, 224, 196, 0.24);
+  border-radius: 14px;
+  background: linear-gradient(120deg, rgba(125, 224, 196, 0.1), rgba(67, 97, 238, 0.08));
+}
+
+.instructor-console-next-step > div { display: grid; gap: 4px; min-width: 0; }
+.instructor-console-next-step .eyebrow { margin: 0; }
+.instructor-console-next-step strong { overflow: hidden; color: var(--dts-text); font-size: .86rem; text-overflow: ellipsis; white-space: nowrap; }
+
+.instructor-console-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 5px;
+  border: 1px solid var(--dts-border);
+  border-radius: 12px;
+  background: var(--dts-base);
+}
+
+.instructor-console-tabs button {
+  min-height: 38px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--dts-muted);
+  font: inherit;
+  font-size: .8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.instructor-console-tabs button:hover {
+  color: var(--dts-text);
+  background: rgba(255, 255, 255, .05);
+}
+
+.instructor-console-tabs button.is-active {
+  color: #fff;
+  background: var(--dts-primary);
+}
+
+.instructor-console:has([data-console-tab="prepare"].is-active) [data-console-stage]:not([data-console-stage="prepare"]),
+.instructor-console:has([data-console-tab="live"].is-active) [data-console-stage]:not([data-console-stage="live"]),
+.instructor-console:has([data-console-tab="review"].is-active) [data-console-stage] {
+  display: none;
+}
+
+.manage-view:has([data-console-tab="prepare"].is-active) > .manage-panel,
+.manage-view:has([data-console-tab="live"].is-active) > .manage-panel {
+  display: none;
+}
+
+.instructor-console:has([data-console-tab="review"].is-active) .instructor-console-grid::before {
+  content: "활동과 케이스 검토 도구를 아래에 모았습니다.";
+  grid-column: 1 / -1;
+  padding: 14px 16px;
+  border: 1px solid var(--dts-border);
+  border-radius: 12px;
+  color: var(--dts-text-secondary);
+  background: var(--dts-base);
+  font-size: .82rem;
+}
+
+.instructor-console-card {
+  padding: 18px;
+  border-radius: 14px;
+}
+
+.instructor-console-card-heading p,
+.instructor-console-note {
+  max-width: 58ch;
+}
+
+.role-admin[data-active-view="manage"] .sidebar .case-summary p,
+.role-admin[data-active-view="manage"] .sidebar .meter-hint,
+.role-admin[data-active-view="manage"] .sidebar .health-panel p {
+  display: none;
+}
+
+/* Text-fit guardrails: Korean labels keep whole words and containers may grow. */
+.role-admin[data-active-view="manage"] .brand-block {
+  gap: 10px;
+}
+
+.role-admin[data-active-view="manage"] .brand-block > div:last-child {
+  min-width: 0;
+}
+
+.role-admin[data-active-view="manage"] .brand-block h1 {
+  font-size: 1.02rem;
+  line-height: 1.25;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+
+.role-admin[data-active-view="manage"] .brand-block p {
+  letter-spacing: .09em;
+  white-space: nowrap;
+}
+
+.role-admin[data-active-view="manage"] #sidebar-case-control,
+.role-admin[data-active-view="manage"] #sidebar-case-select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.role-admin[data-active-view="manage"] #sidebar-case-select {
+  padding-inline: 9px;
+  font-size: .75rem;
+}
+
+.role-admin[data-active-view="manage"] .case-title-row {
+  position: relative;
+  display: block;
+  padding-right: 32px;
+}
+
+.role-admin[data-active-view="manage"] .case-title-row h2 {
+  overflow: visible;
+  text-overflow: clip;
+  font-size: 1rem;
+  line-height: 1.35;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.role-admin[data-active-view="manage"] .case-title-row .icon-button {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.instructor-console-card,
+.instructor-console-card-heading > div,
+.manage-case-main,
+.manage-case-actions,
+.topbar-heading,
+.topbar-side {
+  min-width: 0;
+}
+
+.instructor-console h3,
+.instructor-console h4,
+.instructor-console p,
+.manage-view h3,
+.manage-view h4,
+.manage-view p,
+.manage-case-meta,
+.toolbar-button,
+.nav-item span:last-child {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.toolbar-button,
+.instructor-console-tabs button {
+  line-height: 1.25;
+}
+
+.instructor-console-form-row > *,
+.instructor-console-join-box > * {
+  min-width: 0;
+}
+
+@media (max-width: 1050px) {
+  .role-admin[data-active-view="manage"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .role-admin[data-active-view="manage"] > .sidebar { display: none; }
+  .role-admin[data-active-view="manage"] .mini-control:has(#course-select) { width: min(220px, 28vw); }
+}
+
+@media (max-width: 760px) {
+  .role-admin[data-active-view="manage"] .topbar-side .platform-switcher,
+  .role-admin[data-active-view="manage"] #start-tutorial,
+  .role-admin[data-active-view="manage"] #return-to-landing { display: none; }
+  .instructor-console-tabs { position: sticky; top: 8px; z-index: 4; }
+  .instructor-console-kpis { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Agentic CSCL layer: professor orchestration, learner reflection support. */
+.agent-coach-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-color: rgba(61, 199, 166, 0.38);
+  background: rgba(61, 199, 166, 0.1);
+  color: #72e4ca;
+}
+
+.agent-coach-trigger .material-symbols-outlined { font-size: 18px; }
+.agent-coach-trigger:hover { background: rgba(61, 199, 166, 0.17); color: #a2f4e1; }
+.agent-coach-scrim,
+.agent-coach-drawer { position: fixed; inset: 0; }
+.agent-coach-scrim { z-index: 90; background: rgba(3, 5, 10, 0.58); backdrop-filter: blur(3px); }
+.agent-coach-drawer {
+  z-index: 91;
+  left: auto;
+  width: min(470px, 100vw);
+  overflow-y: auto;
+  padding: 22px;
+  background: #10131b;
+  border-left: 1px solid #293045;
+  box-shadow: -24px 0 70px rgba(0, 0, 0, 0.42);
+}
+.agent-coach-scrim[hidden],
+.agent-coach-drawer[hidden] { display: none !important; }
+.agent-coach-open { overflow: hidden; }
+.agent-coach-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 14px; }
+.agent-coach-head h2 { margin: 3px 0 0; color: #f5f7ff; font-size: 1.35rem; }
+.agent-kicker { margin: 0; color: #3dc7a6; font-size: 0.7rem; font-weight: 750; letter-spacing: 0.08em; text-transform: uppercase; }
+.agent-icon-button {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  place-items: center;
+  border: 1px solid #293045;
+  border-radius: 50%;
+  background: #141822;
+  color: #f5f7ff;
+  cursor: pointer;
+}
+.agent-control-strip { display: flex; align-items: center; gap: 7px; padding: 10px 13px; border-radius: 12px; background: #121c24; border: 1px solid #2e6b5e; color: #a3adc7; font-size: 0.73rem; }
+.agent-control-strip strong { color: #3dc7a6; }
+.agent-status-dot { width: 7px; height: 7px; border-radius: 50%; background: #3dc7a6; box-shadow: 0 0 0 4px rgba(61, 199, 166, 0.12); }
+.agent-context-card,
+.agent-suggestion-card,
+.agent-privacy-note { margin-top: 14px; border: 1px solid #293045; background: #141822; border-radius: 16px; }
+.agent-context-card { display: grid; gap: 7px; padding: 16px; }
+.agent-context-card span { color: #3dc7a6; font-size: 0.68rem; font-weight: 750; text-transform: uppercase; letter-spacing: 0.06em; }
+.agent-context-card strong { color: #f5f7ff; font-size: 0.92rem; }
+.agent-context-card p { margin: 0; color: #a3adc7; font-size: 0.78rem; line-height: 1.55; }
+.agent-suggestion-card { padding: 18px; background: #10131b; }
+.agent-suggestion-meta { display: flex; justify-content: space-between; gap: 10px; color: #3dc7a6; font-size: 0.7rem; font-weight: 700; }
+.agent-suggestion-meta span:last-child { color: #a3adc7; }
+.agent-suggestion-card h3 { margin: 12px 0 18px; color: #f5f7ff; font-size: 1.08rem; line-height: 1.4; }
+.agent-prompt-label { display: block; margin: 0 0 8px; color: #a3adc7; font-size: 0.72rem; font-weight: 700; }
+.agent-prompt-draft {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 112px;
+  resize: vertical;
+  padding: 13px 14px;
+  border: 1px solid #4a63ed;
+  border-radius: 12px;
+  outline: none;
+  background: #1a2447;
+  color: #f5f7ff;
+  font: inherit;
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+.agent-prompt-draft:focus { box-shadow: 0 0 0 3px rgba(74, 99, 237, 0.22); }
+.agent-alternative { margin: 8px 0 0; color: #a3adc7; font-size: 0.7rem; line-height: 1.45; }
+.agent-evidence-toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; margin: 13px 0 0; padding: 10px 0; border: 0; background: transparent; color: #f5f7ff; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
+.agent-evidence-detail { padding: 13px 14px; border-radius: 11px; background: #141822; color: #a3adc7; font-size: 0.75rem; line-height: 1.55; }
+.agent-evidence-detail strong { color: #f5f7ff; }
+.agent-evidence-detail ul { margin: 8px 0 0; padding-left: 18px; }
+.agent-caveat { display: flex; align-items: flex-start; gap: 8px; margin-top: 13px; padding: 11px 12px; border-radius: 10px; background: #241b0e; color: #f5ab40; font-size: 0.72rem; line-height: 1.5; }
+.agent-caveat .material-symbols-outlined { font-size: 17px; }
+.agent-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+.agent-actions .toolbar-button { min-height: 40px; }
+.agent-privacy-note { display: grid; gap: 5px; padding: 13px 15px; color: #a3adc7; font-size: 0.7rem; }
+.agent-privacy-note strong { color: #f5f7ff; }
+.agent-evidence-options { display: grid; gap: 8px; }
+.agent-evidence-options button { width: 100%; padding: 12px 13px; text-align: left; border: 1px solid #293045; border-radius: 10px; background: #141822; color: #a3adc7; cursor: pointer; }
+.agent-evidence-options button.is-selected { border-color: #4a63ed; background: #1a2447; color: #f5f7ff; }
+.agent-full-button { width: 100%; margin-top: 15px; min-height: 44px; }
+.agent-facilitator-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 14px; padding: 5px; border: 1px solid #293045; border-radius: 12px; background: #0d1017; }
+.agent-facilitator-tabs button { min-height: 36px; padding: 6px 5px; border: 0; border-radius: 8px; background: transparent; color: #a3adc7; font: inherit; font-size: 0.68rem; font-weight: 700; cursor: pointer; }
+.agent-facilitator-tabs button.is-active { background: #1a2447; color: #f5f7ff; box-shadow: inset 0 0 0 1px #4a63ed; }
+.agent-topic-brief,
+.agent-topic-results { margin-top: 14px; padding: 16px; border: 1px solid #293045; border-radius: 16px; background: #10131b; }
+.agent-topic-brief label { display: block; margin-bottom: 8px; color: #a3adc7; font-size: 0.72rem; font-weight: 700; }
+.agent-topic-brief textarea { box-sizing: border-box; width: 100%; min-height: 94px; resize: vertical; padding: 12px; border: 1px solid #293045; border-radius: 11px; background: #141822; color: #f5f7ff; font: inherit; font-size: 0.82rem; line-height: 1.5; }
+.agent-topic-brief textarea:focus { outline: 2px solid rgba(74, 99, 237, 0.65); outline-offset: 2px; }
+.agent-topic-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 11px; color: #a3adc7; font-size: 0.7rem; }
+.agent-topic-meta .toolbar-button { min-height: 38px; }
+.agent-topic-empty { margin-top: 12px; padding: 18px 14px; border: 1px dashed #293045; border-radius: 11px; color: #a3adc7; font-size: 0.76rem; line-height: 1.5; }
+.agent-topic-card { display: grid; gap: 5px; width: 100%; margin-top: 9px; padding: 12px 13px; text-align: left; border: 1px solid #293045; border-radius: 11px; background: #141822; color: #a3adc7; cursor: pointer; }
+.agent-topic-card strong { color: #3dc7a6; font-size: 0.76rem; }
+.agent-topic-card span { color: #f5f7ff; font-size: 0.78rem; line-height: 1.45; }
+.agent-topic-card small { color: #a3adc7; font-size: 0.66rem; }
+.agent-topic-card.is-selected { border-color: #4a63ed; background: #1a2447; }
+.agent-topic-card.is-selected strong { color: #9ab2ff; }
+.theme-light .agent-facilitator-tabs { background: #eef1fb; border-color: #d8deef; }
+.theme-light .agent-facilitator-tabs button { color: #5b6781; }
+.theme-light .agent-facilitator-tabs button.is-active,
+.theme-light .agent-topic-card.is-selected { background: #e8ecff; color: #17213b; }
+.theme-light .agent-topic-brief,
+.theme-light .agent-topic-results,
+.theme-light .agent-topic-card { background: #fff; border-color: #d8deef; }
+.theme-light .agent-topic-brief textarea { background: #fff; color: #17213b; border-color: #d8deef; }
+.theme-light .agent-topic-card span { color: #17213b; }
+
+/* ===== Low-density reading pass (Figma-informed) =====
+   Keep the decision surface visible while moving explanations and telemetry
+   behind existing drawers/toggles. This lowers visual noise without removing
+   any data or changing the underlying workflow. */
+.app-shell:not(.density-simple) .meter-hint,
+.app-shell:not(.density-simple) .context-note,
+.app-shell:not(.density-simple) .stage-note,
+.app-shell:not(.density-simple) .legend-desc,
+.app-shell:not(.density-simple) .network-meta-grid,
+.app-shell:not(.density-simple) .swarm-info-panel,
+.app-shell:not(.density-simple) .compare-summary-prompt,
+.app-shell:not(.density-simple) .network-tooltip-body {
+  display: none !important;
+}
+.app-shell:not(.density-simple) .canvas-panel,
+.app-shell:not(.density-simple) .intake-panel,
+.app-shell:not(.density-simple) .insight-panel { padding: 14px; }
+.app-shell:not(.density-simple) .subsection { margin-top: 10px; padding-top: 10px; }
+.app-shell:not(.density-simple) .section-header h3,
+.app-shell:not(.density-simple) .canvas-header h3 { font-size: 0.9rem; }
+/* On laptop widths keep the map legible without letting the canvas push the
+   decision panels far below the fold. The map still has a generous 420px
+   floor and grows on taller displays. */
+.app-shell:not(.density-simple) .network-stage {
+  min-height: clamp(420px, 58vh, 620px);
+}
+.app-shell:not(.density-simple) .network-node .node-meta { display: none; }
+.app-shell:not(.density-simple) .topbar-identity { display: none; }
+
+/* The map is the primary reading surface; secondary copy appears on demand. */
+.app-shell:not(.density-simple) .case-summary p,
+.app-shell:not(.density-simple) .health-panel p,
+.app-shell:not(.density-simple) .pipeline-console .muted,
+.app-shell:not(.density-simple) .reflection-feed .reflection-item p { line-height: 1.4; }
+.app-shell:not(.density-simple) .toolbar-actions { gap: 5px; }
+
+/* In simple mode, make the first action unmistakable and keep controls short. */
+.density-simple .canvas-header { min-height: 42px; }
+.density-simple .canvas-header h3 { font-size: 0.92rem; }
+.density-simple .map-dock-btn { width: 42px; height: 42px; }
+.density-simple .network-stage { min-height: calc(100vh - 220px); }
+
+.theme-light .agent-coach-drawer { background: #f8f9fd; border-left-color: #d8deef; }
+.theme-light .agent-coach-head h2,
+.theme-light .agent-context-card strong,
+.theme-light .agent-suggestion-card h3,
+.theme-light .agent-evidence-toggle,
+.theme-light .agent-evidence-detail strong,
+.theme-light .agent-privacy-note strong { color: #17213b; }
+.theme-light .agent-context-card,
+.theme-light .agent-suggestion-card,
+.theme-light .agent-privacy-note,
+.theme-light .agent-evidence-options button { background: #fff; border-color: #d8deef; }
+.theme-light .agent-context-card p,
+.theme-light .agent-prompt-label,
+.theme-light .agent-evidence-detail,
+.theme-light .agent-privacy-note { color: #5b6781; }
+
+@media (max-width: 700px) {
+  .agent-coach-drawer { padding: 18px 16px 28px; }
+  .agent-facilitator-tabs button { font-size: 0.62rem; }
+  .agent-topic-meta { align-items: stretch; flex-direction: column; }
+  .agent-topic-meta .toolbar-button { width: 100%; }
+  .agent-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .agent-actions .toolbar-button-primary { grid-column: 1 / -1; }
+  .density-simple .topbar-side { display: flex; }
+  .density-simple .toolbar-actions > :not(.agent-coach-trigger) { display: none; }
+  .density-simple .agent-coach-trigger { min-width: 44px; padding-inline: 11px; }
+  .density-simple .agent-coach-trigger span:last-child { display: none; }
+}
+
+/* ===== Commercial polish pass =====
+   Preserve the existing workflow and controls while making the reading frame
+   calmer, more anchored, and easier to scan at product-sized breakpoints. */
+.density-simple .workspace {
+  align-items: center;
+}
+
+.density-simple .topbar,
+.density-simple .main-content {
+  width: min(100%, 1440px);
+}
+
+.density-simple .topbar {
+  position: sticky;
+  top: 12px;
+  z-index: 20;
+  box-shadow: 0 12px 32px rgba(5, 8, 20, 0.18);
+}
+
+.density-simple .main-content {
+  padding-bottom: 28px;
+}
+
+.density-simple .view > .lens-layout,
+.density-simple .view > .matrix-layout,
+.density-simple .view > .sandbox-layout,
+.density-simple .view > .report-layout {
+  width: 100%;
+}
+
+.density-simple .panel,
+.density-simple .task-card,
+.density-simple .pipeline-card {
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.density-simple .panel:focus-within,
+.density-simple .task-card:focus-within,
+.density-simple .pipeline-card:focus-within {
+  border-color: rgba(107, 130, 255, 0.82);
+  box-shadow: 0 0 0 3px rgba(80, 105, 242, 0.14);
+}
+
+.density-simple .toolbar-button,
+.density-simple .token-button,
+.density-simple .workspace-primary-nav-item {
+  min-height: 36px;
+}
+
+.density-simple .section-header {
+  margin-bottom: 12px;
+}
+
+.density-simple .section-header h3 {
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 700px) {
+  .density-simple .workspace { padding: 8px; gap: 8px; }
+  .density-simple .topbar { top: 8px; border-radius: 14px; }
+  .density-simple .main-content { padding-bottom: 18px; }
+}
+
+/* Final light-mode contrast pass. A few legacy dark selectors sit later in
+   the cascade, so keep the compact controls and orbit annotations readable
+   after the theme is inverted. */
+html.theme-light .icon-button,
+html.theme-light .meter-label,
+html.theme-light .health-header,
+html.theme-light .workspace-primary-nav-item,
+html.theme-light .mini-control,
+html.theme-light .mini-control span,
+html.theme-light .topbar-more > summary { color: #1f2a44 !important; }
+html.theme-light .mini-control {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(20, 30, 60, 0.16) !important;
+}
+html.theme-light .workspace-primary-nav-item.is-active {
+  color: #1a2a5c !important;
+  background: rgba(67, 97, 238, 0.1) !important;
+}
+html.theme-light .orbit-core {
+  background: linear-gradient(145deg, rgba(67, 97, 238, 0.16), rgba(67, 97, 238, 0.08)) !important;
+  color: #1f2a44 !important;
+  border-color: rgba(67, 97, 238, 0.28) !important;
+}
+html.theme-light .orbit-core span { color: #4361ee !important; }
+html.theme-light .orbit-label {
+  background: rgba(255, 255, 255, 0.96) !important;
+  color: #46546f !important;
+  border: 1px solid rgba(20, 30, 60, 0.12);
+}
+html.theme-light .orbit-satellite,
+html.theme-light .orbit-satellite-a,
+html.theme-light .orbit-satellite-b,
+html.theme-light .orbit-satellite-c {
+  background: #eef2ff !important;
+  color: #1f2a44 !important;
+  border-color: rgba(67, 97, 238, 0.28) !important;
+}
+html.theme-light .topbar-more-body { background: rgba(255, 255, 255, 0.98) !important; }
+html.theme-light .home-brand-title,
+html.theme-light .home-continue-title,
+html.theme-light .home-task-title,
+html.theme-light .home-recent-item strong,
+html.theme-light .case-summary h2,
+html.theme-light .section-header h3,
+html.theme-light .subsection-head h4 { color: #1f2a44 !important; }
+html.theme-light .home-recent-item span { color: #5a6781 !important; }
+
+/* The density button is the single source of truth for panel complexity. In
+   simple mode, keep each drawer's first action visible and tuck secondary
+   explanatory blocks away until the user switches to 자세히. */
+.density-simple .intake-panel .workflow-guide,
+.density-simple .intake-panel .platform-context,
+.density-simple .insight-panel .score-info,
+.density-simple .insight-panel .chat-actions { display: none !important; }
+.density-simple .intake-panel .pipeline-console,
+.density-simple .insight-panel .chat-composer { margin-top: 10px; }
+
+/* Figma compact-control rule: keep the action icon in the reading frame and
+   move explanatory words into the existing title/aria-label tooltip. */
+.density-simple .canvas-stats .density-toggle-btn {
+  width: 38px;
+  min-width: 38px;
+  padding-inline: 0;
+  justify-content: center;
+}
+.density-simple .canvas-stats .density-toggle-btn > span:not(.material-symbols-outlined) {
+  display: none;
+}
+.density-simple .map-layer-control > span,
+.density-simple .map-lens-bar-label,
+.density-simple .chat-panel .section-header .badge {
+  display: none !important;
+}
+.density-simple .map-layer-control select {
+  max-width: 126px;
+  text-overflow: ellipsis;
+}
+.density-simple .view-result-summary small,
+.density-simple .lens-layout .score-info,
+.density-simple .orbit-panel .section-header .eyebrow {
+  display: none !important;
+}
+
+/* Keep the primary sidebar as the single navigation source in compact mode. */
+.density-simple .topbar .workspace-primary-nav { display: none !important; }
+
+/* Keep navigation in one consistent place. The sidebar owns destinations;
+   the top bar is reserved for context, course, and the primary action. */
+.topbar .workspace-primary-nav { display: none !important; }
+
+/* Hidden state must not reserve a blank strip in the canvas. */
+#compare-summary[hidden] { display: none !important; }
+
+/* The orbit is a visual anchor, never a clipped thumbnail. At tablet widths
+   stack it with the concern cards so rings and labels retain full geometry. */
+@media (max-width: 1400px) {
+  .lens-layout { grid-template-columns: minmax(0, 1fr) !important; }
+  .lens-layout > .orbit-panel { grid-column: 1 !important; grid-row: auto !important; }
+  .lens-layout .orbit-visual { width: 100%; min-width: 0; }
+}
+
+@media (max-width: 1100px) {
+  /* Keep the cohort scan readable without a second horizontal scrollbar. */
+  .cohort-panel th:nth-child(3),
+  .cohort-panel td:nth-child(3),
+  .cohort-panel th:nth-child(4),
+  .cohort-panel td:nth-child(4),
+  .cohort-panel th:nth-child(5),
+  .cohort-panel td:nth-child(5),
+  .cohort-panel th:nth-child(6),
+  .cohort-panel td:nth-child(6) { display: none; }
+  .cohort-panel th,
+  .cohort-panel td { white-space: normal; }
+}
+
+/* Prevent compact header controls from creating the line breaks that made the
+   original interface feel cramped. */
+.topbar .mini-control,
+.topbar .topbar-more,
+.canvas-stats,
+.canvas-stats .density-toggle-btn,
+.section-header-actions { min-width: 0; }
+.topbar select,
+.canvas-stats select,
+.badge,
+.panel-expand-toggle { white-space: nowrap; }
+
+/* Instructor console light-theme pass: the console has its own dark token
+   layer, so explicitly remap its surfaces when the app is in light mode. */
+.theme-light .instructor-console,
+.theme-light .instructor-console-card,
+.theme-light .instructor-console-kpi,
+.theme-light .instructor-console-tabs {
+  color: #172033;
+  background: #f8fbff;
+  border-color: rgba(121, 140, 171, 0.22);
+  box-shadow: 0 8px 24px rgba(30, 55, 90, 0.08);
+}
+.theme-light .instructor-console-kpi,
+.theme-light .instructor-console-card {
+  background: #ffffff;
+}
+.theme-light .instructor-console h3,
+.theme-light .instructor-console h4,
+.theme-light .instructor-console strong,
+.theme-light .instructor-console label,
+.theme-light .instructor-console .instructor-console-step {
+  color: #172033;
+}
+.theme-light .instructor-console p,
+.theme-light .instructor-console span,
+.theme-light .instructor-console small,
+.theme-light .instructor-console .instructor-console-note,
+.theme-light .instructor-console .instructor-console-empty,
+.theme-light .instructor-console .instructor-console-card-heading p {
+  color: #475569;
+}
+.theme-light .instructor-console-next-step {
+  background: linear-gradient(120deg, #effcf8, #eef2ff);
+  border-color: rgba(27, 156, 133, 0.24);
+}
+.theme-light .instructor-console-form input,
+.theme-light .instructor-console-textarea {
+  color: #172033;
+  background: #ffffff;
+  border-color: rgba(121, 140, 171, 0.32);
+}
+.theme-light .instructor-console-roster-row {
+  background: #f3f6fb;
+}
+.theme-light .instructor-console-join-box code {
+  color: #23345c;
+  background: #eef2ff;
+}
+
+/* Report cards stay legible when the light theme is selected while the
+   legacy dark-surface layer is still present on the document root. */
+.theme-light .report-layout .memo-item,
+.theme-light .report-layout .memo-item strong,
+.theme-light .report-layout .metric-card strong,
+.theme-light .report-layout .metric-card p {
+  color: #172033;
+}
+.theme-light .report-layout .memo-item p {
+  color: #475569;
+}
+
+/* Commercial topbar pass: a compact context strip with one list of selectors
+   and icon-first utilities. */
+@media (max-width: 1400px) and (min-width: 721px) {
+  .topbar {
+    position: relative;
+    display: grid !important;
+    grid-template-columns: 176px minmax(0, 1fr) !important;
+    align-items: center;
+    gap: 12px;
+    min-height: 88px;
+    padding: 12px 14px !important;
+  }
+  .topbar-heading { min-width: 0; }
+  .topbar-heading h2 {
+    max-width: 164px;
+    margin: 0;
+    font-size: 1.02rem;
+    line-height: 1.16;
+    overflow-wrap: anywhere;
+  }
+  .topbar-collapse-toggle {
+    position: absolute;
+    top: 10px;
+    left: 150px;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+  }
+  .topbar-side {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex-wrap: nowrap !important;
+  }
+  .platform-switcher {
+    display: grid !important;
+    grid-template-columns: minmax(160px, .9fr) minmax(220px, 1.25fr);
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    width: 100%;
+    flex-wrap: nowrap !important;
+  }
+  .platform-switcher .mini-control {
+    min-width: 0;
+    width: auto;
+  }
+  .platform-switcher .mini-control select {
+    width: 100%;
+    max-width: 100%;
+    height: 38px;
+    text-overflow: ellipsis;
+  }
+  .toolbar-actions {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    min-width: max-content;
+    flex-wrap: nowrap !important;
+  }
+  .agent-coach-trigger {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    padding: 0;
+    font-size: 0;
+    justify-content: center;
+  }
+  .agent-coach-trigger .material-symbols-outlined { font-size: 20px; }
+  .topbar-more > summary {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    padding: 0;
+    font-size: 0;
+    justify-content: center;
+  }
+  .topbar-more > summary::before {
+    content: "more_horiz";
+    font-family: "Material Symbols Outlined";
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  /* Keep the network controls in one calm toolbar row. */
+  .canvas-header {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) !important;
+    align-items: center;
+    gap: 8px;
+    min-height: 58px;
+    height: auto;
+    flex-wrap: nowrap !important;
+  }
+  .canvas-stats {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    height: auto;
+    min-width: 0;
+    flex-wrap: nowrap !important;
+    overflow: hidden;
+  }
+  .canvas-stats .density-toggle-btn {
+    width: 36px;
+    min-width: 36px;
+    height: 34px;
+    padding: 0;
+    justify-content: center;
+  }
+  .canvas-stats .density-toggle-btn > span:not(.material-symbols-outlined),
+  #panel-expand-intake-label,
+  #panel-expand-insight-label,
+  #active-stakeholder-status { display: none !important; }
+  #panel-expand-intake,
+  #panel-expand-insight {
+    width: 36px;
+    min-width: 36px;
+    height: 34px;
+    padding: 0;
+    justify-content: center;
+  }
+  #map-layer-control {
+    display: flex !important;
+    align-items: center;
+    width: auto;
+    height: 34px;
+    padding: 3px 7px;
+  }
+  #map-layer-control > span { display: none; }
+  #map-layer-control select {
+    width: 94px;
+    min-width: 94px;
+    height: 28px;
+    padding-block: 2px;
+  }
+  .canvas-panel { gap: 8px; }
+  .swarm-activity-panel {
+    margin-top: 2px;
+    padding: 12px 14px;
+  }
+}
+
+/* The detailed workspace stacks its drawers below the map at laptop widths.
+   Keep that reading order continuous: an empty related-activity block is not
+   useful until a node is selected, and an inner scrollbar makes the page feel
+   like a nested console. */
+@media (max-width: 1380px) and (min-width: 721px) {
+  .app-shell:not(.density-simple) .visualizer-layout > .intake-panel,
+  .app-shell:not(.density-simple) .visualizer-layout > .insight-panel {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  .app-shell:not(.density-simple) .insight-panel:not(.has-selected-node) .selected-node-related {
+    display: none !important;
+  }
+  .app-shell:not(.density-simple) .insight-panel:not(.has-selected-node) .subsection:has(.selected-node-card) {
+    display: none !important;
+  }
+  .app-shell:not(.density-simple) .insight-panel:not(.has-selected-node) .selected-node-card {
+    padding: 10px 12px;
+  }
+  .app-shell:not(.density-simple) .insight-panel .evidence-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .app-shell:not(.density-simple) .insight-panel .evidence-item {
+    min-width: 0;
+    padding: 11px 12px;
+    border-radius: 12px;
+  }
+  .app-shell:not(.density-simple) .insight-panel .evidence-item strong {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.78rem;
+  }
+  .app-shell:not(.density-simple) .insight-panel .evidence-item p {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    margin-top: 5px;
+    font-size: 0.72rem;
+    line-height: 1.45;
+  }
+
+  /* Keep the instructor intake scannable when it is opened below the map:
+     setup actions share a two-column rhythm, while the case library gets a
+     denser two-column list. All controls remain present and usable. */
+  .app-shell:not(.density-simple) .intake-panel .pipeline-console {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+  .app-shell:not(.density-simple) .intake-panel .pipeline-console > .pipeline-card-highlight,
+  .app-shell:not(.density-simple) .intake-panel .pipeline-console > .pipeline-card:last-child {
+    grid-column: 1 / -1;
+  }
+  .app-shell:not(.density-simple) .intake-panel .pipeline-console > .pipeline-card {
+    min-width: 0;
+    padding: 13px;
+  }
+  .app-shell:not(.density-simple) .intake-panel .pipeline-form {
+    gap: 8px;
+  }
+  .app-shell:not(.density-simple) .intake-panel .pipeline-form textarea {
+    min-height: 88px;
+  }
+  .app-shell:not(.density-simple) .intake-panel .case-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .app-shell:not(.density-simple) .intake-panel .case-card {
+    padding: 9px 10px;
+  }
+  .app-shell:not(.density-simple) .intake-panel .case-card .case-summary-text {
+    -webkit-line-clamp: 2;
+  }
+  .app-shell:not(.density-simple) .intake-panel .case-card .card-actions {
+    margin-top: 5px;
+  }
+}
+
+/* Make the disclosure menu sit above the network canvas instead of being
+   visually masked by the next section. */
+.topbar { z-index: 100; }
+.topbar-more-body { z-index: 9999 !important; }
+
+/* The disclosure menu is wide enough to show full institution/account names;
+   native selects should not truncate their only visible context label. */
+@media (min-width: 721px) {
+  .topbar-more-switcher .mini-control { min-width: 240px; }
+  .topbar-more-switcher .mini-control select { min-width: 240px; text-overflow: clip; }
 }
