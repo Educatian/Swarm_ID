@@ -6,9 +6,10 @@
 // deletes every cache whose name differs, so the version string is the only
 // thing that evicts a stale offline shell — a returning offline user otherwise
 // keeps whatever was cached under the old name indefinitely.
-const CACHE_NAME = "dts-shell-v3-20260731";
+const CACHE_NAME = "dts-shell-v4-20260801";
 const SHELL = [
   "./index.html",
+  "./i18n.min.js",
   "./app.min.js",
   "./styles.min.css",
   "./supabase-config.js",

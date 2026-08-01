@@ -22,7 +22,7 @@ if (!existsSync("build-manifest.json")) {
     const now = sha(src);
     if (now !== recorded) problems.push(`${src} changed since the last build (${recorded} -> ${now})`);
   }
-  for (const out of ["app.min.js", "styles.min.css"]) {
+  for (const out of ["i18n.min.js", "app.min.js", "styles.min.css"]) {
     if (!existsSync(out)) problems.push(`${out} is missing — run: node scripts/build.mjs`);
   }
 }
@@ -30,6 +30,7 @@ if (!existsSync("build-manifest.json")) {
 // The pages must actually load the built files, or the build is decorative.
 for (const page of ["index.html", "preview.html"]) {
   const html = readFileSync(page, "utf8");
+  if (!/i18n\.min\.js/.test(html)) problems.push(`${page} does not load i18n.min.js`);
   if (!/app\.min\.js/.test(html)) problems.push(`${page} does not load app.min.js`);
   if (!/styles\.min\.css/.test(html)) problems.push(`${page} does not load styles.min.css`);
 }

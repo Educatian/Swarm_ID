@@ -21,6 +21,7 @@ const TARGETS = [
   // top-level names (setView, renderAll, state) are reached from inline
   // handlers and from the verification scripts; mangling them breaks the app
   // in ways no syntax check would catch.
+  { src: "i18n.js", out: "i18n.min.js", loader: "js", minifyIdentifiers: false },
   { src: "app.js", out: "app.min.js", loader: "js", minifyIdentifiers: false },
   { src: "styles.css", out: "styles.min.css", loader: "css", minifyIdentifiers: false },
 ];
@@ -38,6 +39,10 @@ for (const t of TARGETS) {
     minifyIdentifiers: t.minifyIdentifiers,
     loader: { [t.src.endsWith(".css") ? ".css" : ".js"]: t.loader },
     bundle: false,
+    // Without this esbuild escapes non-ASCII output. This app's copy is almost
+    // entirely Korean, so the default turned minification into inflation:
+    // i18n.js went from 45KB to 52KB before this was set.
+    charset: "utf8",
     legalComments: "none",
     logLevel: "error",
   });

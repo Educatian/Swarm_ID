@@ -33,7 +33,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="./assets/material-symbols-outlined.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="./assets/pretendard.css">
-  <link rel="stylesheet" href="./styles.min.css?v=20260731-aa">
+  <link rel="stylesheet" href="./styles.min.css?v=20260801-i18n">
 </head>
 <body>
   <a class="skip-link" href="#main-content">본문으로 바로가기</a>
@@ -1012,9 +1012,18 @@
   <script>
     (function loadAppWithOptionalGeminiConfig() {
       const loadApp = () => {
-        const appScript = document.createElement("script");
-        appScript.src = "./app.min.js?v=20260731-aa";
-        document.body.appendChild(appScript);
+        // i18n.js defines window.DTS_TRANSLATIONS, which app.js reads at its
+        // top level, so it has to finish first. Chained rather than emitted as
+        // two tags because defer/async ordering is easy to get subtly wrong and
+        // the failure would be a blank app.
+        const copyScript = document.createElement("script");
+        copyScript.src = "./i18n.min.js?v=20260801-i18n";
+        copyScript.onload = () => {
+          const appScript = document.createElement("script");
+          appScript.src = "./app.min.js?v=20260801-i18n";
+          document.body.appendChild(appScript);
+        };
+        document.body.appendChild(copyScript);
       };
 
       const isLocal =
