@@ -389,6 +389,9 @@ const translations = {
     feedbackAndReflection: "Feedback and reflection",
     reflectionPromptsLabel: "Reflection prompts",
     recentDialogue: "Recent dialogue",
+    liveLabel: "Live",
+    currentResultLabel: "Current result",
+    refreshLabel: "Refresh",
     cohortAnalysis: "Cohort analysis",
     exampleView: "Example view",
     caseMapAppears: "This is where the case map appears.",
@@ -789,6 +792,9 @@ const translations = {
     feedbackAndReflection: "피드백과 생각 정리",
     reflectionPromptsLabel: "생각 정리 질문",
     recentDialogue: "최근 대화",
+    liveLabel: "실시간",
+    currentResultLabel: "현재 결과",
+    refreshLabel: "새로고침",
     cohortAnalysis: "학급 분석",
     exampleView: "예시 화면",
     caseMapAppears: "여기에 케이스 맵이 표시돼요.",
@@ -1882,9 +1888,16 @@ function applyStaticTranslations() {
     ["recent-dialogue-label", "recentDialogue"],
     ["intake-eyebrow", "expandStartHere"],
     ["decision-saved-badge", "savedLabel"],
+    ["evidence-live-badge", "liveLabel"],
+    ["cohort-refresh", "refreshLabel"],
   ].forEach(([id, key]) => {
     const el = document.getElementById(id);
     if (el) el.textContent = t(key);
+  });
+
+  // "현재 결과" appears once per view and carries no id; localise by role.
+  document.querySelectorAll(".view-result-summary > span").forEach((el) => {
+    el.textContent = t("currentResultLabel");
   });
 
   const onboardingCard = document.getElementById("student-onboarding");
@@ -2108,7 +2121,9 @@ function defaultBoardSettings(overrides = {}) {
     agendaPrompt:
       state.locale === "ko"
         ? "재설계에 들어가기 전에, 가장 중요한 설계 쟁점을 짚어 보세요."
-        : "재설계에 들어가기 전에 가장 중요한 수업 설계 쟁점을 짚어 보세요.",
+        // Both branches used to be Korean — the English one was a second
+        // Korean sentence, so this prompt never localised.
+        : "Before redesigning, pin down the design tension that matters most.",
     dueAt: "",
     maxLearnerNodes: 6,
     maxAiExpansionsPerNode: 3,
