@@ -6738,6 +6738,21 @@ svg text.node-meta {
 
 /* --- light theme: audit-driven contrast fixes --- */
 /* Muted copy, empty states, summaries → readable. */
+/* The light theme was overriding only the colour, so .empty-note kept the
+   dark-surface fill and border — white at 4% over white at 10% — and rendered
+   as an invisible box that still applied its 16px padding. The text sat 17px
+   in from its own sibling button with nothing on screen to explain why. Give
+   the box a surface so the indent reads as a container. */
+.theme-light .empty-note {
+  background: rgba(248, 251, 255, 0.92);
+  border-color: rgb(var(--slate-rgb) / 0.3);
+}
+
+/* Pale periwinkle on a pale card; it also sat flush against the number it
+   annotates, so the affordance read as part of the value. */
+.theme-light .rubric-provenance { color: #4058c8; }
+.rubric-provenance { margin-left: 4px; }
+
 .theme-light .empty-note,
 .theme-light #selected-node-copy,
 .theme-light #report-summary,
