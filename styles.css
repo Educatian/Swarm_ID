@@ -86,7 +86,7 @@ body {
 
 body {
   margin: 0;
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", "Pretendard Variable", sans-serif;
   /* Korean has no inter-word breaking rule of its own, so the default lets a
      line split inside an 어절 ("관점|을"). keep-all breaks at spaces instead;
      break-word is the escape hatch so a long unbroken token still cannot push
@@ -198,7 +198,7 @@ textarea:focus-visible,
 .memo-panel h3,
 .reflection-panel h3 {
   margin: 0;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   text-wrap: balance;
 }
 
@@ -246,7 +246,7 @@ textarea:focus-visible,
 
 .case-summary h2 {
   margin: 10px 0 8px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-size: 1.15rem;
   line-height: 1.25;
 }
@@ -498,7 +498,7 @@ textarea:focus-visible,
 .network-meta-card strong {
   display: block;
   margin-bottom: 8px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-size: 1.15rem;
   letter-spacing: -0.03em;
 }
@@ -751,7 +751,7 @@ textarea:focus-visible,
 .case-card strong {
   display: block;
   margin-bottom: 6px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-size: 1rem;
   letter-spacing: -0.03em;
 }
@@ -1071,7 +1071,7 @@ html.theme-light .pipeline-card-header .material-symbols-outlined {
 }
 
 .metric-chip strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-size: 1rem;
 }
 
@@ -1458,7 +1458,7 @@ textarea:disabled {
 .network-empty-preview strong {
   display: block;
   margin: 8px 0;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-size: 1.15rem;
   letter-spacing: -0.03em;
 }
@@ -1530,7 +1530,7 @@ textarea:disabled {
 .network-tooltip strong {
   display: block;
   margin-bottom: 8px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-size: 1rem;
   letter-spacing: -0.03em;
 }
@@ -1556,7 +1556,7 @@ textarea:disabled {
 }
 
 .stage-overlay strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-size: 1rem;
   letter-spacing: -0.03em;
 }
@@ -1771,7 +1771,7 @@ textarea:disabled {
   font-weight: 700;
   color: #ffffff;
   letter-spacing: -0.02em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   flex-shrink: 0;
 }
 .legend-badge-ai { background: var(--dts-primary); }
@@ -1931,7 +1931,7 @@ textarea:disabled {
   font-size: 8px;
   font-weight: 700;
   pointer-events: none;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   letter-spacing: -0.02em;
 }
 
@@ -1978,7 +1978,7 @@ textarea:disabled {
 }
 
 .network-node text {
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", "Pretendard Variable", sans-serif;
   pointer-events: none;
 }
 
@@ -2186,7 +2186,7 @@ textarea:disabled {
 }
 
 .selected-node-card strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-size: 1rem;
   letter-spacing: -0.03em;
 }
@@ -3020,7 +3020,7 @@ html.theme-light .matrix-latest-impact { color: var(--on-surface-variant); }
 }
 
 .metric-card strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-size: 2.4rem;
   letter-spacing: -0.03em;
 }
@@ -3398,7 +3398,7 @@ body {
 
 .tour-card h3 {
   margin: 0 0 8px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   text-wrap: balance;
 }
 
@@ -3835,7 +3835,7 @@ html.dark .task-banner {
 
 .welcome-card h3 {
   margin: 0 0 10px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-size: 1.15rem;
   text-wrap: balance;
 }
@@ -3934,7 +3934,7 @@ html.dark .welcome-card {
 .landing-support h3,
 .landing-footer-cta h3 {
   margin: 0;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
 }
 
 .landing-brand-kicker,
@@ -3972,7 +3972,7 @@ html.dark .welcome-card {
 }
 
 .landing-login-head strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-size: 1rem;
   color: var(--on-surface);
 }
@@ -4159,7 +4159,7 @@ html.dark .welcome-card {
 
 .landing-network .landing-node-label {
   fill: rgba(30, 41, 59, 0.86);
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", "Pretendard Variable", sans-serif;
   font-size: 10px;
   font-weight: 700;
   text-anchor: middle;
@@ -4258,7 +4258,7 @@ html.dark .welcome-card {
 
 .landing-support-card h3 {
   margin: 0;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-size: 1.15rem;
   letter-spacing: -0.02em;
   color: #16203a;
@@ -4342,7 +4342,7 @@ html.dark .welcome-card {
 .tutorial-link-label {
   grid-column: 1;
   grid-row: 2;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-size: 1rem;
   font-weight: 600;
   color: #16203a;
@@ -4435,7 +4435,7 @@ html.dark .welcome-card {
 }
 
 .header-guides-item-role {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-weight: 700;
   letter-spacing: -0.01em;
   color: #16203a;
@@ -4533,7 +4533,7 @@ html.dark .welcome-card {
 }
 
 .landing-footer-link #landing-developer-kicker {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -7133,7 +7133,7 @@ html:not(.theme-light) .landing-brand .material-symbols-outlined {
   border-radius: 50%;
   font-size: 0.78rem;
   font-weight: 700;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
   background: rgb(var(--accent-light-rgb) / 0.16);
   color: #a7b6ff;
   border: 1px solid rgb(var(--accent-light-rgb) / 0.3);
@@ -7561,7 +7561,7 @@ html:not(.theme-light) .landing-copy h2 #landing-hero-title {
 .manage-kpi strong {
   display: block;
   font-size: 1.4rem;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", "Pretendard Variable", sans-serif;
 }
 
 .manage-kpi span {
