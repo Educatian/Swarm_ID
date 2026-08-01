@@ -68,7 +68,11 @@
   --surface-container-lowest: #ffffff;
   --surface-container-low: #f8fbff;
   --outline: #a9b6cc;
-  --on-surface-variant: #627089;
+  /* #627089 reads fine on white but only 3.2-3.9 on the dark surfaces, and it
+     carried 29 of the 39 dark-theme contrast failures on its own. :root is the
+     dark base, so it gets the lighter value and the light theme keeps the
+     original below. */
+  --on-surface-variant: #8b98af;
   --on-surface: #1e293b;
   --glow-primary: 0 0 32px rgb(var(--accent-rgb) / 0.14);
   --glow-danger: 0 0 24px rgba(217, 108, 95, 0.18);
@@ -7856,6 +7860,7 @@ html.theme-light .manage-lens-chip {
    Accents keep their hue; only warning is darkened, since #e76f51 on a pale
    surface measured 2.64 against the 4.5 it needs as text. */
 html.theme-light {
+  --on-surface-variant: #627089;  /* the original; correct against white */
   --dts-app: #f4f7fe;
   --dts-base: #eef2fb;
   --dts-raised: #ffffff;
@@ -9423,4 +9428,48 @@ html.theme-light .home-recent-item span { color: #5a6781 !important; }
 @media (min-width: 721px) {
   .topbar-more-switcher .mini-control { min-width: 240px; }
   .topbar-more-switcher .mini-control select { min-width: 240px; text-overflow: clip; }
+}
+
+/* The brand indigo is right for fills but lands at 4.41 on pale surfaces and
+   3.37 on dark ones when it is the colour of a glyph. Icons and chevrons get a
+   shifted accent so the mark itself is legible; the brand fill is untouched. */
+html.theme-light .material-symbols-outlined,
+html.theme-light .chevron,
+html.theme-light .pipeline-card-collapsible .pipeline-card-header .chevron {
+  --glyph-accent: #3550d8;
+}
+html:not(.theme-light) .material-symbols-outlined,
+html:not(.theme-light) .chevron {
+  --glyph-accent: #8ea4ff;
+}
+html:not(.theme-light) .chevron,
+html:not(.theme-light) .pipeline-card-collapsible .pipeline-card-header .chevron {
+  color: var(--glyph-accent);
+}
+html.theme-light .pipeline-card-collapsible .pipeline-card-header .chevron,
+html.theme-light .home-adv-item .material-symbols-outlined,
+html.theme-light .density-toggle-btn .material-symbols-outlined,
+html.theme-light .map-lens-bar .material-symbols-outlined,
+html.theme-light .panel-expand-toggle .material-symbols-outlined {
+  color: var(--glyph-accent);
+}
+
+/* Coral on its own pale tint measured 2.97; the chip keeps its hue but the
+   label darkens enough to read. */
+html.theme-light .scenario-button { color: #a33a2b; }
+
+/* Step number on the lavender active card, 4.37. */
+html.theme-light .home-loop-index { color: #464f66; }
+
+/* Remaining dark-theme glyphs still painted with the brand indigo — the metric
+   cards and the orbit core — at 3.37 against their surfaces. Same treatment as
+   the chevrons: shift the glyph, leave the brand fill alone. */
+html:not(.theme-light) .metric-card .material-symbols-outlined,
+html:not(.theme-light) .orbit-core .material-symbols-outlined {
+  color: #8ea4ff;
+}
+
+/* rgba(120,130,150,.8) measured 3.46 on the dark panels. */
+html:not(.theme-light) .muted {
+  color: rgba(178, 190, 210, 0.92);
 }
