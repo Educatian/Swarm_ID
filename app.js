@@ -279,6 +279,8 @@ const translations = {
     addCourse: "Add course",
     newCase: "New case",
     titlePlaceholder: "Title...",
+    addNodeTitleLabel: "Node title",
+    addNodeBodyLabel: "Why this matters",
     caseTitleLabel: "Case title",
     caseBriefLabel: "Instructional brief",
     caseVisibilityLabel: "Visibility",
@@ -677,6 +679,8 @@ const translations = {
     addCourse: "수업 추가",
     newCase: "새 케이스",
     titlePlaceholder: "제목을 입력하세요...",
+    addNodeTitleLabel: "노드 제목",
+    addNodeBodyLabel: "왜 중요한지",
     caseTitleLabel: "케이스 제목",
     caseBriefLabel: "수업 설명 요약",
     caseVisibilityLabel: "공개 범위",
@@ -6716,8 +6720,8 @@ function renderPipelineConsole() {
       </button>
       <div class="pipeline-card-body">
         <form class="pipeline-form" id="agenda-node-form">
-          <input name="agendaTitle" type="text" placeholder="${t("titlePlaceholder")}" autocomplete="off" required>
-          <textarea name="agendaBody" placeholder="${t("agendaBodyPlaceholder")}" autocomplete="off"></textarea>
+          <input name="agendaTitle" type="text" aria-label="${t("addNodeTitleLabel")}" placeholder="${t("titlePlaceholder")}" autocomplete="off" required>
+          <textarea name="agendaBody" aria-label="${t("addNodeBodyLabel")}" placeholder="${t("agendaBodyPlaceholder")}" autocomplete="off"></textarea>
           <div class="pipeline-actions">
             <button class="toolbar-button toolbar-button-primary" type="submit">${t("addToMap")}</button>
           </div>
