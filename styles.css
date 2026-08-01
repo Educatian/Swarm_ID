@@ -8035,6 +8035,14 @@ html:not(.theme-light) .landing-login-card {
   background: rgba(18, 24, 40, 0.98);
   box-shadow: var(--elev-4);
 }
+/* The menu body is display:grid unconditionally, which overrides the UA rule
+   that hides a closed <details>. Its contents therefore stayed laid out and
+   painted behind the topbar — invisible only because something else happened
+   to sit on top, which is a z-order accident rather than a decision, and it
+   left phantom controls in the accessibility tree. Same shape as the [hidden]
+   override elsewhere: an attribute or element state that CSS quietly defeats. */
+details.topbar-more:not([open]) > .topbar-more-body { display: none; }
+
 .topbar-more-switcher { gap: 8px; }
 .topbar-more-actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .topbar-more-actions .topbar-identity { margin-right: auto; }

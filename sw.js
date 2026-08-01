@@ -9,8 +9,8 @@
 const CACHE_NAME = "dts-shell-v3-20260731";
 const SHELL = [
   "./index.html",
-  "./app.js",
-  "./styles.css",
+  "./app.min.js",
+  "./styles.min.css",
   "./supabase-config.js",
   "./manifest.webmanifest",
   "./assets/logo.png",
