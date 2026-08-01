@@ -897,7 +897,7 @@ const FACILITATOR_TOPIC_FALLBACK = Object.freeze([
 const state = {
   locale: window.localStorage.getItem(LOCALE_STORAGE_KEY) || "ko",
   density: window.localStorage.getItem(DENSITY_STORAGE_KEY) || "",
-  theme: window.localStorage.getItem(THEME_STORAGE_KEY) || "dark",
+  theme: window.localStorage.getItem(THEME_STORAGE_KEY) || "light",
   activeView: "visualizer",
   activeStakeholder: "teacher",
   activeMapLayer: "base",
@@ -11404,10 +11404,15 @@ function setDensity(next) {
   if (typeof logEvent === "function") logEvent("density.change", { to: value });
 }
 
-// Night / light theme. Dark is the default; html.theme-light flips the surfaces.
+// Light is the default theme and html.theme-light carries it; removing the
+// class drops back to the dark surfaces underneath. The pre-paint script in
+// the page head applies the same rule before first paint.
 function applyTheme() {
   const light = state.theme === "light";
   document.documentElement.classList.toggle("theme-light", light);
+  // Keep the browser chrome in step with the surface it sits above.
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeMeta) themeMeta.content = light ? "#f4f7fe" : "#0b0d14";
   // The repurposed toggle buttons show the action they trigger (icon = target mode).
   const icon = light ? "dark_mode" : "light_mode";
   const aria = light ? "야간(다크) 모드로 전환" : "주간(라이트) 모드로 전환";

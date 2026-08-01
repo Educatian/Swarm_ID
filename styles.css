@@ -6401,10 +6401,20 @@ textarea:focus-visible,
 svg text.node-label {
   fill: rgba(246, 246, 252, 0.96) !important;
 }
-.network-node .node-icon,
-.network-stage .node-icon,
-svg text.node-icon {
+/* Node bodies do not follow the theme: signal renders rgba(16,20,28,.9) while
+   core is rgba(238,243,251,.98) and stakeholder rgba(255,255,255,.96) in BOTH
+   themes. A blanket light glyph therefore left the core and stakeholder icons
+   at 1.03 and 1.08 against their own body — invisible on the main screen in
+   dark too, not only in light. Match the glyph to the body it sits on. */
+.network-node[data-type="signal"] .node-icon,
+.network-stage [data-type="signal"] .node-icon,
+svg [data-type="signal"] text.node-icon {
   fill: #f6f6fc !important;
+}
+.network-node:not([data-type="signal"]) .node-icon,
+.network-stage .network-node:not([data-type="signal"]) .node-icon,
+svg .network-node:not([data-type="signal"]) text.node-icon {
+  fill: #1f2a44 !important;
 }
 .network-node .node-meta,
 .network-stage .node-meta,
@@ -6523,8 +6533,8 @@ svg text.node-meta {
 .density-simple .main-content .lens-summary-block { margin-bottom: 10px; }
 
 /* ============================================================
-   LIGHT (주간) THEME — toggled by the topbar/landing button (was EN/KO).
-   Dark is the default; html.theme-light flips the major surfaces to light.
+   LIGHT (주간) THEME — the default. html.theme-light carries it; the toggle
+   removes the class to fall back to the dark surfaces underneath.
    The app's dark look is itself an override layer over light :root tokens, so
    this is an inverse override layer. Verified with the contrast audit so no
    text drops below WCAG AA in either theme.
@@ -6653,7 +6663,8 @@ svg text.node-meta {
 .theme-light svg text.node-label { fill: #1f2a44 !important; }
 .theme-light .node-meta,
 .theme-light svg text.node-meta { fill: #5a6781 !important; }
-/* node-icon stays light — it sits on the dark node body */
+/* node-icon is handled theme-independently next to the base rule — the node
+   bodies never change with the theme. */
 
 /* Map dock + drawer close on light */
 .theme-light .map-dock-btn {
