@@ -9,7 +9,7 @@
  * Prerequisite: `node scripts/create-cat531-accounts.mjs` must have been run
  * first (creates the students, institution, course, and join code).
  *
- * Roster note: 23 students as of 2026-06-04 (Samantha Winn added).
+ * Roster note: 24 students as of 2026-06-23 (Dan Walters added; Samantha Winn 2026-06-04).
  *
  * Run (PowerShell):
  *   $env:SUPABASE_URL = "https://wvbvexiwyjifatrvdsnv.supabase.co"
@@ -56,6 +56,7 @@ const STUDENT_NAMES = [
   "Jenna Shehadeh",
   "Kailey Smith",
   "Crystal Thomas",
+  "Dan Walters",
   "Tyler White",
   "Samantha Winn",
 ];

@@ -86,6 +86,7 @@ const STUDENT_NAMES = [
   "Jenna Shehadeh",
   "Kailey Smith",
   "Crystal Thomas",
+  "Dan Walters",
   "Tyler White",
   "Samantha Winn",
 ];
