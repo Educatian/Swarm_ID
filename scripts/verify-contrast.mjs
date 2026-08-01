@@ -25,7 +25,7 @@ import { chromium } from "playwright";
 
 const BASE = (process.argv.find((a) => a.startsWith("--base=")) || "").split("=")[1]
   || process.env.SMOKE_BASE || "http://127.0.0.1:8137";
-const VIEWS = ["home", "visualizer", "lens", "matrix", "sandbox", "report", "manage"];
+const VIEWS = ["home", "visualizer", "perspectives", "matrix", "sandbox", "report", "manage"];
 const HARD = 2.5; // below this the text is effectively invisible, not merely dim
 
 const browser = await chromium.launch();
@@ -58,7 +58,10 @@ const sweep = async (theme) => {
         for (const t of toks) {
           let c;
           if (t[0] === "#") c = { r: parseInt(t.slice(1, 3), 16), g: parseInt(t.slice(3, 5), 16), b: parseInt(t.slice(5, 7), 16), a: 1 };
-          else { c = rgb(t); if (!c || c.a < 1) continue; }
+          // A 0.92-alpha base still reads as the surface; demanding a full 1.0
+          // made the probe walk past the orbit canvas to a light ancestor and
+          // report low contrast for text that sits on a dark panel.
+          else { c = rgb(t); if (!c || c.a < 0.85) continue; }
           last = { r: c.r, g: c.g, b: c.b, a: 1 };
         }
         return last;
@@ -68,7 +71,7 @@ const sweep = async (theme) => {
         while (n && n !== document.documentElement) {
           const cs = getComputedStyle(n);
           const c = rgb(cs.backgroundColor);
-          if (c && c.a > 0) { stack.push(c); if (c.a === 1) break; }
+          if (c && c.a > 0) { stack.push(c); if (c.a >= 0.85) break; }
           const g = gradient(cs); if (g) { stack.push(g); break; }
           n = n.parentElement;
         }

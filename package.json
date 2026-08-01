@@ -11,6 +11,7 @@
     "verify:contrast": "node scripts/verify-contrast.mjs",
     "verify:render": "node scripts/verify-render.mjs",
     "smoke": "node scripts/smoke-usability-upgrade.mjs",
-    "serve:gzip": "node scripts/serve-gzip.mjs"
+    "serve:gzip": "node scripts/serve-gzip.mjs",
+    "walkthrough": "node scripts/walkthrough.mjs"
   }
 }

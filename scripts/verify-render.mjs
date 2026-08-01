@@ -23,7 +23,7 @@ import { chromium } from "playwright";
 
 const BASE = (process.argv.find((a) => a.startsWith("--base=")) || "").split("=")[1]
   || process.env.SMOKE_BASE || "http://127.0.0.1:8137";
-const VIEWS = ["home", "visualizer", "lens", "matrix", "sandbox", "report", "manage"];
+const VIEWS = ["home", "visualizer", "perspectives", "matrix", "sandbox", "report", "manage"];
 
 const browser = await chromium.launch();
 const page = await browser.newPage();

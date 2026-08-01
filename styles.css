@@ -2424,6 +2424,23 @@ textarea:disabled {
   font-variant-numeric: tabular-nums;
 }
 
+/* The signal list sits BELOW the orbit canvas, not on it, so it lands on the
+   panel — and rgba(17,19,24,.62) over a light panel is a mid grey band that
+   belongs to neither theme. Dark text on it measured 1.26 in dark and 2.73 in
+   light, because the colours came from theme tokens while the surface did not
+   follow the theme at all. Give each theme a surface and an ink that agree. */
+.orbit-signal-head strong { color: rgb(var(--paper-rgb) / 0.96); }
+.orbit-signal-score { color: rgb(var(--paper-rgb) / 0.74); }
+.orbit-signal-index { color: #8ea4ff; }
+
+html.theme-light .orbit-signal {
+  background: rgb(var(--slate-rgb) / 0.08);
+  border-color: rgb(var(--slate-rgb) / 0.26);
+}
+html.theme-light .orbit-signal-head strong { color: #16203a; }
+html.theme-light .orbit-signal-score { color: #46546f; }
+html.theme-light .orbit-signal-index { color: #3550d8; }
+
 .orbit-signal-bar {
   height: 5px;
   margin: 9px 0 0 36px;
