@@ -387,6 +387,7 @@ const translations = {
     feedbackAndReflection: "Feedback and reflection",
     reflectionPromptsLabel: "Reflection prompts",
     recentDialogue: "Recent dialogue",
+    cohortAnalysis: "Cohort analysis",
     exampleView: "Example view",
     caseMapAppears: "This is where the case map appears.",
     caseMapAppearsBody: "Once a case is selected, the map will show people, constraints, and the main tensions around the design.",
@@ -784,6 +785,7 @@ const translations = {
     feedbackAndReflection: "피드백과 생각 정리",
     reflectionPromptsLabel: "생각 정리 질문",
     recentDialogue: "최근 대화",
+    cohortAnalysis: "학급 분석",
     exampleView: "예시 화면",
     caseMapAppears: "여기에 케이스 맵이 표시돼요.",
     caseMapAppearsBody: "케이스를 선택하면 이 맵에 관련 인물, 제약 조건, 주요 쟁점이 나타나요.",
@@ -2076,7 +2078,14 @@ function applyStaticTranslations() {
     if (labels[2]) labels[2].textContent = t("recommendedRedesignMoves");
     if (labels[3]) labels[3].textContent = t("evidenceTrace");
     if (labels[4]) labels[4].textContent = t("reflectionPromptsLabel");
-    if (labels[5]) labels[5].textContent = t("recentDialogue");
+    // Indexes 0-4 are stable, but the instructor cohort block sits between the
+    // reflection prompts and the dialogue feed and is matched by this selector
+    // even while hidden. Indexing past it renamed 학급 분석 to 최근 대화 and
+    // left the screen showing that heading twice. Address the last two by id.
+    const cohortLabel = document.querySelector("#instructor-cohort-block .label");
+    if (cohortLabel) cohortLabel.textContent = t("cohortAnalysis");
+    const recentDialogueLabel = document.getElementById("recent-dialogue-label");
+    if (recentDialogueLabel) recentDialogueLabel.textContent = t("recentDialogue");
   }
 
   const regenerateMemoButton = document.getElementById("regenerate-memo");
