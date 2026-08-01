@@ -60,17 +60,136 @@ ECD의 CAF(Conceptual Assessment Framework) 세 축을 로깅 요구사항으로
 
 앱이 스스로 선언한 목표에서 직접 유도한다. 임의로 늘리지 않는다.
 
-| id | 구인 | 이 앱에서의 정의 | 주된 증거원 |
-| --- | --- | --- | --- |
-| `lens_shift` | 관점 전환 | 같은 쟁점을 다른 이해관계자 렌즈로 다시 읽는 빈도·전환 지연·전환 후 산출물 변화 | `perspective_switched`, `lens.change`, `agent.compare` |
-| `tension_id` | 쟁점 식별·우선순위 | 갈등을 알아보고 그중 무엇이 지금 중요한지 고르는 판단 | `tension.rank`, `node.select`, `node.add` |
-| `justification` | 근거 기반 정당화 | 주장에 맵의 근거를 연결하는 정도와 그 개선 | `evidence.cite`, `reflection.submit`, `annotation.created` |
-| `redesign` | 재설계·종합 | 받은 정보를 실제 수정으로 바꾸는 정도 | `node.edit`, `synthesis_block_revised`, `sandbox` 조정 |
-| `metacognition` | 자기점검 | 예측과 결과의 정합, 피드백 후 수정 여부 | `jol.predict`/`jol.outcome`, `revised_after_feedback` |
-| `collab` | 협업·상호참조 | 동료 산출물에 노출되고 그것을 자기 산출물에 반영하는 정도 | `peer.exposure`, `annotation.created(visibility)` |
+### 2.0 정의를 쓸 때 지킨 세 가지
 
-> 주의: 이 6개는 **주장 후보**이지 검증된 척도가 아니다. 척도화(신뢰도·타당도)는
-> 데이터가 쌓인 뒤 별도로 해야 하며, 그 전까지 대시보드에 점수로 표시하지 않는다.
+**(1) 정의는 관찰 가능한 것에 묶는다.** "관점을 잘 전환한다"는 정의가 아니다.
+"무엇을 세면 그 주장이 서고, 무엇을 세면 안 서는가"까지 써야 정의다.
+
+**(2) 각 구인에 배제 규칙을 같이 쓴다.** 무엇이 증거인지만 쓰면 구현할 때 애매한
+것이 전부 포함되고, 결국 모든 구인이 "많이 조작함"으로 붕괴한다. 그래서 항목마다
+**증거 아님**을 명시한다.
+
+**(3) 클릭 수는 어떤 구인의 정의에도 넣지 않는다.** 빈도만 보상하면 시스템은
+클릭 놀이를 학습으로 오인하고, 학생은 그걸 금방 알아챈다. 빈도는 **분모**로만 쓰고,
+분자는 항상 산출물의 변화다.
+
+### 2.1 `lens_shift` — 관점 전환
+
+**정의.** 자기 판단으로 다른 이해관계자 렌즈를 선택하고, **그 전환 이후 자신의
+산출물이 달라지는** 정도.
+
+- **증거임** — 이해관계자 pill을 직접 눌러 전환(`source: "pill"`), 전환 후 일정
+  시간 내 해당 렌즈에서 나온 노드·주석·근거 인용, 같은 쟁점을 두 렌즈 이상에서 다룬 흔적.
+- **증거 아님** — 맵 노드를 클릭했더니 렌즈가 따라 바뀐 경우, 전환만 하고 아무 산출물
+  변화가 없는 경우, 왕복 전환(A→B→A)의 단순 횟수.
+- **관찰변수** — `deliberate_switch_count`, `post_switch_yield`(전환 후 120초 내
+  산출물 생성 비율), `lens_coverage`(다룬 렌즈 수 / 제시된 렌즈 수),
+  `multi_lens_issue_ratio`(2개 이상 렌즈에서 다뤄진 쟁점 비율).
+- **지금 측정 가능한가 — 아니오.** §2.7 (1) 참조. 의도적 전환과 부수적 전환이 구분되지 않는다.
+- **판별 위험** — `tension_id`와 섞인다. 전환의 *결과물*로 정의를 좁혀 분리한다.
+
+### 2.2 `tension_id` — 쟁점 식별·우선순위
+
+**정의.** 이해관계자 간 갈등을 쟁점으로 명명하고, 그중 **무엇이 지금 중요한지 골라
+근거를 대는** 판단.
+
+- **증거임** — 갈등을 명명한 노드 생성, 쟁점 우선순위 지정(`tension.rank`)과 그
+  **변경 이력**, 우선순위 판단에 이유가 붙은 경우.
+- **증거 아님** — 노드 조회·선택(주목일 뿐 판단이 아님), 시스템이 이미 갈등으로
+  표시해 둔 것을 그대로 읽은 것, 노드 총량.
+- **관찰변수** — `named_tension_count`, `rank_revision_count`(재정렬 = 재고의 흔적),
+  `rank_stability`, `ranked_with_reason_ratio`.
+- **지금 측정 가능한가 — 부분.** `node.add`는 있으나 갈등 명명인지 단순 추가인지
+  구분되지 않고, 우선순위 이벤트는 아예 없다.
+- **판별 위험** — 노드를 많이 만드는 성향과 구분이 안 된다. `node_count`를 task
+  feature로 통제해야 한다.
+
+### 2.3 `justification` — 근거 기반 정당화
+
+**정의.** 자기 주장에 맵 위의 특정 근거를 **연결**하고, 지적을 받으면 연결을
+**보강**하는 정도.
+
+- **증거임** — 주장에 인용된 근거의 존재와 특정성(어떤 노드인지), 피드백 전후
+  근거 수 증가(`anchors_at_feedback` → `anchors_at_submit`), 반례를 인용한 경우.
+- **증거 아님** — 답변 길이, 근거 없는 단정, 근거 노드를 열어본 것(읽음 ≠ 인용).
+- **관찰변수** — `cite_density`(주장당 인용 수), `cite_specificity`(node_id 지정 비율),
+  `anchor_gain`(피드백 후 증가분), `counter_evidence_ratio`.
+- **지금 측정 가능한가 — 부분이지만 이 중 가장 낫다.** `reflection.submit`이 이미
+  피드백 전후 앵커 수를 싣고 있어 `anchor_gain`은 오늘도 계산된다. 다만
+  `evidence.cite`가 없어 인용의 특정성은 알 수 없다.
+- **판별 위험** — 장문 작성 습관. 그래서 **길이를 정의에서 명시적으로 배제**했다.
+
+### 2.4 `redesign` — 재설계·종합
+
+**정의.** 새로 알게 된 것을 **이미 만들어 둔 산출물의 수정**으로 바꾸는 정도.
+추가가 아니라 **고쳐 쓰기**가 핵심이다.
+
+- **증거임** — 기존 노드/주석의 내용 수정과 그 변화량, 자기 판단의 철회·번복,
+  피드백·관점 전환 이후에 일어난 수정(선후 관계가 있는 것).
+- **증거 아님** — 새 노드 추가(그건 `tension_id`), 최초 제출, 서식·위치 변경.
+- **관찰변수** — `edit_count`, `edit_magnitude`(편집 거리), `revision_depth`(한 산출물의
+  최대 개정 횟수), `informed_edit_ratio`(피드백/전환 직후 수정 비율).
+- **지금 측정 가능한가 — 아니오. 유효한 증거가 하나도 없다.** §2.7 (2)(3) 참조.
+  이 앱이 목표로 내건 "deeper redesign"이 현재 로그로는 전혀 주장되지 않는다.
+- **판별 위험** — 없음. 오히려 지금 가장 비어 있는 칸이다.
+
+### 2.5 `metacognition` — 자기점검
+
+**정의.** 결과를 보기 전에 예측하고, 예측이 빗나갔을 때 **행동을 바꾸는** 정도.
+
+- **증거임** — JOL 예측과 실제의 정합(보정오차), 빗나간 뒤의 수정 행동,
+  피드백 요청 시점(막히기 전 vs 제출 직전), 스캐폴드를 필요할 때 여는 판단.
+- **증거 아님** — 예측의 적중 그 자체(운), 피드백 요청 횟수, `prediction: "skip"`.
+- **관찰변수** — `calibration_error`(|예측−실제| 평균), `overconfidence_bias`(부호 있는 평균),
+  `post_error_revision_rate`, `help_timing`(요청 시각 / 과업 경과).
+- **지금 측정 가능한가 — 예, 6개 중 유일하게.** `jol.predict`/`jol.outcome`이
+  `prediction`·`correct`·`disagreements`를 싣고 `skip`도 구분한다. 봉투만 확장하면 된다.
+- **판별 위험** — 문항 수가 적으면 보정오차가 불안정하다. §6 참조.
+
+### 2.6 `collab` — 협업·상호참조
+
+**정의.** 동료의 산출물을 **실제로 보고**, 그것을 자기 산출물에 반영하거나 반박하는 정도.
+
+- **증거임** — 동료 산출물을 연 뒤의 체류, 동료 노드를 근거로 인용, 공개 주석으로
+  응답, 동료 견해와 대립각을 세운 흔적.
+- **증거 아님** — 동료 활동 알림 수신, 접속 인원 수, 같은 세션에 있었다는 사실.
+- **관찰변수** — `peer_view_dwell_ms`, `peer_cite_count`, `public_annotation_ratio`,
+  `peer_response_latency`.
+- **지금 측정 가능한가 — 아니오.** §2.7 (4) 참조. 현재 `peer.exposure`는 실시간
+  구독 콜백에서 발화하므로 "알림이 도착했다"이지 "보았다"가 아니다.
+- **판별 위험** — 접속 시간과 혼동된다. 노출을 분모로 두고 반응을 분자로 둬야 한다.
+
+### 2.7 코드에서 확인된 정의 위협 4건
+
+정의를 쓰다가 실물에서 확인한 것들이다. 넷 다 **데이터 공백이 아니라 해석 오류**를
+만든다 — 지금 집계하면 틀린 숫자가 나온다.
+
+**(1) 렌즈 전환의 출처가 구분되지 않는다.** `setStakeholder()`는 인자로 출처를 받지
+않는데 호출부가 셋이다 — 이해관계자 pill(의도적), 그래프 노드 focus, 그리고
+`node.select` 안에서 노드에 stakeholder가 붙어 있으면 자동 호출되는 경로. 셋 다
+동일한 `perspective_switched`를 만든다. **맵을 클릭하며 돌아다니면 `lens_shift`가
+부풀려진다.** → `setStakeholder(next, source)`로 출처를 받아 페이로드에 싣는다.
+
+**(2) `synthesis_block_revised`는 개정의 증거가 아니다.** `reflection.submit` 직후
+무조건 함께 발화한다. 이름과 달리 **최초 제출에도 찍힌다.** 지금 이걸 개정으로
+집계하면 개정률이 항상 100%다.
+
+**(3) `annotation.revision`은 죽은 필드다.** 생성 시 `revision: 1`로 하드코딩되고
+증가시키는 곳이 없다. 개정 궤적이 존재하지 않는다.
+
+**(2)+(3) 결과 → `redesign`은 현재 유효한 증거가 0건이다.** 이것이 P0에서
+`node.edit`과 `annotation.revise`를 최우선에 둔 이유다.
+
+**(4) `peer.exposure`는 열람이 아니다.** Supabase 실시간 구독 콜백에서 발화하므로
+학습자가 화면을 보고 있지 않아도, 다른 탭에 있어도 찍힌다. 노출의 상한일 뿐이며
+`collab`의 분자로 쓰면 안 된다.
+
+**(참고) `task.step`은 반복 증거가 아니다.** `markTaskProgress`가 케이스당 한 번만
+기록하므로(`if (progress[stepId]) return`) 첫 도달 이정표로만 쓴다.
+
+> 이 6개는 **주장 후보**이지 검증된 척도가 아니다. 척도화(신뢰도·타당도)는 데이터가
+> 쌓인 뒤 별도로 해야 하며, 그 전까지 대시보드에 점수로 표시하지 않는다. 현재
+> 정직하게 측정 가능한 것은 `metacognition` 하나, 부분적으로 `justification`이다.
 
 ---
 
@@ -133,18 +252,18 @@ ECD의 CAF(Conceptual Assessment Framework) 세 축을 로깅 요구사항으로
 
 | 이벤트 | construct | evidence_role | 비고 |
 | --- | --- | --- | --- |
-| `perspective_switched` | lens_shift | positive | 전환 지연(`ms_since_view`) 추가 |
-| `lens.change` | lens_shift | positive | |
-| `node.add` | tension_id | positive | |
-| `node.select` | tension_id | exposure | 선택은 노출, 후속 행동이 수행 |
+| `perspective_switched` | lens_shift | positive | **`source` 없이는 집계 불가** — §2.7(1). `source: "pill"`만 positive, 나머지는 `none` |
+| `lens.change` | — | none | `perspective_switched`와 같은 지점에서 함께 발화하는 중복. 측정에 쓰지 않는다 |
+| `node.add` | tension_id | positive | 갈등 명명 여부를 구분할 필드 필요 |
+| `node.select` | tension_id | exposure | 선택은 주목, 후속 행동이 수행 |
 | `annotation.created` | justification | positive | `stance`가 쟁점/질문이면 tension_id도 |
 | `annotation.scaffold_opened` | justification | **support_use** | |
-| `reflection.submit` | justification | positive | 이미 관찰변수 내장 |
-| `synthesis_block_revised` | redesign | positive | |
-| `feedback.requested` | metacognition | support_use | |
+| `reflection.submit` | justification | positive | 이미 관찰변수 내장 — `anchor_gain` 오늘도 계산됨 |
+| `synthesis_block_revised` | — | none | **개정 증거 아님** — 최초 제출에도 발화, §2.7(2) |
+| `feedback.requested` | metacognition | support_use | 요청 시각을 `help_timing`으로 |
 | `feedback.shown` | — | exposure | 분모 |
-| `jol.predict` / `jol.outcome` | metacognition | positive | 보정오차 = |예측−실제| |
-| `peer.exposure` | collab | exposure | |
+| `jol.predict` / `jol.outcome` | metacognition | positive | 보정오차 = \|예측−실제\|. `skip`은 `none`으로 분리 |
+| `peer.exposure` | collab | exposure | **열람 아님** — 실시간 알림 수신, §2.7(4). 분모로만 |
 | `question.ask` / `question.answer` | justification | positive/exposure | |
 | `export.onepager` | redesign | positive | 종료 산출물 |
 | `session.heartbeat`, `visibility.change` | — | none | 시간 분모 |
@@ -152,7 +271,20 @@ ECD의 CAF(Conceptual Assessment Framework) 세 축을 로깅 요구사항으로
 
 ### 4.2 신규 — 우선순위 순
 
-**P0 — 이게 없으면 핵심 주장을 못 한다**
+**P0-a — 기존 이벤트 수정 (신규보다 먼저)**
+
+새 이벤트를 붙이기 전에 §2.7의 해석 오류부터 고친다. 이건 데이터가 없는 게 아니라
+**틀린 데이터가 쌓이는** 문제라 우선한다.
+
+| 수정 | 내용 |
+| --- | --- |
+| `setStakeholder(next, source)` | 호출부 3곳에서 `"pill"` / `"graph_focus"` / `"node_select"` 전달 → `perspective_switched.source` |
+| `lens.change` 제거 또는 `none` 고정 | `perspective_switched`와 완전 중복 |
+| `synthesis_block_revised` | 실제 개정일 때만 발화하도록 조건화, 아니면 이름을 사실에 맞게 변경 |
+| `annotation.revision` | 하드코딩 `1` 해제, 개정 시 증가 |
+| `peer.exposure` | 문서·필드명에서 열람이 아님을 명시(`notified` 계열로) |
+
+**P0-b — 이게 없으면 핵심 주장을 못 한다**
 
 | 이벤트 | construct | 페이로드 핵심 | 왜 P0인가 |
 | --- | --- | --- | --- |
@@ -170,6 +302,7 @@ ECD의 CAF(Conceptual Assessment Framework) 세 축을 로깅 요구사항으로
 | `node.delete` | redesign | `node_id`, `age_ms`, `had_annotations` |
 | `case.submit` | — | `duration_ms`, `node_count`, `annotation_count`, `cite_count` (과업 경계) |
 | `prompt.shown` | — | `prompt_id`, `trigger` (기회 분모) |
+| `peer.view` | collab | `peer_run_id`, `dwell_ms`, `visible` — 알림이 아닌 **실제 열람** |
 
 **P2 — 해석 품질을 높인다**
 
