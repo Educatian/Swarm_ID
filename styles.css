@@ -2906,6 +2906,14 @@ html.theme-light .matrix-latest-impact { color: var(--on-surface-variant); }
   gap: 16px;
 }
 
+/* The scenario chips sat flush against the slider group above — measured gap 0,
+   where even the section header above gets 10 — so "부담 시나리오" read as a
+   label belonging to the last slider. Scoped to the sandbox rather than added
+   to the shared rule above, which .reflection-block also uses. */
+.control-panel .scenario-group {
+  margin-top: 20px;
+}
+
 .toggle-row {
   display: flex;
   justify-content: space-between;
