@@ -87,6 +87,13 @@ body {
 body {
   margin: 0;
   font-family: "Inter", sans-serif;
+  /* Korean has no inter-word breaking rule of its own, so the default lets a
+     line split inside an 어절 ("관점|을"). keep-all breaks at spaces instead;
+     break-word is the escape hatch so a long unbroken token still cannot push
+     a narrow column out of shape. The hero headline already did this locally —
+     this lifts it to every surface. */
+  word-break: keep-all;
+  overflow-wrap: break-word;
   color: var(--on-surface);
   background:
     radial-gradient(circle at top left, rgba(151, 169, 255, 0.1), transparent 22%),
@@ -6744,13 +6751,33 @@ svg text.node-meta {
 .theme-light .secondary-action,
 .theme-light .home-adv-item { color: #2a3a6b; }
 
+/* ...but colour alone was not enough. The base button paints a translucent
+   white surface and border — a dark-theme idiom — and the light theme never
+   replaced them, so on a white card the control rendered as white-on-white:
+   measured background rgba(255,255,255,.043) over border rgba(255,255,255,.09).
+   Submit buttons like 코스 만들기 read as centred plain text with no
+   affordance. :not() keeps the accent surface of the primary variant. */
+.theme-light .toolbar-button:not(.toolbar-button-primary) {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(20, 30, 60, 0.16);
+}
+.theme-light .toolbar-button:not(.toolbar-button-primary):hover {
+  border-color: rgba(67, 97, 238, 0.45);
+  background: #fff;
+}
+.theme-light .toolbar-button.toolbar-button-quiet {
+  background: transparent;
+  border-color: rgba(20, 30, 60, 0.12);
+}
+
 /* Standalone accent icons read on white. */
 .theme-light .home-adv-item .material-symbols-outlined,
 .theme-light .density-toggle-btn .material-symbols-outlined,
 .theme-light .map-lens-bar .material-symbols-outlined,
 .theme-light .panel-expand-toggle .material-symbols-outlined { color: #4361ee; }
 
-/* All map SVG text except the node-icon (which sits on the dark node body). */
+/* All map SVG text except the node-icon, which is coloured to match its own
+   node body next to the base rule — the bodies do not follow the theme. */
 .theme-light .network-stage svg text:not(.node-icon) { fill: #1f2a44 !important; }
 
 /* IMPORTANT: keep white text/icons on accent (indigo) surfaces — must come last
@@ -8303,6 +8330,16 @@ html.theme-light .home-loop-card.is-active small {
    One navigation system, one current task, and one operation stage at a time. */
 .role-admin[data-active-view="manage"] {
   grid-template-columns: 248px minmax(0, 1fr);
+}
+
+/* The rule above carries no media query, so it also overrode
+   `.app-shell.density-simple { grid-template-columns: minmax(0, 1fr) }` —
+   same specificity, declared later. Simple density hides the sidebar, so the
+   248px track stayed empty and the workspace auto-placed into it: measured
+   248px wide at a 1440px viewport, i.e. the whole instructor screen collapsed
+   to a column. Reserve the sidebar track only when a sidebar is rendered. */
+.app-shell.density-simple.role-admin[data-active-view="manage"] {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .role-admin[data-active-view="manage"] .workspace {
