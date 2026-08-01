@@ -51,13 +51,18 @@ Related context events: `question.ask` (student question text),
 `question.answer` (full AI turn: question + 5 agent outputs verbatim +
 `duration_ms` round latency), `node.add`, `annotation.add`, `lens.change`.
 
+> `lens.change` counts every stakeholder switch, including the ones where the
+> lens merely followed a map click. Prefer `perspective_switched` filtered to
+> `payload->>'source' = 'pill'` when the question is about deliberate
+> perspective taking. See docs/analytics_ecd_schema.md §2.7.
+
 ### Spatial / social / temporal telemetry (added 2026-06-11)
 
 | event | payload | enables |
 |---|---|---|
 | `node.select` | node_id, label, kind, stakeholder, issue_type, origin, via(map\|list) | reading paths, per-issue attention, student×issue ENA |
 | `layer.change` | from, to (base\|personal\|cohort\|compare) | social-comparison view usage |
-| `peer.exposure` | peer_run_id, peer_name, peer_agenda_count, event, presence_count | social influence (exposure→behavior) treatment variable |
+| `peer.exposure` | peer_run_id, peer_name, peer_agenda_count, event, presence_count, signal, visibility | social influence treatment variable — **notification received, not read**; fires with the tab hidden, so filter `payload->>'visibility' = 'visible'` |
 | `visibility.change` | visibility (visible\|hidden), view | separates tab-hidden gaps from visible idle |
 | `session.heartbeat` | view, map_layer, stakeholder (60s, visible-only) | bounded dwell / time-on-task |
 | `drawer.open` | drawer (intake\|insight) | help-seeking / panel usage |
@@ -131,6 +136,9 @@ the fluency-trap-adjacent signal.
 Lag-sequential style: events after `feedback.shown` within the same
 `session_id`, ordered by `seq` — count `lens.change` / `node.add` /
 `question.ask` in the 10 events following exposure vs the 10 before.
+
+For the deliberate-switch version of this, swap `lens.change` for
+`perspective_switched` with `payload->>'source' = 'pill'`.
 
 ```sql
 with seq_events as (

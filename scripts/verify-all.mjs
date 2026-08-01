@@ -21,6 +21,7 @@ const GATES = [
   { id: "smoke", label: "usability smoke", script: "scripts/smoke-usability-upgrade.mjs", needsServer: true },
   { id: "contrast", label: "contrast (both themes)", script: "scripts/verify-contrast.mjs", needsServer: true },
   { id: "render", label: "render structure", script: "scripts/verify-render.mjs", needsServer: true },
+  { id: "telemetry", label: "telemetry envelope", script: "scripts/verify-telemetry.mjs", needsServer: true },
 ];
 
 const run = (gate) => new Promise((resolve) => {

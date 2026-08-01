@@ -494,6 +494,25 @@ document.getElementById("research-delete")?.addEventListener("click", () => {
 // ---- Session telemetry: tab visibility + visible-only heartbeat ----
 // Makes time-on-task computable: gaps between events split into "tab hidden"
 // vs "idle while visible", and dwell is bounded by heartbeats.
+// Visible-only elapsed time, carried on every event as context.visible_ms.
+// Wall-clock since load overstates time on task by exactly the stretch when the
+// tab sat in the background, which is when nobody was working. Accumulated here
+// rather than in the handler below because that one returns early while the
+// shell is hidden, and the clock has to keep its books either way.
+let visibleMsTotal = 0;
+let visibleSince = document.visibilityState === "visible" ? Date.now() : 0;
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    visibleSince = Date.now();
+  } else if (visibleSince) {
+    visibleMsTotal += Date.now() - visibleSince;
+    visibleSince = 0;
+  }
+});
+function visibleMsSoFar() {
+  return Math.round(visibleMsTotal + (visibleSince ? Date.now() - visibleSince : 0));
+}
+
 document.addEventListener("visibilitychange", () => {
   if (dom.appShell?.classList.contains("is-hidden")) return;
   logEvent("visibility.change", {
@@ -1715,6 +1734,12 @@ function syncRealtimeSubscription() {
           peer_agenda_count: asArray(row.agenda_nodes).length,
           event: payload.eventType,
           presence_count: realtimeState.presenceCount,
+          // This is a realtime notification arriving, not a learner reading
+          // anything. It fires with the tab in the background too, so it bounds
+          // exposure from above and cannot stand in for attention. `visibility`
+          // is the only thing here that narrows it.
+          signal: "realtime_notification",
+          visibility: document.visibilityState,
         });
         pushGraphEvent(
           ko ? "동료 활동" : "Peer activity",
@@ -1919,6 +1944,83 @@ function getAnalyticsSessionId() {
   return analyticsSessionId;
 }
 
+// ---- ECD envelope ----
+// Each event declares which construct it is evidence for and in what role, so
+// an analysis can tell a performance apart from a mere exposure without
+// re-deriving that from the event name. Anything absent from this table is
+// operational: construct null, role "none", and it must not be aggregated as
+// learning evidence. The definitions, and the exclusion rule that goes with
+// each construct, are in docs/analytics_ecd_schema.md.
+//
+// A value may be a function where the role depends on the payload. Switching
+// lens because a clicked node carried one is not the same act as choosing a
+// lens, and a skipped prediction is not a prediction.
+const EVENT_EVIDENCE = {
+  perspective_switched: (p) => ["lens_shift", p.source === "pill" ? "positive" : "none"],
+  "node.add": ["tension_id", "positive"],
+  "node.select": ["tension_id", "exposure"],
+  "annotation.created": ["justification", "positive"],
+  "annotation.scaffold_opened": ["justification", "support_use"],
+  "reflection.submit": ["justification", "positive"],
+  "question.ask": ["justification", "positive"],
+  "feedback.requested": ["metacognition", "support_use"],
+  "feedback.shown": [null, "exposure"],
+  "jol.predict": (p) => ["metacognition", p.prediction === "skip" ? "none" : "positive"],
+  "jol.outcome": (p) => ["metacognition", p.correct == null ? "none" : "positive"],
+  // Exposure only, and a generous one: this fires on a realtime notification,
+  // so it records that peer activity arrived, not that anyone looked at it.
+  "peer.exposure": ["collab", "exposure"],
+};
+
+function analyticsEvidence(eventType, payload) {
+  const entry = EVENT_EVIDENCE[eventType];
+  const resolved = typeof entry === "function" ? entry(payload || {}) : entry;
+  return { construct: resolved?.[0] ?? null, evidence_role: resolved?.[1] || "none" };
+}
+
+// Task features. Without them an observation cannot be read afterwards:
+// a learner improving and a task getting easier produce the same numbers.
+function analyticsTaskFeatures() {
+  try {
+    const course = getActiveCourse();
+    // Read-only on purpose. getActiveLearnerRun() creates a run and persists
+    // platform state, and telemetry must never author the data it observes.
+    const run = course ? getLearnerRun(state.activeCaseId, state.activeLearnerId, course) : null;
+    return {
+      stakeholder_set: Object.keys(stakeholders),
+      active_stakeholder: state.activeStakeholder || null,
+      map_layer: state.activeMapLayer || null,
+      node_count: asArray(run?.agendaNodes).length,
+      annotation_count: asArray(run?.annotations).length,
+      evidence_count: asArray(run?.evidence).length,
+      scaffold: {
+        coach_open: Boolean(state.agentCoach?.open),
+        evidence_open: Boolean(state.agentCoach?.evidenceOpen),
+      },
+    };
+  } catch (_) {
+    return {};
+  }
+}
+
+// Delivery conditions, so two learners' numbers can be compared knowing whether
+// they were looking at the same thing.
+function analyticsContext() {
+  try {
+    return {
+      view: state.activeView || null,
+      density: typeof resolveDensity === "function" ? resolveDensity() : state.density || null,
+      theme: state.theme || null,
+      locale: state.locale || null,
+      viewport: [window.innerWidth, window.innerHeight],
+      visibility: document.visibilityState,
+      visible_ms: visibleMsSoFar(),
+    };
+  } catch (_) {
+    return {};
+  }
+}
+
 function logEvent(eventType, payload = {}) {
   if (!isSupabaseSessionActive()) return;
   if (state.activeRole === "user" && !state.agentCoach.consentGranted) return;
@@ -1926,6 +2028,7 @@ function logEvent(eventType, payload = {}) {
   if (!client) return;
   const course = getActiveCourse();
   const basePayload = payload && typeof payload === "object" ? payload : { value: payload };
+  const evidence = analyticsEvidence(String(eventType || "unknown"), basePayload);
   const row = {
     user_id: state.auth.userId,
     course_id: course?.id || null,
@@ -1938,6 +2041,10 @@ function logEvent(eventType, payload = {}) {
       seq: ++analyticsSeq,
       consent_version: state.agentCoach.consentVersion,
       consent_granted: Boolean(state.agentCoach.consentGranted),
+      construct: evidence.construct,
+      evidence_role: evidence.evidence_role,
+      task: analyticsTaskFeatures(),
+      context: analyticsContext(),
     },
     session_id: getAnalyticsSessionId(),
     seq: analyticsSeq,
@@ -3992,6 +4099,10 @@ async function requestReflectionFeedback(promptIndex) {
   });
 }
 
+// How many times each prompt has been submitted this session. The second
+// submission onward is a revision; the first is not.
+const reflectionSubmitCounts = new Map();
+
 function handleReflectionSubmit(promptIndex) {
   const activeCase = getCaseById(state.activeCaseId);
   if (!activeCase) return;
@@ -4022,14 +4133,25 @@ function handleReflectionSubmit(promptIndex) {
     anchors_at_feedback: critique ? critique.anchors.cited : null,
     anchors_at_submit: detectDraftAnchors(answer).cited,
   });
-  logEvent("synthesis_block_revised", {
-    block_id: `reflection-${promptIndex}`,
-    prompt_index: promptIndex,
-    source_count: asArray(state.evidence).length,
-    annotation_count: asArray(getActiveLearnerRun()?.annotations).length,
-    length: answer.length,
-    revised_after_feedback: critique ? answer !== critique.draftSnapshot : null,
-  });
+  // Only a genuine revision. This used to fire on every submission including
+  // the first, which made the revision rate 100% by construction and left the
+  // one thing the event is named for unmeasurable.
+  const submitKey = reflectionKey(promptIndex);
+  const submitCount = (reflectionSubmitCounts.get(submitKey) || 0) + 1;
+  reflectionSubmitCounts.set(submitKey, submitCount);
+  const revisedAfterFeedback = Boolean(critique) && answer !== critique.draftSnapshot;
+  if (revisedAfterFeedback || submitCount > 1) {
+    logEvent("synthesis_block_revised", {
+      block_id: `reflection-${promptIndex}`,
+      prompt_index: promptIndex,
+      source_count: asArray(state.evidence).length,
+      annotation_count: asArray(getActiveLearnerRun()?.annotations).length,
+      length: answer.length,
+      revised_after_feedback: critique ? answer !== critique.draftSnapshot : null,
+      revision_trigger: revisedAfterFeedback ? "feedback" : "resubmit",
+      submit_index: submitCount,
+    });
+  }
   if (status) status.textContent = state.locale === "ko" ? "제출됨 · 교수자에게 공유되었습니다." : "Submitted — shared with your instructor.";
 }
 
@@ -7064,7 +7186,7 @@ function updateGraphRenderer(frame) {
       window.requestAnimationFrame(() => openMapDrawer("insight"));
     }
     if (node.stakeholder && stakeholders[node.stakeholder]) {
-      setStakeholder(node.stakeholder);
+      setStakeholder(node.stakeholder, "node_select");
       return;
     }
     renderAll();
@@ -10659,17 +10781,23 @@ function setTheme(next) {
   if (typeof logEvent === "function") logEvent("theme.change", { to: value });
 }
 
-function setStakeholder(nextStakeholder) {
+// `source` says who decided. Only "pill" is the learner choosing a lens;
+// "node_select" is the lens following a map click, which is a side effect of
+// browsing and inflates any count of perspective taking if the two are merged.
+function setStakeholder(nextStakeholder, source = "unknown") {
   const previous = state.activeStakeholder;
   state.activeStakeholder = nextStakeholder;
   renderAll();
   if (previous !== nextStakeholder) {
-    logEvent("lens.change", { from: previous, to: nextStakeholder });
+    // Kept because docs/analytics_feedback_events.md documents counting it, but
+    // it duplicates the event below and carries no evidence role.
+    logEvent("lens.change", { from: previous, to: nextStakeholder, source });
     logEvent("perspective_switched", {
       from: previous,
       to: nextStakeholder,
       layer: state.activeMapLayer,
       source_id: state.selectedGraphNodeId || null,
+      source,
     });
     markTaskProgress("lens");
   }
@@ -11568,12 +11696,12 @@ dom.mapLayerSelect?.addEventListener("change", (event) => {
 document.addEventListener("click", (event) => {
   const pill = event.target.closest("[data-pill]");
   if (pill) {
-    setStakeholder(pill.dataset.pill);
+    setStakeholder(pill.dataset.pill, "pill");
   }
 
   const graphNode = event.target.closest("[data-graph-node]");
   if (graphNode) {
-    setStakeholder(graphNode.dataset.focus);
+    setStakeholder(graphNode.dataset.focus, "graph_focus");
   }
 
   const promptButton = event.target.closest("[data-prompt]");

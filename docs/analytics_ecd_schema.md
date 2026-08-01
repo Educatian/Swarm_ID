@@ -187,6 +187,32 @@ ECD의 CAF(Conceptual Assessment Framework) 세 축을 로깅 요구사항으로
 **(참고) `task.step`은 반복 증거가 아니다.** `markTaskProgress`가 케이스당 한 번만
 기록하므로(`if (progress[stepId]) return`) 첫 도달 이정표로만 쓴다.
 
+### 2.8 `redesign`은 로깅 공백이 아니라 제품 공백이다
+
+§2.7(2)(3)을 고치려다 확인한 것이다. **앱에 수정 경로가 아예 없다.**
+
+학습자 산출물에 쓰는 곳은 정확히 두 군데이고 둘 다 앞에 붙이기만 한다.
+
+- `app.js:10213` — `run.agendaNodes = [agendaNode, ...asArray(run.agendaNodes)]`
+- `app.js:10332` — `run.annotations = [annotation, ...asArray(run.annotations)]`
+
+update도 delete도 없다. 학습자 데이터에 대한 `splice`는 단 한 곳
+(`app.js:1579`)이며 그건 교수자가 learnerRun 전체를 지우는 경로다. 노드나 주석을
+고쳐 쓰는 UI 자체가 존재하지 않는다.
+
+그래서:
+
+- `annotation.revision`이 `1`로 굳어 있는 건 버그가 아니라 **증상**이다. 개정이
+  일어날 수 없으니 증가할 일도 없다.
+- **`node.edit`은 지금 구현할 수 없다.** 없는 상호작용은 기록할 수 없다. P0 목록에
+  올린 건 성급했고, 아래로 내린다.
+- 앱이 목표로 내건 *"deeper redesign"*은 **측정이 안 되는 게 아니라 시킬 수가 없다.**
+
+이건 로깅 작업으로 해결되지 않는다. 노드·주석을 고쳐 쓰는 어포던스를 먼저 만들어야
+하고, 그건 제품 결정이다. 그 결정 전까지 `redesign`은 빈칸으로 둔다 — 대신
+`reflection.submit` 재제출(`synthesis_block_revised.revision_trigger: "resubmit"`)이
+유일하게 남은 근사치인데, 반영문 한 종류에만 해당하므로 구인을 대표하지 못한다.
+
 > 이 6개는 **주장 후보**이지 검증된 척도가 아니다. 척도화(신뢰도·타당도)는 데이터가
 > 쌓인 뒤 별도로 해야 하며, 그 전까지 대시보드에 점수로 표시하지 않는다. 현재
 > 정직하게 측정 가능한 것은 `metacognition` 하나, 부분적으로 `justification`이다.
@@ -276,19 +302,18 @@ ECD의 CAF(Conceptual Assessment Framework) 세 축을 로깅 요구사항으로
 새 이벤트를 붙이기 전에 §2.7의 해석 오류부터 고친다. 이건 데이터가 없는 게 아니라
 **틀린 데이터가 쌓이는** 문제라 우선한다.
 
-| 수정 | 내용 |
-| --- | --- |
-| `setStakeholder(next, source)` | 호출부 3곳에서 `"pill"` / `"graph_focus"` / `"node_select"` 전달 → `perspective_switched.source` |
-| `lens.change` 제거 또는 `none` 고정 | `perspective_switched`와 완전 중복 |
-| `synthesis_block_revised` | 실제 개정일 때만 발화하도록 조건화, 아니면 이름을 사실에 맞게 변경 |
-| `annotation.revision` | 하드코딩 `1` 해제, 개정 시 증가 |
-| `peer.exposure` | 문서·필드명에서 열람이 아님을 명시(`notified` 계열로) |
+| 수정 | 상태 | 내용 |
+| --- | --- | --- |
+| `setStakeholder(next, source)` | **완료** | 호출부 3곳에 `"pill"` / `"graph_focus"` / `"node_select"` 전달 → `perspective_switched.source`. `source !== "pill"`은 `evidence_role: none` |
+| `lens.change` | **완료** | 발화는 유지(`analytics_feedback_events.md`가 집계를 문서화함), `construct: null` / `none`으로 측정에서 제외 |
+| `synthesis_block_revised` | **완료** | 실제 개정일 때만 발화 — 피드백 후 변경이거나 2회차 이상 제출. `revision_trigger` / `submit_index` 추가 |
+| `peer.exposure` | **완료** | 이름 유지(이력 연속성), `signal: "realtime_notification"` + `visibility` 추가로 열람이 아님을 데이터에 명시 |
+| `annotation.revision` | **차단됨** | 개정 경로가 앱에 없다 — §2.8 |
 
 **P0-b — 이게 없으면 핵심 주장을 못 한다**
 
 | 이벤트 | construct | 페이로드 핵심 | 왜 P0인가 |
 | --- | --- | --- | --- |
-| `node.edit` | redesign | `node_id`, `field`, `before_len`, `after_len`, `edit_distance`, `since_create_ms` | "깊은 재설계"의 유일한 직접 증거 |
 | `evidence.cite` | justification | `claim_id`, `cited_node_ids[]`, `cite_count`, `source` | 정당화의 최소 단위 |
 | `tension.rank` | tension_id | `ranked_ids[]`, `top_id`, `changed_from_prior` | "지금 무엇이 중요한가" 판단 |
 | `opportunity.skipped` | (해당 구인) | `opportunity`, `shown_ms`, `dismissed_by` | **비반응 증거** — 없으면 능력과 노출 혼동 |
@@ -297,9 +322,7 @@ ECD의 CAF(Conceptual Assessment Framework) 세 축을 로깅 요구사항으로
 
 | 이벤트 | construct | 페이로드 핵심 |
 | --- | --- | --- |
-| `annotation.revise` | redesign | `annotation_id`, `revision`, `stance_before/after`, `body_delta` |
 | `agent.compare` | lens_shift | `compared[]`, `dwell_ms`, `divergence_noted` |
-| `node.delete` | redesign | `node_id`, `age_ms`, `had_annotations` |
 | `case.submit` | — | `duration_ms`, `node_count`, `annotation_count`, `cite_count` (과업 경계) |
 | `prompt.shown` | — | `prompt_id`, `trigger` (기회 분모) |
 | `peer.view` | collab | `peer_run_id`, `dwell_ms`, `visible` — 알림이 아닌 **실제 열람** |
@@ -312,6 +335,12 @@ ECD의 CAF(Conceptual Assessment Framework) 세 축을 로깅 요구사항으로
 | `constraint.view` | 제약 조건을 실제로 열어봤는지 |
 | `idle.detected` | 체류 시간에서 이탈 구간 제거 |
 | `rubric.criterion_view` | 교수자가 어느 기준으로 봤는지 |
+
+**제품 결정을 기다리는 것 — 로깅으로 해결 불가**
+
+| 이벤트 | 막힌 이유 |
+| --- | --- |
+| `node.edit` · `node.delete` · `annotation.revise` | 앱에 수정·삭제 어포던스가 없다(§2.8). 어포던스를 먼저 만들어야 하며 그건 제품 결정이다 |
 
 ---
 
