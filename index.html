@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="dark theme-light" lang="ko">
+<html class="theme-light" lang="ko">
   <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +15,10 @@
     // Runs before first paint so the app never flashes the wrong theme.
     try {
       if (localStorage.getItem("swarm-id-theme-v1") === "dark") {
+        // `dark` has to be added, not merely left in place: four rules are
+        // scoped html.dark, so carrying both classes made them fire on light.
         document.documentElement.classList.remove("theme-light");
+        document.documentElement.classList.add("dark");
         var themeMeta = document.querySelector('meta[name="theme-color"]');
         if (themeMeta) themeMeta.content = "#0b0d14";
       }
@@ -29,7 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="./assets/material-symbols-outlined.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./styles.css?v=20260731-light-polish">
+  <link rel="stylesheet" href="./styles.css?v=20260731-light-sweep">
 </head>
 <body>
   <a class="skip-link" href="#main-content">본문으로 바로가기</a>
@@ -1009,7 +1012,7 @@
     (function loadAppWithOptionalGeminiConfig() {
       const loadApp = () => {
         const appScript = document.createElement("script");
-        appScript.src = "./app.js?v=20260731-light-polish";
+        appScript.src = "./app.js?v=20260731-light-sweep";
         document.body.appendChild(appScript);
       };
 

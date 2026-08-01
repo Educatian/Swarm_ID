@@ -11410,6 +11410,10 @@ function setDensity(next) {
 function applyTheme() {
   const light = state.theme === "light";
   document.documentElement.classList.toggle("theme-light", light);
+  // html.dark carries four dark-surface rules (node list, task banner, welcome
+  // card). Leaving the class on while theme-light was also set kept those
+  // surfaces dark underneath the light theme.
+  document.documentElement.classList.toggle("dark", !light);
   // Keep the browser chrome in step with the surface it sits above.
   const themeMeta = document.querySelector('meta[name="theme-color"]');
   if (themeMeta) themeMeta.content = light ? "#f4f7fe" : "#0b0d14";

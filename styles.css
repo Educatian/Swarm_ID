@@ -899,6 +899,13 @@ textarea:focus-visible,
   transition: transform 180ms ease;
 }
 
+/* The collapse glyph is a .material-symbols-outlined span, not a .chevron, so
+   it inherited the header's translucent white and measured 1.08 on the pale
+   card — eight invisible chevrons across the network and perspective views. */
+html.theme-light .pipeline-card-header .material-symbols-outlined {
+  color: #46546f;
+}
+
 .pipeline-card-collapsible.is-collapsed .pipeline-card-header .chevron {
   transform: rotate(-90deg);
 }
@@ -7776,6 +7783,25 @@ html.theme-light .manage-lens-chip {
   --dts-warning: #e76f51;
 }
 
+/* These eleven tokens had no light values, and 42 rules consume them, so every
+   surface built on them stayed dark after the theme flip: the learning-loop
+   cards rendered black next to pale ones in the same row, and the progress
+   track was a black bar on a white card. Overriding the tokens repaints all
+   consumers at once instead of patching each selector.
+   Accents keep their hue; only warning is darkened, since #e76f51 on a pale
+   surface measured 2.64 against the 4.5 it needs as text. */
+html.theme-light {
+  --dts-app: #f4f7fe;
+  --dts-base: #eef2fb;
+  --dts-raised: #ffffff;
+  --dts-subtle: #e7ecf7;
+  --dts-border: rgba(20, 30, 60, 0.14);
+  --dts-text: #172033;
+  --dts-text-secondary: #46546f;
+  --dts-muted: #5b6781;
+  --dts-warning: #b4441f;
+}
+
 /* The responsive top navigation now carries the complete core flow. */
 .mobile-dock { display: none !important; }
 
@@ -8131,6 +8157,25 @@ html:not(.theme-light) .landing-login-card {
   background: rgba(16, 19, 26, 0.98);
 }
 
+/* The drawer repaints itself opaque so the map cannot show through, which also
+   overrode the light theme's panel surface. Everything inside it — headings,
+   badges, the count pill, the collapse chevrons — then sat dark-on-dark or
+   white-on-white, 24 measured failures between 1.08 and 1.25, all of them in
+   this one panel. */
+html.theme-light .density-simple .insight-panel {
+  background: rgba(252, 253, 255, 0.98);
+  border-left: 1px solid rgba(20, 30, 60, 0.12);
+}
+html.theme-light .density-simple .insight-panel .badge,
+html.theme-light .density-simple .insight-panel .numeric-pill {
+  background: rgba(20, 30, 60, 0.05);
+  border-color: rgba(20, 30, 60, 0.14);
+  color: #1f2a44;
+}
+html.theme-light .density-simple .insight-panel .material-symbols-outlined {
+  color: #46546f;
+}
+
 .density-simple .insight-panel .selected-node-card {
   padding: 16px;
   border-radius: 12px;
@@ -8185,15 +8230,28 @@ html:not(.theme-light) .landing-login-card {
 .home-loop-card.is-active .material-symbols-outlined,
 .home-loop-card.is-active small { color: #9ab2ff; }
 
-/* Light theme: active learning-loop cards use a pale surface, so the dark
-   surface's white heading token must be reasserted for readable contrast. */
+/* Every learning-loop card is a pale surface on this theme, not just the active
+   one — the card background comes from --dts-raised, which is now white. The
+   earlier override only reached .is-active, so the done and pending cards kept
+   `color: #fff` headings and rendered as black cards beside pale ones in the
+   same row. Cover all four states. */
 html.theme-light .home-loop-heading h2,
-html.theme-light .home-loop-card.is-active strong {
+html.theme-light .home-loop-card strong {
   color: #172033;
+}
+html.theme-light .home-loop-card .material-symbols-outlined,
+html.theme-light .home-loop-card small,
+html.theme-light .home-loop-index {
+  color: #5b6781;
 }
 html.theme-light .home-loop-card.is-active .material-symbols-outlined,
 html.theme-light .home-loop-card.is-active small {
   color: #4058c8;
+}
+/* #5fe3c4 is a dark-surface mint; on white it lands near 1.6. */
+html.theme-light .home-loop-card.is-done .material-symbols-outlined,
+html.theme-light .home-loop-card.is-done small {
+  color: #0f7a66;
 }
 
 /* Reflection reads as evidence → synthesis → readiness. */
