@@ -139,6 +139,15 @@ textarea:focus-visible,
   outline-offset: 2px;
 }
 
+/* The `hidden` attribute only carries `display: none` from the UA sheet, so any
+   component rule that sets display beats it. .reflection-block does exactly
+   that, which left the instructor-only cohort panel rendering at 484x58 for
+   learners while its hidden property read true. Make the attribute win
+   everywhere rather than patching the one component that exposed it. */
+[hidden] {
+  display: none !important;
+}
+
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 24;
 }
