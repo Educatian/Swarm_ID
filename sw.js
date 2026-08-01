@@ -2,7 +2,11 @@
    Strategy: network-first for the app shell (so every deploy reaches students
    on the next launch), falling back to cache when offline. Static assets are
    cached as they are fetched. */
-const CACHE_NAME = "dts-shell-v2";
+// Bump this whenever a precached shell asset changes. The activate handler
+// deletes every cache whose name differs, so the version string is the only
+// thing that evicts a stale offline shell — a returning offline user otherwise
+// keeps whatever was cached under the old name indefinitely.
+const CACHE_NAME = "dts-shell-v3-20260731";
 const SHELL = [
   "./index.html",
   "./app.js",
