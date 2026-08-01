@@ -10,7 +10,13 @@
 import { createHash } from "node:crypto";
 import { readFileSync, existsSync } from "node:fs";
 
-const sha = (p) => createHash("sha256").update(readFileSync(p)).digest("hex").slice(0, 16);
+const sha = (p) => createHash("sha256")
+  // Hash with line endings normalised: git rewrites LF to CRLF on checkout
+  // here, so hashing raw bytes makes the guard fire after every commit even
+  // though nothing changed. A gate that cries wolf gets ignored, which would
+  // cost more than the drift it is watching for.
+  .update(readFileSync(p, "utf8").split("\r\n").join("\n"))
+  .digest("hex").slice(0, 16);
 const problems = [];
 
 if (!existsSync("build-manifest.json")) {

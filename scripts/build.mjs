@@ -26,7 +26,13 @@ const TARGETS = [
   { src: "styles.css", out: "styles.min.css", loader: "css", minifyIdentifiers: false },
 ];
 
-const sha = (p) => createHash("sha256").update(readFileSync(p)).digest("hex").slice(0, 16);
+const sha = (p) => createHash("sha256")
+  // Hash with line endings normalised: git rewrites LF to CRLF on checkout
+  // here, so hashing raw bytes makes the guard fire after every commit even
+  // though nothing changed. A gate that cries wolf gets ignored, which would
+  // cost more than the drift it is watching for.
+  .update(readFileSync(p, "utf8").split("\r\n").join("\n"))
+  .digest("hex").slice(0, 16);
 const kb = (n) => (n / 1024).toFixed(0) + "KB";
 
 const manifest = { builtFrom: {} };
