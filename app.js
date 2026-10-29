@@ -317,14 +317,14 @@ function studentTaskCopy(stepId) {
     ? {
         open: { label: "케이스 열기", hint: "목록에서 공개된 케이스를 하나 골라 여세요." },
         inspect: { label: "노드 눌러 쟁점 읽기", hint: "맵의 노드를 눌러 그 뒤에 있는 쟁점을 확인하세요." },
-        lens: { label: "관점 바꿔 보기", hint: "맵 아래 관점 버튼으로 다른 입장에서 같은 케이스를 살펴보세요." },
+        lens: { label: "관점 바꿔 보기", hint: "맵 위쪽 관점 버튼으로 다른 입장에서 같은 케이스를 살펴보세요." },
         contribute: { label: "질문하거나 노드 추가", hint: "궁금한 점을 질문하거나, 케이스에 없는 관점을 내 노드로 추가하세요." },
         reflect: { label: "생각 정리", hint: "리포트 화면에서 발견한 쟁점을 짧은 글로 정리하세요." },
       }
     : {
         open: { label: "Open a case", hint: "Pick one published case from the list." },
-        inspect: { label: "Read issues on the map", hint: "Tap a node to see the issue behind it." },
-        lens: { label: "Switch perspectives", hint: "Use the lens buttons below the map to re-read the case." },
+        inspect: { label: "Read issues on the map", hint: "Select a node to see the issue behind it." },
+        lens: { label: "Switch perspectives", hint: "Use the lens buttons above the map to re-read the case." },
         contribute: { label: "Ask or add a node", hint: "Ask a question, or add a concern the case is missing." },
         reflect: { label: "Write a reflection", hint: "Summarize what you found in the Report view." },
       };
@@ -423,7 +423,7 @@ function renderTaskBanner() {
       <button type="button" class="task-banner-pill" data-task-expand>
         <span class="material-symbols-outlined" aria-hidden="true">flag</span>
         <span>${ko ? "지금 할 일" : "Up next"}: <strong>${currentLabel}</strong></span>
-        <span class="task-banner-count">${doneCount}/${total}</span>
+        <span class="task-banner-count">${doneCount}/${total} ${ko ? "완료" : "done"}</span>
       </button>
     `;
     return;
@@ -449,7 +449,7 @@ function renderTaskBanner() {
       <span class="task-banner-title">
         <span class="material-symbols-outlined" aria-hidden="true">flag</span>
         ${ko ? "지금 할 일" : "What to do now"}
-        <span class="task-banner-count">${doneCount}/${total}</span>
+        <span class="task-banner-count">${doneCount}/${total} ${ko ? "완료" : "done"}</span>
       </span>
       <button type="button" class="icon-button task-banner-collapse" data-task-collapse aria-label="${ko ? "접기" : "Collapse"}" title="${ko ? "접기" : "Collapse"}">
         <span class="material-symbols-outlined" aria-hidden="true">collapse_all</span>
@@ -1099,7 +1099,7 @@ function applyStaticTranslations() {
   if (shareLabel) shareLabel.textContent = state.locale === "ko" ? "팀과 공유" : "Share with team";
   const provenance = document.querySelector(".annotation-provenance");
   if (provenance) provenance.textContent = state.locale === "ko"
-    ? "선택한 노드, 작성자, 관점, 작성 시각이 함께 기록됩니다."
+    ? "선택한 노드, 작성자, 관점, 작성 시각이 함께 기록돼요."
     : "The selected node, author, perspective, and timestamp are recorded together.";
   if (dom.quickAnnotationSubmit) dom.quickAnnotationSubmit.textContent = state.locale === "ko" ? "공동 종합에 추가" : "Add to shared synthesis";
   if (dom.downloadPngButton) dom.downloadPngButton.textContent = t("downloadPng");
@@ -4978,12 +4978,22 @@ function renderRelatedActivityList(items, emptyMessage) {
           (item) => `
             <article class="evidence-item">
               <strong>${escapeHtml(localizeLegacyKoreanCopy(item.title, state.locale === "ko" ? "관련 활동" : item.title))}</strong>
-              <p>${escapeHtml(localizeLegacyKoreanCopy(item.body, state.locale === "ko" ? "현재 케이스와 연결된 활동입니다." : item.body))}</p>
+              ${String(item.body || "").trim() && stripRaiseCount(item.body).trim() !== stripRaiseCount(item.title).trim() ? `<p>${escapeHtml(localizeLegacyKoreanCopy(item.body, item.body))}</p>` : ""}
             </article>
           `
         )
         .join("")
     : emptyNoteMarkup(emptyMessage);
+}
+
+// R3 personas could not cite "제약 2" because the map never said what it was.
+// Label goal/constraint nodes with their own text, cut at the first clause.
+function shortIssueTitle(text, fallback) {
+  const clean = String(text || "").replace(/\s+/g, " ").trim();
+  if (!clean) return fallback;
+  const clause = clean.split(/[.,;:·—(]|\s-\s/)[0].trim() || clean;
+  const max = /[가-힣]/.test(clause) ? 16 : 28;
+  return clause.length > max ? `${clause.slice(0, max - 1).trim()}…` : clause;
 }
 
 function buildCaseIssueEntries(activeCase) {
@@ -5010,7 +5020,7 @@ function buildCaseIssueEntries(activeCase) {
   goals.forEach((goal, index) => {
     issueEntries.push({
       issueType: "goal",
-      title: `${t("nodeGoal")} ${index + 1}`,
+      title: shortIssueTitle(goal, `${t("nodeGoal")} ${index + 1}`),
       body: goal,
       stakeholder: inferStakeholderFromText(goal, index === 0 ? "student" : state.activeStakeholder),
       origin: "brief",
@@ -5020,7 +5030,7 @@ function buildCaseIssueEntries(activeCase) {
   constraints.forEach((constraint, index) => {
     issueEntries.push({
       issueType: "constraint",
-      title: `${t("nodeConstraint")} ${index + 1}`,
+      title: shortIssueTitle(constraint, `${t("nodeConstraint")} ${index + 1}`),
       body: constraint,
       stakeholder: inferStakeholderFromText(constraint, index === 0 ? "teacher" : state.activeStakeholder),
       origin: "brief",
@@ -6426,7 +6436,7 @@ function buildRenderableGraph() {
     label: uiCopy.graphCoreLabel && /[가-힣]/.test(String(uiCopy.graphCoreLabel))
       ? uiCopy.graphCoreLabel
       : getCaseDisplayTitle(activeCase, getActiveCourse()?.cases || []),
-    meta: state.locale === "ko" ? `사이클 ${state.graph.iteration}` : `cycle ${state.graph.iteration}`,
+    meta: state.locale === "ko" ? "중심 사례" : "Case",
     type: "core",
     tone: "primary",
     icon: "auto_awesome",
@@ -6646,8 +6656,10 @@ function describeNodeIssue(node) {
   }
 
   if (node.issueType) {
-    const issueTypeKo = { concern: "우려", alignment: "정렬", aligned: "정렬", conflict: "충돌", divergent: "이견", tension: "쟁점", partial: "부분일치" };
-    const typeWord = ko ? issueTypeKo[node.issueType] || node.issueType : `${node.issueType[0].toUpperCase()}${node.issueType.slice(1)}`;
+    // R4/R5: case node types (goal, constraint…) leaked raw as "GOAL" in Korean.
+    const issueTypeKo = { concern: "우려", alignment: "정렬", aligned: "정렬", conflict: "충돌", divergent: "이견", tension: "쟁점", partial: "부분일치", goal: "목표", constraint: "제약", evidence: "근거", timeline: "과정", agenda: "내 쟁점", expansion: "확장 쟁점", cohort: "학급 쟁점", "annotation-cluster": "공동 메모", summary: "요약", question: "질문" };
+    const issueTypeEn = { agenda: "My issue", expansion: "AI expansion", cohort: "Class issue", "annotation-cluster": "Shared notes" };
+    const typeWord = ko ? issueTypeKo[node.issueType] || "쟁점" : issueTypeEn[node.issueType] || `${node.issueType[0].toUpperCase()}${node.issueType.slice(1)}`;
     return {
       kicker: `${typeWord} · ${stakeLabel || (ko ? "쟁점" : "Issue")}`,
       title: localizeStoredNodeText(node.label, ko ? "생성된 쟁점" : node.label),
@@ -7089,14 +7101,23 @@ function initializeGraphRenderer() {
   graphRenderer.nodeLayer = graphRenderer.root.append("g").attr("class", "network-nodes");
   graphRenderer.zoom = d3
     .zoom()
-    .scaleExtent([0.6, 2.5])
+    .scaleExtent([0.25, 2.5])
     .on("zoom", (event) => {
       graphRenderer.root.attr("transform", event.transform);
-    });
+      // Keep labels readable when the fit zooms out: scale text up by 1/k
+      // (capped) and drop the small sub-label when zoomed far out.
+      const k = event.transform.k;
+      graphRenderer.svg.style("--label-inv", Math.min(4, Math.max(1, 1 / k)).toFixed(3));
+      graphRenderer.svg.classed("is-zoomed-out", k < 0.7);
+      // A wheel/pinch/drag by the learner wins over auto-fit until they ask again.
+      if (event.sourceEvent) graphRenderer.userZoomed = true;
+    })
+    .on("end", () => window.requestAnimationFrame(declutterGraphLabels));
 
   graphRenderer.svg.call(graphRenderer.zoom).on("dblclick.zoom", null);
   graphRenderer.simulation = d3
     .forceSimulation()
+    .alphaDecay(0.045)
     .force(
       "link",
       d3
@@ -7112,7 +7133,8 @@ function initializeGraphRenderer() {
         .strength((link) => (link.kind === "satellite" ? 0.95 : link.kind === "inter-stakeholder" ? 0.03 : 0.28))
     )
     .force("charge", d3.forceManyBody().strength((node) => (node.type === "satellite" ? -26 : node.type === "core" ? -620 : node.type === "stakeholder" ? -280 : -120)))
-    .force("collide", d3.forceCollide().radius((node) => nodeRadius(node) + (node.type === "satellite" ? 4 : 16)))
+    // Labels hang below nodes; give long labels more room so they don't stack.
+    .force("collide", d3.forceCollide().radius((node) => nodeRadius(node) + (node.type === "satellite" ? 4 : 16 + Math.min(34, String(node.label || "").length * 2.2))).iterations(2))
     .force("x", d3.forceX((node) => resolveClusterTarget(node).x).strength((node) => (node.type === "satellite" ? 0.24 : 0.07)))
     .force("y", d3.forceY((node) => resolveClusterTarget(node).y).strength((node) => (node.type === "satellite" ? 0.24 : 0.07)));
 
@@ -7134,6 +7156,9 @@ function resizeGraphRenderer() {
   }
 
   const rect = dom.networkStage.getBoundingClientRect();
+  // A hidden stage measures 0x0; sizing the viewBox to the fallback then lays
+  // the whole map out in a 320px corner once the view becomes visible.
+  if (!rect.width || !rect.height) return;
   graphRenderer.width = Math.max(320, Math.round(rect.width));
   graphRenderer.height = Math.max(420, Math.round(rect.height));
   graphRenderer.svg.attr("viewBox", `0 0 ${graphRenderer.width} ${graphRenderer.height}`);
@@ -7144,6 +7169,206 @@ function resetGraphViewport() {
     return;
   }
   graphRenderer.svg.transition().duration(450).call(graphRenderer.zoom.transform, window.d3.zoomIdentity);
+}
+
+// When two labels overlap on screen, keep the one on the more connected node
+// and hide the other until hover/selection (InfraNodus-style priority by
+// influence). Runs after layout settles and after each zoom.
+function declutterGraphLabels() {
+  if (!graphRenderer.initialized) return;
+  const links = graphRenderer.simulation.force("link").links();
+  const degree = new Map();
+  links.forEach((link) => {
+    if (link.kind === "satellite") return;
+    [link.source.id || link.source, link.target.id || link.target].forEach((id) => degree.set(id, (degree.get(id) || 0) + 1));
+  });
+  const raised = (node) => Number(String(node.label || "").match(/\((\d+)\)\s*$/)?.[1] || 0);
+  const cued = new Set(document.querySelector(".map-insight-item.is-focused [data-insight-ids]")?.dataset.insightIds.split(" ") || []);
+  document.querySelectorAll("#map-insights-panel [data-insight-key=\"bridges\"]").forEach((el) => cued.add(el.dataset.insightIds.split(" ")[0]));
+  const topPeers = new Set(graphRenderer.simulation.nodes()
+    .filter((node) => node.origin === "peer" && raised(node) > 0)
+    .sort((a, b) => raised(b) - raised(a)).slice(0, 3).map((node) => node.id));
+  // R7: dropping labels hid hubs, case issues and the class's top issue.
+  // These are never hidden; on a collision they move above their node.
+  const mustKeep = (node) => node.type === "core" || node.type === "stakeholder" || cued.has(node.id)
+    || node.id === state.selectedGraphNodeId || topPeers.has(node.id)
+    || ["brief", "me", "mineonly", "shared", "teamonly", undefined, ""].includes(node.origin);
+  const priority = (node) => (cued.has(node.id) ? 1e8 : 0) + (node.id === state.selectedGraphNodeId ? 1e7 : 0)
+    + (node.type === "core" ? 1e6 : node.type === "stakeholder" ? 1e5 : mustKeep(node) ? 1e4 : 0)
+    + raised(node) * 10 + (degree.get(node.id) || 0);
+  // Pad by 4px horizontally / 2px vertically so labels that merely touch on a
+  // baseline ("주의 필요AI 페이싱…", R11) still count as colliding.
+  const area = (a, b) => Math.max(0, Math.min(a.right + 4, b.right + 4) - Math.max(a.left - 4, b.left - 4) - 0) * Math.max(0, Math.min(a.bottom + 2, b.bottom + 2) - Math.max(a.top - 2, b.top - 2));
+  const hitArea = (box, list) => list.reduce((sum, other) => sum + area(box, other), 0);
+  // Node circles are obstacles too (R8: a moved label landed on the 교사 hub).
+  const bodies = [];
+  graphRenderer.nodeLayer.selectAll(".network-node").each(function (node) {
+    if (node.type === "satellite") return;
+    const ring = (this.querySelector(".node-halo") || this.querySelector(".node-body"))?.getBoundingClientRect();
+    if (ring?.width) bodies.push({ id: node.id, box: { left: ring.left - 4, right: ring.right + 4, top: ring.top - 4, bottom: ring.bottom + 4 } });
+  });
+  document.querySelectorAll("#map-lens-bar, #map-dock, .map-insights-toggle, .map-insights-panel:not([hidden]), .compare-summary:not([hidden]), .map-fit-btn, .network-stage > .dts-context-help, .legend-reopen")
+    .forEach((control) => {
+      const box = control.offsetParent ? control.getBoundingClientRect() : null;
+      if (box?.width) bodies.push({ id: "", box });
+    });
+  // Leaving the stage counts as a heavy overlap, so edge labels move inward.
+  const stageBox = dom.networkStage.getBoundingClientRect();
+  const outside = (box) => (Math.max(0, stageBox.left - box.left) + Math.max(0, box.right - stageBox.right)
+    + Math.max(0, stageBox.top - box.top) + Math.max(0, box.bottom - stageBox.bottom)) * 40;
+  // A label below its node carries its sub-label, so the pair is one box.
+  const labelBox = (entry, below) => {
+    const box = entry.label.getBoundingClientRect();
+    const meta = entry.group.querySelector(".node-meta");
+    const metaBox = below && meta && getComputedStyle(meta).display !== "none" ? meta.getBoundingClientRect() : null;
+    if (!metaBox || !metaBox.width) return { left: box.left, right: box.right, top: box.top, bottom: box.bottom };
+    return { left: Math.min(box.left, metaBox.left), right: Math.max(box.right, metaBox.right), top: Math.min(box.top, metaBox.top), bottom: Math.max(box.bottom, metaBox.bottom) };
+  };
+  // Labels are counter-scaled to ~11px on screen, so their offsets must be too:
+  // at k=0.25 a fixed 16-unit offset put each label on top of its own node and
+  // shrank tap targets to 10-17px (R12 phone). Offsets are in screen px x inv.
+  const inv = Math.min(4, Math.max(1, 1 / window.d3.zoomTransform(graphRenderer.svg.node()).k));
+  const spots = (r) => [
+    { x: 0, y: r + 16 * inv, anchor: "middle", below: true },
+    { x: 0, y: -(r + 7 * inv), anchor: "middle" },
+    { x: r + 6 * inv, y: 4 * inv, anchor: "start" },
+    { x: -(r + 6 * inv), y: 4 * inv, anchor: "end" },
+  ];
+  const place = (label, spot) => {
+    label.setAttribute("x", spot.x);
+    label.setAttribute("y", spot.y);
+    label.style.textAnchor = spot.anchor;
+  };
+  const entries = [];
+  graphRenderer.nodeLayer.selectAll(".network-node").each(function (node) {
+    if (node.type === "satellite") return;
+    const label = this.querySelector(".node-label");
+    if (!label) return;
+    this.classList.remove("is-label-decluttered", "is-label-flipped");
+    label.classList.remove("is-decluttered");
+    if (label.textContent !== String(node.label || "")) label.textContent = String(node.label || "");
+    this.querySelector(".node-meta")?.setAttribute("y", nodeRadius(node) + 29 * inv);
+    this.querySelector(".node-hit")?.setAttribute("r", nodeRadius(node) + 12 * inv);
+    place(label, spots(nodeRadius(node))[0]);
+    if (label.getBoundingClientRect().width) entries.push({ group: this, node, label, p: priority(node) });
+  });
+  entries.sort((a, b) => b.p - a.p);
+  const kept = [];
+  entries.forEach((entry) => {
+    const obstacles = kept.concat(bodies.filter((body) => body.id !== entry.node.id).map((body) => body.box));
+    const options = mustKeep(entry.node) ? spots(nodeRadius(entry.node)) : spots(nodeRadius(entry.node)).slice(0, 1);
+    const trySpots = () => {
+      let found = null;
+      for (const spot of options) {
+        place(entry.label, spot);
+        const box = labelBox(entry, spot.below);
+        const overlap = hitArea(box, obstacles) + outside(box);
+        if (!found || overlap < found.overlap) found = { spot, box, overlap };
+        if (overlap < 4) break;
+      }
+      return found;
+    };
+    let best = trySpots();
+    const essential = entry.node.type === "core" || entry.node.type === "stakeholder" || cued.has(entry.node.id) || entry.node.id === state.selectedGraphNodeId;
+    // Before giving up on a long label, try it shortened (R11: two long
+    // English compare labels touched). The drawer and list show the full text.
+    const full = String(entry.node.label || "");
+    const comparing = ["peer", "shared", "mineonly", "teamonly"].includes(entry.node.origin);
+    if (best.overlap >= 4 && !essential && !comparing && full.length > 14) {
+      entry.label.textContent = `${full.slice(0, /[가-힣]/.test(full) ? 9 : 14).trim()}…`;
+      const shorter = trySpots();
+      if (shorter.overlap < best.overlap) best = shorter;
+      else entry.label.textContent = full;
+    }
+    const boxArea = Math.max(1, (best.box.right - best.box.left) * (best.box.bottom - best.box.top));
+    if (best.overlap >= 4 && (!mustKeep(entry.node) || (!essential && best.overlap > boxArea * 0.2))) {
+      entry.label.classList.add("is-decluttered");
+      entry.group.classList.add("is-label-decluttered");
+      return;
+    }
+    place(entry.label, best.spot);
+    if (!best.spot.below) entry.group.classList.add("is-label-flipped");
+    kept.push(best.box);
+  });
+}
+
+function panNodeIntoView(nodeId, cover) {
+  if (!graphRenderer.initialized || !window.d3 || !dom.networkStage || !cover) return;
+  const body = graphRenderer.nodeLayer.selectAll(".network-node").filter((node) => node.id === nodeId).select(".node-body").node();
+  if (!body) return;
+  const nodeRect = body.getBoundingClientRect();
+  const stageRect = dom.networkStage.getBoundingClientRect();
+  const coverRect = cover.getBoundingClientRect();
+  const cx = nodeRect.left + nodeRect.width / 2;
+  const cy = nodeRect.top + nodeRect.height / 2;
+  let dx = 0;
+  let dy = 0;
+  const sheet = window.innerWidth <= 720;
+  if (sheet && cy > coverRect.top - 40) dy = (stageRect.top + Math.max(80, (coverRect.top - stageRect.top) / 2)) - cy;
+  if (!sheet && cx > coverRect.left - 40) dx = (stageRect.left + (coverRect.left - stageRect.left) / 2) - cx;
+  if (!dx && !dy) return;
+  const toViewBox = graphRenderer.width / stageRect.width;
+  const current = window.d3.zoomTransform(graphRenderer.svg.node());
+  const next = current.translate((dx * toViewBox) / current.k, (dy * toViewBox) / current.k);
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  (reduce ? graphRenderer.svg : graphRenderer.svg.transition().duration(350)).call(graphRenderer.zoom.transform, next);
+}
+
+// Frame every major node inside the part of the stage that no floating control
+// covers (lens bar on top, tool dock on the left). Camera rule borrowed from
+// Debate Map's timeline applier: scale = min(free W / bbox W, free H / bbox H) * 0.9.
+function fitGraphToView({ animate = true, ids = null } = {}) {
+  if (!graphRenderer.initialized || !window.d3 || !dom.networkStage) return;
+  const only = ids && ids.length ? new Set(ids) : null;
+  const nodes = graphRenderer.simulation.nodes().filter((node) => node.type !== "satellite" && Number.isFinite(node.x) && (!only || only.has(node.id)));
+  if (!nodes.length) return;
+  const stageRect = dom.networkStage.getBoundingClientRect();
+  if (!stageRect.width || !stageRect.height) return;
+  resizeGraphRenderer();
+  const toViewBox = graphRenderer.width / stageRect.width;
+  const inset = { top: 16, right: 16, bottom: Math.max(16, stageRect.bottom - window.innerHeight + 16), left: 16 };
+  const lensBar = document.getElementById("map-lens-bar");
+  const dock = document.getElementById("map-dock");
+  if (lensBar?.offsetParent) inset.top = Math.max(inset.top, lensBar.getBoundingClientRect().bottom - stageRect.top + 12);
+  const compare = document.getElementById("compare-summary");
+  if (compare && !compare.hidden && compare.offsetParent && compare.parentElement === dom.networkStage) {
+    inset.top = Math.max(inset.top, compare.getBoundingClientRect().bottom - stageRect.top + 12);
+  }
+  const drawer = document.querySelector(".visualizer-layout.is-focused > .insight-panel.is-open");
+  if (drawer && window.innerWidth > 720) {
+    inset.right = Math.max(inset.right, stageRect.right - drawer.getBoundingClientRect().left + 12);
+  } else if (drawer) {
+    inset.bottom = Math.max(inset.bottom, stageRect.bottom - drawer.getBoundingClientRect().top + 12);
+  }
+  const insights = document.getElementById("map-insights-panel");
+  if (insights && !insights.hidden && window.innerWidth > 720) {
+    inset.right = Math.max(inset.right, stageRect.right - insights.getBoundingClientRect().left + 12);
+  }
+  if (dock?.offsetParent) {
+    const dockRect = dock.getBoundingClientRect();
+    if (dockRect.right > stageRect.left && dockRect.left < stageRect.left + stageRect.width / 2) {
+      inset.left = Math.max(inset.left, dockRect.right - stageRect.left + 12);
+    }
+  }
+  // Labels hang below each node, so pad the box by label room, not just radius.
+  const labelPad = (node) => Math.max(40, String(node.label || "").length * 3.4);
+  const xs = nodes.flatMap((node) => [node.x - nodeRadius(node) - labelPad(node), node.x + nodeRadius(node) + labelPad(node)]);
+  const ys = nodes.flatMap((node) => [node.y - nodeRadius(node) - 10, node.y + nodeRadius(node) + 36]);
+  const [x0, x1] = [Math.min(...xs), Math.max(...xs)];
+  const [y0, y1] = [Math.min(...ys), Math.max(...ys)];
+  const freeW = (stageRect.width - inset.left - inset.right) * toViewBox;
+  const freeH = (stageRect.height - inset.top - inset.bottom) * toViewBox;
+  if (freeW <= 0 || freeH <= 0) return;
+  const [minScale, maxScale] = graphRenderer.zoom.scaleExtent();
+  const scale = Math.max(minScale, Math.min(1.25, maxScale, Math.min(freeW / (x1 - x0), freeH / (y1 - y0)) * 0.9));
+  const cx = inset.left * toViewBox + freeW / 2;
+  const cy = inset.top * toViewBox + freeH / 2;
+  const transform = window.d3.zoomIdentity.translate(cx - scale * (x0 + x1) / 2, cy - scale * (y0 + y1) / 2).scale(scale);
+  const target = animate && !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ? graphRenderer.svg.transition().duration(450)
+    : graphRenderer.svg;
+  graphRenderer.userZoomed = false;
+  target.call(graphRenderer.zoom.transform, transform);
 }
 
 function updateGraphRenderer(frame) {
@@ -7290,9 +7515,16 @@ function updateGraphRenderer(frame) {
   nodeMerge.select(".node-label").text((node) => node.label);
   nodeMerge.select(".node-meta").text((node) => node.meta);
   nodeMerge.select(".node-icon").text((node) => node.icon);
+  // Every case node said "설명/Brief", which personas read as clutter and EN
+  // clipped to "Brie". Only non-default origins get a badge, sized to its text.
+  nodeMerge
+    .select(".node-badge")
+    .attr("data-origin", (node) => node.origin || "brief")
+    .attr("display", (node) => (!node.origin || node.origin === "brief" ? "none" : null));
   nodeMerge
     .select(".node-badge circle")
-    .attr("data-origin", (node) => node.origin || "brief");
+    .attr("data-origin", (node) => node.origin || "brief")
+    .attr("r", (node) => (["shared", "mineonly", "teamonly"].includes(node.origin) ? 6 : Math.max(8, 3 + originBadgeText(node.origin, state.locale).length * 2.6)));
   nodeMerge
     .select(".node-badge text")
     .text((node) => originBadgeText(node.origin, state.locale));
@@ -7302,9 +7534,10 @@ function updateGraphRenderer(frame) {
       return;
     }
     markTaskProgress("inspect");
-    if (isCoarsePointer()) {
+    if (isCoarsePointer() && resolveDensity() !== "simple") {
       // No hover on tablets: tapping a node pins its tooltip until the
-      // background (or another node) is tapped.
+      // background (or another node) is tapped. In simple mode the drawer
+      // already shows the node, and a pinned card covered it (R7).
       showNetworkTooltip(event, node, { pinned: true });
     }
     state.selectedGraphNodeId = node.id;
@@ -7320,7 +7553,11 @@ function updateGraphRenderer(frame) {
     if (typeof resolveDensity === "function" && resolveDensity() === "simple") {
       window.requestAnimationFrame(() => openMapDrawer("insight"));
     }
-    if (node.stakeholder && stakeholders[node.stakeholder]) {
+    // Only a stakeholder node changes the lens (as the map legend says). An
+    // issue click used to drag the learner's chosen lens along and tick the
+    // "switch perspectives" step for them (R7/R8 personas; the ECD schema
+    // already scored those switches as noise).
+    if (node.type === "stakeholder" && stakeholders[node.stakeholder]) {
       setStakeholder(node.stakeholder, "node_select");
       return;
     }
@@ -7385,7 +7622,24 @@ function updateGraphRenderer(frame) {
         })
     );
 
+  // Auto-fit only when the set of nodes changed; a lens switch keeps the camera.
+  let fittedEarly = false;
+  // Satellites are appended after their parents; raise labelled nodes so the
+  // dots never sit on top of label text (R4: "Peuanogy").
+  nodeMerge.filter((node) => node.type !== "satellite").raise();
+  graphRenderer.simulation.on("end", () => {
+    // A cue clicked while the layout settles keeps its zoom (race seen in R9).
+    const cueIds = document.querySelector(".map-insight-item.is-focused [data-insight-ids]")?.dataset.insightIds.split(" ");
+    if (graphRenderer.fitPending && !graphRenderer.userZoomed) fitGraphToView({ ids: cueIds || null });
+    graphRenderer.fitPending = false;
+    window.requestAnimationFrame(declutterGraphLabels);
+  });
   graphRenderer.simulation.nodes(nodes).on("tick", () => {
+    // Frame once the layout has mostly settled instead of waiting for "end".
+    if (graphRenderer.fitPending && !fittedEarly && graphRenderer.simulation.alpha() < 0.3) {
+      fittedEarly = true;
+      if (!graphRenderer.userZoomed) fitGraphToView({ animate: false });
+    }
     linkMerge
       .attr("x1", (link) => link.source.x)
       .attr("y1", (link) => link.source.y)
@@ -7404,7 +7658,40 @@ function updateGraphRenderer(frame) {
   graphRenderer.simulation
     .force("y")
     .strength((node) => (node.type === "satellite" ? forceStrength + 0.12 : forceStrength));
-  graphRenderer.simulation.alpha(0.85).restart();
+  // Re-renders that keep the same nodes (lens switch, selection) only nudge the
+  // layout; a full reheat kept nodes drifting for ~5s, so learners chased them.
+  const nodeKey = nodes.map((node) => node.id).sort().join("|");
+  const sameNodes = graphRenderer.lastNodeKey === nodeKey;
+  graphRenderer.lastNodeKey = nodeKey;
+  if (!sameNodes) {
+    // Precompute the layout so the first frame is the settled map (Debate Map
+    // replays into fixed positions for the same reason); then frame it.
+    graphRenderer.fitPending = true;
+    graphRenderer.simulation.stop().alpha(0.85);
+    for (let i = 0; i < 320 && graphRenderer.simulation.alpha() > 0.002; i += 1) graphRenderer.simulation.tick();
+    linkMerge
+      .attr("x1", (link) => link.source.x)
+      .attr("y1", (link) => link.source.y)
+      .attr("x2", (link) => link.target.x)
+      .attr("y2", (link) => link.target.y);
+    nodeMerge.attr("transform", (node) => `translate(${node.x}, ${node.y})`);
+    if (!graphRenderer.userZoomed) fitGraphToView({ animate: false });
+    // Converged already: no reheat, so labels are placed once on a still map
+    // (R11: a reheat left labels overlapping for ~2s after a layer switch).
+    graphRenderer.fitPending = false;
+    window.requestAnimationFrame(declutterGraphLabels);
+    return;
+  }
+  // Same nodes (lens switch, selection): the layout is already settled and
+  // positions were carried over, so redraw in place instead of reheating —
+  // a reheat nudged nodes for ~1s and left labels colliding (R12 phone).
+  linkMerge
+    .attr("x1", (link) => link.source.x)
+    .attr("y1", (link) => link.source.y)
+    .attr("x2", (link) => link.target.x)
+    .attr("y2", (link) => link.target.y);
+  nodeMerge.attr("transform", (node) => `translate(${node.x}, ${node.y})`);
+  window.requestAnimationFrame(declutterGraphLabels);
 }
 
 // ---- List view (보조 보기) ----
@@ -7528,8 +7815,12 @@ function renderNodeListRows() {
         <button type="button" class="node-list-row ${entry.id === state.selectedGraphNodeId ? "is-selected" : ""}" data-node-id="${entry.id}">
           <span class="node-list-dot" data-tone="${entry.tone}"></span>
           <span class="node-list-main">
-            <strong>${escapeHtml(entry.label)}</strong>
-            ${detail ? `<p>${escapeHtml(detail)}</p>` : ""}
+            ${(() => {
+              const shortened = /…$/.test(entry.label) && entry.detail.startsWith(entry.label.slice(0, -1).trim());
+              const title = shortened ? entry.detail : entry.label;
+              const showDetail = detail && !shortened && stripRaiseCount(detail).trim() !== stripRaiseCount(entry.label).trim();
+              return `<strong>${escapeHtml(title)}</strong>${showDetail ? `<p>${escapeHtml(detail)}</p>` : ""}`;
+            })()}
           </span>
           <span class="node-list-tags">
             <span class="badge badge-neutral">${escapeHtml(entry.meta)}</span>
@@ -7631,6 +7922,8 @@ function renderNodeList() {
 }
 
 document.getElementById("map-mode-btn")?.addEventListener("click", () => {
+  // A drawer left open covered half of every list card (R6 iPad persona).
+  if (getMapViewMode() !== "list" && typeof closeMapDrawers === "function") closeMapDrawers();
   setMapViewMode(getMapViewMode() === "list" ? "map" : "list");
 });
 
@@ -7939,6 +8232,7 @@ function renderStakeholderFocus() {
     dom.selectedNodeKicker.textContent = t("hoverOrClick");
     dom.selectedNodeTitle.textContent = t("noNodeSelected");
     dom.selectedNodeCopy.textContent = t("hoverNodeHelp");
+    dom.selectedNodeCopy.hidden = false;
     const emptyInsightPanel = document.querySelector(".insight-panel");
     if (emptyInsightPanel) emptyInsightPanel.classList.remove("has-selected-node");
     if (dom.relatedPersonalActivity) {
@@ -8098,9 +8392,14 @@ function renderStakeholderFocus() {
   }
 
   dom.selectedNodeKicker.textContent = selectedNodeIssue?.kicker || t("hoverOrClick");
-  dom.selectedNodeTitle.textContent = selectedNodeIssue?.title || t("noNodeSelected");
-  dom.selectedNodeCopy.textContent =
-    selectedNodeIssue?.body || t("hoverNodeHelp");
+  // A map label shortened with "…" repeated its own full text right below it
+  // (R13); show the full text once as the title instead.
+  const issueTitle = String(selectedNodeIssue?.title || "");
+  const issueBody = String(selectedNodeIssue?.body || "");
+  const titleIsShortBody = /…$/.test(issueTitle) && issueBody.startsWith(issueTitle.slice(0, -1).trim());
+  dom.selectedNodeTitle.textContent = (titleIsShortBody ? issueBody : issueTitle) || t("noNodeSelected");
+  dom.selectedNodeCopy.textContent = titleIsShortBody ? "" : issueBody || t("hoverNodeHelp");
+  dom.selectedNodeCopy.hidden = titleIsShortBody;
   if (dom.relatedPersonalActivity) {
     dom.relatedPersonalActivity.innerHTML = renderRelatedActivityList(
       personalItems,
@@ -8634,12 +8933,12 @@ function renderReport() {
           if (!isStudent) return `<article class="prompt-item">${safe}</article>`;
           const placeholder = state.locale === "ko" ? "여기에 답변을 적어보세요..." : "Type your reflection...";
           const submitLabel = state.locale === "ko" ? "제출" : "Submit";
-          const feedbackLabel = state.locale === "ko" ? "다섯 관점의 피드백 받기" : "Get five-perspective feedback";
+          const feedbackLabel = state.locale === "ko" ? "다섯 관점(네 관점 + 접근성)의 피드백 받기" : "Get five-perspective feedback (four lenses + accessibility)";
            const savedDraft = reflectionFeedbackState.drafts[reflectionKey(index)] || "";
            const selectedCitations = new Set(reflectionFeedbackState.citations[reflectionKey(index)] || []);
            const citationNodes = state.graph.nodes.filter((node) => node.kind === "signal").slice(0, 12);
            const citationLabel = state.locale === "ko" ? "근거 노드 선택" : "Select evidence nodes";
-           const citationEmpty = state.locale === "ko" ? "선택한 노드가 답변의 근거로 기록됩니다." : "Selected nodes will be logged as evidence for this answer.";
+           const citationEmpty = state.locale === "ko" ? "선택한 노드가 답변의 근거로 기록돼요." : "Selected nodes will be logged as evidence for this answer.";
            return `
             <article class="prompt-item" data-prompt-index="${index}">
               <span class="prompt-text">${safe}</span>
@@ -8648,7 +8947,7 @@ function renderReport() {
                  <legend>${citationLabel}</legend>
                  <p class="muted">${citationEmpty}</p>
                  <div class="reflection-citation-options">
-                   ${citationNodes.map((node) => `<label class="reflection-citation-option"><input type="checkbox" data-reflection-citation="${index}" value="${escapeHtml(node.id)}" ${selectedCitations.has(node.id) ? "checked" : ""}><span>${escapeHtml(node.label)}</span></label>`).join("")}
+                   ${citationNodes.map((node) => `<label class="reflection-citation-option" title="${escapeHtml(node.detail || node.label)}"><input type="checkbox" data-reflection-citation="${index}" value="${escapeHtml(node.id)}" ${selectedCitations.has(node.id) ? "checked" : ""}><span>${escapeHtml(node.detail && String(node.detail).length <= 40 ? node.detail : node.label)}</span></label>`).join("")}
                  </div>
                </fieldset>
               <div class="reflection-footer">
@@ -8751,6 +9050,9 @@ function getHomeRecentItems() {
 function renderCompareSummary() {
   const el = document.getElementById("compare-summary");
   if (!el) return;
+  // Float it inside the stage: as a block above the map it pushed the map
+  // down to 0.18-0.49 of the screen for the R1/R3 keyboard persona.
+  if (dom.networkStage && el.parentElement !== dom.networkStage) dom.networkStage.append(el);
   const on = state.activeMapLayer === "compare" && state.activeRole === "user" && hasActiveCase();
   el.hidden = !on;
   if (!on) return;
@@ -8767,6 +9069,8 @@ function renderCompareSummary() {
       </div>
     </div>
     <p class="compare-summary-prompt">${t("comparePrompt")}</p>
+    ${hasSelectedDifference ? "" : `<p class="compare-summary-hint">${state.locale === "ko" ? "맵에서 차이가 나는 노드를 하나 고르면 기록·성찰·공동 주석을 시작할 수 있어요." : "Pick a node that differs on the map to record, reflect on, or annotate it."}</p>`}
+    <div class="compare-summary-actions" ${hasSelectedDifference ? "" : "hidden"}>
     <button class="toolbar-button compare-notice-cta" type="button" data-compare-noticed ${hasSelectedDifference ? "" : "disabled"} aria-disabled="${!hasSelectedDifference}">
       ${hasSelectedDifference
         ? (state.locale === "ko" ? "차이를 발견함 · 비교 기록" : "I noticed the difference")
@@ -8781,7 +9085,8 @@ function renderCompareSummary() {
       ${hasSelectedDifference
         ? (state.locale === "ko" ? "선택한 차이에 공동 주석 시작" : "Annotate the selected difference")
         : (state.locale === "ko" ? "차이를 선택하면 공동 주석을 시작할 수 있어요" : "Select a difference to start a shared annotation")}
-    </button>`;
+    </button>
+    </div>`;
 }
 
 // A schematic explains the product before asking a newcomer to interpret D3.
@@ -8790,7 +9095,7 @@ function renderPerspectiveExample() {
   const lenses = [
     ["school", ko ? "교사" : "Teacher", ko ? "수업의 주도권" : "Teaching agency"],
     ["person", ko ? "학생" : "Student", ko ? "내게 맞는 배움" : "Learning needs"],
-    ["tune", ko ? "에듀테크" : "EdTech", ko ? "데이터와 접근성" : "Data and access"],
+    ["tune", ko ? "에듀테크" : "IT Systems", ko ? "데이터와 접근성" : "Data and access"],
     ["dashboard_customize", ko ? "행정" : "Administration", ko ? "예산과 운영" : "Budget and support"],
   ];
   return '<div class="ux-map-example" aria-label="' + escapeHtml(t("uxExampleNote")) + '">' +
@@ -8830,7 +9135,7 @@ function renderHome() {
     : ko ? "내 수업 열기" : "Open My Course";
   const paths = [
     { view: "visualizer", icon: "hub", title: ko ? "쟁점 하나부터 살펴봐요" : "Start with one issue", body: ko ? "점을 눌러 내용을 읽고, 서로 연결된 이유를 찾아요." : "Select a point, read the issue, and explore its connections.", note: ko ? "맵 열기" : "Open map" },
-    { view: "perspectives", icon: "visibility", title: ko ? "다른 입장에서 생각해요" : "See another perspective", body: ko ? "교사·학생·에듀테크·행정은 무엇을 중요하게 볼까요?" : "What matters to teachers, students, EdTech, and administrators?", note: ko ? "관점 비교" : "Compare views" },
+    { view: "perspectives", icon: "visibility", title: ko ? "다른 입장에서 생각해요" : "See another perspective", body: ko ? "교사·학생·에듀테크·행정은 무엇을 중요하게 볼까요?" : "What matters to teachers, students, IT systems, and administrators?", note: ko ? "관점 비교" : "Compare views" },
     { view: "report", icon: "edit_note", title: ko ? "내 생각에 근거를 더해요" : "Give your thinking a foundation", body: ko ? "중요한 쟁점과 선택의 이유를 짧은 글로 정리해요." : "Write a short reflection on an issue and the reasons for your choice.", note: ko ? "생각 정리" : "Reflect" },
   ].filter(item => isViewAllowed(item.view));
   const advanced = [
@@ -10038,6 +10343,8 @@ function renderAll() {
   renderTaskBanner();
   renderExportActions();
   renderCompareSummary();
+  // After the banner and compare strip exist, so the stage top is final.
+  renderMapViewportControls();
   renderStakeholderFocus();
   renderChat();
   renderMatrix();
@@ -10802,6 +11109,14 @@ function setView(nextView) {
   renderNavigation();
   if (nextView === "home") renderHome();
   if (nextView === "manage") renderManageView();
+  // setView does not re-render, and the last render may have run while the
+  // map was hidden (home → map): size the stage and frame the map once visible.
+  if (nextView === "visualizer") {
+    window.requestAnimationFrame(() => {
+      renderMapViewportControls();
+      if (!graphRenderer.userZoomed) fitGraphToView({ animate: false });
+    });
+  }
   if (previous !== nextView) {
     logEvent("view.switch", { from: previous, to: nextView, dwell_ms: Math.max(0, Date.now() - analyticsViewStartedAt) });
     analyticsViewStartedAt = Date.now();
@@ -10874,6 +11189,7 @@ function setTheme(next) {
 // browsing and inflates any count of perspective taking if the two are merged.
 function setStakeholder(nextStakeholder, source = "unknown") {
   const previous = state.activeStakeholder;
+  if (previous !== nextStakeholder && typeof hideNetworkTooltip === "function") hideNetworkTooltip(true);
   state.activeStakeholder = nextStakeholder;
   renderAll();
   if (previous !== nextStakeholder) {
@@ -11052,7 +11368,7 @@ function renderJolBar(question) {
     form?.parentElement?.insertBefore(bar, form);
   }
   bar.innerHTML = `
-    <span class="jol-bar-question">${ko ? "잠깐 — 다섯 관점이 이 질문에 동의할까요, 갈릴까요?" : "Quick guess — will the five lenses agree or split on this?"}</span>
+    <span class="jol-bar-question">${ko ? "잠깐 — 다섯 관점(네 관점 + 접근성)이 이 질문에 동의할까요, 갈릴까요?" : "Quick guess — will the five lenses (four + accessibility) agree or split on this?"}</span>
     <span class="jol-bar-actions">
       <button type="button" class="toolbar-button" data-jol="split">${ko ? "갈릴 듯" : "They'll split"}</button>
       <button type="button" class="toolbar-button" data-jol="agree">${ko ? "동의할 듯" : "They'll agree"}</button>
@@ -11683,9 +11999,25 @@ document.getElementById("composer-toggle")?.addEventListener("click", () => {
 });
 
 // Icon-dock drawers (간단히/minimal mode): panels fold in from icons.
+// R10: with the drawer open, the dock button closes it; say so on the button
+// (pressed state and label) instead of leaving it looking like "open".
+function syncDockToggle(target, open) {
+  const button = document.querySelector(`#map-dock .map-dock-btn[data-drawer="${target}"]`);
+  if (!button) return;
+  if (!button.dataset.openLabel) button.dataset.openLabel = button.getAttribute("aria-label") || "";
+  button.classList.toggle("is-active", open);
+  button.setAttribute("aria-pressed", open ? "true" : "false");
+  const label = open ? `${button.dataset.openLabel} ${state.locale === "ko" ? "닫기" : "— close"}` : button.dataset.openLabel;
+  button.setAttribute("aria-label", label);
+  button.title = label;
+}
+
 function closeMapDrawers() {
+  const wasOpen = document.querySelector(".insight-panel.is-open");
   document.querySelectorAll(".intake-panel.is-open, .insight-panel.is-open").forEach((p) => p.classList.remove("is-open"));
-  document.querySelectorAll("#map-dock .map-dock-btn").forEach((b) => b.classList.remove("is-active"));
+  ["intake", "insight"].forEach((target) => syncDockToggle(target, false));
+  // Give the map its full width back once the drawer is gone.
+  if (wasOpen && !graphRenderer.userZoomed) window.requestAnimationFrame(() => fitGraphToView());
 }
 function openMapDrawer(target) {
   logEvent("drawer.open", { drawer: String(target || "") });
@@ -11696,20 +12028,38 @@ function openMapDrawer(target) {
     const x = document.createElement("button");
     x.type = "button";
     x.className = "drawer-close";
-    x.setAttribute("aria-label", "닫기");
+    x.setAttribute("aria-label", state.locale === "ko" ? "닫기" : "Close");
     x.innerHTML = '<span class="material-symbols-outlined" aria-hidden="true">close</span>';
     x.addEventListener("click", (e) => { e.stopPropagation(); closeMapDrawers(); });
     panel.insertBefore(x, panel.firstChild);
   }
   closeMapDrawers();
+  if (window.innerWidth > 720 && mapInsightsState.open) {
+    // One side panel at a time on desktop; both left the map a narrow strip (R12).
+    mapInsightsState.open = false;
+    mapInsightsState.focusKey = null;
+    renderMapInsights();
+  }
   panel.classList.add("is-open");
-  document.querySelector(`#map-dock .map-dock-btn[data-drawer="${target}"]`)?.classList.add("is-active");
-  if (target === "insight" && state.selectedGraphNodeId && dom.quickAnnotationForm && !dom.quickAnnotationForm.hidden) {
+  syncDockToggle(target, true);
+  // Open at the top (close button + selected node) and keep the picked node
+  // visible beside the drawer or above the phone sheet (R3-R5 personas lost it).
+  panel.scrollTop = 0;
+  if (target === "insight" && state.selectedGraphNodeId) {
     window.requestAnimationFrame(() => {
-      panel.scrollTo({ top: Math.max(0, dom.quickAnnotationForm.offsetTop - 180), behavior: "auto" });
+      const section = dom.selectedNodeTitle?.closest(".subsection");
+      if (section) {
+        const top = section.getBoundingClientRect().top - panel.getBoundingClientRect().top + panel.scrollTop;
+        panel.scrollTo({ top: Math.max(0, top - 44), behavior: "auto" });
+      }
+      if (window.innerWidth <= 720 && dom.networkStage) {
+        window.scrollTo({ top: Math.max(0, dom.networkStage.getBoundingClientRect().top + window.scrollY - 8), behavior: "auto" });
+      }
+      // Re-frame the map into what the drawer leaves; pan only if the learner
+      // has zoomed by hand (their camera wins).
+      if (graphRenderer.userZoomed) panNodeIntoView(state.selectedGraphNodeId, panel);
+      else fitGraphToView();
     });
-  } else {
-    panel.scrollTop = 0;
   }
 }
 document.getElementById("map-dock")?.addEventListener("click", (event) => {
@@ -11740,8 +12090,13 @@ document.getElementById("map-dock")?.addEventListener("click", (event) => {
   if (panel?.classList.contains("is-open")) closeMapDrawers();
   else openMapDrawer(target);
 });
-// Tapping the map closes any open drawer.
-document.getElementById("network-stage")?.addEventListener("pointerdown", () => closeMapDrawers());
+// Tapping the map closes any open drawer — but not a press on the floating
+// controls: closing on pointerdown re-centred the lens bar under the pointer,
+// so the click landed on empty stage and the lens never changed (R9 P0).
+document.getElementById("network-stage")?.addEventListener("pointerdown", (event) => {
+  if (event.target.closest("#map-lens-bar, #map-dock, .map-insights-toggle, .map-insights-panel, .map-fit-btn, .dts-context-help, .compare-summary, .stage-overlay, .legend-reopen, .stage-note-reopen, .network-tooltip, .node-list-panel")) return;
+  closeMapDrawers();
+});
 
 dom.roleSelect.addEventListener("change", (event) => {
   state.activeRole = event.target.value;
@@ -11797,6 +12152,7 @@ dom.learnerSelect.addEventListener("change", (event) => {
 
 dom.mapLayerSelect?.addEventListener("change", (event) => {
   const previousLayer = state.activeMapLayer;
+  hideNetworkTooltip(true);
   state.activeMapLayer = event.target.value;
   state.selectedGraphNodeId = "";
   logEvent("layer.change", { from: previousLayer, to: state.activeMapLayer });
@@ -11849,8 +12205,10 @@ document.addEventListener("click", (event) => {
     setStakeholder(pill.dataset.pill, "pill");
   }
 
-  const graphNode = event.target.closest("[data-graph-node]");
-  if (graphNode) {
+  // D3 map nodes also carry data-graph-node but no data-focus; their own
+  // click handler sets the lens, so only legacy focus chips route here.
+  const graphNode = event.target.closest("[data-graph-node][data-focus]");
+  if (graphNode && stakeholders[graphNode.dataset.focus]) {
     setStakeholder(graphNode.dataset.focus, "graph_focus");
   }
 
@@ -12646,6 +13004,335 @@ function updateMapFocusButton() {
   btn.setAttribute("aria-label", title);
   btn.setAttribute("aria-pressed", active ? "true" : "false");
 }
+
+// ---- Discussion cues (토론 단서) ----
+// Ported from the 2026-10 benchmark REA (docs/benchmark-rea-2026-10.md):
+// InfraNodus sizes influence by betweenness and prompts across a "structural
+// gap"; its gap is just the two smallest clusters, so here the gap is measured
+// as the weakest cross-lens link density. Balance follows InfraNodus's
+// entropy reading. All of it is computed from the graph already on screen.
+const INSIGHT_LENSES = ["teacher", "student", "it", "administrator"];
+const mapInsightsState = { open: null, focusKey: null };
+
+function computeBetweenness(ids, adjacency) {
+  const score = new Map(ids.map((id) => [id, 0]));
+  ids.forEach((source) => {
+    const stack = [];
+    const preds = new Map(ids.map((id) => [id, []]));
+    const sigma = new Map(ids.map((id) => [id, 0]));
+    const dist = new Map(ids.map((id) => [id, -1]));
+    sigma.set(source, 1);
+    dist.set(source, 0);
+    const queue = [source];
+    while (queue.length) {
+      const v = queue.shift();
+      stack.push(v);
+      adjacency.get(v).forEach((w) => {
+        if (dist.get(w) < 0) {
+          dist.set(w, dist.get(v) + 1);
+          queue.push(w);
+        }
+        if (dist.get(w) === dist.get(v) + 1) {
+          sigma.set(w, sigma.get(w) + sigma.get(v));
+          preds.get(w).push(v);
+        }
+      });
+    }
+    const delta = new Map(ids.map((id) => [id, 0]));
+    while (stack.length) {
+      const w = stack.pop();
+      preds.get(w).forEach((v) => delta.set(v, delta.get(v) + (sigma.get(v) / sigma.get(w)) * (1 + delta.get(w))));
+      if (w !== source) score.set(w, score.get(w) + delta.get(w));
+    }
+  });
+  ids.forEach((id) => score.set(id, score.get(id) / 2)); // undirected
+  return score;
+}
+
+function computeMapInsights(frame = buildRenderableGraph()) {
+  const major = frame.nodes.filter((node) => node.type !== "satellite" && node.type !== "core");
+  const ids = major.map((node) => node.id);
+  const byId = new Map(major.map((node) => [node.id, node]));
+  const adjacency = new Map(ids.map((id) => [id, new Set()]));
+  const edges = [];
+  frame.links.forEach((link) => {
+    const source = typeof link.source === "object" ? link.source.id : link.source;
+    const target = typeof link.target === "object" ? link.target.id : link.target;
+    if (link.kind === "satellite" || !byId.has(source) || !byId.has(target) || source === target) return;
+    adjacency.get(source).add(target);
+    adjacency.get(target).add(source);
+    edges.push({ source, target, kind: link.kind || "" });
+  });
+  const betweenness = computeBetweenness(ids, adjacency);
+  const issues = major.filter((node) => node.type === "signal");
+  const rank = (node) => (betweenness.get(node.id) || 0) * 10 + adjacency.get(node.id).size;
+  const bridges = issues
+    .filter((node) => (betweenness.get(node.id) || 0) > 0)
+    .sort((a, b) => rank(b) - rank(a))
+    .slice(0, 3)
+    .map((node) => ({ id: node.id, label: node.label, stakeholder: node.stakeholder, score: betweenness.get(node.id), neighbors: [...adjacency.get(node.id)] }));
+
+  const byLens = new Map(INSIGHT_LENSES.map((lens) => [lens, issues.filter((node) => node.stakeholder === lens)]));
+  const counts = INSIGHT_LENSES.map((lens) => byLens.get(lens).length);
+  const total = counts.reduce((sum, value) => sum + value, 0);
+  const entropy = total
+    ? -counts.filter(Boolean).reduce((sum, value) => sum + (value / total) * Math.log(value / total), 0) / Math.log(INSIGHT_LENSES.length)
+    : 0;
+
+  const missingLenses = INSIGHT_LENSES.filter((lens) => !byLens.get(lens).length);
+  let gap = null;
+  for (let i = 0; i < INSIGHT_LENSES.length; i += 1) {
+    for (let j = i + 1; j < INSIGHT_LENSES.length; j += 1) {
+      const a = byLens.get(INSIGHT_LENSES[i]);
+      const b = byLens.get(INSIGHT_LENSES[j]);
+      if (!a.length || !b.length) continue;
+      const aIds = new Set(a.map((node) => node.id));
+      const bIds = new Set(b.map((node) => node.id));
+      const cross = edges.filter((edge) => (aIds.has(edge.source) && bIds.has(edge.target)) || (bIds.has(edge.source) && aIds.has(edge.target))).length;
+      const density = Math.min(1, cross / (a.length * b.length));
+      const score = (a.length + b.length) * (1 - density);
+      if (!gap || score > gap.score) {
+        gap = {
+          score,
+          density,
+          lenses: [INSIGHT_LENSES[i], INSIGHT_LENSES[j]],
+          from: [...a].sort((x, y) => rank(y) - rank(x))[0],
+          to: [...b].sort((x, y) => rank(y) - rank(x))[0],
+        };
+      }
+    }
+  }
+
+  // Class layer: peer issues carry their raise count as "(n)" in the label.
+  const peerCounts = issues
+    .filter((node) => node.origin === "peer")
+    .map((node) => ({ node, count: Number(String(node.label).match(/\((\d+)\)\s*$/)?.[1] || 1) }));
+  const mostRaised = [...peerCounts].sort((a, b) => b.count - a.count).filter((item) => item.count > 1).slice(0, 2);
+  const singleVoice = peerCounts.filter((item) => item.count === 1).slice(0, 2);
+
+  return { bridges, counts, total, entropy, missingLenses, gap, mostRaised, singleVoice, issueCount: issues.length };
+}
+
+function insightLensLabel(lens) {
+  return getCaseStakeholderMeta(lens).label;
+}
+
+function stripRaiseCount(label) {
+  return String(label || "").replace(/\s*\(\d+\)\s*$/, "");
+}
+
+function renderMapInsights() {
+  const toggle = document.getElementById("map-insights-toggle");
+  const panel = document.getElementById("map-insights-panel");
+  if (!toggle || !panel || !hasActiveCase()) return;
+  const ko = state.locale === "ko";
+  if (mapInsightsState.open === null) mapInsightsState.open = false;
+  // Instructors orchestrate from the class layer, so the first visit opens it.
+  if (state.activeRole === "admin" && state.activeMapLayer === "cohort" && !mapInsightsState.autoOpened) {
+    mapInsightsState.open = true;
+    mapInsightsState.autoOpened = true;
+    // The map was framed before the panel existed; re-frame around it.
+    window.requestAnimationFrame(() => { if (!graphRenderer.userZoomed) fitGraphToView({ animate: false }); });
+  }
+  const label = ko ? "토론 단서" : "Discussion cues";
+  toggle.querySelector("#map-insights-toggle-label").textContent = label;
+  toggle.setAttribute("aria-expanded", mapInsightsState.open ? "true" : "false");
+  toggle.title = ko ? "맵에서 이야기 나눌 지점을 찾아줘요" : "Find what is worth discussing on this map";
+  panel.hidden = !mapInsightsState.open;
+  if (!mapInsightsState.open) {
+    applyInsightFocus(null);
+    return;
+  }
+
+  const data = computeMapInsights();
+  // An item with nodes to show is a toggle that highlights them; one with none
+  // (a lens absent from the map) is plain text, so it never looks clickable.
+  const item = (key, ids, title, body, action = "") => `
+    <li class="map-insight-item${mapInsightsState.focusKey === key ? " is-focused" : ""}">
+      ${ids.length ? `<button type="button" class="map-insight-focus" data-insight-key="${escapeHtml(key)}" data-insight-ids="${escapeHtml(ids.join(" "))}" aria-pressed="${mapInsightsState.focusKey === key}">` : `<div class="map-insight-focus map-insight-static">`}
+        <strong>${escapeHtml(title)}</strong>
+        <span>${escapeHtml(body)}</span>
+      ${ids.length ? "</button>" : "</div>"}
+      ${action}
+    </li>`;
+  const askButton = (question) => `<button type="button" class="map-insight-ask" data-insight-ask="${escapeHtml(question)}">${ko ? "질문으로 남기기" : "Ask this"}</button>`;
+  const rows = [];
+
+  data.missingLenses.slice(0, 1).forEach((lens) => {
+    const lensLabel = insightLensLabel(lens);
+    const question = ko ? `${lensLabel} 입장에서는 이 사례의 무엇이 가장 걸릴까요?` : `What in this case would concern ${lensLabel} most?`;
+    rows.push(item(`missing-${lens}`, [], ko ? `빈 관점 · ${lensLabel}` : `Missing lens · ${lensLabel}`,
+      ko ? `아직 ${lensLabel} 관점의 쟁점이 맵에 없어요.` : `No ${lensLabel} issue is on the map yet.`, askButton(question)));
+  });
+  if (data.gap?.from && data.gap?.to) {
+    const [a, b] = data.gap.lenses.map(insightLensLabel);
+    const fromLabel = stripRaiseCount(data.gap.from.label);
+    const toLabel = stripRaiseCount(data.gap.to.label);
+    const question = ko
+      ? `'${fromLabel}'(${a})와 '${toLabel}'(${b})는 서로 어떻게 영향을 줄까요?`
+      : `How do '${fromLabel}' (${a}) and '${toLabel}' (${b}) affect each other?`;
+    rows.push(item("gap", [data.gap.from.id, data.gap.to.id], ko ? `연결이 약한 곳 · ${a} ↔ ${b}` : `Weak link · ${a} ↔ ${b}`,
+      data.gap.density === 0
+        ? (ko ? `두 관점의 쟁점끼리 직접 이어진 선이 아직 없어요. ${fromLabel} ↔ ${toLabel}` : `No line yet links these two lenses' issues directly. ${fromLabel} ↔ ${toLabel}`)
+        : (ko ? `두 관점의 쟁점끼리 이어진 선이 적어요. ${fromLabel} ↔ ${toLabel}` : `Few lines link these two lenses' issues. ${fromLabel} ↔ ${toLabel}`), askButton(question)));
+  }
+  if (data.bridges.length) {
+    // R4: instructors wanted one place to start, not a list in a sentence.
+    const [first, ...rest] = data.bridges;
+    const firstLabel = stripRaiseCount(first.label);
+    const startQuestion = ko ? `'${firstLabel}'은(는) 다른 쟁점들과 어떻게 이어져 있을까요?` : `How does '${firstLabel}' connect to the other issues?`;
+    rows.push(item("bridges", [first.id, ...first.neighbors, ...rest.map((bridge) => bridge.id)], ko ? `여기서 시작 · ${firstLabel}` : `Start here · ${firstLabel}`,
+      ko ? `여러 쟁점을 잇는 다리 역할을 해요.${rest.length ? ` 다음 후보: ${rest.map((bridge) => stripRaiseCount(bridge.label)).join(", ")}` : ""}`
+        : `It bridges several issues.${rest.length ? ` Next: ${rest.map((bridge) => stripRaiseCount(bridge.label)).join(", ")}` : ""}`, askButton(startQuestion)));
+  }
+  if (data.mostRaised.length) {
+    rows.push(item("raised", data.mostRaised.map((entry) => entry.node.id), ko ? "여러 명이 꺼낸 쟁점" : "Raised by many",
+      data.mostRaised.map((entry) => `${stripRaiseCount(entry.node.label)} · ${entry.count}${ko ? "명" : ""}`).join(", ")));
+  }
+  if (data.singleVoice.length) {
+    rows.push(item("single", data.singleVoice.map((entry) => entry.node.id), ko ? "한 명만 꺼낸 쟁점" : "Raised by one person",
+      ko ? `${data.singleVoice.map((entry) => stripRaiseCount(entry.node.label)).join(", ")} — 소수 의견을 먼저 들어 보면 좋아요.`
+        : `${data.singleVoice.map((entry) => stripRaiseCount(entry.node.label)).join(", ")} — worth hearing the minority view first.`));
+  }
+
+  const present = data.counts.filter(Boolean);
+  const skew = present.length < INSIGHT_LENSES.length ? Infinity : Math.max(...present) / Math.min(...present);
+  const balanceWord = data.total < 2
+    ? (ko ? "쟁점이 아직 적어요" : "Too few issues yet")
+    : skew >= 3 || data.entropy < 0.5 ? (ko ? "한쪽에 쏠려 있어요" : "Concentrated in one lens")
+    : data.entropy >= 0.8 && skew < 2 ? (ko ? "고르게 퍼져 있어요" : "Evenly spread")
+    : data.entropy >= 0.5 ? (ko ? "조금 쏠려 있어요" : "Somewhat lopsided")
+    : (ko ? "한쪽에 쏠려 있어요" : "Concentrated in one lens");
+  const maxCount = Math.max(1, ...data.counts);
+  const bars = INSIGHT_LENSES.map((lens, index) => `
+    <li><span>${escapeHtml(insightLensLabel(lens))}</span><span class="map-insight-bar"><span style="width:${Math.round((data.counts[index] / maxCount) * 100)}%"></span></span><em>${data.counts[index]}</em></li>`).join("");
+
+  panel.innerHTML = `
+    <div class="map-insights-head">
+      <h4 id="map-insights-title">${escapeHtml(label)}</h4>
+      <button type="button" class="map-insights-close" data-insights-close aria-label="${ko ? "토론 단서 닫기" : "Close discussion cues"}"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+    </div>
+    <p class="map-insights-note">${ko ? "맵의 연결 구조로 계산한 참고 단서예요. 정답이나 성적이 아니에요." : "Computed from how the map is connected. A prompt, not a grade."}</p>
+    <div class="map-insight-balance">
+      <p><strong>${ko ? "관점 균형" : "Lens balance"}</strong> <span>${escapeHtml(balanceWord)}</span></p>
+      <ul>${bars}</ul>
+    </div>
+    ${rows.length ? `<ul class="map-insight-list">${rows.join("")}</ul>` : `<p class="map-insights-empty">${ko ? "쟁점이 더 쌓이면 단서가 보여요." : "Cues appear as more issues are added."}</p>`}`;
+  applyInsightFocus(mapInsightsState.focusKey ? panel.querySelector(`[data-insight-key="${mapInsightsState.focusKey}"]`)?.dataset.insightIds.split(" ") : null);
+}
+
+function applyInsightFocus(ids) {
+  if (!graphRenderer.initialized) return;
+  const set = ids && ids.length ? new Set(ids) : null;
+  graphRenderer.svg.classed("has-insight-focus", Boolean(set));
+  graphRenderer.nodeLayer.selectAll(".network-node")
+    .classed("is-insight-focus", (node) => Boolean(set && (set.has(node.id) || set.has(node.parent) || set.has(node.stakeholder) && node.type === "stakeholder")))
+    // The cue's first node is its subject (e.g. "start here"); the rest are context.
+    .classed("is-insight-primary", (node) => Boolean(set && node.id === ids[0]));
+}
+
+document.addEventListener("click", (event) => {
+  const toggle = event.target.closest("#map-insights-toggle");
+  if (toggle) {
+    mapInsightsState.open = !mapInsightsState.open;
+    if (mapInsightsState.open && window.innerWidth > 720) closeMapDrawers();
+    if (!mapInsightsState.open) mapInsightsState.focusKey = null;
+    logEvent("insight.toggle", { open: mapInsightsState.open, layer: state.activeMapLayer });
+    renderMapInsights();
+    if (!graphRenderer.userZoomed) fitGraphToView();
+    return;
+  }
+  if (event.target.closest("[data-insights-close]")) {
+    mapInsightsState.open = false;
+    mapInsightsState.focusKey = null;
+    renderMapInsights();
+    if (!graphRenderer.userZoomed) fitGraphToView();
+    document.getElementById("map-insights-toggle")?.focus();
+    return;
+  }
+  const focus = event.target.closest("[data-insight-key]");
+  if (focus) {
+    const key = focus.dataset.insightKey;
+    mapInsightsState.focusKey = mapInsightsState.focusKey === key ? null : key;
+    logEvent("insight.focus", { key, node_ids: focus.dataset.insightIds.split(" "), active: Boolean(mapInsightsState.focusKey), layer: state.activeMapLayer });
+    renderMapInsights();
+    // Zoom to the cue's nodes (Debate Map-style camera), or back out to all.
+    if (!graphRenderer.userZoomed) fitGraphToView({ ids: mapInsightsState.focusKey ? focus.dataset.insightIds.split(" ") : null });
+    return;
+  }
+  const ask = event.target.closest("[data-insight-ask]");
+  if (ask) {
+    const input = document.getElementById("visualizer-input");
+    const form = document.getElementById("visualizer-form");
+    if (form && !form.offsetParent) document.getElementById("composer-toggle")?.click();
+    if (input) {
+      input.value = ask.dataset.insightAsk;
+      input.focus();
+      input.scrollIntoView({ block: "nearest" });
+    }
+    logEvent("insight.ask", { question: ask.dataset.insightAsk.slice(0, 160), layer: state.activeMapLayer });
+  }
+});
+
+// The map is the workspace: give the stage whatever height the viewport has
+// left below the chrome, and keep slide-in drawers inside the stage so they
+// never sit on top of the map toolbar.
+function fitMapStageToViewport() {
+  const stage = dom.networkStage;
+  const layout = dom.visualizerLayout;
+  if (!stage || !stage.offsetParent || state.activeView !== "visualizer") return;
+  const simple = typeof resolveDensity === "function" && resolveDensity() === "simple";
+  if (!simple) {
+    stage.style.removeProperty("height");
+    stage.style.removeProperty("min-height");
+    resizeGraphRenderer();
+    return;
+  }
+  const phone = window.innerWidth <= 720;
+  const top = stage.getBoundingClientRect().top + window.scrollY;
+  const composer = document.getElementById("composer-toggle");
+  const reserve = (composer?.offsetHeight || 0) + 20;
+  const height = Math.max(phone ? 340 : 380, Math.round(window.innerHeight - top - reserve));
+  stage.style.height = `${height}px`;
+  stage.style.minHeight = `${height}px`;
+  resizeGraphRenderer();
+  if (layout) {
+    const layoutTop = layout.getBoundingClientRect().top + window.scrollY;
+    layout.style.setProperty("--map-drawer-top", `${Math.max(0, Math.round(top - layoutTop))}px`);
+    layout.style.setProperty("--map-drawer-height", `${height}px`);
+  }
+}
+
+window.addEventListener("resize", () => fitMapStageToViewport());
+
+function renderMapViewportControls() {
+  fitMapStageToViewport();
+  updateMapFocusButton();
+  renderMapInsights();
+  // The graph was framed inside renderGraph, before the compare band / cues
+  // panel / drawer for this render existed (R11: a node ended up under the
+  // band). When that floating chrome changes, frame again around it.
+  const chrome = [
+    !document.getElementById("compare-summary")?.hidden,
+    !document.getElementById("map-insights-panel")?.hidden,
+    Boolean(document.querySelector(".insight-panel.is-open")),
+    state.activeMapLayer,
+  ].join("|");
+  if (graphRenderer.chromeKey !== chrome) {
+    graphRenderer.chromeKey = chrome;
+    if (!graphRenderer.userZoomed) window.requestAnimationFrame(() => fitGraphToView({ animate: false }));
+  }
+  const fit = document.getElementById("map-fit-btn");
+  if (!fit) return;
+  const label = state.locale === "ko" ? "맵을 화면에 맞추기" : "Fit map to screen";
+  fit.title = label;
+  fit.setAttribute("aria-label", label);
+}
+
+document.getElementById("map-fit-btn")?.addEventListener("click", () => {
+  fitGraphToView();
+  logEvent("map.fit", { via: "button" });
+});
 
 document.getElementById("map-focus-btn")?.addEventListener("click", () => {
   const next = !isMapFocusActive();

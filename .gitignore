@@ -32,3 +32,8 @@ supabase/.temp/
 
 # fablize goal-tracking state (local scratch, like .codex-goal.md)
 .fablize/
+
+# local release staging (scripts/stage-ui-release.mjs) and test/QA output
+ui-release-ko-*/
+.playwright-cli/
+output/

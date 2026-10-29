@@ -6,14 +6,14 @@
 // deletes every cache whose name differs, so the version string is the only
 // thing that evicts a stale offline shell — a returning offline user otherwise
 // keeps whatever was cached under the old name indefinitely.
-const CACHE_NAME = "dts-ko-shell-20260908-ui1";
+const CACHE_NAME = "dts-ko-shell-20261029-rea";
 const SHELL = [
   "./index.html",
   "./i18n.min.js",
   "./app.min.js",
   "./styles.min.css",
-  "./ui-shared.css?v=20260908-ui1",
-  "./ui-shared.js?v=20260908-ui1",
+  "./ui-shared.css?v=20261029-rea",
+  "./ui-shared.js?v=20261029-rea",
   "./cloudflare-client.js",
   "./manifest.webmanifest",
   "./assets/logo.png",

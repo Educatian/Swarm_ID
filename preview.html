@@ -34,9 +34,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="./assets/material-symbols-outlined.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="./assets/pretendard.css">
-  <link rel="stylesheet" href="./styles.min.css?v=20260907-ux">
-  <link rel="stylesheet" href="./ui-shared.css?v=20260908-ui1">
-  <script src="./ui-shared.js?v=20260908-ui1"></script>
+  <link rel="stylesheet" href="./styles.min.css?v=20261029-rea">
+  <link rel="stylesheet" href="./ui-shared.css?v=20261029-rea">
+  <script src="./ui-shared.js?v=20261029-rea"></script>
   <link rel="preload" href="./assets/pretendard/PretendardVariable.subset.91.woff2" as="font" type="font/woff2" crossorigin>
 </head>
 <body>
@@ -455,6 +455,14 @@
 
               <div class="network-stage" id="network-stage">
                 <svg class="network-svg" id="network-svg" aria-label="실시간 케이스 쟁점 맵"></svg>
+                <button type="button" class="map-insights-toggle" id="map-insights-toggle" aria-expanded="false" aria-controls="map-insights-panel">
+                  <span class="material-symbols-outlined" aria-hidden="true">hub</span>
+                  <span id="map-insights-toggle-label">토론 단서</span>
+                </button>
+                <aside class="map-insights-panel" id="map-insights-panel" aria-labelledby="map-insights-title" hidden></aside>
+                <button type="button" class="map-fit-btn" id="map-fit-btn" title="맵을 화면에 맞추기" aria-label="맵을 화면에 맞추기">
+                  <span class="material-symbols-outlined" aria-hidden="true">target</span>
+                </button>
                 <div class="map-lens-bar" id="map-lens-bar" role="group" aria-label="관점 전환">
                   <span class="map-lens-bar-label" id="map-lens-bar-label">관점</span>
                   <div class="lens-pill-row token-row" id="stakeholder-pills"></div>
@@ -646,7 +654,7 @@
                     <label class="annotation-share-toggle"><input type="checkbox" name="visibility" value="cohort" checked><span>팀과 공유</span></label>
                     <button class="toolbar-button toolbar-button-primary" id="quick-annotation-submit" type="submit">공동 종합에 추가</button>
                   </div>
-                  <p class="annotation-provenance">선택한 노드, 작성자, 관점, 작성 시각이 함께 기록됩니다.</p>
+                  <p class="annotation-provenance">선택한 노드, 작성자, 관점, 작성 시각이 함께 기록돼요.</p>
                 </form>
               </div>
 
@@ -1034,10 +1042,10 @@
         // two tags because defer/async ordering is easy to get subtly wrong and
         // the failure would be a blank app.
         const copyScript = document.createElement("script");
-        copyScript.src = "./i18n.min.js?v=20260907-ux";
+        copyScript.src = "./i18n.min.js?v=20261029-rea";
         copyScript.onload = () => {
           const appScript = document.createElement("script");
-          appScript.src = "./app.min.js?v=20260907-ux";
+          appScript.src = "./app.min.js?v=20261029-rea";
           document.body.appendChild(appScript);
         };
         document.body.appendChild(copyScript);

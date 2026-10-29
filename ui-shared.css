@@ -65,7 +65,8 @@ html.theme-light .agent-coach-trigger:hover { background: #e8f5f0; color: #17624
 html .app-shell .network-stage .node-badge text { fill: #fff !important; }
 html .app-shell .network-stage .node-badge circle[data-origin="brief"] { fill: #475569; }
 html .app-shell .network-stage .node-badge circle[data-origin="me"] { fill: #11634f; }
-html .app-shell .network-stage .node-badge:has(circle[data-origin="peer"]) text { fill: #17243b !important; }
+/* Peer badge fill is amber-700 since R12, so its text is white (5:1); the old dark text suited the former light orange fill. */
+html .app-shell .network-stage .node-badge:has(circle[data-origin="peer"]) text { fill: #ffffff !important; }
 #dts-ui-tooltip {
   position: fixed; z-index: 100000; pointer-events: none;
   max-width: min(280px,calc(100vw - 24px)); box-sizing: border-box;
@@ -181,3 +182,191 @@ html[lang="ko"] .landing-shell :is(h1,h2,h3,p) { word-break: keep-all; }
   .app-shell .reflection-actions { flex-wrap: wrap; }
   .app-shell .reflection-actions button { min-height: 44px; }
 }
+
+/* ---- Map-forward pass (2026-10, persona round R1) ----
+   Personas found the map starting 460-650px down a laptop screen. Keep the
+   chrome to one row each and let the stage take the rest (height set in JS by
+   fitMapStageToViewport). */
+@media(min-width:1024px) {
+  .app-shell .topbar { grid-template-columns: minmax(0,1fr) auto auto !important; }
+  .app-shell .workspace-primary-nav { grid-column: 2; grid-row: 1; width: auto !important; }
+  .app-shell .workspace-primary-nav-item { min-height: 38px; padding: 6px 16px; white-space: nowrap !important; }
+  .app-shell .topbar-side { grid-column: 3; }
+}
+.app-shell .topbar { padding-block: 10px; }
+.density-simple [data-view-panel="visualizer"] .canvas-header { min-height: 0; padding-block: 4px; }
+.density-simple [data-view-panel="visualizer"] .canvas-header .eyebrow { display: none; }
+.density-simple [data-view-panel="visualizer"] .canvas-header h3 { font-size: 15px; margin: 0; }
+/* Task guide: keep the progress, show only the step that matters now. */
+.density-simple .task-banner { display: flex; align-items: center; gap: 12px; padding: 6px 12px; min-height: 0; margin-block: 4px; }
+.density-simple .task-banner .task-banner-head { flex: 0 0 auto; gap: 8px; }
+.density-simple .task-banner .task-step-list { display: flex; flex: 1 1 auto; min-width: 0; margin: 0; padding: 0; }
+.density-simple .task-banner .task-step:not(.is-current) { display: none; }
+.density-simple .task-banner .task-step.is-current { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.density-simple .task-banner .task-step.is-current .task-step-text { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; min-width: 0; }
+.density-simple .task-banner .task-step.is-current em { font-size: 12px; }
+/* "How to read the map" lives inside the stage as a small chip. */
+.network-stage > .dts-context-help { position: absolute; left: 12px; bottom: 12px; z-index: 18; margin: 0; max-width: min(380px, calc(100% - 96px)); box-shadow: 0 2px 8px rgba(20,30,60,.08); }
+.network-stage > .dts-context-help > summary { min-height: 36px; padding: 4px 12px; font-size: 12px; }
+.network-stage > .dts-context-help:not([open]) { border-radius: 999px; }
+.map-fit-btn { position: absolute; right: 64px; bottom: 12px; z-index: 18; width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid var(--dts-border); background: var(--dts-raised); color: var(--dts-text-secondary); cursor: pointer; }
+.map-fit-btn:hover { color: var(--dts-text); border-color: #4361ee; }
+.map-fit-btn:focus-visible { outline: 2px solid #4361ee; outline-offset: 2px; }
+/* Slide-in drawers stay within the stage instead of covering the toolbar. */
+.density-simple .visualizer-layout.is-focused > .insight-panel,
+.density-simple .visualizer-layout.is-focused > .intake-panel { top: var(--map-drawer-top, 0) !important; height: var(--map-drawer-height, auto) !important; max-height: var(--map-drawer-height, none) !important; overflow-y: auto; }
+/* Compare: one hint line until a difference is picked. */
+.compare-summary-hint { margin: 4px 0 0; font-size: 12px; color: var(--dts-text-secondary); }
+.compare-summary-actions[hidden] { display: none !important; }
+@media(max-width:720px) {
+  /* Phones: words beat icons for telling 에듀테크 from 행정. */
+  .app-shell #stakeholder-pills .ui-control-label { display: inline !important; font-size: 11px; }
+  .app-shell #map-lens-bar #stakeholder-pills button { width: auto !important; min-width: 44px !important; padding: 6px 8px; }
+  .app-shell #map-lens-bar #stakeholder-pills button .material-symbols-outlined { display: none; }
+  .map-fit-btn { bottom: 60px; right: 10px; }
+}
+@media(hover:none) {
+  .app-shell .map-dock-btn[title]:hover::before, .app-shell .map-dock-btn:hover::before { display: none !important; }
+}
+@media(max-width:720px) {
+  /* Phones (R3): the node drawer became a full-screen cover hiding the lens
+     buttons. Make it a bottom sheet so the map top and lenses stay usable. */
+  .density-simple .visualizer-layout.is-focused > .insight-panel.is-open,
+  .density-simple .visualizer-layout.is-focused > .intake-panel.is-open {
+    position: fixed !important; top: auto !important; bottom: 0 !important; left: 0 !important; right: 0 !important;
+    width: auto !important; height: min(58vh, 520px) !important; max-height: min(58vh, 520px) !important;
+    transform: none !important; border-radius: 18px 18px 0 0 !important; z-index: 45 !important;
+    box-shadow: 0 -8px 28px rgba(20,30,60,.16);
+  }
+}
+
+/* ---- Discussion cues panel (benchmark REA port) ---- */
+.map-insights-toggle { position: absolute; top: 12px; right: 12px; z-index: 19; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--dts-border); background: var(--dts-raised); color: var(--dts-text-secondary); font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 8px rgba(20,30,60,.06); }
+.map-insights-toggle .material-symbols-outlined { font-size: 18px; color: #4361ee; }
+.map-insights-toggle[aria-expanded="true"] { border-color: #4361ee; color: var(--dts-text); }
+.map-insights-toggle:hover { color: var(--dts-text); border-color: #4361ee; }
+.map-insights-toggle:focus-visible, .map-insight-focus:focus-visible, .map-insight-ask:focus-visible, .map-insights-close:focus-visible { outline: 2px solid #4361ee; outline-offset: 2px; }
+.map-insights-panel { position: absolute; top: 60px; right: 12px; z-index: 19; width: min(320px, calc(100% - 24px)); max-height: calc(100% - 132px); overflow-y: auto; padding: 14px; border-radius: 14px; border: 1px solid var(--dts-border); background: var(--dts-raised); color: var(--dts-text); box-shadow: 0 10px 28px rgba(20,30,60,.12); }
+.map-insights-panel[hidden] { display: none; }
+.map-insights-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.map-insights-head h4 { margin: 0; font-size: 14px; font-weight: 650; }
+.map-insights-close { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 0; background: transparent; color: var(--dts-text-secondary); border-radius: 8px; cursor: pointer; }
+.map-insights-note { margin: 4px 0 10px; font-size: 11px; line-height: 1.6; color: var(--dts-muted); }
+.map-insight-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.map-insight-item { border: 1px solid var(--dts-border); border-radius: 10px; overflow: hidden; }
+.map-insight-item.is-focused { border-color: #4361ee; box-shadow: 0 0 0 1px #4361ee inset; }
+.map-insight-focus { display: grid; gap: 4px; width: 100%; padding: 10px 12px; text-align: left; border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; }
+.map-insight-focus strong { font-size: 12px; font-weight: 650; color: var(--dts-text); }
+.map-insight-focus span { font-size: 12px; line-height: 1.6; color: var(--dts-text-secondary); word-break: keep-all; overflow-wrap: anywhere; }
+.map-insight-focus:hover { background: var(--dts-subtle); }
+.map-insight-ask { display: block; width: calc(100% - 24px); margin: 0 12px 10px; min-height: 36px; border-radius: 8px; border: 1px solid #4361ee; background: transparent; color: #3a54d6; font-size: 12px; font-weight: 600; cursor: pointer; }
+.map-insight-ask:hover { background: #4361ee; color: #fff; }
+.map-insights-empty { margin: 0; font-size: 12px; color: var(--dts-text-secondary); }
+.map-insight-balance { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--dts-border); }
+.map-insight-balance p { margin: 0 0 6px; display: flex; justify-content: space-between; gap: 8px; font-size: 12px; }
+.map-insight-balance p span { color: var(--dts-text-secondary); }
+.map-insight-balance ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.map-insight-balance li { display: grid; grid-template-columns: 64px 1fr 20px; align-items: center; gap: 8px; font-size: 11px; color: var(--dts-text-secondary); }
+.map-insight-balance li em { font-style: normal; text-align: right; }
+.map-insight-bar { height: 6px; border-radius: 99px; background: var(--dts-subtle); overflow: hidden; }
+.map-insight-bar > span { display: block; height: 100%; background: #4361ee; border-radius: 99px; }
+.network-svg.has-insight-focus .network-node:not(.is-insight-focus) { opacity: .18; transition: opacity .2s; }
+.network-svg.has-insight-focus .network-link { opacity: .15; }
+.network-svg.has-insight-focus .network-node.is-insight-focus .node-halo { stroke: #4361ee !important; stroke-width: 3px; opacity: 1; }
+html.dark:not(.theme-light) .map-insight-ask { color: #aebcff; border-color: #6f86ff; }
+html.dark:not(.theme-light) .map-insight-ask:hover { color: #fff; }
+html.dark:not(.theme-light) .map-insights-toggle .material-symbols-outlined { color: #8fa2ff; }
+@media(max-width:720px) {
+  .map-insights-toggle { top: auto; bottom: 12px; right: 64px; }
+  .map-insights-toggle #map-insights-toggle-label { display: none; }
+  .map-insights-panel { top: auto; bottom: 64px; left: 12px; right: 12px; width: auto; max-height: 60%; }
+}
+@media (prefers-reduced-motion: reduce) { .network-svg.has-insight-focus .network-node { transition: none; } }
+.map-insight-static { cursor: default; }
+.map-insight-static:hover { background: transparent; }
+/* R3: labels stay legible after auto-fit; a halo separates them from links. */
+.network-svg .network-node .node-label { font-size: calc(11px * var(--label-inv, 1)) !important; paint-order: stroke; stroke: #f4f7fe; stroke-width: 3px; stroke-linejoin: round; }
+.network-svg .network-node .node-meta { font-size: calc(9px * var(--label-inv, 1)) !important; paint-order: stroke; stroke: #f4f7fe; stroke-width: 3px; stroke-linejoin: round; }
+html.dark:not(.theme-light) .network-svg .network-node :is(.node-label,.node-meta) { stroke: #0f1320; }
+.network-svg.is-zoomed-out .network-node .node-meta { display: none; }
+/* List mode: the lens bar and cues belong to the map, not the list. */
+.network-stage:has(> .node-list-panel:not([hidden])) :is(#map-lens-bar, .map-insights-toggle, .map-insights-panel, .map-fit-btn, .dts-context-help) { display: none !important; }
+/* Compare strip floats in the map (bottom centre) instead of pushing it down. */
+.network-stage > .compare-summary { position: absolute; left: 50%; bottom: 60px; transform: translateX(-50%); z-index: 18; width: min(560px, calc(100% - 200px)); margin: 0; padding: 10px 14px; border-radius: 14px; border: 1px solid var(--dts-border); background: var(--dts-raised); box-shadow: 0 8px 24px rgba(20,30,60,.12); }
+.network-stage > .compare-summary[hidden] { display: none; }
+@media(max-width:720px) { .network-stage > .compare-summary { left: 12px; right: 12px; width: auto; transform: none; bottom: 64px; } }
+
+/* ---- Persona round R5 ---- */
+/* Overlapping labels on less-connected nodes wait for hover or selection. */
+.network-svg .network-node .node-label.is-decluttered { opacity: 0; }
+.network-svg .network-node:is(:hover, .is-selected, .is-insight-focus) .node-label.is-decluttered { opacity: 1; }
+/* Compare-layer origins had no fill rule and rendered as black discs. */
+/* Colours match the compare band's chips, which act as the legend; the
+   badge itself is a dot because ~5px text failed legibility (R8). */
+html .app-shell .network-stage .node-badge circle[data-origin="shared"] { fill: #11634f; }
+html .app-shell .network-stage .node-badge circle[data-origin="mineonly"] { fill: #4361ee; }
+html .app-shell .network-stage .node-badge circle[data-origin="teamonly"] { fill: #b45309; }
+html .app-shell .network-stage .node-badge:is([data-origin="shared"], [data-origin="mineonly"], [data-origin="teamonly"]) text { display: none; }
+/* The map view fits the viewport, so a sticky header only covered content. */
+.app-shell.density-simple[data-active-view="visualizer"] .topbar { position: relative !important; top: auto !important; }
+/* While the right drawer is open, keep the lens bar and cues beside it. */
+@media(min-width:721px) {
+  .density-simple .visualizer-layout:has(> .insight-panel.is-open) #map-lens-bar { left: calc((100% - 372px) / 2) !important; }
+  /* R10: hiding the cues made them unreachable while a node was open; sit them beside the drawer instead. */
+  .density-simple .visualizer-layout:has(> .insight-panel.is-open) :is(.map-insights-toggle, .map-insights-panel) { right: 384px; }
+}
+/* Give the drawer's close button its own row so it covers nothing. */
+.density-simple .visualizer-layout.is-focused > .is-open > .drawer-close { position: sticky; top: 0; z-index: 2; display: flex; margin: 0 0 6px auto; }
+@media(max-width:720px) {
+  .map-insights-toggle #map-insights-toggle-label { display: inline !important; }
+  .map-insights-toggle { right: auto; left: 12px; bottom: 60px; }
+}
+
+/* ---- Persona round R6 ---- */
+/* Compare: one compact band under the lens bar (R5's floating card covered
+   the map and intercepted list rows). Hidden while the list view is open. */
+.network-stage > .compare-summary { top: 76px; bottom: auto; left: 84px; right: 12px; transform: none; width: auto; max-width: 720px; margin: 0 auto; padding: 6px 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
+.network-stage > .compare-summary .compare-summary-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0; }
+.network-stage > .compare-summary .compare-summary-prompt { display: none; }
+.network-stage > .compare-summary .compare-summary-hint { margin: 0; font-size: 11px; }
+.network-stage > .compare-summary .compare-summary-actions { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; }
+.network-stage > .compare-summary .compare-summary-actions .toolbar-button { min-height: 36px; font-size: 12px; padding: 4px 10px; }
+.network-stage:has(> .node-list-panel:not([hidden])) > .compare-summary { display: none !important; }
+@media(max-width:720px) { .network-stage > .compare-summary { left: 12px; right: 12px; top: auto; bottom: 108px; } }
+/* Phone sheet: another rule capped the width at 332px. */
+@media(max-width:720px) {
+  .density-simple .visualizer-layout.is-focused > .insight-panel.is-open,
+  .density-simple .visualizer-layout.is-focused > .intake-panel.is-open { max-width: none !important; min-width: 0 !important; height: min(50vh, 460px) !important; max-height: min(50vh, 460px) !important; }
+}
+/* A decluttered label hides its sub-label too. */
+.network-svg .network-node.is-label-decluttered:not(:hover):not(.is-selected):not(.is-insight-focus) .node-meta { opacity: 0; }
+.reflection-citation-option span { white-space: normal; overflow-wrap: anywhere; }
+/* R7 phone: leave a usable map band above the sheet. */
+@media(max-width:720px) {
+  .density-simple .visualizer-layout.is-focused > .insight-panel.is-open,
+  .density-simple .visualizer-layout.is-focused > .intake-panel.is-open { height: min(44vh, 380px) !important; max-height: min(44vh, 380px) !important; }
+  .density-simple .visualizer-layout:has(> .insight-panel.is-open) #map-dock { visibility: hidden; }
+}
+/* R8: a must-keep label moved above its node drops its sub-label there. */
+.network-svg .network-node.is-label-flipped .node-meta { opacity: 0; }
+/* Cue focus ranks nodes: the start point solid, the rest dashed. */
+.network-svg.has-insight-focus .network-node.is-insight-focus:not(.is-insight-primary) .node-halo { stroke-dasharray: 3 3; }
+/* R10: toolbar focus rings drew as two brackets; give them one rounded ring. */
+/* Drawn inside the button: the toolbar row clips anything outside (R10 "brackets"). */
+.app-shell :is(#density-toggle-btn, #map-focus-btn, #map-mode-btn):focus-visible { outline: 2px solid #4361ee !important; outline-offset: -2px !important; border-radius: 10px !important; box-shadow: none !important; }
+/* R11: fit and legend stay reachable beside an open drawer, like the cues. */
+@media(min-width:721px) {
+  .density-simple .visualizer-layout:has(> .insight-panel.is-open) .map-fit-btn { right: 436px; }
+  .density-simple .visualizer-layout:has(> .insight-panel.is-open) .legend-reopen { right: 384px; }
+}
+/* R11 P2: white text on #f59e0b was ~2:1; amber-700 clears AA (4.9:1). */
+html .app-shell .network-stage .node-badge circle[data-origin="peer"] { fill: #b45309; }
+/* List cards: chips in one wrapping row instead of a three-high stack. */
+.node-list-row .node-list-tags { display: flex; flex-flow: row wrap; gap: 4px; align-items: flex-start; }
+/* R13 P2: show that the cues panel scrolls (its last cards were cut off). */
+.map-insights-panel { background:
+  linear-gradient(var(--dts-raised) 30%, transparent) top / 100% 24px no-repeat local,
+  linear-gradient(transparent, var(--dts-raised) 70%) bottom / 100% 24px no-repeat local,
+  radial-gradient(farthest-side at 50% 0, rgba(20,30,60,.14), transparent) top / 100% 10px no-repeat scroll,
+  radial-gradient(farthest-side at 50% 100%, rgba(20,30,60,.14), transparent) bottom / 100% 10px no-repeat scroll,
+  var(--dts-raised); }

@@ -26,10 +26,10 @@ window.__DTS_PREVIEW__ = true;
       title: EN ? "Adopting AI-Personalized Learning" : "AI 개인화 학습 도입",
       published: true,
       summary: EN
-        ? "Mapping the design tensions of a school adopting computer-based instruction (CBI)."
-        : "학교가 컴퓨터 기반 수업(CBI)을 도입하는 상황의 설계 쟁점을 지도화합니다.",
+        ? "Mapping the design tensions of a school adopting AI-personalized learning."
+        : "학교가 AI 개인화 학습을 도입하는 상황의 설계 쟁점을 지도로 살펴봐요.",
       pipeline: { graphStatus: EN ? "Synced" : "동기화됨" },
-      learningGoals: [EN ? "Integrate CBI without losing pedagogical intent" : "CBI를 교육적 의도를 잃지 않고 통합하기"],
+      learningGoals: [EN ? "Personalize with AI without losing pedagogical intent" : "교육적 의도를 지키며 AI로 개인화하기"],
       constraints: EN
         ? ["Pedagogy vs automation", "Equity vs standardization", "Control vs convenience"]
         : ["페다고지 vs 자동화", "형평성 vs 표준화", "통제 vs 편의"],

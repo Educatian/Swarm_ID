@@ -317,6 +317,7 @@ update도 delete도 없다. 학습자 데이터에 대한 `splice`는 단 한 �
 | 수정 | 상태 | 내용 |
 | --- | --- | --- |
 | `setStakeholder(next, source)` | **완료** | 호출부 3곳에 `"pill"` / `"graph_focus"` / `"node_select"` 전달 → `perspective_switched.source`. `source !== "pill"`은 `evidence_role: none` |
+| `node_select` 관점 전환 범위 | **변경 (2026-10-29)** | 이제 이해관계자 노드를 누를 때만 관점이 바뀌어요. 쟁점 노드를 누르면 관점이 그대로 유지돼요. 이 날짜 이후 `perspective_switched{source:"node_select"}` 빈도는 이전과 비교할 수 없어요. |
 | `lens.change` | **완료** | 발화는 유지(`analytics_feedback_events.md`가 집계를 문서화함), `construct: null` / `none`으로 측정에서 제외 |
 | `synthesis_block_revised` | **완료** | 실제 개정일 때만 발화 — 피드백 후 변경이거나 2회차 이상 제출. `revision_trigger` / `submit_index` 추가 |
 | `peer.exposure` | **완료** | 이름 유지(이력 연속성), `signal: "realtime_notification"` + `visibility` 추가로 열람이 아님을 데이터에 명시 |
