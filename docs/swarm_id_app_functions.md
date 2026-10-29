@@ -2,6 +2,13 @@
 
 ## 1. Product framing
 
+### North Star goal
+
+> Help learners notice differences between perspectives and use specific evidence to redesign their instructional technology decisions.
+
+The product loop is therefore: **lens shift → difference noticed → evidence cited → redesign explained**.
+This goal is the reference point for the first-screen message, the learning-loop labels, and the analytics model. The product does not optimize for a correct answer or raw activity volume; it makes perspective change, justification, and informed revision observable.
+
 `Swarm ID` is not a generic AI discussion app.
 Its purpose is to help students see instructional technology design as a system of competing constraints, stakeholder tensions, and redesign choices.
 

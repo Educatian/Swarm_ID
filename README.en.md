@@ -19,7 +19,7 @@
 
 > **`main` is the English-default canonical branch**, deployed on Cloudflare Pages at
 > swarm-id-en.pages.dev. The Korean-default twin lives on the `ko` branch
-> (swarm-id-ko.pages.dev). Both share the same codebase and Supabase backend — they
+> (swarm-id-ko.pages.dev). Both share the same codebase and Cloudflare backend — they
 > differ only in default locale, first-paint statics, and manifest.
 
 ---
@@ -79,18 +79,18 @@ The studio supports students in seeing educational media not as neutral delivery
 ## Technical Stack
 
 - Plain HTML/CSS/JS + **D3.js** force-directed tension maps
-- **Supabase** — auth, course data, learner runs, append-only `analytics_events`, **Realtime** (live peer activity + presence)
+- **Cloudflare D1 + Pages Worker** — auth, course data, learner runs, `analytics_events`, and four-second collaboration sync
 - **OpenRouter** — case structuring, swarm replies, disagreement classification, critique rounds via the `_worker.js` Cloudflare Pages worker (model fallback chain absorbs provider rate limits) + deterministic local fallback
 - **PWA** — manifest + network-first service worker (media bypassed), home-screen install, offline shell
 - Hosting: Cloudflare Pages (`swarm-id-en` / `swarm-id-ko` / `dts-ko-preview`), wrangler direct-upload
 
 ## Data Model
 
-Course-centered Supabase model: `profiles` · `institutions` · `courses` · `course_memberships` · `cases` · `documents` · `learner_runs` · `cohort_graph_snapshots` (+ `analytics_events`).
+Course-centered Cloudflare model: `profiles` · `institutions` · `courses` · `course_memberships` · `cases` · `documents` · `learner_runs` · `cohort_graph_snapshots` (+ `analytics_events`).
 
 - instructor-authored cases remain canonical; learner work lives in `learner_runs`
 - published/archived state controls learner visibility; cases with student activity can only be archived, never deleted from the UI
-- schema & policies: [docs/supabase_schema.sql](./docs/supabase_schema.sql) · [docs/supabase_setup.md](./docs/supabase_setup.md)
+- runtime schema & policies: [`cloudflare-backend.js`](./cloudflare-backend.js) · [`wrangler.toml`](./wrangler.toml)
 
 ## Local Development
 
@@ -109,7 +109,7 @@ Guide regeneration pipeline (locale-parametrized — `GUIDE_LOCALE=en|ko`):
 ## Repository Guide
 
 - [docs/analytics_feedback_events.md](./docs/analytics_feedback_events.md) — feedback instrumentation dictionary + mining SQL
-- [docs/supabase_setup.md](./docs/supabase_setup.md) — backend setup (Realtime publication, case-delete policy)
+- [docs/supabase_setup.md](./docs/supabase_setup.md) — legacy pre-migration policy reference (not used at runtime)
 - [guides/](./guides) — student/instructor guides (md → HTML build, with videos & narration)
 - [scripts/](./scripts) — cohort seeding, guide capture/recording, E2E verification (`e2e-verify-feedback.mjs`)
 

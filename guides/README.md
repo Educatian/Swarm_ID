@@ -1,4 +1,14 @@
-# Swarm_ID — Guides
+# Design Tension Studio — Guides
+
+## September 2026 · v2 (current)
+
+The four Markdown files and their generated HTML pages now describe the updated Home → Issue map → Reflection workflow. Run `npm run build` to regenerate both app assets and guides, or `node scripts/build-guides-html.mjs` for guides only. Existing public guide URLs are unchanged.
+
+Current student screenshots are `screenshots/v2/home-{ko,en}.png` and `screenshots/v2/reflection-{ko,en}.png`, captured from the updated local public-preview workspace with fictional data. They contain no real account credentials. Current pages do not embed old videos or audio. Historical media and the legacy capture instructions below are retained, not newly verified.
+
+The current guides explicitly distinguish sample reset behavior, known submission/answer-retention limitations, and non-grade reference indicators. Remove a limitation notice only after the underlying fix and end-to-end verification, not merely because the guide is restyled.
+
+## Legacy capture workflow (previous interface)
 
 Four walkthrough guides for classroom use plus the Playwright script
 that captures all screenshots referenced in them.

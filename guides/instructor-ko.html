@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>디자인 텐션 스튜디오 — 교수자용 가이드</title>
-  <meta name="description" content="케이스 만들기부터 참여 분석까지 — 수업 운영의 전체 흐름.">
+  <title>첫 수업을 차분하게 시작하기</title>
+  <meta name="description" content="사례 준비부터 토론과 수신 확인까지. 첫 수업에 필요한 것만.">
   <style>
 :root {
   --bg: #fafafa;
@@ -197,116 +197,110 @@ footer {
   main { padding: 0 20px 64px; }
   h2 { font-size: 22px; }
 }
+/* The updated workspace's restrained palette, with reading-first hierarchy. */
+:root { --bg:#f5f6f9; --ink:#202b3c; --muted:#526176; --accent:#4053d8; }
+.hero { background:#fff; color:var(--ink); border-bottom:1px solid var(--border); padding:56px 24px 40px; }
+.hero-inner { max-width:1100px; }
+.hero h1 { max-width:760px; font-size:clamp(30px,4vw,48px); letter-spacing:-.04em; line-height:1.22; }
+.hero .eyebrow { color:var(--accent); opacity:1; font-weight:700; }
+.hero p { opacity:1; color:var(--muted); }
+.guide-nav { max-width:1148px; padding:0 24px; }
+.guide-nav a { padding:10px 14px; min-height:44px; }
+.guide-layout { max-width:1148px; margin:auto; padding:0 24px; display:grid; grid-template-columns:230px minmax(0,1fr); gap:40px; }
+.guide-layout main { min-width:0; width:100%; padding:0 0 64px; }
+.guide-toc { position:sticky; top:20px; align-self:start; max-height:calc(100vh - 40px); overflow:auto; padding:16px; background:white; border:1px solid var(--border); border-radius:14px; }
+.guide-toc h2 { font-size:13px; margin:0 0 12px; }
+.guide-toc a { display:block; padding:10px 8px; border-radius:8px; font-size:14px; line-height:1.5; color:var(--muted); }
+.guide-toc a[aria-current] { background:#eef0ff; color:#283bb3; font-weight:700; }
+main h2 { scroll-margin-top:24px; margin-top:48px; font-size:25px; line-height:1.4; }
+main h3 { font-size:18px; line-height:1.5; }
+main p, main li { line-height:1.85; overflow-wrap:anywhere; }
+blockquote { background:#fff8ec; color:#654b1f; border-color:#b98731; font-size:15px; }
+figure { padding:8px; box-shadow:none; }
+figure a { display:block; }
+.skip-link { position:absolute; top:-100px; left:16px; z-index:10; background:white; padding:12px; }
+.skip-link:focus { top:8px; }
+:focus-visible { outline:3px solid #4053d8; outline-offset:4px; }
+footer { max-width:1148px; }
+@media(max-width:800px) { .guide-layout { display:block; padding:0 20px; } .guide-toc { position:static; max-height:none; margin-bottom:32px; } .guide-toc a { display:inline-block; margin:2px; border:1px solid var(--border); } .hero { padding:32px 20px; } }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+@media print { .guide-toc,.guide-nav,.skip-link { display:none; } .guide-layout { display:block; } .hero { padding:0 0 20px; } body { background:white; } figure { break-inside:avoid; } }
 </style>
 </head>
 <body>
+  <a class="skip-link" href="#guide-content">본문으로 바로가기</a>
   <header class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">디자인 텐션 스튜디오 · 수업용 가이드</p>
-      <h1>디자인 텐션 스튜디오 — 교수자용 가이드</h1>
-      <p>케이스 만들기부터 참여 분석까지 — 수업 운영의 전체 흐름.</p>
+      <p class="eyebrow">디자인 텐션 스튜디오 · 새 화면 안내 · 2026.09 · v2</p>
+      <h1>첫 수업을 차분하게 시작하기</h1>
+      <p>사례 준비부터 토론과 수신 확인까지. 첫 수업에 필요한 것만.</p>
     </div>
   </header>
-  <nav class="guide-nav"><a href="./instructor-en.html">교수자 가이드(영어)</a><a href="./instructor-ko.html" class="active">교수자 가이드</a><a href="./student-en.html">학생 가이드(영어)</a><a href="./student-ko.html">학생 가이드</a></nav>
-  <main>
-<p>수업에서 디자인 텐션 스튜디오를 운영하는 교수자를 위한 안내서입니다. 케이스 만들기부터 학생 참여 분석까지, 한 학기 운영의 전체 흐름을 다룹니다.</p>
+  <nav class="guide-nav" aria-label="역할과 언어"><a href="./student-ko.html">학생 가이드</a><a href="./student-en.html">학생 가이드(영어)</a><a href="./instructor-ko.html" class="active">교수자 가이드</a><a href="./instructor-en.html">교수자 가이드(영어)</a></nav>
+  <div class="guide-layout">
+  <nav class="guide-toc" aria-label="이 안내서의 순서"><h2>필요한 단계로 바로 가기</h2><a href="#section-1">수업 전 · 먼저 확인할 것</a><a href="#section-2">1 · 수업과 사례 확인</a><a href="#section-3">2 · 사례 준비와 공개</a><a href="#section-4">3 · 첫 활동은 쟁점 하나로 제한</a><a href="#section-5">4 · 비교와 토론 진행</a><a href="#section-6">5 · 성찰 수신과 분석 읽기</a><a href="#section-7">자주 묻는 질문</a><a href="#section-8">수업 시작 전 체크</a></nav>
+  <main id="guide-content" tabindex="-1">
+<p>새 디자인 텐션 스튜디오에서 수업을 준비하고 학생의 사고를 읽기 위한 운영 안내입니다. 학생은 <strong>홈 → 쟁점 맵 → 생각 정리</strong>로 이동합니다. 이 안내는 실제 화면의 사용법을 정리하며, 학습 효과나 분석 지표의 타당성을 보증하지 않습니다.</p>
+<h2 id="section-1">수업 전 · 먼저 확인할 것</h2>
+<p><a href="../index.html">서비스 열기</a> · <a href="../preview.html?lang=ko">학생 체험 살펴보기</a> · <a href="./student-ko.html">학생에게 줄 안내</a></p>
+<p>교수자 계정, 올바른 수업, 공개할 사례를 준비하세요. 기존 계정은 기존 로그인 경로를 사용합니다. 공개 문서에 공용 계정 비밀번호나 학생 정보를 넣지 마세요.</p>
 <blockquote>
-<strong>운영 모델 한 줄 요약</strong>: 교수자가 케이스를 만들어 <strong>게시</strong>하면<br>
-학생들이 코스 코드로 들어와 맵을 탐색하고, 노드 · 질문 · 메모 ·<br>
-생각 정리를 남깁니다. 교수자는 <strong>내 수업</strong> 화면에서 케이스를<br>
-관리하고 참여를 한눈에 봅니다.<br>
+현재 버전 운영 주의: 성찰 제출은 연구 동의와 로그 전송에 연결되어 있어, 성공 문구만으로 수신을 확정할 수 없습니다. 실제 수업 전 테스트 제출을 수신 측에서 확인하고, 학생에게 원문 보관과 대체 제출 경로를 안내하세요. 이 문제의 해결을 위해 연구 동의를 강요하지 마세요.<br>
 </blockquote>
-<div class="narration"><span class="narration-label">나레이션 듣기</span><audio controls preload="none" src="./audio/instructor-ko/00-intro.mp3"></audio></div>
-<hr>
-<h2>1단계 · 케이스 만들기와 게시</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/instructor-ko/01-create-case.jpg" src="./videos/instructor-ko/01-create-case.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p><strong>https://swarm-id-ko.pages.dev</strong> 에 교수자 계정으로 로그인하면 작업 공간이 열립니다. 왼쪽 <strong>시작 패널</strong>에서:</p>
+<h2 id="section-2">1 · 수업과 사례 확인</h2>
+<p><strong>추가 설정</strong>에서 수업·사례 선택을 확인하세요. 홈의 <strong>더 탐구하기</strong> 또는 탐색 메뉴에서 <strong>내 수업</strong> 관리 화면을 엽니다. 계정 권한이나 수업 상태에 따라 보이는 항목이 달라집니다.</p>
+<p>학생에게 보낼 항목: 접속 주소, 수업 이름, 참여 코드가 필요한 경우 그 코드, 오늘 사용할 사례 이름. 비밀번호는 별도의 안전한 경로로 전달하세요.</p>
+<p>확인: 학생 계정에서 의도한 사례가 보이는지 점검합니다. 교수자에게 보인다는 사실만으로 학생 공개가 확인된 것은 아닙니다.</p>
+<h2 id="section-3">2 · 사례 준비와 공개</h2>
+<p>사례 생성 화면에서 수업 설명과 제목을 입력하고 내용을 검토하세요. AI로 구조화한 경우 목표·제약·이해관계자가 원래 설명을 제대로 반영하는지 확인합니다. 학생에게 사용시킬 준비가 되면 게시 상태로 전환합니다.</p>
+<p>좋은 시작 사례: 선택 하나, 이해관계자 둘 이상, 충돌하는 요구가 분명한 상황. 학생이 첫 쟁점을 읽기 전에 전문 용어부터 해석해야 하는 설명은 줄이세요.</p>
+<p>확인: 초안·공개·보관 상태를 구분하세요. 삭제·보관은 수업 기록에 영향을 줄 수 있으므로 안내 없이 연습하지 않습니다.</p>
+<h2 id="section-4">3 · 첫 활동은 쟁점 하나로 제한</h2>
+<p>다음 발문으로 시작해 보세요. 이는 제안된 수업 운영 예시이며 검증된 소요 시간이나 효과를 뜻하지 않습니다.</p>
 <ol>
-<li>수업 브리프(설계 시나리오 텍스트)를 붙여넣거나 업로드하세요.</li>
-<li><strong>케이스 만들기</strong>를 누르면 AI가 브리프를 구조화된 케이스로</li>
+<li>홈에서 오늘의 사례를 찾으세요.</li>
+<li>쟁점 맵의 노드를 하나 누르고 내용을 자기 말로 설명하세요.</li>
+<li>다른 관점을 선택하고, 처음 놓쳤던 우려를 하나 적으세요.</li>
+<li>선택의 이유를 사례 근거와 함께 생각 정리에 남기세요.</li>
 </ol>
-<p>   변환합니다 — 이해관계자, 제약, 쟁점이 자동으로 추출돼 맵이    됩니다.</p>
-<ol>
-<li>만들어진 케이스는 <strong>초안</strong> 상태입니다. <strong>게시</strong>해야 학생에게</li>
-</ol>
-<p>   보입니다.</p>
-<p>케이스별 설정(보드 설정)에서 학생 노드 최대 개수, AI 확장 수, 학급 공유 모드, 학생 화면 잠금(네트워크만 보기) 등을 조정할 수 있습니다.</p>
-<hr>
-<h2>2단계 · &quot;내 수업&quot;에서 관리하기</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/instructor-ko/02-manage.jpg" src="./videos/instructor-ko/02-manage.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p>사이드바의 <strong>내 수업</strong>이 교수자 관리 허브입니다. 한 화면에서:</p>
-<ul>
-<li><strong>참여 코드</strong> 확인 · 복사 — 학생들에게 이 코드를 알려 주면</li>
-</ul>
-<p>  랜딩 페이지의 &quot;코스 코드로 참여&quot;로 들어옵니다.</p>
-<ul>
-<li>케이스 목록과 상태(게시됨 / 초안 / 보관됨), 케이스별 참여</li>
-</ul>
-<p>  요약(학생 수 · 노드 수 · 메모 수)</p>
-<ul>
-<li>학생 상호작용 분석 (아래 4단계)</li>
-</ul>
-<hr>
-<h2>3단계 · 케이스 정리: 게시 · 보관 · 삭제</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/instructor-ko/03-actions.jpg" src="./videos/instructor-ko/03-actions.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p>케이스마다 다섯 가지 액션이 있습니다:</p>
-<div class="table-wrap"><table><thead><tr><th>액션</th><th>하는 일</th></tr></thead><tbody><tr><td><strong>열기</strong></td><td>해당 케이스의 맵으로 이동</td></tr><tr><td><strong>이름변경</strong></td><td>케이스 제목 수정</td></tr><tr><td><strong>게시 / 공개 취소</strong></td><td>학생 노출 여부 전환</td></tr><tr><td><strong>보관</strong></td><td>목록에서 숨기고 비공개 처리 — <strong>학생 기록은 그대로 보존</strong></td></tr><tr><td><strong>삭제</strong></td><td>완전 삭제 — <strong>학생 활동이 없는 케이스만</strong> 가능</td></tr></tbody></table></div>
-<p>학생이 한 명이라도 활동한 케이스는 삭제 버튼이 비활성화되고 보관만 할 수 있습니다. 학기 데이터가 실수로 사라지는 일을 막기 위한 설계입니다. 보관한 케이스는 &quot;보관된 케이스 보기&quot;를 켜면 다시 보이고, <strong>복원</strong>으로 되돌릴 수 있습니다.</p>
-<hr>
-<h2>4단계 · 참여 분석 읽기</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/instructor-ko/04-analytics.jpg" src="./videos/instructor-ko/04-analytics.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p><strong>내 수업</strong> 하단의 참여 분석은 학생들의 상호작용 로그를 집계해 보여 줍니다 (60초 캐시, 새로고침 버튼):</p>
-<ul>
-<li><strong>KPI 줄</strong>: 활동 학생 수 / 노드 / 질문 / 메모 / 성찰 제출</li>
-<li><strong>참여 퍼널</strong>: 코스 참여 → 접속 → 케이스 열람 → 관점 탐색 →</li>
-</ul>
-<p>  기여 → 성찰 제출. <strong>단계 사이의 낙차</strong>가 수업 개입 포인트입니다 —   예: &quot;열람은 했는데 기여가 적다&quot;면 노드 추가 활동을 수업 중에   명시적으로 시켜 보세요.</p>
-<ul>
-<li><strong>관점 전환 분포</strong>: 학생들이 어떤 이해관계자 관점을 많이/적게</li>
-</ul>
-<p>  봤는지. <strong>비중이 낮은 관점</strong>(예: 행정, 접근성)은 토론에서   명시적으로 다룰 후보입니다.</p>
-<ul>
-<li><strong>학생별 활동 표</strong>: 이름 · 마지막 활동 · 노드 · 질문 · 메모 ·</li>
-</ul>
-<p>  성찰. 조용한 학생을 조기에 발견할 수 있습니다.</p>
-<p>리포트 화면의 <strong>학급 분석</strong> 패널에서는 케이스 단위의 학생별 진행(참여 → 열람 → 노드 추가)을 섹션 필터와 함께 볼 수 있습니다.</p>
-<hr>
-<h2>5단계 · 수업 중 실시간 활용</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/instructor-ko/05-realtime.jpg" src="./videos/instructor-ko/05-realtime.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p>같은 케이스를 학생들이 열어 두면 화면 위에 <strong>&quot;함께 보는 중 N명&quot;</strong> 이 표시되고, 학생이 노드를 추가하면 다른 학생과 교수자의 맵에 <strong>실시간으로</strong> 반영됩니다. 수업 중 활용 패턴:</p>
-<ol>
-<li>교수자 화면을 프로젝터에 띄우고 <strong>학급 보기</strong> 레이어로 전환</li>
-<li>학생들에게 &quot;케이스에 빠진 우려를 노드로 추가하세요&quot; 과제</li>
-<li>노드가 실시간으로 쌓이는 것을 보면서, 반복 등장하는 쟁점</li>
-</ol>
-<p>   (&quot;(N명)&quot; 묶음)과 소수 의견을 함께 짚어 토론</p>
-<p>학생 화면에는 <strong>지금 할 일</strong> 5단계 안내가 떠 있어서 별도 설명 없이도 흐름을 따라갑니다. 처음 쓰는 반이라면 첫 5분은 환영 슬라이드 + 가이드 투어가 자동으로 안내합니다.</p>
-<hr>
-<h2>6단계 · 토론 가이드 출력</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/instructor-ko/06-guide.jpg" src="./videos/instructor-ko/06-guide.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p><strong>내 수업</strong>에서 케이스의 <strong>&quot;토론 가이드&quot;</strong> 버튼을 누르면 인쇄용 한 장이 자동 생성됩니다 — 케이스 제약, 프로젝터에 띄울 <strong>이해관계자 교차 지점</strong>, 학급에서 <strong>반복된 쟁점</strong>(&quot;(N명)&quot;), <strong>소수 의견</strong>(제기자 이름 포함), <strong>외면받은 관점</strong>이 학급 데이터에서 추출되고, 장면마다 바로 쓸 수 있는 <strong>토론 발문(talk move)</strong>이 붙어 있습니다.</p>
-<p>수업 전 1분이면 그날의 토론 대본이 준비됩니다. 학생 질문 라운드가 쌓인 뒤 생성할수록 내용이 풍부해져요.</p>
-<hr>
-<h2>운영 팁</h2>
-<ul>
-<li><strong>아이패드 수업</strong>: 학생들에게 Safari 공유(⬆️) → &quot;홈 화면에</li>
-</ul>
-<p>  추가&quot;를 안내하세요. 전체 화면 앱으로 실행되고 터치에 최적화돼   있습니다.</p>
-<ul>
-<li><strong>학생이 로그인을 못 해요</strong>: 계정이 미리 만들어져 있어야</li>
-</ul>
-<p>  합니다. 명단에 없는 학생이 나오면 운영 담당자(문제웅)에게   이메일 한 줄이면 1분 안에 추가됩니다.</p>
-<ul>
-<li><strong>케이스가 학생에게 안 보여요</strong>: 게시 상태인지 확인하세요 —</li>
-</ul>
-<p>  초안과 보관 케이스는 학생에게 보이지 않습니다.</p>
-<ul>
-<li><strong>새 학기 시작</strong>: 지난 학기 케이스는 보관 처리하면 깔끔합니다.</li>
-</ul>
-<p>  학생 기록은 남아 있어 연구 분석에 그대로 쓸 수 있습니다.</p>
+<p>학생 첫 방문에 환영 슬라이드가 자동 실행되지는 않습니다. 필요할 때 <strong>추가 설정 → 튜토리얼 보기</strong>를 안내하세요. 화면 제한을 사용한다면 생각 정리 제출을 요구하는 활동과 충돌하지 않는지 확인합니다.</p>
+<h2 id="section-5">4 · 비교와 토론 진행</h2>
+<p><strong>학급 보기</strong>나 <strong>비교 보기</strong>로 공통 쟁점과 다른 의견을 검토하세요. 공유 범위와 새로고침 시점에 따라 보이는 내용이 다를 수 있습니다. 모든 변경이 즉시 반영된다고 가정하지 마세요.</p>
+<p>토론 발문: “이 주장은 어떤 사례 내용으로 뒷받침되나요?”, “다른 입장에서는 어떤 비용이 생기나요?”, “소수 의견을 반영하면 선택이 어떻게 달라지나요?”</p>
+<p>AI 답변은 비판적으로 검토할 제안입니다. 개인정보나 학생을 특정하는 민감한 사정을 노드·질문에 넣지 않도록 안내하세요.</p>
+<h2 id="section-6">5 · 성찰 수신과 분석 읽기</h2>
+<p>테스트 답변의 <strong>원문과 수신 내용</strong>을 비교하세요. 현재 긴 답변은 2,000자 이후가 잘릴 수 있습니다. 학생에게 원문 복사와 인쇄·PDF 등 대체 제출 방식을 안내하고, 제출 문구나 단계 체크만으로 채점하지 마세요.</p>
+<p>분석에서 클릭·활동 수는 기록된 행동의 요약입니다. 로그가 없다는 사실만으로 미참여나 학습 부족을 판단하지 마세요. 연구 동의, 통신 상태, 설정에 따라 누락될 수 있습니다.</p>
+<p><strong>관점 전환</strong>, <strong>수정 품질</strong> 등 설계 참고 지표는 현재 설정값·기록 수를 기반으로 합니다. 학습자의 능력이나 글의 질을 평가하는 점수로 사용하지 마세요. 같은 답변 재제출도 수정 이벤트로 집계될 수 있어 원문 비교가 필요합니다.</p>
+<h2 id="section-7">자주 묻는 질문</h2>
+<h3>학생이 사례를 못 찾아요.</h3>
+<p>학생의 수업과 사례 공개 상태부터 확인하세요. 화면 권한과 해당 계정의 수업 연결도 점검합니다.</p>
+<h3>학생이 제출했다고 하는데 기록이 없어요.</h3>
+<p>답변 원문을 보존하게 하고 대체 경로로 받으세요. 제출 메시지·시각·사례 이름 등 필요한 최소 정보로 운영자에게 문의하되 비밀번호는 받지 마세요.</p>
+<h3>학생 계정을 공개 체험에 써야 하나요?</h3>
+<p>아니요. 공개 체험은 로그인 없이 가상의 사례로 연습합니다. 실제 수업 계정의 기록과 혼동하지 않도록 안내하세요.</p>
+<h3>지난 버전 영상은 그대로 사용해도 되나요?</h3>
+<p>새 동선과 다른 화면·자동 안내·저장 보장 문구가 있어 이 버전의 핵심 안내에서는 제외했습니다. 새 화면 기준의 학생 안내와 앱 내 투어를 먼저 사용하세요.</p>
+<h2 id="section-8">수업 시작 전 체크</h2>
+<p>학생 계정 로그인, 사례 공개, 허용된 화면, 짧은 테스트 성찰의 수신, 원문 보관 안내, 대체 제출 경로를 확인하세요. 이 확인이 끝나기 전에는 분석 화면을 학습 성적의 근거로 사용하지 마세요.</p>
+<p><a href="./student-ko.html">학생용 실습 안내 열기</a></p>
   </main>
+  </div>
   <footer>
-    <p><code>guides/instructor-ko.md</code>에서 생성했습니다. 스크린샷은 Playwright로 <code>https://swarmid.vercel.app</code>에서 캡처했습니다.</p>
+    <p>2026년 9월 화면 기준. 학생 화면은 가상의 공개 체험 데이터입니다. 이전 버전 영상은 새 안내에서 제외했습니다. 수업·권한에 따라 보이는 기능이 다를 수 있습니다.</p>
   </footer>
+  <script>
+    const headings = [...document.querySelectorAll('main h2[id]')];
+    const links = [...document.querySelectorAll('.guide-toc a')];
+    function updateSection() {
+      let current = headings[0];
+      for (const heading of headings) { if (heading.getBoundingClientRect().top <= 140) current = heading; }
+      for (const link of links) { if (current && link.hash === '#' + current.id) link.setAttribute('aria-current','location'); else link.removeAttribute('aria-current'); }
+    }
+    let queued = false;
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(() => { updateSection(); queued = false; }); } }, {passive:true});
+    addEventListener('hashchange', updateSection);
+    updateSection();
+  </script>
 </body>
 </html>

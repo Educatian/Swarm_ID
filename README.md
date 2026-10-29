@@ -77,18 +77,18 @@ The studio is intended to support students in seeing educational media not as ne
 ## Technical Stack
 
 - Plain HTML/CSS/JS + **D3.js** force-directed tension maps
-- **Supabase** — auth, course data, learner runs, append-only `analytics_events`, **Realtime** (동료 활동 라이브 반영 + 프레즌스)
+- **Cloudflare D1 + Pages Worker** — 인증, 코스 데이터, 학습자 실행 기록, `analytics_events`, 4초 단위 공동작업 동기화
 - **OpenRouter** — case structuring, swarm replies, disagreement classification, critique rounds (`_worker.js` Pages 워커, 모델 폴백 체인) + 결정론적 로컬 폴백
 - **PWA** — manifest + network-first service worker(미디어 우회), 홈 화면 설치, 오프라인 셸
 - 배포: Cloudflare Pages (`swarm-id-en` EN / `swarm-id-ko` KO / `dts-ko-preview` 데모), wrangler direct-upload
 
 ## Data Model
 
-Course-centered Supabase model: `profiles` · `institutions` · `courses` · `course_memberships` · `cases` · `documents` · `learner_runs` · `cohort_graph_snapshots` (+ `analytics_events`).
+Course-centered Cloudflare model: `profiles` · `institutions` · `courses` · `course_memberships` · `cases` · `documents` · `learner_runs` · `cohort_graph_snapshots` (+ `analytics_events`).
 
 - instructor-authored cases remain canonical; learner work lives in `learner_runs`
 - published/archived state controls learner visibility; cases with student activity can only be archived, never deleted from the UI
-- schema & policies: [docs/supabase_schema.sql](./docs/supabase_schema.sql) · [docs/supabase_setup.md](./docs/supabase_setup.md)
+- runtime schema & policies: [`cloudflare-backend.js`](./cloudflare-backend.js) · [`wrangler.toml`](./wrangler.toml)
 
 ## Local Development
 
@@ -107,7 +107,7 @@ node scripts/smoke-usability-upgrade.mjs   # browser smoke (11 checks)
 
 - [docs/analytics_feedback_events.md](./docs/analytics_feedback_events.md) — 피드백 계측 이벤트 사전 + 마이닝 SQL
 - [docs/ko-glossary.md](./docs/ko-glossary.md) — 한국어 용어 기준표
-- [docs/supabase_setup.md](./docs/supabase_setup.md) — 백엔드 셋업 (Realtime publication, 케이스 삭제 정책 포함)
+- [docs/supabase_setup.md](./docs/supabase_setup.md) — 이관 전 레거시 정책 참고용(운영 런타임에서는 사용하지 않음)
 - [guides/](./guides) — 학생/교수자 가이드 (md → HTML 빌드, 영상·나레이션 포함)
 - [scripts/](./scripts) — 코호트 시딩, 가이드 캡처/녹화, E2E 검증(`e2e-verify-feedback.mjs`)
 

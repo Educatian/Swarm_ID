@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html class="theme-light" lang="ko">
   <head>
+  <script>window.__DTS_PREVIEW__ = true;</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>디자인 텐션 스튜디오</title>
@@ -33,7 +34,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="./assets/material-symbols-outlined.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="./assets/pretendard.css">
-  <link rel="stylesheet" href="./styles.min.css?v=20260801-i18n">
+  <link rel="stylesheet" href="./styles.min.css?v=20260907-ux">
+  <link rel="stylesheet" href="./ui-shared.css?v=20260908-ui1">
+  <script src="./ui-shared.js?v=20260908-ui1"></script>
+  <link rel="preload" href="./assets/pretendard/PretendardVariable.subset.91.woff2" as="font" type="font/woff2" crossorigin>
 </head>
 <body>
   <a class="skip-link" href="#main-content">본문으로 바로가기</a>
@@ -50,6 +54,10 @@
         </div>
       </div>
       <div class="landing-header-actions">
+        <div class="landing-language-switcher" id="landing-language-switcher" role="group" aria-label="언어 선택">
+          <button type="button" data-landing-language="ko" lang="ko" aria-pressed="true">한국어</button>
+          <button type="button" data-landing-language="en" lang="en" aria-pressed="false">English</button>
+        </div>
         <div class="header-guides" id="header-guides">
           <button class="toolbar-button toolbar-button-quiet header-guides-trigger" id="header-guides-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="header-guides-menu">
             <span id="header-guides-label">가이드</span>
@@ -81,8 +89,13 @@
     <section class="landing-hero">
       <div class="landing-copy">
         <p class="landing-kicker">비판적 수업설계 스튜디오</p>
-        <h2 class="hero-headline"><span id="landing-hero-title">설계의 쟁점을 살아 있는 맵으로 읽어요.</span></h2>
+        <h2 class="hero-headline"><span id="landing-hero-title">하나의 사례, 서로 다른 관점.</span></h2>
         <p class="landing-body">교사 · 학생 · 에듀테크 · 행정 — 네 관점이 부딪히는 지점을 시각화하고, 근거로 생각을 정리하는 수업 설계 스튜디오예요.</p>
+        <div class="ux-try">
+          <a class="toolbar-button toolbar-button-primary ux-demo-link" href="./preview.html" data-ux-copy="uxTry">예시로 먼저 둘러보기</a>
+          <p data-ux-copy="uxTryNote">가입 없이 · 내 속도로 가볍게 체험해요</p>
+        </div>
+        <div class="ux-landing-sample" id="ux-landing-sample"></div>
         <ol class="landing-steps">
           <li>
             <span class="landing-step-num">1</span>
@@ -282,9 +295,9 @@
         </button>
 
         <nav class="workspace-primary-nav" aria-label="핵심 학습 흐름">
-          <button class="workspace-primary-nav-item" type="button" data-view="home">홈</button>
-          <button class="workspace-primary-nav-item is-active" type="button" data-view="visualizer">네트워크</button>
-          <button class="workspace-primary-nav-item" type="button" data-view="report">생각 정리</button>
+          <button class="workspace-primary-nav-item" type="button" data-view="home"><span>홈</span></button>
+          <button class="workspace-primary-nav-item is-active" type="button" data-view="visualizer"><span>쟁점 맵</span></button>
+          <button class="workspace-primary-nav-item" type="button" data-view="report"><span>생각 정리</span></button>
         </nav>
 
         <div class="topbar-side">
@@ -321,6 +334,9 @@
             </button>
             <button class="toolbar-button toolbar-button-quiet toolbar-button-icon" id="workspace-locale-toggle" type="button" aria-label="주간(라이트) 모드로 전환" title="주간(라이트) 모드로 전환"><span class="material-symbols-outlined" aria-hidden="true">light_mode</span></button>
             <span class="topbar-identity" id="session-identity-label">교수자</span>
+            <button class="toolbar-button toolbar-button-quiet" id="research-consent-toggle" type="button" aria-pressed="false">연구 동의</button>
+            <button class="toolbar-button toolbar-button-quiet" id="research-export" type="button">데이터 내보내기</button>
+            <button class="toolbar-button toolbar-button-danger" id="research-delete" type="button">내 데이터 삭제</button>
             <button class="toolbar-button toolbar-button-quiet" id="start-tutorial" type="button">튜토리얼 보기</button>
             <button class="toolbar-button toolbar-button-danger" id="return-to-landing">로그아웃</button>
           </div>
@@ -463,7 +479,7 @@
                   <button type="button" class="legend-close" id="stage-note-close" aria-label="정보 숨기기" title="정보 숨기기">
                     <span class="material-symbols-outlined" aria-hidden="true">close</span>
                   </button>
-                  <p class="eyebrow" id="stage-note-kicker">관계 연결 맵</p>
+                  <p class="eyebrow" id="stage-note-kicker">D3 포스 그래프</p>
                   <strong id="stage-note-title">실시간 네트워크 구조</strong>
                   <span id="stage-note-body">노드에 마우스를 올리면 쟁점을 확인할 수 있어요. 이해관계자 노드를 누르면 선택한 관점이 바뀝니다.</span>
                 </div>
@@ -532,7 +548,7 @@
                 </div>
                 <div class="swarm-info-panel" id="swarm-info-panel" hidden>
                   <div class="swarm-info-section">
-                    <strong class="swarm-info-heading">관점 간 연결</strong>
+                    <strong class="swarm-info-heading">스웜 연결</strong>
                     <ul class="swarm-info-list">
                       <li><span class="swarm-info-line swarm-info-line-ok"></span><span>에이전트 동의</span></li>
                       <li><span class="swarm-info-line swarm-info-line-danger"></span><span>에이전트 이견</span></li>
@@ -682,11 +698,10 @@
                   <span class="material-symbols-outlined" id="orbit-icon">school</span>
                 </div>
                 <div class="orbit-label" id="orbit-summary">수업 운영 부담과 진행 부담이 높아요.</div>
-                <div class="orbit-satellite orbit-satellite-a" id="orbit-sat-a">LMS</div>
+                <div class="orbit-satellite orbit-satellite-a">LMS</div>
                 <div class="orbit-satellite orbit-satellite-b" id="orbit-sat-b">동료 피드백</div>
                 <div class="orbit-satellite orbit-satellite-c" id="orbit-sat-c">평가</div>
               </div>
-              <div class="orbit-signal-list" id="orbit-signal-list" aria-label="관심사 우선순위"></div>
             </section>
 
             <aside class="panel chat-panel">
@@ -914,12 +929,16 @@
                 <span class="badge badge-neutral" id="reflection-badge">교수자 보기</span>
               </div>
 
-              <div class="rubric-list" id="rubric-list"></div>
-
               <div class="reflection-block">
                 <p class="label">생각 정리 질문</p>
                 <div id="reflection-prompts" class="prompt-list"></div>
               </div>
+
+              <details class="ux-rubric-details">
+                <summary data-ux-copy="uxReferenceMetrics">설계 참고 지표</summary>
+                <p data-ux-copy="uxReferenceMetricsNote">사례 설정과 기록 수를 바탕으로 한 참고값이에요. 학습 성취도나 성적이 아니에요.</p>
+                <div class="rubric-list" id="rubric-list"></div>
+              </details>
 
               <div class="reflection-block" id="instructor-cohort-block" hidden>
                 <div class="cohort-header">
@@ -995,9 +1014,9 @@
     </div>
   </div>
 
+  <script src="./preview-demo.js"></script>
   <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="./supabase-config.js"></script>
+  <script src="./cloudflare-client.js?v=20260823"></script>
   <script>
     // PWA: register the service worker (https/localhost only; preview harness excluded).
     if ("serviceWorker" in navigator) {
@@ -1015,10 +1034,10 @@
         // two tags because defer/async ordering is easy to get subtly wrong and
         // the failure would be a blank app.
         const copyScript = document.createElement("script");
-        copyScript.src = "./i18n.min.js?v=20260801-i18n";
+        copyScript.src = "./i18n.min.js?v=20260907-ux";
         copyScript.onload = () => {
           const appScript = document.createElement("script");
-          appScript.src = "./app.min.js?v=20260801-i18n";
+          appScript.src = "./app.min.js?v=20260907-ux";
           document.body.appendChild(appScript);
         };
         document.body.appendChild(copyScript);
@@ -1040,6 +1059,5 @@
       document.body.appendChild(geminiScript);
     })();
   </script>
-  <script src="./preview-demo.js?v=20260731-network-alias"></script>
 </body>
 </html>

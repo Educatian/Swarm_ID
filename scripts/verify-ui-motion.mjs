@@ -1,0 +1,27 @@
+// Synthetic interaction checks only; no real learner state or requests.
+import {chromium} from 'playwright';
+const browser=await chromium.launch();
+const page=await browser.newPage({viewport:{width:1024,height:900}});
+const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await page.goto(`${process.env.UI_BASE||'http://127.0.0.1:8152'}/preview.html?lang=${process.env.UI_LANG||'ko'}`,{waitUntil:'networkidle'});
+await page.waitForFunction(()=>typeof state!=='undefined'&&state.activeCourseId);
+const checks=[];
+const check=(name,pass)=>checks.push({name,pass:!!pass});
+await page.emulateMedia({reducedMotion:'no-preference'});
+const coach=page.locator('#agent-coach-trigger');
+await coach.hover();await page.waitForTimeout(200);
+check('Hover lifts button without layout movement',await coach.evaluate(e=>getComputedStyle(e).transform.includes('-2')));
+await page.mouse.down();await page.waitForTimeout(180);
+check('Press feedback',await coach.evaluate(e=>getComputedStyle(e).transform.startsWith('matrix(0.97')));
+await page.mouse.up();
+check('Coach opens with slide',await page.locator('#agent-coach-drawer').evaluate(e=>!e.hidden&&getComputedStyle(e).animationName==='dts-drawer-enter'));
+await page.waitForTimeout(300);
+check('Drawer settles without residual transform',await page.locator('#agent-coach-drawer').evaluate(e=>getComputedStyle(e).transform==='none'));
+await page.emulateMedia({reducedMotion:'reduce'});
+await page.evaluate(()=>{setAgentCoachOpen(false);setAgentCoachOpen(true);});
+check('Reduced motion disables animations and transitions',await page.evaluate(()=>[...document.querySelectorAll('.agent-coach-drawer,.agent-coach-trigger,.intake-panel,.insight-panel')].every(e=>getComputedStyle(e).animationName==='none'&&getComputedStyle(e).transitionDuration==='0s')));
+check('Keyboard focus remains visible',await page.evaluate(()=>{const e=document.querySelector('#agent-coach-drawer button');e.focus();return e===document.activeElement;}));
+await page.locator('#agent-coach-drawer button').first().click();
+check('Close remains functional',await page.locator('#agent-coach-drawer').evaluate(e=>e.hidden));
+await browser.close();console.log(JSON.stringify({checks,errors},null,2));
+if(errors.length||checks.some(c=>!c.pass))process.exitCode=1;

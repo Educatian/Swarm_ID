@@ -88,6 +88,21 @@ for (const key of ["view", "density", "theme", "locale", "visibility"]) {
   if (ctx[key] == null) problems.push(`context.${key} is null`);
 }
 
+const scope = await page.evaluate(() => {
+  const course = getActiveCourse();
+  const caseRecord = getCaseById(state.activeCaseId);
+  return window.analyticsScope(course, caseRecord);
+});
+for (const key of ["account_id", "course_id", "case_id", "session_id", "session_started_at", "event_at", "session_elapsed_ms"]) {
+  if (!(key in scope)) problems.push(`scope missing ${key}`);
+}
+if (!scope.session_id || !scope.session_started_at || !scope.event_at) {
+  problems.push("scope session/timeframe identifiers are empty");
+}
+if (typeof scope.session_elapsed_ms !== "number" || scope.session_elapsed_ms < 0) {
+  problems.push(`scope.session_elapsed_ms is ${scope.session_elapsed_ms}`);
+}
+
 // The visible-time clock is the denominator for every rate in the schema. If it
 // never advances, time on task is uniformly zero and nothing normalises.
 const t0 = await page.evaluate(() => window.visibleMsSoFar());

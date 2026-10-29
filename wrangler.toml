@@ -1,0 +1,8 @@
+name = "swarm-id-ko"
+compatibility_date = "2026-08-23"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "design-tension-studio"
+database_id = "4a036dba-7d40-4152-a9c9-59e54b7b33ae"

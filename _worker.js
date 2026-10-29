@@ -1,4 +1,6 @@
-/* Cloudflare Pages worker: serve static assets + handle POST /api/gemini.
+import { handleDtsApi } from "./cloudflare-backend.js";
+
+/* Cloudflare Pages worker: serve static assets + handle application APIs.
    The client speaks the legacy shape {systemInstruction, prompt,
    responseMimeType, temperature, model} and expects {text}. We translate it
    to an OpenRouter chat completion (OPENROUTER_API_KEY secret required).
@@ -7,17 +9,19 @@
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const dtsResponse = await handleDtsApi(url.pathname, request, env);
+    if (dtsResponse) return secure(dtsResponse);
     if (url.pathname === "/api/gemini" && request.method === "POST") {
       try {
         if (!env.OPENROUTER_API_KEY) {
-          return json({ error: "OPENROUTER_API_KEY is not configured." }, 500);
+          return secure(json({ error: "OPENROUTER_API_KEY is not configured." }, 500));
         }
-        return await callOpenRouter(await request.text(), env.OPENROUTER_API_KEY, url.origin);
+        return secure(await callOpenRouter(await request.text(), env.OPENROUTER_API_KEY, url.origin));
       } catch (error) {
-        return json({ error: String(error) }, 502);
+        return secure(json({ error: String(error) }, 502));
       }
     }
-    return env.ASSETS.fetch(request);
+    return secure(await env.ASSETS.fetch(request));
   },
 };
 
@@ -87,4 +91,13 @@ function json(obj, status) {
     status,
     headers: { "Content-Type": "application/json" },
   });
+}
+
+function secure(response) {
+  const headers = new Headers(response.headers);
+  headers.set("x-content-type-options", "nosniff");
+  headers.set("referrer-policy", "strict-origin-when-cross-origin");
+  headers.set("permissions-policy", "camera=(), microphone=(), geolocation=()");
+  headers.set("x-frame-options", "SAMEORIGIN");
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }

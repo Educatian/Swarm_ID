@@ -16,31 +16,47 @@
      - SVG text is painted by `fill`; reading `color` there returns whatever
        was inherited and yields a contrast of exactly 1.
 
-   SVG nodes are reported separately: their background is a sibling shape
-   rather than an ancestor, so this technique cannot judge them and pretending
-   otherwise produces confident nonsense.
+   Node icons and provenance badges resolve their sibling circle fill.
+   Arbitrary artwork, overlapping geometry and gradients still require visual review.
 
    Usage: node scripts/verify-contrast.mjs [--base=http://127.0.0.1:8137]   */
 import { chromium } from "playwright";
+import fs from 'node:fs';
 
 const BASE = (process.argv.find((a) => a.startsWith("--base=")) || "").split("=")[1]
   || process.env.SMOKE_BASE || "http://127.0.0.1:8137";
-const VIEWS = ["home", "visualizer", "perspectives", "matrix", "sandbox", "report", "manage"];
+const VIEWS = ["home", "visualizer", "perspectives", "matrix", "sandbox", "report", "manage", "drawer-intake", "drawer-insight", "coach", "tutorial", "landing"];
 const HARD = 2.5; // below this the text is effectively invisible, not merely dim
 
 const browser = await chromium.launch();
-const page = await browser.newPage();
+const page = await browser.newPage({reducedMotion:'reduce'});
 await page.setViewportSize({ width: 1440, height: 1000 });
-await page.goto(`${BASE}/preview.html`, { waitUntil: "networkidle" });
+await page.goto(`${BASE}/preview.html?lang=${process.env.UI_LANG || 'ko'}&role=admin`, { waitUntil: "networkidle" });
 await page.waitForTimeout(2500);
 
-const sweep = async (theme) => {
-  await page.evaluate((t) => { state.activeRole = "admin"; setTheme(t); renderAll(); }, theme);
-  await page.waitForTimeout(700);
+const sweep = async (theme, density, width) => {
+  await page.goto(`${BASE}/preview.html?lang=${process.env.UI_LANG || 'ko'}&role=admin`,{waitUntil:'networkidle'});
+  await page.setViewportSize({width,height:1000});
+  await page.evaluate(({t,d}) => { state.activeRole = "admin"; state.density=d; setTheme(t); renderAll(); }, {t:theme,d:density});
+  await page.waitForTimeout(100);
   const all = [];
   for (const v of VIEWS) {
-    await page.evaluate((x) => { setView(x); renderAll(); }, v);
-    await page.waitForTimeout(450);
+    if(v==='landing') {
+      await page.goto(`${BASE}/index.html`,{waitUntil:'networkidle'});
+      await page.evaluate(t=>setTheme(t),theme);
+    } else await page.evaluate((x) => {
+      setAgentCoachOpen(false);endTutorial(false);closeMapDrawers();
+      setView(x.startsWith('drawer-')||x==='coach'||x==='tutorial'?'visualizer':x);renderAll();
+      if(x.startsWith('drawer-'))openMapDrawer(x.slice(7));
+      if(x==='coach')setAgentCoachOpen(true);
+      if(x==='tutorial')startTutorial(true);
+    }, v);
+    await page.evaluate(()=>document.fonts.ready);
+    await page.waitForTimeout(350);
+    if(process.env.CONTRAST_SHOTS && width===390 && density==='simple' && ['home','visualizer','report','coach','landing','perspectives','tutorial'].includes(v)) {
+      fs.mkdirSync(process.env.CONTRAST_SHOTS,{recursive:true});
+      await page.screenshot({path:`${process.env.CONTRAST_SHOTS}/${theme}-${v}.png`});
+    }
     all.push(...await page.evaluate((view) => {
       const rgb = (c) => { const m = (c || "").match(/[\d.]+/g);
         return m ? { r: +m[0], g: +m[1], b: +m[2], a: m.length > 3 ? +m[3] : 1 } : null; };
@@ -84,26 +100,36 @@ const sweep = async (theme) => {
       };
       const out = [];
       document.querySelectorAll("*").forEach((el) => {
-        const txt = [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent.trim()).join("");
+        const placeholder=el.matches('input,textarea')&&!el.value&&el.placeholder;
+        const txt = placeholder || [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent.trim()).join("");
         if (!txt) return;
         const r = el.getBoundingClientRect();
         if (r.width < 4 || r.height < 4) return;
-        const cs = getComputedStyle(el);
+        const cs = getComputedStyle(el,placeholder?'::placeholder':null);
         if (cs.visibility === "hidden" || cs.display === "none" || +cs.opacity < 0.15) return;
         // A closed <details> keeps its contents in the layout when CSS sets a
         // display on them; those are not on screen and must not be judged.
         if (el.closest("details:not([open])")) return;
+        if(el.matches(':disabled') || el.closest('[hidden],.is-hidden,button:disabled')) return;
         const isSvg = el.ownerSVGElement != null;
         const paint = isSvg ? cs.fill : cs.color;
         const fg = rgb(paint); if (!fg) return;
-        const bg = effBg(el);
+        let bg = effBg(el);
+        const shape = el.classList.contains('node-icon') ? el.closest('.network-node')?.querySelector('.node-body')
+          : el.closest('.node-badge')?.querySelector('circle');
+        if(shape){const fill=rgb(getComputedStyle(shape).fill);if(fill)bg=over(fill,bg);}
         const size = parseFloat(cs.fontSize);
         const large = size >= 24 || (+cs.fontWeight >= 700 && size >= 18.66);
-        const need = large ? 3 : 4.5;
+        const need = large || el.classList.contains('material-symbols-outlined') || el.classList.contains('node-icon') ? 3 : 4.5;
+        let opacity=placeholder?+cs.opacity:1;
+        for(let n=el;n;n=n.parentElement)opacity*=+getComputedStyle(n).opacity;
+        if(opacity===0)return; // Closed drawers remain in the DOM but are not rendered.
+        fg.a*=opacity;
         const c = ratio(fg.a < 1 ? over(fg, bg) : fg, bg);
         if (c < need) out.push({ view, isSvg,
-          sel: (el.tagName + "." + String(el.className).split(" ")[0]).slice(0, 44),
-          text: txt.slice(0, 24), contrast: c, need, paint });
+          sel: el.id?'#'+el.id:(el.tagName + "." + String(el.className).split(" ")[0]).slice(0, 70),
+          parent:el.parentElement.className, placeholder:!!placeholder,
+          text: txt.slice(0, 24), contrast: c, need, paint, bg, opacity });
       });
       return out;
     }, v));
@@ -111,16 +137,19 @@ const sweep = async (theme) => {
   return all;
 };
 
-let failed = false;
-for (const theme of ["light", "dark"]) {
-  const hits = await sweep(theme);
+let failed = false;const report=[];
+for (const theme of ["light", "dark"]) for(const density of ['simple','advanced']) for(const width of [390,1440]) {
+  if(process.env.CONTRAST_QUICK && (density!=='simple'||width!==390))continue;
+  const hits = await sweep(theme,density,width);
   const dom = hits.filter((h) => !h.isSvg);
   const hard = dom.filter((h) => h.contrast < HARD);
   const worst = dom.length ? Math.min(...dom.map((h) => h.contrast)) : "-";
-  console.log(`${theme.toUpperCase().padEnd(6)} below AA: ${String(dom.length).padStart(3)}  |  below ${HARD}: ${String(hard.length).padStart(3)}  |  worst ${worst}   (svg skipped: ${hits.length - dom.length})`);
+  report.push({theme,density,width,dom,svg:hits.filter(h=>h.isSvg)});
+  console.log(`${theme} ${density} ${width} below AA: ${dom.length} worst ${worst} (svg failures: ${hits.length-dom.length})`);
   dom.slice(0, 8).forEach((h) => console.log(`   ${String(h.contrast).padStart(5)} (need ${h.need})  ${h.view.padEnd(10)} ${h.sel.padEnd(34)} "${h.text}"`));
-  if (dom.length) failed = true;
+  if (hits.length) failed = true;
 }
 await browser.close();
-console.log(failed ? "FAIL contrast" : "PASS contrast — no DOM text below AA in either theme");
+if(process.env.CONTRAST_REPORT)fs.writeFileSync(process.env.CONTRAST_REPORT,JSON.stringify(report,null,2));
+console.log(failed ? "FAIL contrast" : "PASS contrast — no measured text/icon failures in either theme (not a full accessibility audit)");
 process.exit(failed ? 1 : 0);

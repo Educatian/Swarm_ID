@@ -6,13 +6,15 @@
 // deletes every cache whose name differs, so the version string is the only
 // thing that evicts a stale offline shell — a returning offline user otherwise
 // keeps whatever was cached under the old name indefinitely.
-const CACHE_NAME = "dts-shell-v4-20260801";
+const CACHE_NAME = "dts-ko-shell-20260908-ui1";
 const SHELL = [
   "./index.html",
   "./i18n.min.js",
   "./app.min.js",
   "./styles.min.css",
-  "./supabase-config.js",
+  "./ui-shared.css?v=20260908-ui1",
+  "./ui-shared.js?v=20260908-ui1",
+  "./cloudflare-client.js",
   "./manifest.webmanifest",
   "./assets/logo.png",
   "./assets/hero-bg.webp",
@@ -51,6 +53,7 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   // Never intercept API/auth traffic (Supabase, Gemini, fonts CDNs).
   if (url.origin !== self.location.origin) return;
+  if (url.pathname.startsWith("/api/")) return;
   if (url.pathname.includes("/guides/videos/") || url.pathname.includes("/guides/audio/")) return;
 
   event.respondWith(

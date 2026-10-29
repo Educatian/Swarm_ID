@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Design Tension Studio — Instructor Guide</title>
-  <meta name="description" content="From creating a case to reading engagement analytics — the whole course flow.">
+  <title>Start your first class with confidence</title>
+  <meta name="description" content="Prepare the case, guide the discussion, and verify what was received.">
   <style>
 :root {
   --bg: #fafafa;
@@ -197,113 +197,110 @@ footer {
   main { padding: 0 20px 64px; }
   h2 { font-size: 22px; }
 }
+/* The updated workspace's restrained palette, with reading-first hierarchy. */
+:root { --bg:#f5f6f9; --ink:#202b3c; --muted:#526176; --accent:#4053d8; }
+.hero { background:#fff; color:var(--ink); border-bottom:1px solid var(--border); padding:56px 24px 40px; }
+.hero-inner { max-width:1100px; }
+.hero h1 { max-width:760px; font-size:clamp(30px,4vw,48px); letter-spacing:-.04em; line-height:1.22; }
+.hero .eyebrow { color:var(--accent); opacity:1; font-weight:700; }
+.hero p { opacity:1; color:var(--muted); }
+.guide-nav { max-width:1148px; padding:0 24px; }
+.guide-nav a { padding:10px 14px; min-height:44px; }
+.guide-layout { max-width:1148px; margin:auto; padding:0 24px; display:grid; grid-template-columns:230px minmax(0,1fr); gap:40px; }
+.guide-layout main { min-width:0; width:100%; padding:0 0 64px; }
+.guide-toc { position:sticky; top:20px; align-self:start; max-height:calc(100vh - 40px); overflow:auto; padding:16px; background:white; border:1px solid var(--border); border-radius:14px; }
+.guide-toc h2 { font-size:13px; margin:0 0 12px; }
+.guide-toc a { display:block; padding:10px 8px; border-radius:8px; font-size:14px; line-height:1.5; color:var(--muted); }
+.guide-toc a[aria-current] { background:#eef0ff; color:#283bb3; font-weight:700; }
+main h2 { scroll-margin-top:24px; margin-top:48px; font-size:25px; line-height:1.4; }
+main h3 { font-size:18px; line-height:1.5; }
+main p, main li { line-height:1.85; overflow-wrap:anywhere; }
+blockquote { background:#fff8ec; color:#654b1f; border-color:#b98731; font-size:15px; }
+figure { padding:8px; box-shadow:none; }
+figure a { display:block; }
+.skip-link { position:absolute; top:-100px; left:16px; z-index:10; background:white; padding:12px; }
+.skip-link:focus { top:8px; }
+:focus-visible { outline:3px solid #4053d8; outline-offset:4px; }
+footer { max-width:1148px; }
+@media(max-width:800px) { .guide-layout { display:block; padding:0 20px; } .guide-toc { position:static; max-height:none; margin-bottom:32px; } .guide-toc a { display:inline-block; margin:2px; border:1px solid var(--border); } .hero { padding:32px 20px; } }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+@media print { .guide-toc,.guide-nav,.skip-link { display:none; } .guide-layout { display:block; } .hero { padding:0 0 20px; } body { background:white; } figure { break-inside:avoid; } }
 </style>
 </head>
 <body>
+  <a class="skip-link" href="#guide-content">Skip to content</a>
   <header class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">Design Tension Studio · Classroom guide</p>
-      <h1>Design Tension Studio — Instructor Guide</h1>
-      <p>From creating a case to reading engagement analytics — the whole course flow.</p>
+      <p class="eyebrow">Design Tension Studio · Updated walkthrough · 2026.09 · v2</p>
+      <h1>Start your first class with confidence</h1>
+      <p>Prepare the case, guide the discussion, and verify what was received.</p>
     </div>
   </header>
-  <nav class="guide-nav"><a href="./instructor-en.html" class="active">Instructor Guide</a><a href="./instructor-ko.html">Instructor Guide (Korean)</a><a href="./student-en.html">Student Guide</a><a href="./student-ko.html">Student Guide (Korean)</a></nav>
-  <main>
-<p>A walkthrough for instructors running Design Tension Studio in a course — from creating a case to reading engagement analytics.</p>
+  <nav class="guide-nav" aria-label="Role and language"><a href="./student-ko.html">Student Guide (Korean)</a><a href="./student-en.html">Student Guide</a><a href="./instructor-ko.html">Instructor Guide (Korean)</a><a href="./instructor-en.html" class="active">Instructor Guide</a></nav>
+  <div class="guide-layout">
+  <nav class="guide-toc" aria-label="On this page"><h2>Jump to a step</h2><a href="#section-1">Before class · Check the essentials</a><a href="#section-2">1 · Check the course and case</a><a href="#section-3">2 · Prepare and publish the case</a><a href="#section-4">3 · Start with one issue</a><a href="#section-5">4 · Compare and discuss</a><a href="#section-6">5 · Verify receipt and interpret analytics</a><a href="#section-7">Frequently asked questions</a><a href="#section-8">Ready-to-teach check</a></nav>
+  <main id="guide-content" tabindex="-1">
+<p>An operational guide to the updated Design Tension Studio. Students follow <strong>Home → Issue map → Reflection</strong>. This guide explains the interface; it does not establish learning effectiveness or validate the analytics.</p>
+<h2 id="section-1">Before class · Check the essentials</h2>
+<p><a href="../index.html">Open the service</a> · <a href="../preview.html?lang=en">Try the student sample</a> · <a href="./student-en.html">Student instructions</a></p>
+<p>Prepare an instructor account, the intended course, and a case to publish. Existing accounts use the existing sign-in route. Keep shared passwords and student information out of public guides.</p>
 <blockquote>
-<strong>The operating model in one line</strong>: you create and <strong>publish</strong> a case;<br>
-students join with a course code, explore the map, and leave nodes,<br>
-questions, notes, and reflections; you manage cases and watch engagement<br>
-from the <strong>My Course</strong> view.<br>
+Current-version caution: reflection submission is coupled to research consent and event logging, so a success message alone does not establish receipt. Before class, verify a test submission on the receiving side and provide an original-copy and alternative-submission procedure. Do not require research consent as a workaround.<br>
 </blockquote>
-<div class="narration"><span class="narration-label">Listen to the narration</span><audio controls preload="none" src="./audio/instructor-en/00-intro.mp3"></audio></div>
-<hr>
-<h2>Step 1 · Create and publish a case</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/instructor-en/01-create-case.jpg" src="./videos/instructor-en/01-create-case.mp4"></video><figcaption>Screen recording with narration — press play</figcaption></figure>
-<p>Sign in at <strong>https://swarm-id-en.pages.dev</strong> with your instructor account. In the <strong>intake panel</strong> on the left:</p>
+<h2 id="section-2">1 · Check the course and case</h2>
+<p>Check the course and case selections in <strong>More settings</strong>. Open <strong>My courses</strong> from the navigation or <strong>More ways to explore</strong> on Home. Available controls depend on account permissions and course state.</p>
+<p>Share the service address, course name, join code if needed, and assigned case name. Deliver passwords separately through an appropriate private channel.</p>
+<p>Check: verify visibility using a student account. Instructor access alone does not establish that a case is published to students.</p>
+<h2 id="section-3">2 · Prepare and publish the case</h2>
+<p>Use the case creation controls to provide a title and instructional brief, then review the result. If AI structures the brief, check that its goals, constraints, and stakeholders match the source. Publish only when the case is ready.</p>
+<p>A useful starting case has one decision, at least two stakeholders, and clearly conflicting needs. Reduce unexplained jargon before asking students to analyze it.</p>
+<p>Check: distinguish draft, published, and archived states. Do not practice deleting or archiving class material without considering the records affected.</p>
+<h2 id="section-4">3 · Start with one issue</h2>
+<p>Try this activity sequence. It is a proposed facilitation pattern, not an evaluated timing or effectiveness claim.</p>
 <ol>
-<li>Paste a course brief (a design scenario, syllabus excerpt, policy note...).</li>
-<li>Click <strong>create</strong> — the AI converts it into a structured case:</li>
+<li>Find the assigned case on Home.</li>
+<li>Select one map node and explain its content in your own words.</li>
+<li>Switch perspective and identify a concern you initially missed.</li>
+<li>Write a reflection supporting a decision with case evidence.</li>
 </ol>
-<p>   stakeholders, constraints, and issues become a map.</p>
-<ol>
-<li>New cases start as <strong>drafts</strong>; <strong>publish</strong> to make them visible to</li>
-</ol>
-<p>   students.</p>
-<p>Per-case board settings control max student nodes, AI expansions per node, class sharing mode, and the student-view lockdown (network-only).</p>
-<hr>
-<h2>Step 2 · Manage from &quot;My Course&quot;</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/instructor-en/02-manage.jpg" src="./videos/instructor-en/02-manage.mp4"></video><figcaption>Screen recording with narration — press play</figcaption></figure>
-<p>The <strong>My Course</strong> view in the sidebar is your management hub:</p>
-<ul>
-<li><strong>Join code</strong> with one-tap copy — students enter it on the landing page</li>
-<li>Case list with status (published / draft / archived) and per-case</li>
-</ul>
-<p>  participation summary (students · nodes · notes)</p>
-<ul>
-<li>Student interaction analytics (step 4)</li>
-</ul>
-<hr>
-<h2>Step 3 · Curate: publish, archive, delete</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/instructor-en/03-actions.jpg" src="./videos/instructor-en/03-actions.mp4"></video><figcaption>Screen recording with narration — press play</figcaption></figure>
-<p>Each case row offers five actions:</p>
-<div class="table-wrap"><table><thead><tr><th>Action</th><th>What it does</th></tr></thead><tbody><tr><td><strong>Open</strong></td><td>Jump to that case's map</td></tr><tr><td><strong>Rename</strong></td><td>Edit the case title</td></tr><tr><td><strong>Publish / Unpublish</strong></td><td>Toggle student visibility</td></tr><tr><td><strong>Archive</strong></td><td>Hide from lists and unpublish — <strong>student records are preserved</strong></td></tr><tr><td><strong>Delete</strong></td><td>Permanent — <strong>only for cases with no student activity</strong></td></tr></tbody></table></div>
-<p>Once any student has worked in a case, the delete button is disabled and archiving is the only way to tidy up — by design, so semester data can't be destroyed accidentally. Archived cases reappear under &quot;Show archived&quot; and can be <strong>restored</strong> anytime.</p>
-<hr>
-<h2>Step 4 · Read the engagement analytics</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/instructor-en/04-analytics.jpg" src="./videos/instructor-en/04-analytics.mp4"></video><figcaption>Screen recording with narration — press play</figcaption></figure>
-<p>The analytics block at the bottom of <strong>My Course</strong> aggregates the interaction log (60s cache, refresh button):</p>
-<ul>
-<li><strong>KPI row</strong>: active students / nodes / questions / notes / reflections</li>
-<li><strong>Engagement funnel</strong>: enrolled → signed in → opened a case → explored</li>
-</ul>
-<p>  lenses → contributed → submitted reflection. <strong>The drop between stages is   your intervention point</strong> — if students open but rarely contribute, run a   node-adding activity in class.</p>
-<ul>
-<li><strong>Lens switches</strong>: which stakeholder lenses students visit — low-share</li>
-</ul>
-<p>  lenses (often Admin, Accessibility) are good candidates for explicit   discussion.</p>
-<ul>
-<li><strong>Per-student table</strong>: name · last active · nodes · questions · notes ·</li>
-</ul>
-<p>  reflections — spot quiet students early.</p>
-<p>The Report view's <strong>class analysis</strong> panel adds per-case progress with a section filter.</p>
-<hr>
-<h2>Step 5 · Live classroom patterns</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/instructor-en/05-realtime.jpg" src="./videos/instructor-en/05-realtime.mp4"></video><figcaption>Screen recording with narration — press play</figcaption></figure>
-<p>When students keep the same case open, a <strong>&quot;viewing now&quot;</strong> count appears and their nodes stream onto everyone's map <strong>in real time</strong>. A pattern that works:</p>
-<ol>
-<li>Project your screen and switch to the <strong>Class view</strong> layer</li>
-<li>Ask students to add the concerns the case is missing</li>
-<li>Watch nodes accumulate live, then discuss the recurring issues (grouped</li>
-</ol>
-<p>   with counts) and the minority voices together</p>
-<p>Students see the <strong>What to do now</strong> banner, so the flow runs without much explanation; first-time classes get the welcome slides + guided tour automatically in the first five minutes.</p>
-<hr>
-<h2>Step 6 · Print the discussion guide</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/instructor-en/06-guide.jpg" src="./videos/instructor-en/06-guide.mp4"></video><figcaption>Screen recording with narration — press play</figcaption></figure>
-<p>In <strong>My Course</strong>, press a case's <strong>&quot;Discussion guide&quot;</strong> button and a printable one-pager is generated automatically — the case constraints, the <strong>stakeholder interlock points</strong> worth projecting, the issues your class <strong>repeated</strong> (with counts), the <strong>minority voices</strong> (with author names), and the <strong>under-visited lens</strong>, each scene paired with a ready-to-use <strong>talk move</strong>.</p>
-<p>One minute before class and your discussion script for the day is ready. The more question rounds your students have run, the richer it gets.</p>
-<hr>
-<h2>Operating tips</h2>
-<ul>
-<li><strong>iPad classes</strong>: have students use Safari share (⬆️) → &quot;Add to Home</li>
-</ul>
-<p>  Screen&quot; — full-screen app, touch-optimized.</p>
-<ul>
-<li><strong>A student can't sign in</strong>: accounts must exist beforehand; one email to</li>
-</ul>
-<p>  the operator adds a missing student in about a minute.</p>
-<ul>
-<li><strong>Students can't see a case</strong>: check it's published — drafts and archived</li>
-</ul>
-<p>  cases are hidden.</p>
-<ul>
-<li><strong>New semester</strong>: archive last term's cases; student records remain</li>
-</ul>
-<p>  available for research analysis.</p>
+<p>Welcome slides no longer run automatically for students. Offer <strong>More settings → Show Tutorial</strong> when needed. If learner views are restricted, check that a required reflection task remains accessible.</p>
+<h2 id="section-5">4 · Compare and discuss</h2>
+<p>Use <strong>Class view</strong> or <strong>Compare</strong> to examine recurring issues and different positions. What appears depends on sharing settings and refresh timing; do not assume every change is instantaneous.</p>
+<p>Discussion prompts: “Which case detail supports that claim?”, “What cost does another perspective face?”, and “How would a minority concern change this decision?”</p>
+<p>Treat AI responses as proposals to inspect. Tell students not to include personal or sensitive identifying information in nodes or questions.</p>
+<h2 id="section-6">5 · Verify receipt and interpret analytics</h2>
+<p>Compare the <strong>original answer and received content</strong> in a test submission. Long answers currently may lose content after 2,000 characters. Provide a copy-first and print/PDF or other alternative submission process. Do not grade from a success message or a progress checkmark.</p>
+<p>Activity counts summarize recorded actions. Missing logs do not establish nonparticipation or weak learning: consent, connectivity, and settings can affect coverage.</p>
+<p>Design reference indicators such as <strong>Perspective shift</strong> and <strong>Revision quality</strong> currently use settings or record counts. Do not treat them as measures of learner ability or writing quality. Repeated submission of an unchanged answer can also produce revision events; inspect the original text.</p>
+<h2 id="section-7">Frequently asked questions</h2>
+<h3>A student cannot find the case.</h3>
+<p>Check the student’s course, the case’s publication state, view permissions, and account-to-course connection.</p>
+<h3>A student submitted, but no record appears.</h3>
+<p>Preserve the original answer and accept it through the alternative route. Report the minimum necessary information, such as case name and submission time, to the operator. Do not ask for the student’s password.</p>
+<h3>Does the public sample need student accounts?</h3>
+<p>No. It uses fictional case data without sign-in. Help learners distinguish practice from real coursework.</p>
+<h3>Can I keep using the previous videos?</h3>
+<p>They show older navigation and include outdated automatic-onboarding and saving claims. They are excluded from this version’s core guide. Use the current student guide and in-app tour first.</p>
+<h2 id="section-8">Ready-to-teach check</h2>
+<p>Verify student sign-in, case visibility, permitted views, receipt of a short test reflection, original-copy instructions, and an alternative submission route. Do not use the analytics as evidence of learning grades.</p>
+<p><a href="./student-en.html">Open the student walkthrough</a></p>
   </main>
+  </div>
   <footer>
-    <p>Generated from <code>guides/instructor-en.md</code>. Screenshots captured on <code>https://swarmid.vercel.app</code> via Playwright.</p>
+    <p>Based on the September 2026 interface. Student screenshots use fictional public-preview data. Previous-version videos are excluded. Available features depend on your course and permissions.</p>
   </footer>
+  <script>
+    const headings = [...document.querySelectorAll('main h2[id]')];
+    const links = [...document.querySelectorAll('.guide-toc a')];
+    function updateSection() {
+      let current = headings[0];
+      for (const heading of headings) { if (heading.getBoundingClientRect().top <= 140) current = heading; }
+      for (const link of links) { if (current && link.hash === '#' + current.id) link.setAttribute('aria-current','location'); else link.removeAttribute('aria-current'); }
+    }
+    let queued = false;
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(() => { updateSection(); queued = false; }); } }, {passive:true});
+    addEventListener('hashchange', updateSection);
+    updateSection();
+  </script>
 </body>
 </html>

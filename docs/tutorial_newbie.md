@@ -1,5 +1,7 @@
 # Swarm ID — Newbie User Tutorial
 
+> **Archived: previous interface.** For the September 2026 workflow, use [학생 안내](../guides/student-ko.html), [Student guide](../guides/student-en.html), [교수자 안내](../guides/instructor-ko.html), or [Instructor guide](../guides/instructor-en.html). The instructions below are historical and no longer mirror the current in-app tour.
+
 A step-by-step walkthrough for first-time users. This mirrors the in-app guided tour but reads as a standalone reference. It is structured so it can be re-laid out as a publisher-style tutorial document later (cover page, chapter breaks, callouts).
 
 ---

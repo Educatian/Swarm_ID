@@ -22,6 +22,8 @@ gemini-config.js
 
 # local Cloudflare Pages preview build (no-login demo)
 dist-preview/
+dist-en/
+dist-ko/
 .wrangler/
 .codex-goal.md
 

@@ -57,3 +57,14 @@ for (const t of TARGETS) {
 }
 writeFileSync("build-manifest.json", JSON.stringify(manifest, null, 2) + "\n");
 console.log("wrote build-manifest.json");
+
+// Keep the sample workspace on exactly the same markup as the application.
+// The early flag prevents auth/session loading before the demo is injected.
+const previewHtml = readFileSync("index.html", "utf8")
+  .replace("<head>", '<head>\n  <script>window.__DTS_PREVIEW__ = true;</script>')
+  .replace('<script src="https://d3js.org/d3.v7.min.js"></script>', '<script src="./preview-demo.js"></script>\n  <script src="https://d3js.org/d3.v7.min.js"></script>');
+writeFileSync("preview.html", previewHtml);
+console.log("synced preview.html");
+
+// Guide markup is generated from the four role/locale sources in every build.
+await import("./build-guides-html.mjs");

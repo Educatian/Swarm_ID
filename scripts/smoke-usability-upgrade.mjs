@@ -41,6 +41,9 @@ await page.evaluate(() => {
 await page.waitForTimeout(800);
 
 // 4. Inter-stakeholder dashed edges present in the SVG
+// Comparison data supplies overlapping issues across stakeholder groups.
+await page.selectOption("#map-layer-select", "compare");
+await page.waitForTimeout(300);
 const interEdges = await page.locator('.network-link[data-kind="inter-stakeholder"]').count();
 check("inter-stakeholder edges drawn", interEdges > 0, `count=${interEdges}`);
 
@@ -57,6 +60,9 @@ await page.click("#map-focus-btn");
 await page.waitForTimeout(400);
 
 // 6. List view renders sortable rows; search filters
+// Peer-contributed "데이터" issues live in the comparison layer. The sample
+// now starts on the simpler base map, so choose that layer explicitly.
+await page.selectOption("#map-layer-select", "compare");
 await page.click("#map-mode-btn");
 await page.waitForTimeout(500);
 const listVisible = await page.locator("#node-list-panel:not([hidden])").count();

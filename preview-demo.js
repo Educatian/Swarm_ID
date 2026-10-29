@@ -6,6 +6,7 @@ window.__DTS_PREVIEW__ = true;
   function inject() {
     const previewParams = new URLSearchParams(window.location.search);
     const EN = (function () {
+      if (["ko", "en"].includes(previewParams.get("lang"))) return previewParams.get("lang") === "en";
       try { return localStorage.getItem("swarm-id-locale-v1") === "en"; } catch (_) { return false; }
     })();
     const A = (title, stakeholder) => ({ title, stakeholder: stakeholder || "teacher", body: title });
@@ -39,7 +40,7 @@ window.__DTS_PREVIEW__ = true;
       timeline: [],
       matrixInsights: [],
       sandboxFeed: [],
-      reflectionPrompts: [],
+      reflectionPrompts: [EN ? "Which issue matters most in this case? Explain your choice using one example from the map." : "이 사례에서 가장 중요한 쟁점은 무엇인가요? 맵의 사례 하나를 근거로 선택의 이유를 적어보세요."],
       networkMeta: [],
       uiCopy: {},
       stakeholderProfiles: {},
@@ -83,13 +84,13 @@ window.__DTS_PREVIEW__ = true;
     state.activeCourseId = "c";
     state.activeCaseId = "ca";
     state.activeLearnerId = "l";
-    state.activeMapLayer = "compare";
+    state.activeMapLayer = "base";
     const requestedViewRaw = previewParams.get("view");
     const requestedView = requestedViewRaw === "network" ? "visualizer" : requestedViewRaw;
     state.activeView = ["home", "visualizer", "perspectives", "matrix", "sandbox", "report", "manage"].includes(requestedView)
       ? requestedView
       : "home";
-    state.density = previewParams.get("density") === "advanced" ? "advanced" : "simple";
+    state.density = ["advanced", "detailed"].includes(previewParams.get("density")) ? "detailed" : "simple";
 
     if (typeof applyStaticTranslations === "function") applyStaticTranslations();
     document.getElementById("landing-shell")?.classList.add("is-hidden");
@@ -98,7 +99,7 @@ window.__DTS_PREVIEW__ = true;
       renderAll();
       window.setTimeout(() => {
         state.activeRole = previewParams.get("role") === "admin" ? "admin" : "user";
-        state.density = previewParams.get("density") === "advanced" ? "advanced" : "simple";
+        state.density = ["advanced", "detailed"].includes(previewParams.get("density")) ? "detailed" : "simple";
         if (requestedView && typeof setView === "function") setView(requestedView);
         renderAll();
         if (previewParams.get("coach") === "1" && typeof openAgentCoach === "function") openAgentCoach();
@@ -108,18 +109,12 @@ window.__DTS_PREVIEW__ = true;
     }
 
     // Small banner so it's clear this is a no-login demo.
-    if (!document.getElementById("preview-flag")) {
+    if (!document.getElementById("ux-preview-notice")) {
       const flag = document.createElement("div");
-      flag.id = "preview-flag";
-      flag.textContent = EN ? "Preview · demo data (no sign-in)" : "미리보기 · 데모 데이터 (로그인 없음)";
-      flag.style.cssText =
-        "position:fixed;top:94px;right:16px;z-index:20;max-width:calc(100vw - 32px);" +
-        "background:rgba(67,97,238,0.78);color:#fff;font:600 11px/1 Inter,sans-serif;" +
-        "padding:6px 10px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,0.2);pointer-events:none;opacity:.86;";
-      // The preview URL already communicates demo mode; do not pin a badge
-      // over the report or instructor console once the app shell is visible.
-      if (document.querySelector(".app-shell")) flag.style.display = "none";
-      document.body.appendChild(flag);
+      flag.id = "ux-preview-notice";
+      flag.className = "ux-demo-banner";
+      flag.innerHTML = '<span><strong>' + t("uxDemo") + '</strong><span>' + t("uxDemoNote") + '</span></span><a href="./index.html">' + t("uxExitDemo") + ' <span aria-hidden="true">↗</span></a>';
+      document.querySelector(".workspace")?.prepend(flag);
     }
   }
 

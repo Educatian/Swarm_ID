@@ -6,19 +6,22 @@
  *         student-en.html, student-ko.html
  */
 
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, cpSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const GUIDES = path.join(ROOT, "guides");
+const outputArg = process.argv.find(a => a.startsWith("--output="));
+const OUTPUT = outputArg ? path.resolve(outputArg.slice("--output=".length)) : GUIDES;
+mkdirSync(OUTPUT, { recursive: true });
 
 const guides = [
-  { slug: "instructor-en", md: "instructor-en.md", title: "Design Tension Studio — Instructor Guide", lang: "en" },
-  { slug: "instructor-ko", md: "instructor-ko.md", title: "디자인 텐션 스튜디오 — 교수자용 가이드", lang: "ko" },
-  { slug: "student-en",    md: "student-en.md",    title: "Design Tension Studio — Student Guide",    lang: "en" },
-  { slug: "student-ko",    md: "student-ko.md",    title: "디자인 텐션 스튜디오 — 학생용 가이드",    lang: "ko" },
+  { slug: "student-ko", md: "student-ko.md", title: "쟁점 하나에서, 내 생각까지", lang: "ko" },
+  { slug: "student-en", md: "student-en.md", title: "From one issue to your own position", lang: "en" },
+  { slug: "instructor-ko", md: "instructor-ko.md", title: "첫 수업을 차분하게 시작하기", lang: "ko" },
+  { slug: "instructor-en", md: "instructor-en.md", title: "Start your first class with confidence", lang: "en" },
 ];
 
 // --- tiny markdown-to-HTML (purpose-built for these guides) ---
@@ -407,6 +410,34 @@ footer {
   main { padding: 0 20px 64px; }
   h2 { font-size: 22px; }
 }
+/* The updated workspace's restrained palette, with reading-first hierarchy. */
+:root { --bg:#f5f6f9; --ink:#202b3c; --muted:#526176; --accent:#4053d8; }
+.hero { background:#fff; color:var(--ink); border-bottom:1px solid var(--border); padding:56px 24px 40px; }
+.hero-inner { max-width:1100px; }
+.hero h1 { max-width:760px; font-size:clamp(30px,4vw,48px); letter-spacing:-.04em; line-height:1.22; }
+.hero .eyebrow { color:var(--accent); opacity:1; font-weight:700; }
+.hero p { opacity:1; color:var(--muted); }
+.guide-nav { max-width:1148px; padding:0 24px; }
+.guide-nav a { padding:10px 14px; min-height:44px; }
+.guide-layout { max-width:1148px; margin:auto; padding:0 24px; display:grid; grid-template-columns:230px minmax(0,1fr); gap:40px; }
+.guide-layout main { min-width:0; width:100%; padding:0 0 64px; }
+.guide-toc { position:sticky; top:20px; align-self:start; max-height:calc(100vh - 40px); overflow:auto; padding:16px; background:white; border:1px solid var(--border); border-radius:14px; }
+.guide-toc h2 { font-size:13px; margin:0 0 12px; }
+.guide-toc a { display:block; padding:10px 8px; border-radius:8px; font-size:14px; line-height:1.5; color:var(--muted); }
+.guide-toc a[aria-current] { background:#eef0ff; color:#283bb3; font-weight:700; }
+main h2 { scroll-margin-top:24px; margin-top:48px; font-size:25px; line-height:1.4; }
+main h3 { font-size:18px; line-height:1.5; }
+main p, main li { line-height:1.85; overflow-wrap:anywhere; }
+blockquote { background:#fff8ec; color:#654b1f; border-color:#b98731; font-size:15px; }
+figure { padding:8px; box-shadow:none; }
+figure a { display:block; }
+.skip-link { position:absolute; top:-100px; left:16px; z-index:10; background:white; padding:12px; }
+.skip-link:focus { top:8px; }
+:focus-visible { outline:3px solid #4053d8; outline-offset:4px; }
+footer { max-width:1148px; }
+@media(max-width:800px) { .guide-layout { display:block; padding:0 20px; } .guide-toc { position:static; max-height:none; margin-bottom:32px; } .guide-toc a { display:inline-block; margin:2px; border:1px solid var(--border); } .hero { padding:32px 20px; } }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+@media print { .guide-toc,.guide-nav,.skip-link { display:none; } .guide-layout { display:block; } .hero { padding:0 0 20px; } body { background:white; } figure { break-inside:avoid; } }
 `;
 
 function navLinks(activeSlug) {
@@ -432,6 +463,12 @@ function navLinks(activeSlug) {
 }
 
 function wrap(title, lang, slug, bodyHtml, tagline) {
+  const sections = [];
+  bodyHtml = bodyHtml.replace(/<h2>(.*?)<\/h2>/g, (_, label) => {
+    const id = `section-${sections.length + 1}`;
+    sections.push({ id, label });
+    return `<h2 id="${id}">${label}</h2>`;
+  });
   return `<!doctype html>
 <html lang="${lang}">
 <head>
@@ -442,31 +479,48 @@ function wrap(title, lang, slug, bodyHtml, tagline) {
   <style>${css}</style>
 </head>
 <body>
+  <a class="skip-link" href="#guide-content">${lang === "ko" ? "본문으로 바로가기" : "Skip to content"}</a>
   <header class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">${lang === "ko" ? "디자인 텐션 스튜디오 · 수업용 가이드" : "Design Tension Studio · Classroom guide"}</p>
+      <p class="eyebrow">${lang === "ko" ? "디자인 텐션 스튜디오 · 새 화면 안내" : "Design Tension Studio · Updated walkthrough"} · 2026.09 · v2</p>
       <h1>${escapeHtml(title)}</h1>
       <p>${escapeHtml(tagline)}</p>
     </div>
   </header>
-  <nav class="guide-nav">${navLinks(slug)}</nav>
-  <main>
+  <nav class="guide-nav" aria-label="${lang === "ko" ? "역할과 언어" : "Role and language"}">${navLinks(slug)}</nav>
+  <div class="guide-layout">
+  <nav class="guide-toc" aria-label="${lang === "ko" ? "이 안내서의 순서" : "On this page"}"><h2>${lang === "ko" ? "필요한 단계로 바로 가기" : "Jump to a step"}</h2>${sections.map(s => `<a href="#${s.id}">${s.label}</a>`).join("")}</nav>
+  <main id="guide-content" tabindex="-1">
 ${bodyHtml}
   </main>
+  </div>
   <footer>
     <p>${lang === "ko"
-      ? `<code>guides/${slug}.md</code>에서 생성했습니다. 스크린샷은 Playwright로 <code>https://swarmid.vercel.app</code>에서 캡처했습니다.`
-      : `Generated from <code>guides/${slug}.md</code>. Screenshots captured on <code>https://swarmid.vercel.app</code> via Playwright.`}</p>
+      ? "2026년 9월 화면 기준. 학생 화면은 가상의 공개 체험 데이터입니다. 이전 버전 영상은 새 안내에서 제외했습니다. 수업·권한에 따라 보이는 기능이 다를 수 있습니다."
+      : "Based on the September 2026 interface. Student screenshots use fictional public-preview data. Previous-version videos are excluded. Available features depend on your course and permissions."}</p>
   </footer>
+  <script>
+    const headings = [...document.querySelectorAll('main h2[id]')];
+    const links = [...document.querySelectorAll('.guide-toc a')];
+    function updateSection() {
+      let current = headings[0];
+      for (const heading of headings) { if (heading.getBoundingClientRect().top <= 140) current = heading; }
+      for (const link of links) { if (current && link.hash === '#' + current.id) link.setAttribute('aria-current','location'); else link.removeAttribute('aria-current'); }
+    }
+    let queued = false;
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(() => { updateSection(); queued = false; }); } }, {passive:true});
+    addEventListener('hashchange', updateSection);
+    updateSection();
+  </script>
 </body>
 </html>`;
 }
 
 const taglines = {
-  "instructor-en": "From creating a case to reading engagement analytics — the whole course flow.",
-  "instructor-ko": "케이스 만들기부터 참여 분석까지 — 수업 운영의 전체 흐름.",
-  "student-en": "Every screen a student sees — from sign-in to submitting a reflection.",
-  "student-ko": "로그인부터 생각 정리 제출까지 — 학생이 보는 모든 화면.",
+  "instructor-en": "Prepare the case, guide the discussion, and verify what was received.",
+  "instructor-ko": "사례 준비부터 토론과 수신 확인까지. 첫 수업에 필요한 것만.",
+  "student-en": "Read one issue. Compare perspectives. Explain a choice with evidence.",
+  "student-ko": "쟁점을 읽고, 다른 입장을 비교하고, 근거 있는 내 선택을 남겨요.",
 };
 
 for (const g of guides) {
@@ -478,25 +532,31 @@ for (const g of guides) {
   // Skip the first H1 of the .md since the hero already shows the title.
   let md = readFileSync(mdPath, "utf8");
   md = md.replace(/^#\s+[^\r\n]+\r?\n(?:\r?\n)?/, "");
-  const body = renderMarkdown(md, g.lang);
+  let body = renderMarkdown(md, g.lang);
+  if (OUTPUT !== GUIDES) {
+    const origin = g.lang === "ko" ? "https://swarm-id-ko.pages.dev" : "https://swarm-id-en.pages.dev";
+    body = body.replaceAll('href="../', `href="${origin}/`);
+  }
   const html = wrap(g.title, g.lang, g.slug, body, taglines[g.slug] || "");
-  const outPath = path.join(GUIDES, `${g.slug}.html`);
+  const outPath = path.join(OUTPUT, `${g.slug}.html`);
   writeFileSync(outPath, html, "utf8");
   console.log(`  ✓ ${g.slug}.html`);
 }
 
 // Also write a tiny index.html that lists all four.
 const indexBody = `
-<h2>Four guides</h2>
+<h2>시작할 안내를 고르세요 · Choose your guide</h2>
 <ul>
 ${guides.map(g => `<li><a href="./${g.slug}.html">${escapeHtml(g.title)}</a> — <small>${escapeHtml(taglines[g.slug] || "")}</small></li>`).join("\n")}
 </ul>
-<h3>How screenshots were captured</h3>
-<p>Each PNG under <code>guides/screenshots/{role}-{locale}/</code> was produced by <code>scripts/capture-guides.mjs</code>, which drives a headless Chromium through the real deployed app at <a href="https://swarmid.vercel.app">swarmid.vercel.app</a>.</p>
+<p>학생은 첫 쟁점부터, 교수자는 수업 준비부터 시작하세요. Start with one issue as a student, or prepare a class as an instructor.</p>
 `;
 writeFileSync(
-  path.join(GUIDES, "index.html"),
-  wrap("Swarm_ID — Guides", "en", "instructor-en", indexBody, "Instructor and student walkthroughs."),
+  path.join(OUTPUT, "index.html"),
+  wrap("Design Tension Studio · Guides", "ko", "index", indexBody, "새 화면에 맞춘 학생·교수자 안내 · Updated student and instructor walkthroughs."),
   "utf8"
 );
 console.log("  ✓ index.html");
+if (OUTPUT !== GUIDES) {
+  cpSync(path.join(GUIDES, "screenshots", "v2"), path.join(OUTPUT, "screenshots", "v2"), { recursive: true });
+}

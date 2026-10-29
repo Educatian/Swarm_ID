@@ -93,7 +93,6 @@ const WELCOME_STORAGE_KEY = "swarm-id-welcome-v1";
 const TASK_PROGRESS_STORAGE_KEY = "swarm-id-task-progress-v1";
 const MAP_VIEW_MODE_STORAGE_KEY = "swarm-id-map-mode-v1";
 const PLATFORM_ADMIN_EMAIL = "admin@swarm.io";
-const DEFAULT_SUPABASE_CONFIG = window.SUPABASE_CONFIG || { url: "", anonKey: "" };
 const DEFAULT_GEMINI_CONFIG = window.GEMINI_CONFIG || { apiKey: "", model: "gemini-2.5-flash" };
 const FACILITATOR_TOPIC_FALLBACK = Object.freeze([
   Object.freeze({ label: "비교 질문", prompt: "공정성을 높이는 자동화가 설명 책임을 약화시킬 수 있을까?", signal: "관점 4개 · 근거 7개" }),
@@ -118,6 +117,8 @@ const state = {
   autonomousIteration: true,
   sandboxBaseline: { caseId: "", metrics: null },
   evidence: [],
+  tensionRanks: {},
+  compareSession: { startedAt: 0, noticed: false },
   decisions: [],
   chat: [],
   timeline: [],
@@ -297,6 +298,9 @@ function advanceWelcome(direction) {
 // Single entry point for first-run guidance: students get the welcome slides
 // once, everyone else falls back to the existing auto-tour behavior.
 function startFirstRunGuidance() {
+  // Learners now enter through the actionable Home introduction. The full
+  // tour remains available on demand without interrupting their first action.
+  if (state.activeRole === "user") return;
   if (showWelcome(false)) return;
   startTutorial(false);
 }
@@ -331,6 +335,7 @@ let taskProgressStore = null;
 
 function loadTaskProgressStore() {
   if (taskProgressStore) return taskProgressStore;
+  if (window.__DTS_PREVIEW__) return (taskProgressStore = {});
   try {
     taskProgressStore = JSON.parse(window.localStorage.getItem(TASK_PROGRESS_STORAGE_KEY) || "{}") || {};
   } catch (_) {
@@ -358,7 +363,7 @@ function markTaskProgress(stepId) {
   progress[stepId] = true;
   store[key] = progress;
   try {
-    window.localStorage.setItem(TASK_PROGRESS_STORAGE_KEY, JSON.stringify(store));
+    if (!window.__DTS_PREVIEW__) window.localStorage.setItem(TASK_PROGRESS_STORAGE_KEY, JSON.stringify(store));
   } catch (_) {}
   logEvent("task.step", { step: stepId, case_id: state.activeCaseId || "" });
   renderTaskBanner();
@@ -401,7 +406,7 @@ function renderTaskBanner() {
       progress.open = true;
       store[key] = progress;
       try {
-        window.localStorage.setItem(TASK_PROGRESS_STORAGE_KEY, JSON.stringify(store));
+        if (!window.__DTS_PREVIEW__) window.localStorage.setItem(TASK_PROGRESS_STORAGE_KEY, JSON.stringify(store));
       } catch (_) {}
     }
   }
@@ -545,6 +550,18 @@ document.addEventListener("input", (event) => {
       reflectionFeedbackState.drafts[reflectionKey(idx)] = event.target.value;
     }
   }
+});
+
+document.addEventListener("change", (event) => {
+  const citation = event.target.closest?.("[data-reflection-citation]");
+  if (!citation) return;
+  const index = Number(citation.getAttribute("data-reflection-citation"));
+  if (!Number.isFinite(index)) return;
+  const key = reflectionKey(index);
+  const selected = new Set(reflectionFeedbackState.citations[key] || []);
+  if (citation.checked) selected.add(citation.value);
+  else selected.delete(citation.value);
+  reflectionFeedbackState.citations[key] = [...selected];
 });
 
 document.getElementById("task-banner")?.addEventListener("click", (event) => {
@@ -844,6 +861,14 @@ function wireHeaderGuidesDropdown() {
 }
 
 function applyStaticTranslations() {
+  window.DTSSharedUI?.translate(state.locale);
+  const languageSwitcher = document.getElementById("landing-language-switcher");
+  if (languageSwitcher) {
+    languageSwitcher.setAttribute("aria-label", state.locale === "ko" ? "언어 선택" : "Choose language");
+    languageSwitcher.querySelectorAll("[data-landing-language]").forEach(button => {
+      button.setAttribute("aria-pressed", String(button.dataset.landingLanguage === state.locale));
+    });
+  }
   if (dom.researchConsentToggle) {
     dom.researchConsentToggle.textContent = state.locale === "ko"
       ? (state.agentCoach.consentGranted ? "연구 동의됨" : "연구 동의")
@@ -884,6 +909,20 @@ function applyStaticTranslations() {
   }
 
   const landingSteps = document.querySelectorAll(".landing-steps li");
+  document.querySelectorAll("[data-ux-copy]").forEach(node => {
+    node.textContent = t(node.dataset.uxCopy);
+  });
+  document.querySelectorAll(".ux-demo-link").forEach(link => {
+    link.href = `./preview.html?lang=${state.locale}`;
+  });
+  const dockCopy = state.locale === "ko" ? ["쟁점 추가", "읽고 메모", "팀과 비교", "생각 정리"] : ["Add issue", "Read & note", "Compare", "Reflect"];
+  document.querySelectorAll("#map-dock .map-dock-btn").forEach((button, index) => {
+    button.dataset.caption = dockCopy[index];
+    button.setAttribute("aria-label", dockCopy[index]);
+    button.title = dockCopy[index];
+  });
+  const exampleHost = document.getElementById("ux-landing-sample");
+  if (exampleHost) exampleHost.innerHTML = `<div class="ux-example-heading"><span>${t("uxExample")}</span><strong>${t("uxExampleTitle")}</strong></div>${renderPerspectiveExample()}`;
   [
     ["landingStep1Title", "landingStep1Body"],
     ["landingStep2Title", "landingStep2Body"],
@@ -987,7 +1026,7 @@ function applyStaticTranslations() {
     if (button.dataset.view === "report") {
       button.textContent = state.locale === "ko" ? "생각 정리" : "Reflection";
     } else if (button.dataset.view === "visualizer") {
-      button.textContent = state.locale === "ko" ? "네트워크" : "Network";
+      button.textContent = t("navNetwork");
     } else if (navMap[button.dataset.view]) {
       button.textContent = t(navMap[button.dataset.view]);
     }
@@ -1506,7 +1545,7 @@ function buildRemotePlatform({
   });
 }
 
-// ---- Realtime collaboration (Supabase Realtime) ----
+// ---- Near-realtime collaboration (Cloudflare polling channel) ----
 // Usability feedback: "실시간 토론 기능", "공동작업기능". Peers' node additions,
 // notes, and instructor case edits stream into the open workspace live, with a
 // lightweight presence count of who is looking at the same case.
@@ -1794,7 +1833,7 @@ function syncRealtimeSubscription() {
 }
 
 function isSupabaseSessionActive() {
-  return state.auth.source === "supabase" && Boolean(state.auth.userId);
+  return state.auth.source === "cloudflare" && Boolean(state.auth.userId);
 }
 
 function serializeCaseForSupabase(caseRecord, courseId) {
@@ -1935,13 +1974,34 @@ async function syncLearnerRunToSupabase(runRecord, caseId = state.activeCaseId, 
 // Extract via payload->>'session_id' and (payload->>'seq')::int.
 let analyticsSessionId = null;
 let analyticsSeq = 0;
+let analyticsSessionStartedAt = null;
+let analyticsViewStartedAt = Date.now();
 function getAnalyticsSessionId() {
   if (!analyticsSessionId) {
     analyticsSessionId =
       (typeof crypto !== "undefined" && crypto.randomUUID && crypto.randomUUID()) ||
       `sess-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+    analyticsSessionStartedAt = new Date().toISOString();
   }
   return analyticsSessionId;
+}
+
+function analyticsScope(course = getActiveCourse()) {
+  const caseRecord = getCaseById(state.activeCaseId);
+  const sessionId = getAnalyticsSessionId();
+  const eventAt = new Date().toISOString();
+  return {
+    account_id: state.auth?.userId || null,
+    course_id: course?.id || null,
+    course_code: course?.code || null,
+    course_name: course?.name || null,
+    case_id: caseRecord?.id || state.activeCaseId || null,
+    case_title: caseRecord?.title || null,
+    session_id: sessionId,
+    session_started_at: analyticsSessionStartedAt,
+    event_at: eventAt,
+    session_elapsed_ms: analyticsSessionStartedAt ? Math.max(0, Date.now() - Date.parse(analyticsSessionStartedAt)) : 0,
+  };
 }
 
 // ---- ECD envelope ----
@@ -1959,13 +2019,18 @@ const EVENT_EVIDENCE = {
   perspective_switched: (p) => ["lens_shift", p.source === "pill" ? "positive" : "none"],
   "node.add": ["tension_id", "positive"],
   "node.select": ["tension_id", "exposure"],
+  "tension.rank": ["tension_id", "positive"],
+  "agent.compare": ["lens_shift", "positive"],
+  "redesign.explained": ["redesign", "positive"],
   "annotation.created": ["justification", "positive"],
+  "evidence.cite": ["justification", "positive"],
   "annotation.scaffold_opened": ["justification", "support_use"],
   "reflection.submit": ["justification", "positive"],
   "question.ask": ["justification", "positive"],
   "feedback.requested": ["metacognition", "support_use"],
   "feedback.shown": [null, "exposure"],
   "jol.predict": (p) => ["metacognition", p.prediction === "skip" ? "none" : "positive"],
+  "opportunity.skipped": ["metacognition", "negative"],
   "jol.outcome": (p) => ["metacognition", p.correct == null ? "none" : "positive"],
   // Exposure only, and a generous one: this fires on a realtime notification,
   // so it records that peer activity arrived, not that anyone looked at it.
@@ -2022,6 +2087,7 @@ function analyticsContext() {
 }
 
 function logEvent(eventType, payload = {}) {
+  if (window.__DTS_PREVIEW__) return;
   if (!isSupabaseSessionActive()) return;
   if (state.activeRole === "user" && !state.agentCoach.consentGranted) return;
   const client = initializeSupabase();
@@ -2029,6 +2095,7 @@ function logEvent(eventType, payload = {}) {
   const course = getActiveCourse();
   const basePayload = payload && typeof payload === "object" ? payload : { value: payload };
   const evidence = analyticsEvidence(String(eventType || "unknown"), basePayload);
+  const scope = analyticsScope(course);
   const row = {
     user_id: state.auth.userId,
     course_id: course?.id || null,
@@ -2037,6 +2104,7 @@ function logEvent(eventType, payload = {}) {
     event_type: String(eventType || "unknown"),
     payload: {
       ...basePayload,
+      scope,
       session_id: getAnalyticsSessionId(),
       seq: ++analyticsSeq,
       consent_version: state.agentCoach.consentVersion,
@@ -2048,7 +2116,7 @@ function logEvent(eventType, payload = {}) {
     },
     session_id: getAnalyticsSessionId(),
     seq: analyticsSeq,
-    client_ts: new Date().toISOString(),
+    client_ts: scope.event_at,
   };
   try {
     const result = client.from("analytics_events").insert(row);
@@ -2073,7 +2141,7 @@ async function createInstitutionInSupabase(name) {
 
   const { data: institution, error: institutionError } = await client
     .from("institutions")
-    .insert({ name: institutionName, settings: {} })
+    .insert({ name: institutionName, settings: {}, created_by: state.auth.userId })
     .select("*")
     .single();
   if (institutionError) throw institutionError;
@@ -2087,6 +2155,7 @@ async function createInstitutionInSupabase(name) {
       name: "New Course",
       join_code: buildJoinCode(starterCode),
       settings: {},
+      created_by: state.auth.userId,
     })
     .select("*")
     .single();
@@ -2130,6 +2199,7 @@ async function createCourseInSupabase(name, code) {
       name: courseName,
       join_code: buildJoinCode(courseCode || courseName),
       settings: {},
+      created_by: state.auth.userId,
     })
     .select("*")
     .single();
@@ -2257,7 +2327,7 @@ function applyRemoteSessionContext({ profile, primaryMembership, platform, conse
   state.activeCaseId = "";
   state.auth = {
     ...state.auth,
-    source: "supabase",
+    source: "cloudflare",
     ready: true,
     configured: true,
     loading: false,
@@ -2292,6 +2362,23 @@ async function signInWithSupabase(email, password) {
   const context = await fetchSupabaseContext(sessionUser.id);
   applyRemoteSessionContext(context, sessionUser);
   logEvent("auth.sign_in", { email_domain: (sessionUser.email || "").split("@")[1] || "", role: state.activeRole });
+  return context;
+}
+
+async function signInOrCreateCourseAccount(email, password, joinCode) {
+  try {
+    return await signInWithSupabase(email, password);
+  } catch (error) {
+    if (error?.code !== "INVALID_CREDENTIALS") throw error;
+  }
+  const client = initializeSupabase();
+  const { data, error } = await client.auth.signUpWithCourse({ email, password, joinCode });
+  if (error) throw error;
+  const sessionUser = data?.user;
+  if (!sessionUser) throw new Error("The course account could not be created.");
+  const context = await fetchSupabaseContext(sessionUser.id);
+  applyRemoteSessionContext(context, sessionUser);
+  logEvent("auth.sign_up", { email_domain: (sessionUser.email || "").split("@")[1] || "", role: state.activeRole });
   return context;
 }
 
@@ -2402,7 +2489,7 @@ async function restoreSupabaseSession() {
 }
 
 async function signOutSupabaseIfNeeded() {
-  if (state.auth.source !== "supabase") return;
+  if (state.auth.source !== "cloudflare") return;
   const client = initializeSupabase();
   if (!client) return;
   await client.auth.signOut();
@@ -2628,6 +2715,7 @@ function readStoredSession() {
 }
 
 function persistSessionState() {
+  if (window.__DTS_PREVIEW__) return;
   window.localStorage.setItem(
     SESSION_STORAGE_KEY,
     JSON.stringify({
@@ -2671,9 +2759,9 @@ function persistTutorialState() {
 }
 
 function initializeSupabase() {
-  const hasClient = Boolean(window.supabase && typeof window.supabase.createClient === "function");
-  const hasConfig = Boolean(DEFAULT_SUPABASE_CONFIG.url && DEFAULT_SUPABASE_CONFIG.anonKey);
-  state.auth.configured = hasClient && hasConfig;
+  if (window.__DTS_PREVIEW__) return null;
+  const hasClient = Boolean(window.CloudflareDataClient && typeof window.CloudflareDataClient.createClient === "function");
+  state.auth.configured = hasClient;
   if (!state.auth.configured) {
     state.auth.source = "none";
     if (!state.auth.loading) {
@@ -2683,16 +2771,10 @@ function initializeSupabase() {
   }
 
   if (!supabaseClient) {
-    supabaseClient = window.supabase.createClient(DEFAULT_SUPABASE_CONFIG.url, DEFAULT_SUPABASE_CONFIG.anonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-      },
-    });
+    supabaseClient = window.CloudflareDataClient.createClient();
   }
   state.auth.ready = true;
-  if (!state.auth.loading && !state.auth.userId && state.auth.source !== "supabase") {
+  if (!state.auth.loading && !state.auth.userId && state.auth.source !== "cloudflare") {
     state.auth.message = "";
   }
   return supabaseClient;
@@ -2737,6 +2819,7 @@ function createEmptyCourseTemplate({ id, name, code, joinCode = "" }) {
 
 function persistPlatformState() {
   state.platform = normalizePlatformState(state.platform);
+  if (window.__DTS_PREVIEW__) return;
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state.platform));
   persistSessionState();
 }
@@ -3362,6 +3445,7 @@ async function requestGeminiContent({
   responseMimeType = "text/plain",
   temperature = 0.7,
 }) {
+  if (window.__DTS_PREVIEW__) throw new Error("Sample workspace uses local example responses.");
   const { apiKey, model } = getGeminiConfig();
   const payload = {
     systemInstruction,
@@ -3956,6 +4040,7 @@ const reflectionFeedbackState = {
   drafts: {},
   critiques: {},
   busy: {},
+  citations: {},
 };
 
 function reflectionKey(promptIndex) {
@@ -3968,6 +4053,14 @@ function detectDraftAnchors(draft) {
     .map((node) => node.label);
   const matched = [...new Set(labels.filter((label) => draft.includes(label)))];
   return { cited: matched.length, matched };
+}
+
+function detectDraftAnchorNodes(draft) {
+  const text = String(draft || "");
+  return state.graph.nodes
+    .filter((node) => node.kind === "signal" && (node.label || "").length >= 2)
+    .filter((node) => text.includes(node.label))
+    .map((node) => ({ id: node.id, label: node.label }));
 }
 
 async function generateCritiqueWithAi(stakeholderKey, draft, promptText) {
@@ -4133,6 +4226,28 @@ function handleReflectionSubmit(promptIndex) {
     anchors_at_feedback: critique ? critique.anchors.cited : null,
     anchors_at_submit: detectDraftAnchors(answer).cited,
   });
+  const explicitCitationIds = reflectionFeedbackState.citations[reflectionKey(promptIndex)] || [];
+  const explicitCitedNodes = explicitCitationIds
+    .map((id) => state.graph.nodes.find((node) => node.id === id))
+    .filter(Boolean)
+    .map((node) => ({ id: node.id, label: node.label }));
+  const autoCitedNodes = detectDraftAnchorNodes(answer);
+  const citedNodes = [...new Map([...explicitCitedNodes, ...autoCitedNodes].map((node) => [node.id, node])).values()];
+  if (citedNodes.length) {
+    logEvent("evidence.cite", {
+      claim_id: `reflection-${promptIndex}-${reflectionKey(promptIndex)}`,
+      cited_node_ids: citedNodes.map((node) => node.id),
+      cited_labels: citedNodes.map((node) => node.label).slice(0, 12),
+      cite_count: citedNodes.length,
+      source: explicitCitedNodes.length ? "reflection.citation_picker" : "reflection.submit",
+    });
+  } else {
+    logEvent("opportunity.skipped", {
+      opportunity: "evidence_citation",
+      shown_ms: null,
+      dismissed_by: "learner",
+    });
+  }
   // Only a genuine revision. This used to fire on every submission including
   // the first, which made the revision rate 100% by construction and left the
   // one thing the event is named for unmeasurable.
@@ -4140,6 +4255,15 @@ function handleReflectionSubmit(promptIndex) {
   const submitCount = (reflectionSubmitCounts.get(submitKey) || 0) + 1;
   reflectionSubmitCounts.set(submitKey, submitCount);
   const revisedAfterFeedback = Boolean(critique) && answer !== critique.draftSnapshot;
+  if (revisedAfterFeedback || submitCount > 1) {
+    logEvent("redesign.explained", {
+      block_id: `reflection-${promptIndex}`,
+      prompt_index: promptIndex,
+      revision_trigger: revisedAfterFeedback ? "feedback" : "resubmit",
+      cited_node_ids: citedNodes.map((node) => node.id),
+      answer_length: answer.length,
+    });
+  }
   if (revisedAfterFeedback || submitCount > 1) {
     logEvent("synthesis_block_revised", {
       block_id: `reflection-${promptIndex}`,
@@ -4152,7 +4276,9 @@ function handleReflectionSubmit(promptIndex) {
       submit_index: submitCount,
     });
   }
-  if (status) status.textContent = state.locale === "ko" ? "제출됨 · 교수자에게 공유되었습니다." : "Submitted — shared with your instructor.";
+  if (status) status.textContent = window.__DTS_PREVIEW__
+    ? (state.locale === "ko" ? "체험용 답변을 확인했어요. 실제 수업에는 제출되지 않아요." : "Sample reflection recorded for this preview. It was not submitted to a course.")
+    : (state.locale === "ko" ? "제출됨 · 교수자에게 공유되었습니다." : "Submitted — shared with your instructor.");
 }
 
 async function renderInstructorCohortPanel() {
@@ -5398,7 +5524,10 @@ function renderNavigation() {
     const allowed = isViewAllowed(button.dataset.view);
     button.classList.toggle("is-hidden", !allowed);
     button.classList.toggle("is-active", button.dataset.view === state.activeView);
+    if (button.dataset.view === state.activeView) button.setAttribute("aria-current", "page");
+    else button.removeAttribute("aria-current");
   });
+  dom.appShell?.setAttribute("data-active-view", state.activeView);
   dom.viewPanels.forEach((panel) => {
     const allowed = isViewAllowed(panel.dataset.viewPanel);
     panel.classList.toggle("is-hidden", !allowed);
@@ -5742,6 +5871,7 @@ function renderPipelineConsole() {
 
   if (state.activeRole === "admin") {
     const canManagePlatform = isPlatformAdminAccount();
+    const canManageInstitutions = isSupabaseSessionActive() && state.activeRole === "admin";
     const canManageCourses = Boolean(getActiveInstitution());
     dom.pipelineConsole.innerHTML = `
       ${pipelineStatusMarkup(activeCase)}
@@ -5755,10 +5885,10 @@ function renderPipelineConsole() {
               </button>
               <div class="pipeline-card-body">
               <div class="pipeline-form-row two-up">
-                ${canManagePlatform ? `<form class="pipeline-form" id="add-institution-form">
+                ${canManageInstitutions ? `<form class="pipeline-form" id="add-institution-form">
                     <input name="institutionName" type="text" placeholder="${t("institutionNamePlaceholder")}" required>
                     <button class="toolbar-button" type="submit">${t("addInstitution")}</button>
-                  </form>` : `<div class="empty-note">기관은 플랫폼 관리자만 추가할 수 있어요.</div>`}
+                  </form>` : `<div class="empty-note">기관을 추가하려면 관리자 권한이 필요해요.</div>`}
                 <form class="pipeline-form" id="add-course-form">
                   <input name="courseName" type="text" placeholder="${t("courseNamePlaceholder")}" required>
                   <input name="courseCode" type="text" placeholder="${t("courseCode")}" required>
@@ -7097,6 +7227,11 @@ function updateGraphRenderer(frame) {
   nodeSelection.exit().remove();
 
   const nodeEnter = nodeSelection.enter().append("g").attr("class", "network-node");
+  nodeEnter
+    .attr("data-graph-node", "true")
+    .attr("data-node-id", (node) => node.id)
+    .attr("data-node-kind", (node) => node.kind || node.type || "")
+    .attr("data-node-label", (node) => String(node.label || "").slice(0, 120));
 
   nodeEnter
     .filter((node) => node.type === "satellite")
@@ -7209,6 +7344,9 @@ function updateGraphRenderer(frame) {
       d3
         .drag()
         .on("start", (event, node) => {
+          node.__dragStartedAt = Date.now();
+          node.__dragStartX = node.x;
+          node.__dragStartY = node.y;
           if (!event.active) {
             graphRenderer.simulation.alphaTarget(0.3).restart();
           }
@@ -7231,6 +7369,19 @@ function updateGraphRenderer(frame) {
             node.fx = null;
             node.fy = null;
           }
+          const dx = Number(event.x || node.x || 0) - Number(node.__dragStartX || 0);
+          const dy = Number(event.y || node.y || 0) - Number(node.__dragStartY || 0);
+          logEvent("node.drag", {
+            node_id: node.id,
+            label: String(node.label || "").slice(0, 120),
+            kind: node.kind || node.type || "",
+            duration_ms: node.__dragStartedAt ? Date.now() - node.__dragStartedAt : null,
+            distance_px: Math.round(Math.sqrt(dx * dx + dy * dy)),
+            from: { x: Math.round(Number(node.__dragStartX || 0)), y: Math.round(Number(node.__dragStartY || 0)) },
+            to: { x: Math.round(Number(event.x || node.x || 0)), y: Math.round(Number(event.y || node.y || 0)) },
+            via: "map",
+          });
+          delete node.__dragStartedAt;
         })
     );
 
@@ -7883,15 +8034,29 @@ function renderStakeholderFocus() {
   dom.chatBadge.textContent = state.locale === "ko" ? `${stakeholder.label} 보기` : `${stakeholder.label} view`;
   dom.activeStakeholderStatus.textContent = stakeholder.status;
 
-  dom.topTensions.innerHTML = conflicts
-    .map(
-      (item) => `
-        <article class="tension-item">
-          <strong>${item.title}</strong>
-          <p>${item.body}</p>
+  const rankedConflicts = [...conflicts].sort((a, b) => {
+    const ar = Number(state.tensionRanks[tensionBucketKey(a.title)] ?? 999);
+    const br = Number(state.tensionRanks[tensionBucketKey(b.title)] ?? 999);
+    return ar - br;
+  });
+  dom.topTensions.innerHTML = rankedConflicts
+    .map((item, index) => {
+      const tensionId = tensionBucketKey(item.title);
+      const rank = index + 1;
+      return `
+        <article class="tension-item" data-tension-id="${escapeHtml(tensionId)}">
+          <div class="tension-item-heading">
+            <span class="badge badge-secondary">${state.locale === "ko" ? `우선순위 ${rank}` : `Priority ${rank}`}</span>
+            <strong>${escapeHtml(item.title)}</strong>
+          </div>
+          <p>${escapeHtml(item.body)}</p>
+          <div class="tension-rank-actions" role="group" aria-label="${state.locale === "ko" ? "쟁점 우선순위 조정" : "Adjust tension priority"}">
+            <button type="button" class="toolbar-button toolbar-button-quiet" data-tension-rank="up" data-tension-id="${escapeHtml(tensionId)}" ${rank === 1 ? "disabled" : ""}>↑</button>
+            <button type="button" class="toolbar-button toolbar-button-quiet" data-tension-rank="down" data-tension-id="${escapeHtml(tensionId)}" ${rank === rankedConflicts.length ? "disabled" : ""}>↓</button>
+          </div>
         </article>
-      `
-    )
+      `;
+    })
     .join("");
 
   dom.evidenceStrip.innerHTML = state.evidence
@@ -8422,18 +8587,32 @@ function renderReport() {
       ]
     : [];
 
+  const rubricExplanations = state.locale === "ko"
+    ? [
+        "60 + 근거 기록 수 × 8, 최대 96인 참고값입니다. 실제 관점 전환 행동을 측정한 점수가 아닙니다.",
+        "사례의 프라이버시 설정값과 접근성 설정값의 평균입니다. 학습자의 제약 식별 능력을 평가하지 않습니다.",
+        "교사 부담·프라이버시·접근성·개인화 설정을 가중합한 실행 가능성 참고값입니다. 성찰문의 수정 품질을 채점하지 않습니다.",
+        "58 + 근거 기록 수 × 7, 최대 94인 참고값입니다. 인용의 정확성이나 설명의 품질을 평가하지 않습니다.",
+      ]
+    : [
+        "60 + evidence record count × 8, capped at 96. This reference value does not measure actual perspective switching.",
+        "The average of the case privacy and accessibility settings. It does not assess the learner's ability to identify constraints.",
+        "A weighted feasibility estimate from workload, privacy, accessibility, and personalization settings. It does not grade reflection revisions.",
+        "58 + evidence record count × 7, capped at 94. It does not assess citation accuracy or explanation quality.",
+      ];
   dom.rubricList.innerHTML = rubric.length
     ? rubric
         .map(
-          (item) => `
+          (item, index) => `
             <article class="rubric-item">
               <header>
                 <span>${item.label}</span>
-                <strong>${item.value}% <small class="rubric-provenance">${state.locale === "ko" ? "근거 보기" : "View evidence"}</small></strong>
+                <strong class="rubric-value">${item.value}% <button type="button" class="rubric-info" data-rubric-info="${index}" aria-expanded="false" aria-controls="rubric-info-${index}" title="${state.locale === "ko" ? "산정 기준 보기" : "Show calculation basis"}">ⓘ</button></strong>
               </header>
               <div class="bar-track">
                 <div class="bar-fill" style="width:${item.value}%; background:var(--primary);"></div>
               </div>
+              <div id="rubric-info-${index}" class="rubric-info-popover" role="note" hidden>${escapeHtml(rubricExplanations[index] || "")}</div>
             </article>
           `
         )
@@ -8456,11 +8635,22 @@ function renderReport() {
           const placeholder = state.locale === "ko" ? "여기에 답변을 적어보세요..." : "Type your reflection...";
           const submitLabel = state.locale === "ko" ? "제출" : "Submit";
           const feedbackLabel = state.locale === "ko" ? "다섯 관점의 피드백 받기" : "Get five-perspective feedback";
-          const savedDraft = reflectionFeedbackState.drafts[reflectionKey(index)] || "";
-          return `
+           const savedDraft = reflectionFeedbackState.drafts[reflectionKey(index)] || "";
+           const selectedCitations = new Set(reflectionFeedbackState.citations[reflectionKey(index)] || []);
+           const citationNodes = state.graph.nodes.filter((node) => node.kind === "signal").slice(0, 12);
+           const citationLabel = state.locale === "ko" ? "근거 노드 선택" : "Select evidence nodes";
+           const citationEmpty = state.locale === "ko" ? "선택한 노드가 답변의 근거로 기록됩니다." : "Selected nodes will be logged as evidence for this answer.";
+           return `
             <article class="prompt-item" data-prompt-index="${index}">
               <span class="prompt-text">${safe}</span>
-              <textarea class="reflection-response" data-prompt-index="${index}" placeholder="${placeholder}">${escapeHtml(savedDraft)}</textarea>
+               <textarea class="reflection-response" aria-label="${safe}" data-prompt-index="${index}" placeholder="${placeholder}">${escapeHtml(savedDraft)}</textarea>
+               <fieldset class="reflection-citations" data-reflection-citations="${index}">
+                 <legend>${citationLabel}</legend>
+                 <p class="muted">${citationEmpty}</p>
+                 <div class="reflection-citation-options">
+                   ${citationNodes.map((node) => `<label class="reflection-citation-option"><input type="checkbox" data-reflection-citation="${index}" value="${escapeHtml(node.id)}" ${selectedCitations.has(node.id) ? "checked" : ""}><span>${escapeHtml(node.label)}</span></label>`).join("")}
+                 </div>
+               </fieldset>
               <div class="reflection-footer">
                 <button type="button" class="toolbar-button reflection-feedback" data-reflection-feedback="${index}">${feedbackLabel}</button>
                 <button type="button" class="toolbar-button toolbar-button-primary reflection-submit" data-reflection-submit="${index}">${submitLabel}</button>
@@ -8577,114 +8767,102 @@ function renderCompareSummary() {
       </div>
     </div>
     <p class="compare-summary-prompt">${t("comparePrompt")}</p>
-    <button class="toolbar-button toolbar-button-primary compare-annotation-cta" type="button" data-compare-annotate ${hasSelectedDifference ? "" : "disabled"} aria-disabled="${!hasSelectedDifference}">
+    <button class="toolbar-button compare-notice-cta" type="button" data-compare-noticed ${hasSelectedDifference ? "" : "disabled"} aria-disabled="${!hasSelectedDifference}">
+      ${hasSelectedDifference
+        ? (state.locale === "ko" ? "차이를 발견함 · 비교 기록" : "I noticed the difference")
+        : (state.locale === "ko" ? "차이 노드를 선택하세요" : "Select a difference first")}
+    </button>
+    <button class="toolbar-button compare-reflection-cta" type="button" data-compare-reflect ${hasSelectedDifference ? "" : "disabled"} aria-disabled="${!hasSelectedDifference}">
+      ${hasSelectedDifference
+        ? (state.locale === "ko" ? "비교한 차이로 성찰 시작" : "Reflect on this difference")
+        : (state.locale === "ko" ? "차이를 선택하면 성찰을 시작할 수 있어요" : "Select a difference to start reflecting")}
+    </button>
+    <button class="toolbar-button ${hasSelectedDifference ? "toolbar-button-primary" : "compare-disabled-cta"} compare-annotation-cta" type="button" data-compare-annotate ${hasSelectedDifference ? "" : "disabled"} aria-disabled="${!hasSelectedDifference}">
       ${hasSelectedDifference
         ? (state.locale === "ko" ? "선택한 차이에 공동 주석 시작" : "Annotate the selected difference")
         : (state.locale === "ko" ? "차이를 선택하면 공동 주석을 시작할 수 있어요" : "Select a difference to start a shared annotation")}
     </button>`;
 }
 
+// A schematic explains the product before asking a newcomer to interpret D3.
+function renderPerspectiveExample() {
+  const ko = state.locale === "ko";
+  const lenses = [
+    ["school", ko ? "교사" : "Teacher", ko ? "수업의 주도권" : "Teaching agency"],
+    ["person", ko ? "학생" : "Student", ko ? "내게 맞는 배움" : "Learning needs"],
+    ["tune", ko ? "에듀테크" : "EdTech", ko ? "데이터와 접근성" : "Data and access"],
+    ["dashboard_customize", ko ? "행정" : "Administration", ko ? "예산과 운영" : "Budget and support"],
+  ];
+  return '<div class="ux-map-example" aria-label="' + escapeHtml(t("uxExampleNote")) + '">' +
+    '<svg class="ux-map-lines" viewBox="0 0 480 220" preserveAspectRatio="none" aria-hidden="true"><path d="M95 48 Q240 30 240 110 T385 174 M385 48 Q240 30 240 110 T95 174" fill="none"/><circle cx="240" cy="110" r="45"/><circle cx="240" cy="110" r="64"/></svg>' +
+    '<div class="ux-map-center"><span class="material-symbols-outlined" aria-hidden="true">hub</span><strong>' + (ko ? "AI 학습 도입" : "AI learning") + '</strong></div>' +
+    lenses.map(([icon, title, note], i) => '<div class="ux-map-lens ux-map-lens-' + i + '"><span class="material-symbols-outlined" aria-hidden="true">' + icon + '</span><div><strong>' + title + '</strong><small>' + note + '</small></div></div>').join("") + '</div>';
+}
+
 function renderHome() {
   const host = document.getElementById("home-view");
   if (!host) return;
-  const learner = state.activeRole === "user" ? getActiveLearner() : null;
-  const instructor = state.activeRole === "admin" ? getActiveInstructor() : null;
-  const name =
-    (state.activeRole === "admin" ? instructor?.name : learner?.name)?.trim() ||
-    (state.activeRole === "user" ? t("student") : t("instructor"));
+  const ko = state.locale === "ko";
+  const isStudent = state.activeRole === "user";
+  const person = isStudent ? getActiveLearner() : getActiveInstructor();
+  const name = person?.name?.trim() || (isStudent ? t("student") : t("instructor"));
   const course = getActiveCourse();
   const activeCase = getCaseById(state.activeCaseId, course);
-  const courseLine = course ? `${course.code} · ${course.name}` : "";
-  const activeRun = typeof getActiveLearnerRun === "function" ? getActiveLearnerRun() : null;
+  const activeRun = isStudent ? getActiveLearnerRun() : null;
+  const progress = getTaskProgress();
   const annotationCount = asArray(activeRun?.annotations).length;
-  const evidenceCount = asArray(state.evidence).length;
-  const completedSteps = activeCase ? Math.min(3, 1 + Number(annotationCount > 0) + Number(evidenceCount > 2)) : 0;
-  const progress = Math.round((completedSteps / 4) * 100);
-
-  // The home is a quiet launcher into the case map — NOT a step-by-step checklist.
-  // (README: "see design work as a network of tensions rather than a linear checklist".)
-  const continueBlock = activeCase
-    ? `<p class="home-continue-eyebrow">${t("homeContinueEyebrow")}</p>
-       <h2 class="home-continue-title">${escapeHtml(getCaseDisplayTitle(activeCase, course?.cases || []))}</h2>
-       <p class="home-continue-sub">${escapeHtml(courseLine)}</p>
-       <p class="home-task-framing">${t("homeTaskFraming")}</p>
-       <div class="home-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}">
-         <span style="width:${progress}%"></span>
-       </div>
-       <p class="home-progress-label">${state.locale === "ko" ? `학습 루프 ${progress}% · 다음: 팀의 관점 차이에 공동 주석 남기기` : `Learning loop ${progress}% · Next: annotate a perspective difference`}</p>
-       <button class="toolbar-button toolbar-button-primary home-continue-cta" type="button" data-home-goto="visualizer">
-         <span class="material-symbols-outlined" aria-hidden="true">play_arrow</span>${t("homeContinueCta")}
-       </button>`
-    : `<p class="home-continue-eyebrow">${t("homeContinueEyebrow")}</p>
-       <p class="home-continue-sub home-continue-empty">${t("homeContinueEmpty")}</p>
-       <p class="home-task-framing">${t("homeTaskFraming")}</p>`;
-
+  const contributionCount = asArray(activeRun?.agendaNodes).length;
   const recent = getHomeRecentItems();
-  const recentList = recent.length
-    ? `<ul class="home-recent-list">${recent
-        .map(
-          (r) =>
-            `<li class="home-recent-item"><strong>${escapeHtml(String(r.title).slice(0, 80))}</strong><span>${escapeHtml(r.meta)}</span></li>`,
-        )
-        .join("")}</ul>`
-    : `<div class="home-empty-action"><p class="muted home-recent-empty">${t("homeRecentEmpty")}</p><button class="toolbar-button home-recent-cta" type="button" data-home-goto="visualizer">${state.locale === "ko" ? "네트워크에서 시작하기" : "Start from the network"}</button></div>`;
-
-  const advTradeoffs = isViewAllowed("matrix");
-  const advSandbox = isViewAllowed("sandbox");
-  const advanced = `
-    <button class="home-adv-item" type="button" data-home-goto="matrix"${advTradeoffs ? "" : " disabled"}>
-      <span class="material-symbols-outlined" aria-hidden="true">leaderboard</span>${t("homeAdvancedTradeoffs")}
-    </button>
-    <button class="home-adv-item" type="button" data-home-goto="sandbox"${advSandbox ? "" : " disabled"}>
-      <span class="material-symbols-outlined" aria-hidden="true">science</span>${t("homeAdvancedSandbox")}
-    </button>`;
-
-  const loop = [
-    { icon: "visibility", title: state.locale === "ko" ? "관점 살펴보기" : "Explore perspectives", state: activeCase ? "done" : "waiting" },
-    { icon: "difference", title: state.locale === "ko" ? "차이 발견하기" : "Notice differences", state: completedSteps >= 2 ? "done" : activeCase ? "active" : "waiting" },
-    { icon: "edit_note", title: state.locale === "ko" ? "공동 주석하기" : "Annotate together", state: annotationCount > 0 ? "done" : activeCase ? "active" : "waiting" },
-    { icon: "hub", title: state.locale === "ko" ? "생각 종합하기" : "Synthesize thinking", state: evidenceCount > 2 ? "active" : "waiting" },
-  ];
-
-  host.innerHTML = `
-    <div class="home-wrap">
-      <header class="home-head">
-        <div class="home-brand">
-          <img class="home-brand-mark home-brand-logo" src="./assets/logo.png" alt="" width="34" height="34">
-          <div>
-            <h1 class="home-brand-title">${escapeHtml(t("appName"))}</h1>
-            <p class="home-brand-sub">${t("homeSubtitle")}</p>
-          </div>
-        </div>
-      </header>
-      <section class="home-continue panel-soft">
-        <p class="home-greeting">${escapeHtml(t("homeGreeting", { name }))}</p>
-        ${continueBlock}
-      </section>
-      <section class="home-learning-loop" aria-labelledby="home-learning-loop-title">
-        <div class="home-loop-heading">
-          <div>
-            <p class="home-section-eyebrow">${state.locale === "ko" ? "학습 루프" : "Learning loop"}</p>
-            <h2 id="home-learning-loop-title">${state.locale === "ko" ? "관점 차이를 공동 지식으로 바꾸기" : "Turn perspective differences into shared knowledge"}</h2>
-          </div>
-          <button class="toolbar-button" type="button" data-home-goto="report">${state.locale === "ko" ? "공동 종합 보기" : "Open synthesis"}</button>
-        </div>
-        <div class="home-loop-grid">
-          ${loop.map((step, index) => `<article class="home-loop-card is-${step.state}"><span class="home-loop-index">${index + 1}</span><span class="material-symbols-outlined" aria-hidden="true">${step.icon}</span><strong>${step.title}</strong><small>${step.state === "done" ? (state.locale === "ko" ? "완료" : "Complete") : step.state === "active" ? (state.locale === "ko" ? "진행 중" : "In progress") : (state.locale === "ko" ? "대기" : "Waiting")}</small></article>`).join("")}
-        </div>
-      </section>
-      <div class="home-bottom">
-        <section class="home-recent panel-soft">
-          <p class="home-section-eyebrow">${t("homeRecentTitle")}</p>
-          ${recentList}
-        </section>
-        <section class="home-advanced panel-soft">
-          <p class="home-section-eyebrow">${t("homeAdvancedTitle")}</p>
-          <p class="home-advanced-body">${t("homeAdvancedBody")}</p>
-          <div class="home-adv-grid">${advanced}</div>
-        </section>
-      </div>
-    </div>`;
+  const firstVisit = !progress.inspect && !progress.lens;
+  const title = activeCase
+    ? getCaseDisplayTitle(activeCase, course?.cases || [])
+    : ko ? "수업 사례를 준비하고 있어요" : "Your next case is on its way";
+  const prompt = activeCase
+    ? firstVisit
+      ? ko ? "맵에서 눈에 띄는 쟁점 하나를 눌러보세요. 다른 입장에서는 어떻게 보일까요?" : "Choose one issue on the map. How might someone else see it?"
+      : ko ? "발견한 쟁점을 다른 관점에서 다시 살펴보고, 내 선택의 근거를 남겨보세요." : "Revisit an issue from another perspective and explain what shaped your decision."
+    : isStudent
+      ? ko ? "교수자가 사례를 공개하면 여기에 나타나요. 수업이 맞는지 상단 설정에서 확인해 보세요." : "Published cases will appear here. Check your course in the settings above."
+      : ko ? "내 수업에서 첫 사례를 만들고 학생들에게 공개해 보세요." : "Create your first case in My Course and publish it for your students.";
+  const actionView = activeCase ? "visualizer" : isStudent ? "" : "manage";
+  const actionLabel = activeCase
+    ? firstVisit ? (ko ? "쟁점 맵 살펴보기" : "Explore the issue map") : (ko ? "탐구 이어가기" : "Continue exploring")
+    : ko ? "내 수업 열기" : "Open My Course";
+  const paths = [
+    { view: "visualizer", icon: "hub", title: ko ? "쟁점 하나부터 살펴봐요" : "Start with one issue", body: ko ? "점을 눌러 내용을 읽고, 서로 연결된 이유를 찾아요." : "Select a point, read the issue, and explore its connections.", note: ko ? "맵 열기" : "Open map" },
+    { view: "perspectives", icon: "visibility", title: ko ? "다른 입장에서 생각해요" : "See another perspective", body: ko ? "교사·학생·에듀테크·행정은 무엇을 중요하게 볼까요?" : "What matters to teachers, students, EdTech, and administrators?", note: ko ? "관점 비교" : "Compare views" },
+    { view: "report", icon: "edit_note", title: ko ? "내 생각에 근거를 더해요" : "Give your thinking a foundation", body: ko ? "중요한 쟁점과 선택의 이유를 짧은 글로 정리해요." : "Write a short reflection on an issue and the reasons for your choice.", note: ko ? "생각 정리" : "Reflect" },
+  ].filter(item => isViewAllowed(item.view));
+  const advanced = [
+    ["matrix", "leaderboard", t("homeAdvancedTradeoffs")],
+    ["sandbox", "science", t("homeAdvancedSandbox")],
+    ...(!isStudent ? [["manage", "dashboard_customize", t("navManage")]] : []),
+  ].filter(([view]) => isViewAllowed(view));
+  host.innerHTML = '<div class="home-wrap ux-home">' +
+    '<header class="ux-home-heading"><div><p class="ux-eyebrow">' + escapeHtml(course ? course.code + " · " + course.name : t("appName")) + '</p><h1>' +
+    escapeHtml(t("homeGreeting", { name })) + '</h1><p>' + (ko ? "오늘은 어떤 관점을 발견할까요?" : "What will you see differently today?") + '</p></div>' +
+    (window.__DTS_PREVIEW__ ? '<span class="ux-sample-badge">' + t("uxDemo") + '</span>' : '') + '</header>' +
+    '<section class="home-continue panel-soft ux-case"><div class="ux-case-copy"><p class="ux-eyebrow">' +
+    (ko ? "오늘의 사례" : "YOUR CASE") + '</p><h2 class="home-continue-title">' + escapeHtml(title) +
+    '</h2><p class="home-task-framing">' + prompt + '</p>' +
+    (actionView ? '<button class="toolbar-button toolbar-button-primary home-continue-cta" type="button" data-home-goto="' + actionView + '">' + actionLabel + '<span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></button>' : '') +
+    (activeCase ? '<p class="ux-case-footnote">' + (ko ? "정답을 맞히기보다, 선택의 이유를 찾아보세요." : "Explore the reasons behind a decision.") + '</p>' : '') +
+    '</div><aside class="ux-case-aside"><span class="ux-eyebrow">' + (ko ? "이렇게 탐구해요" : "HOW IT WORKS") +
+    '</span><div class="ux-case-question"><span class="material-symbols-outlined" aria-hidden="true">forum</span><p>' +
+    (ko ? "같은 선택이 모두에게 좋은 선택일까요?" : "Does the same choice work for everyone?") +
+    '</p></div><div class="ux-perspective-tags">' + ["stakeholderTeacher", "stakeholderStudent", "stakeholderIt", "stakeholderAdministrator"].map(key => '<span>' + escapeHtml(t(key)) + '</span>').join("") +
+    '</div><p>' + (ko ? "관점을 바꾸면 새로운 쟁점이 보여요." : "A different perspective reveals another issue.") + '</p></aside></section>' +
+    (activeCase ? '<section class="ux-paths" aria-labelledby="ux-paths-title"><div class="ux-section-heading"><h2 id="ux-paths-title">' +
+    (ko ? "처음이라면, 여기서 시작해요" : "A simple way to begin") + '</h2><span>' + (ko ? "순서는 자유롭게" : "Explore in any order") + '</span></div>' +
+    '<div class="ux-path-list">' + paths.map((item, i) => '<button class="ux-path" type="button" data-home-goto="' + item.view + '"><span class="ux-path-number">0' + (i + 1) +
+    '</span><span class="ux-path-text"><strong>' + item.title + '</strong><span>' + item.body + '</span></span><span class="ux-path-action">' + item.note +
+    '<span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></span></button>').join("") + '</div></section>' : '') +
+    '<div class="ux-home-bottom"><section class="ux-recent"><div class="ux-section-heading"><h2>' + t("homeRecentTitle") + '</h2>' +
+    (isStudent && activeCase ? '<span>' + (ko ? '내 쟁점 ' + contributionCount + ' · 메모 ' + annotationCount : contributionCount + ' issues · ' + annotationCount + ' notes') + '</span>' : '') + '</div>' +
+    (recent.length ? '<ul class="home-recent-list">' + recent.slice(0, 3).map(r => '<li class="home-recent-item"><strong>' + escapeHtml(String(r.title).slice(0, 80)) + '</strong><span>' + escapeHtml(r.meta) + '</span></li>').join("") + '</ul>' :
+    '<p class="ux-empty">' + (ko ? "아직 기록이 없어요. 맵에서 쟁점을 살펴보며 시작해 보세요." : "No recent activity. Start by exploring an issue on the map.") + '</p>') + '</section>' +
+    (advanced.length ? '<details class="ux-more-tools"><summary>' + (ko ? "더 탐구하기" : "More ways to explore") + '<span class="material-symbols-outlined" aria-hidden="true">expand_more</span></summary><div class="home-adv-grid">' +
+    advanced.map(([view, icon, label]) => '<button class="home-adv-item" type="button" data-home-goto="' + view + '"><span class="material-symbols-outlined" aria-hidden="true">' + icon + '</span>' + label + '</button>').join("") + '</div></details>' : '') + '</div></div>';
 }
 
 // ---- Printable artifacts: discussion guide (instructor) & one-pager (student) ----
@@ -8925,7 +9103,7 @@ async function setCaseArchived(caseId, archived) {
   const ko = state.locale === "ko";
   targetCase.boardSettings = { ...asObject(targetCase.boardSettings), archived: Boolean(archived) };
   if (archived && targetCase.published) {
-    toggleCasePublish(caseId); // also syncs to Supabase
+    toggleCasePublish(caseId); // also syncs to Cloudflare D1
   } else {
     persistPlatformState();
     if (isSupabaseSessionActive()) {
@@ -8976,8 +9154,8 @@ async function deleteCaseHard(caseId) {
       if (error) {
         showToast(
           ko
-            ? "삭제가 거부됐어요. 케이스 삭제 RLS 정책(docs/supabase_setup.md)이 적용됐는지 확인하세요."
-            : "Delete was rejected. Check that the case-delete RLS policy (docs/supabase_setup.md) is applied."
+            ? "삭제가 거부됐어요. 코스 권한과 연결된 학습 기록을 확인하세요."
+            : "Delete was rejected. Check the course permission and linked learner records."
         );
         console.error("cases delete failed", error);
         return;
@@ -9218,7 +9396,7 @@ function renderInstructorSystemConsole(course, ko) {
               <span class="instructor-console-avatar">${escapeHtml(String(invite.name || invite.email || "?").trim().slice(0, 1).toUpperCase())}</span>
               <span class="instructor-console-roster-copy"><strong>${escapeHtml(invite.name || "학생")}</strong><small>${escapeHtml(invite.email || "")}</small></span>
               <span class="badge badge-secondary">${invite.status === "revoked" ? (ko ? "취소됨" : "Revoked") : (invite.status === "pending" ? (ko ? "메일 발송됨" : "Email sent") : (ko ? "초대 준비됨" : "Invite ready"))}</span>
-              ${invite.status !== "revoked" ? `<span class="instructor-console-invite-actions"><button type="button" class="toolbar-button toolbar-button-quiet" data-console-invite-resend="${escapeHtml(invite.email || "")}">${ko ? "재전송" : "Resend"}</button><button type="button" class="toolbar-button toolbar-button-quiet" data-console-invite-revoke="${escapeHtml(invite.email || "")}">${ko ? "취소" : "Revoke"}</button></span>` : ""}
+              ${invite.status !== "revoked" ? `<span class="instructor-console-invite-actions"><button type="button" class="toolbar-button toolbar-button-quiet" data-console-invite-resend="${escapeHtml(invite.email || "")}">${ko ? "초대 갱신" : "Refresh invite"}</button><button type="button" class="toolbar-button toolbar-button-quiet" data-console-invite-revoke="${escapeHtml(invite.email || "")}">${ko ? "취소" : "Revoke"}</button></span>` : ""}
             </li>`
         )
         .join("")
@@ -9271,7 +9449,7 @@ function renderInstructorSystemConsole(course, ko) {
             <button type="submit" class="toolbar-button">${ko ? (canProvisionAccounts ? "계정 생성·초대" : "초대 준비") : (canProvisionAccounts ? "Create account & invite" : "Prepare invite")}</button>
           </form>
           <ul class="instructor-console-roster">${inviteRows}</ul>
-          <p class="instructor-console-note">${ko ? (canProvisionAccounts ? "서버 초대 함수가 계정을 만들고 초대 메일을 보냅니다. 비밀번호는 학습자가 직접 설정해요." : "브라우저에서는 비밀번호를 만들지 않아요. 로그인 후 서버 초대 함수가 실제 계정 생성을 활성화합니다.") : (canProvisionAccounts ? "The server invite function creates the account and sends the email; learners set their own password." : "The browser never creates passwords. Sign in to enable server-side account provisioning.")}</p>
+          <p class="instructor-console-note">${ko ? (canProvisionAccounts ? "안전한 가입 링크와 코스 코드를 전달하면 학습자가 직접 비밀번호를 설정해요." : "브라우저에서는 비밀번호를 만들지 않아요. 로그인 후 안전한 가입 링크를 준비할 수 있습니다.") : (canProvisionAccounts ? "Share the secure join link and course code; learners set their own password." : "The browser never creates passwords. Sign in to prepare a secure join link.")}</p>
         </article>
 
         <article class="instructor-console-card" data-console-stage="prepare">
@@ -9451,7 +9629,7 @@ document.getElementById("manage-view")?.addEventListener("click", (event) => {
         if (isSupabaseSessionActive()) await createStudentInviteRemote({ courseId: course?.id, name: invite?.name || "", email: resendEmail });
         if (invite) invite.lastSentAt = new Date().toISOString();
         persistPlatformState();
-        showToast(state.locale === "ko" ? "초대 메일을 다시 보냈어요." : "Invitation resent.");
+        showToast(state.locale === "ko" ? "안전한 초대 링크를 갱신했어요." : "Secure invitation refreshed.");
         renderManageView();
       } catch (error) {
         showToast(state.locale === "ko" ? `초대 메일을 다시 보내지 못했어요: ${error.message}` : `Could not resend invitation: ${error.message}`);
@@ -9639,7 +9817,7 @@ document.getElementById("manage-view")?.addEventListener("submit", async (event)
     createdAt: new Date().toISOString(),
   });
   persistPlatformState();
-  showToast(state.locale === "ko" ? (remoteInvite ? "학생 계정을 만들고 초대 메일을 보냈어요." : "학생 초대를 준비했어요. 참여 코드나 링크를 전달하세요.") : (remoteInvite ? "Student account created and invitation sent." : "Invite prepared. Share the course code or link."));
+  showToast(state.locale === "ko" ? "학생 초대를 준비했어요. 참여 코드나 안전한 링크를 전달하세요." : "Invite prepared. Share the course code or secure link.");
   renderManageView();
 });
 
@@ -9826,6 +10004,10 @@ function ensureMapDockInStage() {
 }
 
 function renderAll() {
+  const reportLayout = document.querySelector(".report-layout");
+  const reflectionPanel = reportLayout?.querySelector(".reflection-panel");
+  if (reflectionPanel && state.activeRole === "user") reportLayout.prepend(reflectionPanel);
+  else if (reflectionPanel) reportLayout.append(reflectionPanel);
   dom.appShell?.classList.toggle("role-admin", state.activeRole === "admin");
   dom.appShell?.classList.toggle("role-learner", state.activeRole === "user");
   dom.appShell?.setAttribute("data-active-view", state.activeView);
@@ -9866,6 +10048,7 @@ function renderAll() {
   syncRealtimeSubscription();
   renderPresencePill();
   normalizeRenderedCopy();
+  window.DTSSharedUI?.enhance(state.locale);
   if (tutorialState.active) {
     window.requestAnimationFrame(renderTutorialStep);
   }
@@ -9889,11 +10072,11 @@ function renderLandingLogin() {
     0,
   );
   dom.landingLoginHelper.textContent =
-    state.auth.source === "supabase" && totalCourseCount > 1
+    state.auth.source === "cloudflare" && totalCourseCount > 1
       ? t("signedInReadyMany").replace("{count}", String(totalCourseCount))
-      : state.auth.source === "supabase" && totalCourseCount === 1
+      : state.auth.source === "cloudflare" && totalCourseCount === 1
         ? t("signedInReadyOne")
-        : state.auth.source === "supabase"
+        : state.auth.source === "cloudflare"
           ? t("noCourseLinkedYet")
           : configured
             ? ""
@@ -9915,151 +10098,54 @@ function clearTutorialHighlight() {
 }
 
 function getTutorialSteps() {
-  const hasCase = hasActiveCase();
-  const hasCourse = Boolean(getActiveCourse());
+  const ko = state.locale === "ko";
+  const step = (selector, view, titleKo, titleEn, bodyKo, bodyEn) => ({
+    selector, view, title: ko ? titleKo : titleEn, body: ko ? bodyKo : bodyEn,
+  });
   if (state.activeRole === "admin") {
-    if (!hasCourse) {
-      return [
-        {
-          selector: "#add-course-form",
-          title: state.locale === "ko" ? "첫 코스 만들기" : "Create Your First Course",
-          body: state.locale === "ko"
-            ? "아직 코스가 없습니다. 코스 이름과 코드(예: W200)를 입력해 학생을 위한 첫 코스를 만드세요. 코스를 만든 뒤 튜토리얼을 다시 실행하면 나머지 단계를 안내합니다."
-            : "You don't have a course yet. Enter a course name and code (e.g., W200) here to spin up your first course. Replay the tutorial after creating the course to see the rest of the flow.",
-          view: "visualizer",
-        },
-      ];
-    }
     return [
-      {
-        selector: "#course-select",
-        title: state.locale === "ko" ? "코스 선택" : "Choose the Course",
-        body: state.locale === "ko" ? "케이스를 만들거나 수정하기 전에 올바른 코스인지 먼저 확인하세요." : "Start by making sure you are in the right course before creating or editing a case.",
-      },
-      {
-        selector: "#case-select",
-        title: state.locale === "ko" ? "작업할 케이스 선택" : "Pick the Case You Want to Work On",
-        body: state.locale === "ko" ? "이 목록에서 초안과 게시된 케이스를 전환할 수 있습니다." : "Use this list to switch between drafts and published cases.",
-      },
-      {
-        selector: "#upload-document-form",
-        title: state.locale === "ko" ? "케이스 생성 또는 게시" : "Create or Publish a Case",
-        body: state.locale === "ko"
-          ? "제목, 수업 설명요약, 공개 설정을 입력해 케이스를 만드세요. 기본값은 초안이며, 학생에게 공개할 준비가 되면 '학생에게 게시'로 전환하세요."
-          : "Fill in the title, instructional brief, and visibility to create a case. New cases start as drafts — switch to 'Publish to learners' when students should see it.",
-        view: "visualizer",
-      },
-      {
-        selector: "#network-stage",
-        title: state.locale === "ko" ? "케이스 맵 읽기" : "Read the Case Map",
-        body: state.locale === "ko" ? "이 맵은 설계 결정을 형성하는 사람, 제약, 쟁점을 보여줍니다." : "This map shows the people, constraints, and tensions that shape the design decision.",
-        view: "visualizer",
-      },
-      {
-        selector: "#visualizer-form",
-        title: state.locale === "ko" ? "질문하기" : "Ask a Question",
-        body: state.locale === "ko" ? "가장 중요한 쟁점이나 특정 이해관계자의 우려를 물어 맵의 해석을 더해보세요." : "Ask about the most important conflict or a stakeholder concern to add more insight to the map.",
-        view: "visualizer",
-      },
-      ...(hasCase
-        ? [
-            {
-              selector: "#report-summary",
-              title: state.locale === "ko" ? "분석을 요약으로 정리" : "Turn the Analysis into a Summary",
-              body: state.locale === "ko" ? "준비가 되면 리포트 보기에서 요약, 쟁점, 근거를 확인하세요." : "When you are ready, open the report view to review the summary, tensions, and evidence.",
-              view: "report",
-            },
-          ]
-        : []),
-    ];
+      step(".topbar-heading", "home", "먼저 수업과 사례 확인", "Check your course and case",
+        "추가 설정에서 올바른 수업과 사례인지 확인하세요. 이 투어는 안내만 하며 사례를 게시하거나 변경하지 않습니다.",
+        "Check your course and case in More settings. This tour only explains the interface; it does not publish or edit cases."),
+      step("#manage-view", "manage", "학생에게 공개하기 전", "Before students join",
+        "내 수업에서 참여 코드와 사례 공개 상태를 확인하세요. 교수자에게 보이는 사례가 학생에게도 보이는지 학생 계정으로 점검하세요.",
+        "In My courses, check the join code and publication state. Verify case visibility with a student account."),
+      ...(hasActiveCase() ? [
+        step("#network-stage", "visualizer", "첫 활동은 쟁점 하나", "Start with one issue",
+          "학생에게 노드 하나를 읽고 다른 관점과 비교하게 하세요. 번호형 이름은 실제 내용을 열어 확인해야 합니다.",
+          "Ask students to read one node and compare another perspective. Open numbered nodes to check their actual meaning."),
+        step("#map-lens-bar", "visualizer", "다른 입장에서 질문하기", "Invite another perspective",
+          "누가 이 선택에서 이익을 얻고, 누가 어려움을 겪을까요? 관점 전환 횟수보다 학생의 설명을 살펴보세요.",
+          "Who benefits from this choice, and who faces a cost? Examine students' explanations, not just their click counts."),
+        step("#reflection-prompts", "report", "원문과 수신을 함께 확인", "Check the answer and its receipt",
+          "현재 제출 문구나 단계 체크만으로 수신을 확정할 수 없습니다. 수업 전 테스트 답변을 확인하고 원문 보관·대체 제출 경로를 안내하세요. 참고 지표는 성적이 아닙니다.",
+          "A success message or step checkmark does not guarantee receipt. Verify a test answer before class and provide a copy-first and alternative-submission procedure. Reference indicators are not grades."),
+      ] : []),
+    ].filter(item => isViewAllowed(item.view));
   }
-
-  return [
-    {
-      selector: "#course-select",
-      title: state.locale === "ko" ? "코스 확인" : "Confirm Your Course",
-      body: state.locale === "ko"
-        ? "교수자가 안내한 코스에 들어와 있는지 먼저 확인하세요. 아니라면 드롭다운에서 올바른 코스로 전환하세요."
-        : "Start here. Check that the course dropdown shows the course your instructor assigned — if it doesn't, switch courses before you pick a case.",
-    },
-    {
-      selector: "#case-select",
-      title: state.locale === "ko" ? "게시된 케이스 선택" : "Open a Published Case",
-      body: state.locale === "ko"
-        ? "이 목록에는 교수자가 학생과 공유한 케이스만 보입니다. 케이스 카드의 파란색 ‘케이스 열기’ 버튼을 눌러 설명요약과 네트워크 맵을 불러오세요."
-        : "Only cases your instructor has published appear in this list. Click the blue Open case pill on any card to load its brief and network map.",
-    },
-    ...(hasCase
-      ? [
-          {
-            selector: "[data-collapsible-panel='intake']",
-            title: state.locale === "ko" ? "수업 설명요약 읽기" : "Read the Case Brief First",
-            body: state.locale === "ko"
-              ? "왼쪽 패널의 수업 설명요약을 읽고, 설계가 해결하려는 문제와 학습자, 제약을 먼저 파악하세요. 읽고 나면 셰브론 버튼으로 패널을 접어 맵을 더 넓게 볼 수 있습니다."
-              : "The left panel holds the instructor's brief — read it before touching the map so you understand the design problem, the learners, and the constraints in play. Collapse this panel with the chevron once you are done to give the map more room.",
-            view: "visualizer",
-          },
-          {
-            selector: "#network-stage",
-            title: state.locale === "ko" ? "케이스 맵 탐색" : "Explore the Case Map",
-            body: state.locale === "ko"
-              ? "먼저 큰 묶음(이해관계자·제약·쟁점)을 훑어보세요. 노드에 마우스를 올리면 내용을 보고, 이해관계자 노드를 클릭하면 그 사람의 관점으로 전환됩니다."
-              : "Scan the main clusters first — stakeholders, constraints, and tensions. Hover any node to read its detail; click a stakeholder node to shift the Selected lens panel into their point of view.",
-            view: "visualizer",
-          },
-          {
-            selector: "#visualizer-form",
-            title: state.locale === "ko" ? "여러 관점에 질문하기" : "Ask the perspectives",
-            body: state.locale === "ko"
-              ? "가장 중요한 쟁점이나 이해관계자의 우려를 한 문장으로 물어보세요. 다섯 개의 AI 관점이 동시에 답하고, 서로 동의하거나 다른 지점이 맵에 연결됩니다."
-              : "Ask one focused question — a tension, tradeoff, or stakeholder concern. Five AI perspectives answer at once, and agreements or disagreements appear as connections on the map.",
-            view: "visualizer",
-          },
-          {
-            selector: ".chat-challenge",
-            title: state.locale === "ko" ? "응답에 이의 제기" : "Challenge a Response",
-            body: state.locale === "ko"
-              ? "에이전트 답변 옆의 ‘반박’ 버튼을 누르면 그 답변에 직접 반대 입장을 쓰고 맵에 반대 연결이 그려집니다. 맹목적으로 받아들이지 말고, 설득력이 약한 답에 반드시 이의를 제기하세요."
-              : "Each agent reply has a Challenge button. Use it to push back on a response you find weak — your challenge is logged, a disagreement edge is drawn on the map, and the swarm has to account for your objection next round.",
-            view: "visualizer",
-          },
-          {
-            selector: "#agenda-node-form",
-            title: state.locale === "ko" ? "직접 노드 추가" : "Add Your Own Node",
-            body: state.locale === "ko"
-              ? "자신의 관점에서 질문, 우려, 설계 쟁점 하나를 맵에 추가하세요. 이 노드는 개인 학습 레이어에 저장되어 세션 간에도 유지되며, 교수자는 리포트에서 확인할 수 있습니다."
-              : "Add a node for a question or issue you want to track from your own point of view. Your node joins a private learner layer on top of the map — it persists between sessions, and your instructor can see it in the report.",
-            view: "visualizer",
-          },
-          {
-            selector: "#chat-form",
-            title: state.locale === "ko" ? "한 이해관계자와 1:1로 대화" : "Go 1-on-1 with a Stakeholder",
-            body: state.locale === "ko"
-              ? "상단의 관점 뷰로 전환하면 특정 이해관계자의 관점에서 답을 듣는 1:1 채팅이 열립니다. 한 주제를 더 깊이 확인하고 싶을 때 사용하세요."
-              : "Switch to the Perspectives view (top nav) for a 1:1 chat from one stakeholder's point of view. Use it to explore one topic in more depth.",
-            view: "perspectives",
-          },
-          {
-            selector: "#reflection-prompts",
-            title: state.locale === "ko" ? "생각 정리 작성 후 제출" : "Write Your Reflection, Then Submit",
-            body: state.locale === "ko"
-              ? "리포트 뷰를 열고 프롬프트를 활용해 맵에서 발견한 쟁점과 근거를 짧은 생각 정리로 작성하세요. 다운로드 버튼으로 내보내거나 교수자에게 제출할 수 있습니다."
-              : "Open the Report view and use these prompts to turn what you found on the map into a short reflection. When you are ready, use the Download button at the bottom to export your report or submit it to your instructor.",
-            view: "report",
-          },
-        ]
-      : [
-          // Fallback for students who haven't opened a case yet — still give them somewhere to go.
-          {
-            selector: "#network-stage",
-            title: state.locale === "ko" ? "케이스를 선택하면 맵이 열립니다" : "Pick a Case to Load the Map",
-            body: state.locale === "ko"
-              ? "위의 목록에서 게시된 케이스를 하나 고르면 관계 맵이 이곳에 나타납니다. 그 뒤 튜토리얼을 다시 실행하면 설명요약 읽기, 여러 관점에 질문하기, 노드 추가, 생각 정리 작성까지 나머지 단계를 안내합니다."
-              : "Pick one published case from the list above and its network map will load here. Replay the tutorial after you've opened a case — it will walk you through reading the brief, exploring the map, asking the swarm, challenging responses, adding your own node, and writing a reflection.",
-            view: "visualizer",
-          },
-        ]),
+  const steps = [
+    step(".topbar-heading", "home", "오늘의 사례부터 시작해요", "Start with your case",
+      hasActiveCase() ? "홈에서 수업과 사례를 확인하세요. 홈 → 쟁점 맵 → 생각 정리가 기본 경로입니다. 이 안내는 언제든 닫고 추가 설정에서 다시 볼 수 있어요." : "아직 선택된 사례가 없어요. 추가 설정에서 수업·사례를 확인하고, 보이지 않으면 교수자에게 공개 여부를 문의하세요.",
+      hasActiveCase() ? "Check the course and case on Home. Home → Issue map → Reflection is the main route. Close this guide anytime and replay it from More settings." : "No case is selected. Check the course and case in More settings, or ask your instructor whether it is published."),
   ];
+  if (hasActiveCase()) steps.push(
+    step("#network-stage", "visualizer", "쟁점 하나를 읽어요", "Read one issue",
+      "안내를 닫은 뒤 노드 하나를 눌러 내용을 읽어보세요. 목표 1·제약 1 같은 번호만으로 의미를 판단하지 마세요. 왜 중요한지 한 문장으로 설명해 보세요.",
+      "After closing the guide, select a node and read its details. Do not infer meaning from Goal 1 or Constraint 1 alone. Explain why the issue matters."),
+    step("#map-lens-bar", "visualizer", "다른 입장과 비교해요", "Compare another perspective",
+      "교사·학생·에듀테크·행정 중 다른 관점을 골라보세요. 기기 접근이 중요한 학생과 지원 시간이 필요한 교사는 무엇을 다르게 볼까요?",
+      "Choose Teacher, Student, IT Systems, or Administrator. How might a student's need for access differ from a teacher's need for support time?"),
+    step("#map-dock", "visualizer", "내 쟁점을 더해요", "Add your own issue",
+      "쟁점 추가에서 제목과 왜 중요한지를 적을 수 있어요. 읽고 메모로 내용을 살펴보세요. 공유될 수 있는 노드에는 개인정보를 쓰지 마세요.",
+      "Use Add issue for a title and a reason, or Read & note to inspect details. Keep personal information out of potentially shared nodes."),
+    step("#reflection-prompts", "report", "선택에 근거를 붙여요", "Support your choice",
+      "생각 정리에 내 선택, 사례 근거, 다른 입장의 우려를 적고 관련 근거 노드를 고르세요. AI 피드백은 검토할 제안이며 설계 참고 지표는 성적이 아닙니다.",
+      "In Reflection, explain your choice, case evidence, and another perspective's concern. Select relevant evidence nodes. AI feedback is a proposal; reference indicators are not grades."),
+    step("#onepager-export", "report", "원문을 먼저 보관해요", "Keep your original answer",
+      window.__DTS_PREVIEW__ ? "지금은 체험 중입니다. 새로고침하면 초기화되고 실제 수업에는 제출되지 않아요. 안내를 마친 뒤 쟁점 하나를 직접 읽어보세요." : "제출 전에 원문을 복사해 보관하세요. 현재 긴 답변은 2,000자까지만 전송될 수 있습니다. 제출 문구만 믿지 말고 교수자 수신 또는 대체 제출 절차를 확인하세요.",
+      window.__DTS_PREVIEW__ ? "This is a sample. Reloading resets it, and answers are not submitted to a real course. After the guide, explore one issue yourself." : "Copy your original before submitting. Long answers may currently send only the first 2,000 characters. Verify instructor receipt or use the agreed alternative submission route.")
+  );
+  return steps.filter(item => isViewAllowed(item.view));
 }
 
 function positionTutorialCard(target) {
@@ -10714,9 +10800,11 @@ function setView(nextView) {
   const previous = state.activeView;
   state.activeView = nextView;
   renderNavigation();
+  if (nextView === "home") renderHome();
   if (nextView === "manage") renderManageView();
   if (previous !== nextView) {
-    logEvent("view.switch", { from: previous, to: nextView });
+    logEvent("view.switch", { from: previous, to: nextView, dwell_ms: Math.max(0, Date.now() - analyticsViewStartedAt) });
+    analyticsViewStartedAt = Date.now();
     window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "auto" }));
   }
   if (nextView === "report") {
@@ -10981,6 +11069,13 @@ function renderJolBar(question) {
         prediction: jolState.prediction,
         question: question.slice(0, 300),
       });
+      if (jolState.prediction === "skip") {
+        logEvent("opportunity.skipped", {
+          opportunity: "jol_prediction",
+          shown_ms: null,
+          dismissed_by: "learner",
+        });
+      }
       document.getElementById("visualizer-form")?.requestSubmit();
     }, { once: true });
   });
@@ -11243,7 +11338,7 @@ function applyScenario(name) {
 }
 
 async function addInstitution(name) {
-  if (isSupabaseSessionActive() && isPlatformAdminAccount()) {
+  if (isSupabaseSessionActive() && state.activeRole === "admin") {
     await createInstitutionInSupabase(name);
     persistSessionState();
     return;
@@ -11394,6 +11489,21 @@ document.getElementById("home-view")?.addEventListener("click", (event) => {
 });
 
 document.querySelector('[data-view-panel="report"]')?.addEventListener("click", (event) => {
+  const info = event.target.closest("[data-rubric-info]");
+  if (info) {
+    const target = document.getElementById(info.getAttribute("aria-controls"));
+    const open = info.getAttribute("aria-expanded") === "true";
+    document.querySelectorAll("[data-rubric-info]").forEach((button) => {
+      button.setAttribute("aria-expanded", "false");
+      const panel = document.getElementById(button.getAttribute("aria-controls"));
+      if (panel) panel.hidden = true;
+    });
+    if (!open && target) {
+      info.setAttribute("aria-expanded", "true");
+      target.hidden = false;
+    }
+    return;
+  }
   const trigger = event.target.closest("[data-report-action]");
   if (!trigger) return;
   setView(trigger.dataset.reportAction === "network" ? "visualizer" : "report");
@@ -11610,6 +11720,7 @@ document.getElementById("map-dock")?.addEventListener("click", (event) => {
       const previousLayer = state.activeMapLayer;
       state.activeMapLayer = "compare";
       state.selectedGraphNodeId = "";
+      state.compareSession = { startedAt: Date.now(), noticed: false };
       persistSessionState();
       renderAll();
       logEvent("layer.change", { from: previousLayer, to: "compare", via: "map_dock" });
@@ -11694,6 +11805,45 @@ dom.mapLayerSelect?.addEventListener("change", (event) => {
 });
 
 document.addEventListener("click", (event) => {
+  const interactive = event.target.closest?.("button, a, [role='button'], input[type='checkbox'], input[type='radio']");
+  if (interactive && !interactive.closest("#landing-login-form")) {
+    const label = String(interactive.getAttribute("aria-label") || interactive.textContent || "")
+      .replace(/\s+/g, " ").trim().slice(0, 120);
+    logEvent("ui.click", {
+      target_id: interactive.id || null,
+      target_role: interactive.getAttribute("role") || interactive.tagName.toLowerCase(),
+      target_label: label,
+      action: interactive.dataset.action || interactive.dataset.agentAction || interactive.dataset.reportAction || null,
+      view: state.activeView || null,
+      via: "pointer",
+    });
+  }
+  const rankButton = event.target.closest("[data-tension-rank]");
+  if (rankButton) {
+    const direction = rankButton.getAttribute("data-tension-rank");
+    const selectedId = rankButton.getAttribute("data-tension-id");
+    const current = [...stakeholderConflicts(state.activeStakeholder)].sort((a, b) => {
+      const ar = Number(state.tensionRanks[tensionBucketKey(a.title)] ?? 999);
+      const br = Number(state.tensionRanks[tensionBucketKey(b.title)] ?? 999);
+      return ar - br;
+    });
+    const from = current.findIndex((item) => tensionBucketKey(item.title) === selectedId);
+    const to = direction === "up" ? from - 1 : from + 1;
+    if (from < 0 || to < 0 || to >= current.length) return;
+    [current[from], current[to]] = [current[to], current[from]];
+    const previousOrder = current.map((item) => tensionBucketKey(item.title));
+    previousOrder.forEach((id, index) => { state.tensionRanks[id] = index; });
+    logEvent("tension.rank", {
+      ranked_ids: previousOrder,
+      top_id: previousOrder[0] || null,
+      changed_from_prior: true,
+      reason: null,
+      via: "tension_card",
+    });
+    renderAll();
+    return;
+  }
+
   const pill = event.target.closest("[data-pill]");
   if (pill) {
     setStakeholder(pill.dataset.pill, "pill");
@@ -11723,6 +11873,44 @@ document.addEventListener("click", (event) => {
   }
 
   const compareAnnotate = event.target.closest("[data-compare-annotate]");
+  const compareReflect = event.target.closest("[data-compare-reflect]");
+  if (compareReflect) {
+    if (!state.selectedGraphNodeId) {
+      showToast(state.locale === "ko" ? "먼저 비교할 차이 노드를 선택하세요." : "Select a difference first.");
+    } else {
+      const selected = state.graph.nodes.find((node) => node.id === state.selectedGraphNodeId);
+      logEvent("reflection.handoff", {
+        source: "compare",
+        source_node_id: selected?.id || null,
+        source_node_label: String(selected?.label || "").slice(0, 160),
+      });
+      setView("report");
+      renderAll();
+      window.requestAnimationFrame(() => dom.reflectionPrompts?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    }
+    return;
+  }
+  const compareNoticed = event.target.closest("[data-compare-noticed]");
+  if (compareNoticed) {
+    if (!state.selectedGraphNodeId) {
+      showToast(state.locale === "ko" ? "먼저 비교할 차이 노드를 선택하세요." : "Select a difference first.");
+    } else {
+      const entries = buildComparisonEntries();
+      const selected = state.graph.nodes.find((node) => node.id === state.selectedGraphNodeId);
+      const compared = entries.filter((entry) => entry.origin === "shared" || entry.origin === "mineonly" || entry.origin === "teamonly");
+      state.compareSession.noticed = true;
+      logEvent("agent.compare", {
+        compared: compared.map((entry) => tensionBucketKey(entry.title)).slice(0, 20),
+        selected_difference: selected?.id || null,
+        dwell_ms: state.compareSession.startedAt ? Date.now() - state.compareSession.startedAt : null,
+        divergence_noted: true,
+        via: "compare_notice",
+      });
+      showToast(state.locale === "ko" ? "관점 차이를 비교 기록에 남겼어요." : "Perspective difference recorded.");
+      renderCompareSummary();
+    }
+    return;
+  }
   if (compareAnnotate) {
     if (!state.selectedGraphNodeId) {
       showToast(state.locale === "ko" ? "먼저 맵에서 차이가 강조된 노드를 선택하세요." : "Select a highlighted difference on the map first.");
@@ -11814,8 +12002,9 @@ document.addEventListener("submit", async (event) => {
       if (!joinEmail || !joinPassword) {
         throw new Error("Enter your student email and password.");
       }
-      await signInWithSupabase(joinEmail, joinPassword);
-      await joinCourseWithCodeRemote(dom.landingJoinCode.value.trim());
+      const joinCode = dom.landingJoinCode.value.trim();
+      await signInOrCreateCourseAccount(joinEmail, joinPassword, joinCode);
+      await joinCourseWithCodeRemote(joinCode);
       renderLandingLogin();
       openStudio();
     } catch (error) {
@@ -12250,6 +12439,16 @@ dom.landingLocaleToggle?.addEventListener("click", () => {
   setTheme(state.theme === "light" ? "dark" : "light");
 });
 
+document.getElementById("landing-language-switcher")?.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-landing-language]");
+  if (!button || button.dataset.landingLanguage === state.locale) return;
+  // Translating must not erase a partially completed sign-in/join form.
+  // Values remain only in this synchronous handler, never storage or logs.
+  const inputs = [...document.querySelectorAll(".landing-login-card input")].map(input => [input, input.value]);
+  setLocale(button.dataset.landingLanguage);
+  inputs.forEach(([input, value]) => { input.value = value; });
+});
+
 wireHeaderGuidesDropdown();
 
 dom.workspaceLocaleToggle?.addEventListener("click", () => {
@@ -12288,7 +12487,7 @@ dom.returnToLanding?.addEventListener("click", async () => {
   await signOutSupabaseIfNeeded();
   state.auth = {
     ...state.auth,
-    source: state.auth.configured ? "supabase" : "none",
+    source: state.auth.configured ? "cloudflare" : "none",
     loading: false,
     userId: "",
     sessionEmail: "",
@@ -12685,8 +12884,8 @@ async function boot() {
     const nextCollapsed = !dom.topbar?.classList.contains("is-collapsed");
     setTopbarCollapsed(nextCollapsed);
   });
-  state.platform = loadPlatformState();
-  hydrateSessionState();
+  state.platform = window.__DTS_PREVIEW__ ? normalizePlatformState(seedPlatform) : loadPlatformState();
+  if (!window.__DTS_PREVIEW__) hydrateSessionState();
   hydrateTutorialState();
   initializeSupabase();
   ensureActiveSelections();
@@ -12695,7 +12894,7 @@ async function boot() {
   renderLandingLogin();
   regenerateGraph("initial load");
   syncGraphLoop();
-  const restored = await restoreSupabaseSession();
+  const restored = window.__DTS_PREVIEW__ ? false : await restoreSupabaseSession();
   renderLandingLogin();
   if (window.location.hash === "#studio" || restored) {
     dom.landingShell?.classList.add("is-hidden");

@@ -263,6 +263,16 @@ update도 delete도 없다. 학습자 데이터에 대한 `splice`는 단 한 �
 `construct`와 `evidence_role`은 **호출부에서 명시**한다. 자동 추론하면 나중에
 "이건 무슨 증거였나"를 되짚을 수 없다.
 
+### 이벤트 공통 매칭 범위
+
+모든 이벤트 payload에는 `scope`가 함께 들어간다. 이를 통해 분석자는 로그인
+계정(`account_id`), 수업(`course_id`, `course_code`, `course_name`), 케이스
+(`case_id`, `case_title`), 세션과 타임프레임(`session_id`, `session_started_at`,
+`event_at`, `session_elapsed_ms`)을 별도 조인 없이 매칭할 수 있다. DB의
+`user_id`, `course_id`, `case_id`, `client_ts` 컬럼은 보존하고, `scope`는
+내보내기·분석 파이프라인에서 안정적으로 사용할 수 있는 self-contained 키로
+중복 기록한다. 이메일 주소는 저장하지 않고 계정 UUID만 사용한다.
+
 `evidence_role`의 값이 중요하다:
 - `positive` — 구인을 드러내는 수행
 - `negative` — 구인의 부재를 드러내는 수행(예: 근거 없이 결론)
@@ -279,6 +289,8 @@ update도 delete도 없다. 학습자 데이터에 대한 `splice`는 단 한 �
 | 이벤트 | construct | evidence_role | 비고 |
 | --- | --- | --- | --- |
 | `perspective_switched` | lens_shift | positive | **`source` 없이는 집계 불가** — §2.7(1). `source: "pill"`만 positive, 나머지는 `none` |
+| `ui.click` | — | none | 버튼/링크의 식별자·라벨·화면만 기록하며 입력값은 기록하지 않음 |
+| `node.drag` | — | none | 노드 ID, 이동 거리, 드래그 시간, 시작/종료 좌표를 기록 |
 | `lens.change` | — | none | `perspective_switched`와 같은 지점에서 함께 발화하는 중복. 측정에 쓰지 않는다 |
 | `node.add` | tension_id | positive | 갈등 명명 여부를 구분할 필드 필요 |
 | `node.select` | tension_id | exposure | 선택은 주목, 후속 행동이 수행 |
@@ -323,6 +335,7 @@ update도 delete도 없다. 학습자 데이터에 대한 `splice`는 단 한 �
 | 이벤트 | construct | 페이로드 핵심 |
 | --- | --- | --- |
 | `agent.compare` | lens_shift | `compared[]`, `dwell_ms`, `divergence_noted` |
+| `redesign.explained` | redesign | `block_id`, `revision_trigger`, `cited_node_ids[]`, `answer_length` |
 | `case.submit` | — | `duration_ms`, `node_count`, `annotation_count`, `cite_count` (과업 경계) |
 | `prompt.shown` | — | `prompt_id`, `trigger` (기회 분모) |
 | `peer.view` | collab | `peer_run_id`, `dwell_ms`, `visible` — 알림이 아닌 **실제 열람** |

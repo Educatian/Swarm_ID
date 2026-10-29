@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>디자인 텐션 스튜디오 — 학생용 가이드</title>
-  <meta name="description" content="로그인부터 생각 정리 제출까지 — 학생이 보는 모든 화면.">
+  <title>쟁점 하나에서, 내 생각까지</title>
+  <meta name="description" content="쟁점을 읽고, 다른 입장을 비교하고, 근거 있는 내 선택을 남겨요.">
   <style>
 :root {
   --bg: #fafafa;
@@ -197,122 +197,118 @@ footer {
   main { padding: 0 20px 64px; }
   h2 { font-size: 22px; }
 }
+/* The updated workspace's restrained palette, with reading-first hierarchy. */
+:root { --bg:#f5f6f9; --ink:#202b3c; --muted:#526176; --accent:#4053d8; }
+.hero { background:#fff; color:var(--ink); border-bottom:1px solid var(--border); padding:56px 24px 40px; }
+.hero-inner { max-width:1100px; }
+.hero h1 { max-width:760px; font-size:clamp(30px,4vw,48px); letter-spacing:-.04em; line-height:1.22; }
+.hero .eyebrow { color:var(--accent); opacity:1; font-weight:700; }
+.hero p { opacity:1; color:var(--muted); }
+.guide-nav { max-width:1148px; padding:0 24px; }
+.guide-nav a { padding:10px 14px; min-height:44px; }
+.guide-layout { max-width:1148px; margin:auto; padding:0 24px; display:grid; grid-template-columns:230px minmax(0,1fr); gap:40px; }
+.guide-layout main { min-width:0; width:100%; padding:0 0 64px; }
+.guide-toc { position:sticky; top:20px; align-self:start; max-height:calc(100vh - 40px); overflow:auto; padding:16px; background:white; border:1px solid var(--border); border-radius:14px; }
+.guide-toc h2 { font-size:13px; margin:0 0 12px; }
+.guide-toc a { display:block; padding:10px 8px; border-radius:8px; font-size:14px; line-height:1.5; color:var(--muted); }
+.guide-toc a[aria-current] { background:#eef0ff; color:#283bb3; font-weight:700; }
+main h2 { scroll-margin-top:24px; margin-top:48px; font-size:25px; line-height:1.4; }
+main h3 { font-size:18px; line-height:1.5; }
+main p, main li { line-height:1.85; overflow-wrap:anywhere; }
+blockquote { background:#fff8ec; color:#654b1f; border-color:#b98731; font-size:15px; }
+figure { padding:8px; box-shadow:none; }
+figure a { display:block; }
+.skip-link { position:absolute; top:-100px; left:16px; z-index:10; background:white; padding:12px; }
+.skip-link:focus { top:8px; }
+:focus-visible { outline:3px solid #4053d8; outline-offset:4px; }
+footer { max-width:1148px; }
+@media(max-width:800px) { .guide-layout { display:block; padding:0 20px; } .guide-toc { position:static; max-height:none; margin-bottom:32px; } .guide-toc a { display:inline-block; margin:2px; border:1px solid var(--border); } .hero { padding:32px 20px; } }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+@media print { .guide-toc,.guide-nav,.skip-link { display:none; } .guide-layout { display:block; } .hero { padding:0 0 20px; } body { background:white; } figure { break-inside:avoid; } }
 </style>
 </head>
 <body>
+  <a class="skip-link" href="#guide-content">본문으로 바로가기</a>
   <header class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">디자인 텐션 스튜디오 · 수업용 가이드</p>
-      <h1>디자인 텐션 스튜디오 — 학생용 가이드</h1>
-      <p>로그인부터 생각 정리 제출까지 — 학생이 보는 모든 화면.</p>
+      <p class="eyebrow">디자인 텐션 스튜디오 · 새 화면 안내 · 2026.09 · v2</p>
+      <h1>쟁점 하나에서, 내 생각까지</h1>
+      <p>쟁점을 읽고, 다른 입장을 비교하고, 근거 있는 내 선택을 남겨요.</p>
     </div>
   </header>
-  <nav class="guide-nav"><a href="./instructor-en.html">교수자 가이드(영어)</a><a href="./instructor-ko.html">교수자 가이드</a><a href="./student-en.html">학생 가이드(영어)</a><a href="./student-ko.html" class="active">학생 가이드</a></nav>
-  <main>
-<p>수업 시간에 디자인 텐션 스튜디오를 사용하는 학생을 위한 단계별 안내서입니다. 각 단계는 <strong>무엇이 보이는지</strong>, <strong>무엇을 누르는지</strong>, 그리고 <strong>왜 그렇게 설계됐는지</strong>를 함께 설명합니다.</p>
+  <nav class="guide-nav" aria-label="역할과 언어"><a href="./student-ko.html" class="active">학생 가이드</a><a href="./student-en.html">학생 가이드(영어)</a><a href="./instructor-ko.html">교수자 가이드</a><a href="./instructor-en.html">교수자 가이드(영어)</a></nav>
+  <div class="guide-layout">
+  <nav class="guide-toc" aria-label="이 안내서의 순서"><h2>필요한 단계로 바로 가기</h2><a href="#section-1">시작 전 · 체험과 실제 수업 구분하기</a><a href="#section-2">1 · 오늘의 사례 열기</a><a href="#section-3">2 · 쟁점 하나를 읽기</a><a href="#section-4">3 · 다른 입장으로 다시 보기</a><a href="#section-5">4 · 내 쟁점과 근거 남기기</a><a href="#section-6">5 · 내 선택을 글로 설명하기</a><a href="#section-7">6 · 원문을 보관하고 제출 확인하기</a><a href="#section-8">자주 묻는 질문</a><a href="#section-9">마무리 · 내가 할 수 있게 된 것</a></nav>
+  <main id="guide-content" tabindex="-1">
+<p>새 화면을 처음 사용하는 학생을 위한 짧은 실습입니다. 디자인 텐션 스튜디오는 같은 수업 사례를 서로 다른 입장에서 읽고, 선택의 이유를 근거와 함께 설명하는 공간입니다. 모든 기능을 익힐 필요는 없어요.</p>
+<h2 id="section-1">시작 전 · 체험과 실제 수업 구분하기</h2>
+<p><a href="../preview.html?lang=ko">가입 없이 예시로 연습하기</a> · <a href="../index.html">실제 수업 로그인</a></p>
+<p>예시에서는 가상의 학생과 사례로 연습합니다. 새로고침하면 초기화되고, 체험 답변은 실제 수업에 제출되지 않습니다. 실제 수업은 교수자가 안내한 계정과 코스를 사용하세요. 처음 참여할 때만 로그인 카드의 <strong>처음 오셨나요? 코스 코드로 참여</strong>를 선택합니다. 이 공개 가이드에는 계정 비밀번호를 싣지 않습니다.</p>
 <blockquote>
-<strong>지금 뭘 하는 거야?</strong> 여러분은 수업 설계 사례 하나를 받아서,<br>
-그 설계를 둘러싼 <strong>쟁점</strong>을 찾아내는 중입니다. 같은 케이스도<br>
-<strong>교사 · 학생 · 에듀테크 · 행정</strong> 네 입장에서 보면 다르게 보여요.<br>
-질문을 던지면 다섯 관점의 AI 에이전트가 동시에 답하고, 여러분은<br>
-그들이 어디서 <strong>동의</strong>하고 어디서 <strong>부딪히는지</strong> 확인한 뒤,<br>
-가장 중요한 쟁점 하나를 골라 <strong>근거를 들어</strong> 정리합니다.<br>
-맵의 노드에는 출처 배지가 달립니다: <code>AI</code>(에이전트), <code>나</code>(여러분),<br>
-<code>동료</code>(반 친구), <code>설명</code>(원본 케이스).<br>
+현재 버전 주의: 제출 문구만으로 교수자의 수신이 보장되지는 않습니다. 제출 전 원문을 따로 복사해 보관하고, 교수자가 안내한 수신 확인 또는 대체 제출 절차를 따르세요. 긴 답변은 현재 2,000자까지만 전송되는 문제가 있어 짧게 작성하고 원문을 보관하세요.<br>
 </blockquote>
-<div class="narration"><span class="narration-label">나레이션 듣기</span><audio controls preload="none" src="./audio/student-ko/00-intro.mp3"></audio></div>
-<hr>
-<h2>1단계 · 접속과 로그인</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/student-ko/01-landing.jpg" src="./videos/student-ko/01-landing.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p><strong>https://swarm-id-ko.pages.dev</strong> 에 접속합니다. 랜딩 화면 왼쪽에서 이 도구가 무엇을 하는지 3단계로 소개하고, 그 아래 카드에서 바로 로그인합니다.</p>
-<ul>
-<li><strong>처음이라면</strong>: 카드 아래의 <em>&quot;처음 오셨나요? 코스 코드로 참여&quot;</em></li>
-</ul>
-<p>  를 눌러 이메일 · 비밀번호 · 교수자가 알려 준 <strong>코스 코드</strong>를   입력하세요.</p>
-<ul>
-<li><strong>이미 참여했다면</strong>: 이메일과 비밀번호만 입력하면 됩니다.</li>
-</ul>
-<blockquote>
-<strong>아이패드에서 앱처럼 쓰기</strong>: Safari에서 접속한 뒤<br>
-<strong>공유 버튼(⬆️) → &quot;홈 화면에 추가&quot;</strong> 를 누르면 홈 화면에<br>
-아이콘이 생기고, 주소창 없는 전체 화면 앱으로 실행됩니다.<br>
-한 번 설치하면 와이파이가 불안정해도 화면이 즉시 뜹니다.<br>
-</blockquote>
-<hr>
-<h2>2단계 · 첫 방문 안내</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/student-ko/02-welcome.jpg" src="./videos/student-ko/02-welcome.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p>처음 들어오면 짧은 안내 슬라이드 4장이 나타납니다. 이 도구가 무엇인지, 네 가지 관점이 무엇인지, 오늘 할 일이 무엇인지 1분 안에 보여 줘요. 마지막 장에서 <strong>&quot;가이드 투어 시작&quot;</strong> 을 누르면 화면 요소를 하나씩 짚어 주는 투어가 이어집니다.</p>
-<p>건너뛰어도 괜찮습니다 — 화면 위쪽의 <strong>&quot;튜토리얼 보기&quot;</strong> 버튼으로 언제든 다시 열 수 있어요.</p>
-<hr>
-<h2>3단계 · 홈에서 이어하기</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/student-ko/03-home.jpg" src="./videos/student-ko/03-home.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p>로그인하면 <strong>홈</strong> 화면에서 시작합니다. 진행 중인 케이스가 있으면 <strong>&quot;이어하기&quot;</strong> 한 번으로 바로 맵으로 돌아갑니다. 쟁점은 깔끔하게 풀리지 않아요 — 가장 중요한 하나를 골라 근거를 세우는 게 목표라는 것만 기억하세요.</p>
-<hr>
-<h2>4단계 · &quot;지금 할 일&quot; 따라가기</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/student-ko/04-task-banner.jpg" src="./videos/student-ko/04-task-banner.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p>맵 화면 위에는 <strong>지금 할 일</strong> 안내가 떠 있습니다. 다섯 단계 — <strong>케이스 열기 → 노드 눌러 쟁점 읽기 → 관점 바꿔 보기 → 질문하거나 노드 추가 → 생각 정리</strong> — 를 실제로 수행하면 자동으로 체크되고, 다음에 할 일이 항상 강조돼요. 접어 두고 싶으면 오른쪽 버튼으로 한 줄로 줄일 수 있습니다.</p>
-<hr>
-<h2>5단계 · 맵 읽는 법</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/student-ko/05-map-read.jpg" src="./videos/student-ko/05-map-read.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p>맵의 <strong>노드 하나가 쟁점 하나</strong>입니다. 노드를 누르면(또는 마우스를 올리면) 그 쟁점의 설명이 떠요. 아이패드에서는 <strong>탭하면 설명이 고정</strong>되고, 빈 곳을 탭하면 닫힙니다.</p>
-<ul>
-<li><strong>색</strong>: 보라 = 수업 설계 신호, 빨강 = 제약 충돌, 초록 = 근거</li>
-<li><strong>이해관계자 사이의 점선</strong>: 두 입장의 쟁점이 같은 유형에서</li>
-</ul>
-<p>  맞물린다는 뜻입니다 — 한쪽의 결정이 다른 쪽의 부담이 되는 지점</p>
-<ul>
-<li><strong>배지</strong>: 노드를 누가 만들었는지 (<code>AI</code> / <code>나</code> / <code>동료</code> / <code>설명</code>)</li>
-</ul>
-<p>화면이 좁으면 <strong>&quot;맵 크게&quot;</strong> 버튼으로 양쪽 패널을 접고 맵만 크게 볼 수 있어요.</p>
-<hr>
-<h2>6단계 · 관점 바꿔 보기</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/student-ko/06-lens-bar.jpg" src="./videos/student-ko/06-lens-bar.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p>맵 아래 <strong>관점 버튼</strong>(교사 · 학생 · 에듀테크 · 행정)을 누르면 같은 케이스가 그 입장에서 다시 읽힙니다. 강조되는 노드가 달라지고, 오른쪽 패널의 주요 쟁점도 바뀌어요. <strong>적어도 두 개 이상의 관점</strong>으로 케이스를 읽어 보세요 — 한 면만 봐서는 쟁점이 안 보입니다.</p>
-<hr>
-<h2>7단계 · 질문하고 응답 받기</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/student-ko/07-swarm-round.jpg" src="./videos/student-ko/07-swarm-round.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p>맵 아래 <strong>질문하기</strong> 입력창에 질문을 쓰고 보내면, 먼저 <strong>&quot;동의할까요, 갈릴까요?&quot;</strong> 한 번의 예측 탭이 나타나요 — 직감을 걸어 보세요. 그다음 다섯 관점의 에이전트가 <strong>동시에</strong> 답하고, 라운드가 끝나면 예측이 맞았는지 활동 내역에서 알려 줍니다. 응답은 맵에 새 노드로 나타나고, 에이전트끼리 <strong>의견이 갈리면 빨간 선</strong>으로 표시돼요 — 그 지점이 바로 토론할 가치가 있는 쟁점입니다.</p>
-<p>오른쪽 <strong>활동 내역</strong> 패널에는 의미 있는 사건만 기록됩니다: 라운드 응답 완료, 이견 감지, 내 노드 추가, 동료 활동 등. 내가 한 일이 맵에 어떻게 반영됐는지 여기서 확인하세요.</p>
-<hr>
-<h2>8단계 · 내 노드와 메모 추가</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/student-ko/08-add-node.jpg" src="./videos/student-ko/08-add-node.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p>왼쪽 아이콘(⊕)을 누르면 <strong>노드 추가</strong> 패널이 열립니다. 원본 케이스에 빠져 있다고 생각하는 우려나 질문을 짧은 제목으로 추가하세요. 여러분의 노드는 맵에 <code>나</code> 배지로 나타나고, AI가 관련 쟁점을 이어 붙여 줍니다.</p>
-<p>노드를 선택한 상태에서는 <strong>메모</strong>도 남길 수 있어요 — &quot;나만 보기&quot; 또는 &quot;학급 보기&quot;(반 전체 공개)를 고를 수 있습니다.</p>
-<hr>
-<h2>9단계 · 목록으로 보기</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/student-ko/09-list-view.jpg" src="./videos/student-ko/09-list-view.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p>맵이 한눈에 안 들어오면 <strong>&quot;목록&quot;</strong> 버튼으로 같은 쟁점들을 목록으로 볼 수 있습니다. 검색하고, <strong>관점별 · 유형별 · 이름순 · 출처별</strong>로 정렬하고, 행을 누르면 해당 노드가 선택돼요. 맵과 목록은 같은 내용의 두 가지 보기입니다.</p>
-<hr>
-<h2>10단계 · 학급 보기로 비교하기</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/student-ko/10-class-view.jpg" src="./videos/student-ko/10-class-view.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p><strong>맵 레이어</strong>를 &quot;학급 보기&quot;로 바꾸면 반 친구들이 추가한 쟁점이 모여 보입니다. 여러 명이 반복해서 지적한 쟁점은 &quot;(N명)&quot;으로 묶여요. &quot;비교 보기&quot;에서는 <strong>나만 본 쟁점</strong>(고유 기여)과 <strong>팀만 본 쟁점</strong>(내 사각지대)이 구분됩니다.</p>
-<p>같은 케이스를 열어 둔 친구가 있으면 화면 위에 <strong>&quot;함께 보는 중 N명&quot;</strong> 이 뜨고, 친구의 노드가 <strong>실시간으로</strong> 내 맵에 나타납니다.</p>
-<hr>
-<h2>11단계 · 생각 정리 제출</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/student-ko/11-report.jpg" src="./videos/student-ko/11-report.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p><strong>리포트</strong> 화면에서 마무리합니다. 지금까지 맵에서 발견한 쟁점과 근거가 요약돼 있고, <strong>생각 정리 질문</strong>에 답해 제출하면 교수자에게 전달됩니다. 좋은 생각 정리의 기준은 하나예요 — <em>가장 중요한 쟁점 하나를 고르고, 맵에서 본 근거로 그 선택을 설명했는가.</em></p>
-<hr>
-<h2>12단계 · 스웜 피드백으로 다듬고, 1장으로 제출</h2>
-<figure class="screencast"><video controls preload="metadata" playsinline poster="./videos/student-ko/12-critique.jpg" src="./videos/student-ko/12-critique.mp4"></video><figcaption>나레이션이 포함된 화면 녹화 — 재생 버튼을 누르세요</figcaption></figure>
-<p>생각 정리 초안을 쓴 뒤 <strong>&quot;스웜 피드백 받기&quot;</strong>를 누르면 다섯 관점이 초안을 읽고 <strong>도전 질문</strong>을 던집니다 — 정답을 주지 않아요. 당신의 주장이 놓친 쟁점을 짚을 뿐이에요. 초안이 <strong>맵의 노드를 근거로 인용했는지</strong>도 자동으로 확인해 줍니다. 도전에 답하도록 고친 뒤 제출하세요.</p>
-<p><strong>&quot;제출용 1장&quot;</strong> 버튼을 누르면 내 노드 · 메모 · 생각 정리 · 받은 비평이 한 장으로 정리돼 인쇄하거나 PDF로 제출할 수 있어요.</p>
-<hr>
-<h2>자주 묻는 것</h2>
-<ul>
-<li><strong>화면이 복잡해요</strong> → 기본 &quot;간단히&quot; 모드를 유지하세요. &quot;자세히&quot;는</li>
-</ul>
-<p>  과정 데이터가 더 필요할 때만 켜면 됩니다. &quot;맵 크게&quot;로 패널을   접는 것도 도움이 돼요.</p>
-<ul>
-<li><strong>야간/주간 모드</strong> → 오른쪽 위 ☀/☾ 버튼으로 바꿉니다.</li>
-<li><strong>내가 한 게 저장됐나요?</strong> → 활동 내역에 기록이 떴다면 저장된</li>
-</ul>
-<p>  것입니다. 노드 · 메모 · 생각 정리는 계정에 저장되어 다른   기기에서 로그인해도 이어집니다.</p>
-<ul>
-<li><strong>튜토리얼을 다시 보고 싶어요</strong> → 화면 위 &quot;튜토리얼 보기&quot; 버튼.</li>
-</ul>
+<h2 id="section-2">1 · 오늘의 사례 열기</h2>
+<p>홈에서 <strong>수업 이름</strong>과 <strong>오늘의 사례</strong>를 확인하고 <strong>쟁점 맵 살펴보기</strong>를 누르세요. 이미 탐색한 경우 버튼 문구가 달라질 수 있습니다. 홈 → 쟁점 맵 → 생각 정리가 기본 경로입니다.</p>
+<p>할 일: 사례 제목을 읽고 “누구의 어떤 선택을 살펴보는가?”를 한 문장으로 말해보세요.</p>
+<p>확인: 수업이나 사례가 다르면 <strong>추가 설정</strong>에서 선택을 확인하세요. 사례가 없으면 교수자에게 공개 여부를 문의합니다. 환영 슬라이드는 자동으로 뜨지 않습니다.</p>
+<figure><img src="./screenshots/v2/home-ko.png" alt="예시 데이터로 연 홈: 오늘의 사례와 세 가지 시작 경로" loading="lazy"><figcaption>예시 데이터로 연 홈: 오늘의 사례와 세 가지 시작 경로</figcaption></figure>
+<h2 id="section-3">2 · 쟁점 하나를 읽기</h2>
+<p><strong>쟁점 맵</strong>에서 노드 하나를 눌러 내용을 읽으세요. 번호만 보고 판단하지 마세요. <strong>목표 1</strong>, <strong>제약 1</strong>처럼 보이는 이름은 내용을 열어 확인해야 합니다.</p>
+<p>예: “기기 접근 격차”를 발견했다면, “기기가 없는 학생도 같은 활동에 참여할 수 있을까?”라고 질문해 보세요. 이 문장은 연습용 예시이지 정답이 아닙니다.</p>
+<p>확인: 내가 고른 쟁점이 왜 중요한지, 어떤 사례 내용에 근거하는지 설명할 수 있나요? 맵이 복잡하면 <strong>목록으로 보기</strong> 또는 <strong>패널을 접고 맵을 크게 보기</strong>를 사용하세요.</p>
+<h2 id="section-4">3 · 다른 입장으로 다시 보기</h2>
+<p>맵의 <strong>교사 · 학생 · 에듀테크 · 행정</strong> 버튼 중 다른 관점을 선택하세요. 같은 선택이라도 무엇이 달라지는지 읽습니다.</p>
+<p>연습: 학생은 “기기를 쓸 수 있는가?”, 교사는 “수업 중 지원 부담은 얼마인가?”를 걱정할 수 있습니다. 두 입장에서 중요한 점을 하나씩 적으세요.</p>
+<p>확인: 관점을 바꾸는 클릭 자체보다, 내 설명에서 달라진 이유가 중요합니다. 의견이 궁금하면 <strong>질문하기</strong>를 사용할 수 있지만 AI 답변을 사례의 사실이나 정답으로 간주하지 마세요.</p>
+<h2 id="section-5">4 · 내 쟁점과 근거 남기기</h2>
+<p>맵의 <strong>쟁점 추가</strong>에서 짧은 제목과 왜 중요한지를 적습니다. 수업 설정에 따라 추가 기능이나 공유 범위가 달라질 수 있어요. 동료에게 보일 수 있으므로 개인정보는 쓰지 마세요.</p>
+<p>연습 제목: “기기 대여와 지원 시간”. 이유: “접근 기회뿐 아니라 교사의 지원 시간도 함께 확보해야 하기 때문이다.”</p>
+<p>확인: 이후 <strong>생각 정리</strong>의 근거 노드를 고를 때, 번호만 기억하지 말고 실제 내용과 맞는지 확인하세요.</p>
+<h2 id="section-6">5 · 내 선택을 글로 설명하기</h2>
+<p>상단 <strong>생각 정리</strong>를 누르고 질문 아래에 답변을 적으세요. 관련 있는 <strong>근거 노드 선택</strong> 항목을 고릅니다.</p>
+<p>쓰기 틀: “나는 ___을 우선하겠다. 사례의 ___이 그 근거다. 다만 ___ 입장에서는 ___이 어려울 수 있으므로 ___을 보완하겠다.”</p>
+<p>원하면 <strong>다섯 관점의 피드백 받기</strong>를 사용해 빠진 근거나 반대 입장을 점검하세요. 피드백은 검토할 제안이지 자동 채점이 아닙니다. 체험 모드의 답변은 실제 서비스 AI 응답과 다를 수 있습니다.</p>
+<p>확인: 내 선택, 사례 근거, 다른 입장의 우려가 모두 들어갔나요? <strong>설계 참고 지표</strong>의 퍼센트는 학습 성적이나 글의 품질 점수가 아닙니다.</p>
+<figure><img src="./screenshots/v2/reflection-ko.png" alt="예시 성찰 화면: 먼저 글을 쓰고 관련 근거를 선택" loading="lazy"><figcaption>예시 성찰 화면: 먼저 글을 쓰고 관련 근거를 선택</figcaption></figure>
+<h2 id="section-7">6 · 원문을 보관하고 제출 확인하기</h2>
+<ol>
+<li>답변 원문을 내 문서에 복사해 보관합니다. 새로고침이나 재로그인 후 초안 복원을 가정하지 마세요.</li>
+<li><strong>제출</strong>을 누릅니다. 빈 답변이면 먼저 작성하라는 안내가 나옵니다.</li>
+<li>체험에서는 “실제 수업에는 제출되지 않아요” 안내를 확인합니다.</li>
+<li>실제 수업에서는 교수자가 받은 내용까지 확인하세요. <strong>제출용 1장</strong>은 인쇄·PDF 보관에 사용할 수 있으며 서버 수신 확인과는 별개입니다.</li>
+</ol>
+<p><strong>지금 할 일</strong>의 완료 체크만으로 제출 여부를 판단하지 마세요. 현재는 생각 정리 화면을 여는 것만으로도 체크가 붙을 수 있습니다. 연구 동의를 제출 문제의 해결책으로 강요하거나 임의로 바꾸지 마세요.</p>
+<h2 id="section-8">자주 묻는 질문</h2>
+<h3>튜토리얼은 어디서 다시 보나요?</h3>
+<p>앱의 <strong>추가 설정 → 튜토리얼 보기</strong>에서 화면 안내를 다시 실행할 수 있습니다. 로그인 화면의 <strong>가이드</strong> 메뉴에서는 이 안내서를 엽니다.</p>
+<h3>생각 정리나 추가 버튼이 없어요.</h3>
+<p>교수자가 학생 화면을 제한했을 수 있습니다. 다른 코스를 만들거나 설정을 임의로 바꾸지 말고, 현재 사례와 수업의 허용 범위를 문의하세요.</p>
+<h3>로그인 정보가 기억나지 않아요.</h3>
+<p>받은 안내 메일을 확인하고 운영자에게 계정 복구를 요청하세요. 비밀번호를 질문창·공유 노드에 입력하지 마세요. 반복해서 추측하지 않아도 됩니다.</p>
+<h3>휴대전화에서 맵이 작아요.</h3>
+<p>목록 보기나 맵 확대 기능으로 쟁점부터 읽고, 상세 설명은 스크롤해서 확인하세요. 인터넷이 끊긴 상태의 저장·제출은 보장되지 않습니다.</p>
+<h3>AI가 틀린 말을 하거나 응답하지 않아요.</h3>
+<p>사례 내용과 비교해 근거를 확인하세요. AI 없이도 쟁점을 읽고 자신의 이유를 적을 수 있습니다. 응답 실패 시 글을 보관한 뒤 다시 시도하세요.</p>
+<h2 id="section-9">마무리 · 내가 할 수 있게 된 것</h2>
+<p>쟁점 하나를 설명하고, 두 입장의 차이를 말하고, 근거가 있는 내 선택을 글로 남겼다면 이 실습의 목적을 달성한 것입니다. 이는 학습 성취를 자동 판정하는 기준이 아니라 스스로 돌아보기 위한 질문입니다.</p>
+<p><a href="../preview.html?lang=ko">예시에서 다시 연습하기</a> · <a href="./instructor-ko.html">교수자 안내</a></p>
   </main>
+  </div>
   <footer>
-    <p><code>guides/student-ko.md</code>에서 생성했습니다. 스크린샷은 Playwright로 <code>https://swarmid.vercel.app</code>에서 캡처했습니다.</p>
+    <p>2026년 9월 화면 기준. 학생 화면은 가상의 공개 체험 데이터입니다. 이전 버전 영상은 새 안내에서 제외했습니다. 수업·권한에 따라 보이는 기능이 다를 수 있습니다.</p>
   </footer>
+  <script>
+    const headings = [...document.querySelectorAll('main h2[id]')];
+    const links = [...document.querySelectorAll('.guide-toc a')];
+    function updateSection() {
+      let current = headings[0];
+      for (const heading of headings) { if (heading.getBoundingClientRect().top <= 140) current = heading; }
+      for (const link of links) { if (current && link.hash === '#' + current.id) link.setAttribute('aria-current','location'); else link.removeAttribute('aria-current'); }
+    }
+    let queued = false;
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(() => { updateSection(); queued = false; }); } }, {passive:true});
+    addEventListener('hashchange', updateSection);
+    updateSection();
+  </script>
 </body>
 </html>

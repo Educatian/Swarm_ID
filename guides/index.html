@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Swarm_ID — Guides</title>
-  <meta name="description" content="Instructor and student walkthroughs.">
+  <title>Design Tension Studio · Guides</title>
+  <meta name="description" content="새 화면에 맞춘 학생·교수자 안내 · Updated student and instructor walkthroughs.">
   <style>
 :root {
   --bg: #fafafa;
@@ -197,32 +197,76 @@ footer {
   main { padding: 0 20px 64px; }
   h2 { font-size: 22px; }
 }
+/* The updated workspace's restrained palette, with reading-first hierarchy. */
+:root { --bg:#f5f6f9; --ink:#202b3c; --muted:#526176; --accent:#4053d8; }
+.hero { background:#fff; color:var(--ink); border-bottom:1px solid var(--border); padding:56px 24px 40px; }
+.hero-inner { max-width:1100px; }
+.hero h1 { max-width:760px; font-size:clamp(30px,4vw,48px); letter-spacing:-.04em; line-height:1.22; }
+.hero .eyebrow { color:var(--accent); opacity:1; font-weight:700; }
+.hero p { opacity:1; color:var(--muted); }
+.guide-nav { max-width:1148px; padding:0 24px; }
+.guide-nav a { padding:10px 14px; min-height:44px; }
+.guide-layout { max-width:1148px; margin:auto; padding:0 24px; display:grid; grid-template-columns:230px minmax(0,1fr); gap:40px; }
+.guide-layout main { min-width:0; width:100%; padding:0 0 64px; }
+.guide-toc { position:sticky; top:20px; align-self:start; max-height:calc(100vh - 40px); overflow:auto; padding:16px; background:white; border:1px solid var(--border); border-radius:14px; }
+.guide-toc h2 { font-size:13px; margin:0 0 12px; }
+.guide-toc a { display:block; padding:10px 8px; border-radius:8px; font-size:14px; line-height:1.5; color:var(--muted); }
+.guide-toc a[aria-current] { background:#eef0ff; color:#283bb3; font-weight:700; }
+main h2 { scroll-margin-top:24px; margin-top:48px; font-size:25px; line-height:1.4; }
+main h3 { font-size:18px; line-height:1.5; }
+main p, main li { line-height:1.85; overflow-wrap:anywhere; }
+blockquote { background:#fff8ec; color:#654b1f; border-color:#b98731; font-size:15px; }
+figure { padding:8px; box-shadow:none; }
+figure a { display:block; }
+.skip-link { position:absolute; top:-100px; left:16px; z-index:10; background:white; padding:12px; }
+.skip-link:focus { top:8px; }
+:focus-visible { outline:3px solid #4053d8; outline-offset:4px; }
+footer { max-width:1148px; }
+@media(max-width:800px) { .guide-layout { display:block; padding:0 20px; } .guide-toc { position:static; max-height:none; margin-bottom:32px; } .guide-toc a { display:inline-block; margin:2px; border:1px solid var(--border); } .hero { padding:32px 20px; } }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+@media print { .guide-toc,.guide-nav,.skip-link { display:none; } .guide-layout { display:block; } .hero { padding:0 0 20px; } body { background:white; } figure { break-inside:avoid; } }
 </style>
 </head>
 <body>
+  <a class="skip-link" href="#guide-content">본문으로 바로가기</a>
   <header class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">Design Tension Studio · Classroom guide</p>
-      <h1>Swarm_ID — Guides</h1>
-      <p>Instructor and student walkthroughs.</p>
+      <p class="eyebrow">디자인 텐션 스튜디오 · 새 화면 안내 · 2026.09 · v2</p>
+      <h1>Design Tension Studio · Guides</h1>
+      <p>새 화면에 맞춘 학생·교수자 안내 · Updated student and instructor walkthroughs.</p>
     </div>
   </header>
-  <nav class="guide-nav"><a href="./instructor-en.html" class="active">Instructor Guide</a><a href="./instructor-ko.html">Instructor Guide (Korean)</a><a href="./student-en.html">Student Guide</a><a href="./student-ko.html">Student Guide (Korean)</a></nav>
-  <main>
+  <nav class="guide-nav" aria-label="역할과 언어"><a href="./student-ko.html">Student Guide (Korean)</a><a href="./student-en.html">Student Guide</a><a href="./instructor-ko.html">Instructor Guide (Korean)</a><a href="./instructor-en.html">Instructor Guide</a></nav>
+  <div class="guide-layout">
+  <nav class="guide-toc" aria-label="이 안내서의 순서"><h2>필요한 단계로 바로 가기</h2><a href="#section-1">시작할 안내를 고르세요 · Choose your guide</a></nav>
+  <main id="guide-content" tabindex="-1">
 
-<h2>Four guides</h2>
+<h2 id="section-1">시작할 안내를 고르세요 · Choose your guide</h2>
 <ul>
-<li><a href="./instructor-en.html">Design Tension Studio — Instructor Guide</a> — <small>From creating a case to reading engagement analytics — the whole course flow.</small></li>
-<li><a href="./instructor-ko.html">디자인 텐션 스튜디오 — 교수자용 가이드</a> — <small>케이스 만들기부터 참여 분석까지 — 수업 운영의 전체 흐름.</small></li>
-<li><a href="./student-en.html">Design Tension Studio — Student Guide</a> — <small>Every screen a student sees — from sign-in to submitting a reflection.</small></li>
-<li><a href="./student-ko.html">디자인 텐션 스튜디오 — 학생용 가이드</a> — <small>로그인부터 생각 정리 제출까지 — 학생이 보는 모든 화면.</small></li>
+<li><a href="./student-ko.html">쟁점 하나에서, 내 생각까지</a> — <small>쟁점을 읽고, 다른 입장을 비교하고, 근거 있는 내 선택을 남겨요.</small></li>
+<li><a href="./student-en.html">From one issue to your own position</a> — <small>Read one issue. Compare perspectives. Explain a choice with evidence.</small></li>
+<li><a href="./instructor-ko.html">첫 수업을 차분하게 시작하기</a> — <small>사례 준비부터 토론과 수신 확인까지. 첫 수업에 필요한 것만.</small></li>
+<li><a href="./instructor-en.html">Start your first class with confidence</a> — <small>Prepare the case, guide the discussion, and verify what was received.</small></li>
 </ul>
-<h3>How screenshots were captured</h3>
-<p>Each PNG under <code>guides/screenshots/{role}-{locale}/</code> was produced by <code>scripts/capture-guides.mjs</code>, which drives a headless Chromium through the real deployed app at <a href="https://swarmid.vercel.app">swarmid.vercel.app</a>.</p>
+<p>학생은 첫 쟁점부터, 교수자는 수업 준비부터 시작하세요. Start with one issue as a student, or prepare a class as an instructor.</p>
 
   </main>
+  </div>
   <footer>
-    <p>Generated from <code>guides/instructor-en.md</code>. Screenshots captured on <code>https://swarmid.vercel.app</code> via Playwright.</p>
+    <p>2026년 9월 화면 기준. 학생 화면은 가상의 공개 체험 데이터입니다. 이전 버전 영상은 새 안내에서 제외했습니다. 수업·권한에 따라 보이는 기능이 다를 수 있습니다.</p>
   </footer>
+  <script>
+    const headings = [...document.querySelectorAll('main h2[id]')];
+    const links = [...document.querySelectorAll('.guide-toc a')];
+    function updateSection() {
+      let current = headings[0];
+      for (const heading of headings) { if (heading.getBoundingClientRect().top <= 140) current = heading; }
+      for (const link of links) { if (current && link.hash === '#' + current.id) link.setAttribute('aria-current','location'); else link.removeAttribute('aria-current'); }
+    }
+    let queued = false;
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(() => { updateSection(); queued = false; }); } }, {passive:true});
+    addEventListener('hashchange', updateSection);
+    updateSection();
+  </script>
 </body>
 </html>

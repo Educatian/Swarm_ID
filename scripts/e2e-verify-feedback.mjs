@@ -54,6 +54,10 @@ await page.evaluate(() => { try { finishWelcome(false); endTutorial(false); } ca
 const studentState = await page.evaluate(async (caseId) => {
   state.activeCaseId = caseId;
   syncActiveCaseState();
+  // The product intentionally suppresses learner analytics until research
+  // consent is granted. Set it through the same persistence function used by
+  // the visible control, after the test case/course context is active.
+  await saveResearchConsent(true);
   renderAll();
   return { role: state.activeRole, caseTitle: getActiveCaseRecord()?.title, prompts: asArray(getActiveCaseRecord()?.reflectionPrompts).length };
 }, CASE_ID);
@@ -62,6 +66,15 @@ console.log("PHASE2 student:", JSON.stringify(studentState));
 // JOL + question
 await page.evaluate(() => { setView("visualizer"); renderAll(); document.querySelector(".canvas-panel").classList.add("composer-open"); });
 await page.waitForTimeout(800);
+const draggableNode = page.locator("[data-graph-node]").first();
+const dragBox = (await draggableNode.count()) ? await draggableNode.boundingBox() : null;
+if (dragBox) {
+  await page.mouse.move(dragBox.x + dragBox.width / 2, dragBox.y + dragBox.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(dragBox.x + dragBox.width / 2 + 32, dragBox.y + dragBox.height / 2 + 18, { steps: 4 });
+  await page.mouse.up();
+  await page.waitForTimeout(300);
+}
 await page.fill("#visualizer-input", "계측 검증: 프라이버시와 개인화는 양립 가능한가?");
 await page.evaluate(() => document.getElementById("visualizer-form").requestSubmit());
 await page.waitForTimeout(700);

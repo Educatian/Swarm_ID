@@ -1,191 +1,94 @@
-# Design Tension Studio — Student Guide
+# From one issue to your own position
 
-A step-by-step walkthrough for students using Design Tension Studio in class.
-Each step explains **what you see**, **what to press**, and **why it is
-designed that way**.
+A short practice guide for the new student workspace. Design Tension Studio helps you examine one teaching case from different perspectives and explain a decision with evidence. You do not need every feature to begin.
 
-> **What am I doing here?** You receive one instructional design case, and
-> your job is to uncover the **tensions** around it. The same case looks
-> different through four lenses — **teacher · student · edtech ·
-> administration**. Ask a question and five AI agents answer at once; you
-> watch where they **agree** and where they **collide**, then pick the single
-> most important tension and defend your choice **with evidence**. Every node
-> wears an origin badge: `AI` (an agent), `Me` (you), `Peer` (a classmate),
-> `Brief` (the original case).
+## Before you start · Sample or real course?
 
-[audio](./audio/student-en/00-intro.mp3)
+[Practice without an account](../preview.html?lang=en) · [Sign in to your course](../index.html)
 
----
+The sample uses fictional learners and a fictional case. Reloading resets it; sample answers are not submitted to a real course. For coursework, use the account and course provided by your instructor. New participants can choose **First time here? Join with a course code** on the sign-in card. This public guide contains no account passwords.
 
-## Step 1 · Getting in
+> Current-version caution: a submission message alone does not guarantee instructor receipt. Copy your original answer before submitting and follow your instructor’s receipt-check or alternative submission procedure. Long answers currently send only the first 2,000 characters; keep the response short and retain the complete original.
 
-[video](./videos/student-en/01-landing.mp4)
+## 1 · Open your case
 
-Open **https://swarm-id-en.pages.dev**. The landing page introduces the tool
-in three steps, with the sign-in card right below.
+On **Home**, check the course name and case, then choose **Explore the issue map**. The button wording may change after you begin. Home → Issue map → Reflection is your main route.
 
-- **First time?** Tap *"First time here? Join with a course code"* under the
-  card and enter your email, a password, and the **course code** from your
-  instructor.
-- **Already enrolled?** Just email and password.
+Try this: read the case title and explain whose decision you are examining in one sentence.
 
-> **Use it like an app on iPad**: open the site in Safari, tap the
-> **share button (⬆️) → "Add to Home Screen"**. You get a home-screen icon
-> and a full-screen app that launches instantly even on flaky wifi.
+Check: if the course or case is wrong, check the selection in **More settings**. If no case is available, ask your instructor whether it is published. Welcome slides do not open automatically.
 
----
+![Sample Home with the case and three ways to begin](./screenshots/v2/home-en.png)
 
-## Step 2 · Your first visit
+## 2 · Read one issue
 
-[video](./videos/student-en/02-welcome.mp4)
+On **Issue map**, select a node and read its details. Do not infer its meaning from a number: open **Goal 1** or **Constraint 1** to find out what it represents.
 
-Four short welcome slides explain what the tool is, what the four lenses are,
-and what to do today — in under a minute. The last slide offers a **guided
-tour** that points out each part of the screen.
+Example: after finding “Device access gap,” ask, “Can a student without a device participate in the same activity?” This is a practice example, not a correct answer to memorize.
 
-Skipping is fine — the **"Show Tutorial"** button at the top reopens it
-anytime.
+Check: can you explain why your issue matters and which case detail supports it? If the map feels crowded, use **View as a list** or **Collapse panels and focus the map**.
 
----
+## 3 · Look from another perspective
 
-## Step 3 · Continue from Home
+Select a different perspective: **Teacher · Student · IT Systems · Administrator**. Some instructions call IT Systems “EdTech”; they refer to the same perspective here.
 
-[video](./videos/student-en/03-home.mp4)
+Practice: a student may ask whether a device is available, while a teacher may ask how much support time is needed. Write one concern from each position.
 
-You start on the **Home** screen. If a case is in progress, one tap on
-**"Continue"** takes you straight back to the map. Keep one thing in mind:
-tensions don't resolve neatly — the goal is to pick the one that matters most
-and build your reasoning on evidence.
+Check: what changed in your explanation? Clicking a perspective alone is not evidence of understanding. **Ask a Question** is optional; AI answers are proposals to examine, not case facts or authoritative answers.
 
----
+## 4 · Add your issue and identify evidence
 
-## Step 4 · Follow "What to do now"
+Use **Add issue** to write a short title and explain why it matters. Course settings may limit contributions or change who sees them. Do not include personal information in potentially shared work.
 
-[video](./videos/student-en/04-task-banner.mp4)
+Example title: “Device loans and support time.” Reason: “Access to devices and the teacher’s capacity to support their use need to be planned together.”
 
-Above the map sits the **What to do now** banner with five steps — **open a
-case → read issues by tapping nodes → switch lenses → ask or add a node →
-write your reflection**. Steps check off automatically as you actually do
-them, and the next step is always highlighted. Collapse it with the button on
-the right if you want it out of the way.
+Check: when you later select evidence for your reflection, match each numbered node to its actual content.
 
----
+## 5 · Explain your decision
 
-## Step 5 · Reading the map
+Open **Reflection**, write below the prompt, and choose relevant items under **Select evidence nodes**.
 
-[video](./videos/student-en/05-map-read.mp4)
+Writing frame: “I would prioritize ___. The case detail ___ supports this choice. However, from the ___ perspective, ___ may be difficult, so I would also ___.”
 
-**One node is one issue.** Tap (or hover) a node to read it. On iPad the
-tooltip **stays pinned** until you tap the background.
+Optionally choose **Get five-perspective feedback** to check missing evidence or alternative views. Feedback is a suggestion to review, not an automatic grade. Sample-mode responses may differ from live AI responses.
 
-- **Colors**: purple = instructional signals, red = constraint friction,
-  green = evidence
-- **Dashed lines between stakeholders**: their issues interlock — one side's
-  decision becomes the other side's burden
-- **Badges**: who created the node (`AI` / `Me` / `Peer` / `Brief`)
+Check: does your answer include your choice, case evidence, and another perspective’s concern? Percentages under **Design reference indicators** are not grades or scores of your writing quality.
 
-If the screen feels tight, the **"Focus map"** button collapses both side
-panels.
+![Sample Reflection: write first and select relevant evidence](./screenshots/v2/reflection-en.png)
 
----
+## 6 · Keep a copy and verify receipt
 
-## Step 6 · Switch lenses
+1. Copy the original answer into your own document. Do not assume a draft will return after reloading or signing in again.
+2. Choose **Submit**. An empty answer produces a prompt to write first.
+3. In the sample, check the message stating that nothing was submitted to a course.
+4. For coursework, verify what your instructor actually received. **One-page export** can be used for printing or saving a PDF; it is not a server receipt.
 
-[video](./videos/student-en/06-lens-bar.mp4)
+Do not rely on the **What to do now** checkmark to verify submission. In the current version, simply opening Reflection can mark that step complete. Do not change research consent merely to work around a submission problem.
 
-The **lens buttons** under the map (Teacher · Student · Edtech ·
-Administration) re-read the same case from that position. Highlighted nodes
-change, and so do the key issues in the side panel. **Read through at least
-two lenses** — tensions stay invisible from a single side.
+## Frequently asked questions
 
----
+### Where can I replay the tutorial?
 
-## Step 7 · Ask and get answered
+Choose **More settings → Show Tutorial** in the app to replay the on-screen guide. The sign-in page’s **Guides** menu opens these longer guides.
 
-[video](./videos/student-en/07-swarm-round.mp4)
+### Why is Reflection or an add button missing?
 
-Type a question into the **Ask** composer and send it — first, a one-tap
-prediction appears: **"will they agree or split?"** Stake your intuition.
-Then five stakeholder agents answer **simultaneously**, and after the round
-the activity feed tells you whether your prediction held. Responses join the map as new nodes, and when agents
-**disagree, a red edge** marks the spot — exactly where a discussion is worth
-having.
+Your instructor may have restricted learner views or contributions. Ask about the current course and case settings instead of creating a different course or changing settings.
 
-The **Activity** panel on the right records meaningful events only: round
-completed, disagreement detected, your node added, peer activity. Check there
-to see how your actions changed the map.
+### What if I cannot remember my sign-in details?
 
----
+Check the invitation email or ask the operator for account recovery. Never put a password in a question, shared node, or note. Avoid repeated guesses.
 
-## Step 8 · Add your own nodes and notes
+### What if the map is too small on my phone?
 
-[video](./videos/student-en/08-add-node.mp4)
+Use the list or focus view, then scroll to read the details. Offline saving and submission are not guaranteed.
 
-Tap the **⊕ icon** on the left to open the add-node panel. Add a concern you
-think the original case is missing, as a short title. Your node joins the map
-with a `Me` badge, and the AI links related issues to it.
+### What if AI is wrong or unavailable?
 
-With a node selected you can also leave **notes** — visible to you only, or
-shared with the class.
+Compare its claims with the case. You can still read an issue and write your own reasoning without AI. Keep your draft before retrying a failed request.
 
----
+## Finish · What can you explain now?
 
-## Step 9 · View as a list
+Can you explain one issue, contrast two perspectives, and support your own decision with case evidence? These are reflection prompts, not an automated mastery test.
 
-[video](./videos/student-en/09-list-view.mp4)
-
-If the map feels overwhelming, the **"List"** button shows the same issues as
-a list — search, then sort **by lens · type · name · origin**. Tapping a row
-selects that node. Map and list are two views of the same content.
-
----
-
-## Step 10 · Compare with class view
-
-[video](./videos/student-en/10-class-view.mp4)
-
-Switch the **map layer** to "Class view" to see the issues your classmates
-added — issues raised by several people are grouped with a count. "Compare
-view" separates **what only you saw** (your unique contribution) from **what
-only the team saw** (your blind spots).
-
-When a classmate has the same case open, a **"viewing now"** indicator
-appears and their nodes land on your map **in real time**.
-
----
-
-## Step 11 · Submit your reflection
-
-[video](./videos/student-en/11-report.mp4)
-
-Finish in the **Report** view. The issues and evidence you found are
-summarized there; answer the **reflection prompt** and submit it to your
-instructor. One standard for a good reflection: *did you pick the single most
-important tension and explain your choice with evidence from the map?*
-
----
-
-## Step 12 · Sharpen with swarm feedback, submit as one page
-
-[video](./videos/student-en/12-critique.mp4)
-
-After drafting your reflection, press **"Get swarm feedback"** — five lenses
-read your draft and push back with **challenges**. They never hand you
-answers; they point at the tensions your argument missed. The studio also
-checks whether you **cited map nodes as evidence**. Revise to answer the
-challenges, then submit.
-
-The **"One-page export"** button bundles your nodes, notes, reflection, and
-the critiques you received into a single printable page for submission.
-
----
-
-## Quick answers
-
-- **The screen feels busy** → stay in the default "Simple" mode; "Detailed"
-  is for when you need the process data. "Focus map" also helps.
-- **Dark/light mode** → the ☀/☾ button at the top right.
-- **Did my work save?** → if it appeared in the Activity panel, it saved.
-  Nodes, notes, and reflections live in your account and follow you across
-  devices.
-- **I want the tutorial again** → "Show Tutorial" at the top.
+[Practice again](../preview.html?lang=en) · [Instructor guide](./instructor-en.html)
