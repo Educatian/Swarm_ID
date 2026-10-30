@@ -7344,6 +7344,13 @@ function fitGraphToView({ animate = true, ids = null } = {}) {
   if (insights && !insights.hidden && window.innerWidth > 720) {
     inset.right = Math.max(inset.right, stageRect.right - insights.getBoundingClientRect().left + 12);
   }
+  // Phones: the cues pill, help chip, fit and legend line the bottom edge
+  // (EN persona run: the wider English pill covered nodes there).
+  if (window.innerWidth <= 720) {
+    const lowest = [...document.querySelectorAll(".map-insights-toggle, .network-stage > .dts-context-help, .map-fit-btn, .legend-reopen")]
+      .filter((el) => el.offsetParent).map((el) => el.getBoundingClientRect().top);
+    if (lowest.length) inset.bottom = Math.max(inset.bottom, stageRect.bottom - Math.min(...lowest) + 8);
+  }
   if (dock?.offsetParent) {
     const dockRect = dock.getBoundingClientRect();
     if (dockRect.right > stageRect.left && dockRect.left < stageRect.left + stageRect.width / 2) {

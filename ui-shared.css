@@ -370,3 +370,11 @@ html .app-shell .network-stage .node-badge circle[data-origin="peer"] { fill: #b
   radial-gradient(farthest-side at 50% 0, rgba(20,30,60,.14), transparent) top / 100% 10px no-repeat scroll,
   radial-gradient(farthest-side at 50% 100%, rgba(20,30,60,.14), transparent) bottom / 100% 10px no-repeat scroll,
   var(--dts-raised); }
+/* EN phone run: "Administrator" wrapped the lens bar to two rows and left a
+   ~110px map band above the sheet. Keep four lenses on one row. */
+@media(max-width:720px) {
+  .app-shell #map-lens-bar #stakeholder-pills { display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 4px; width: 100%; }
+  .app-shell #map-lens-bar #stakeholder-pills button { width: 100% !important; min-width: 0 !important; padding: 6px 2px !important; overflow: hidden; }
+  .app-shell #map-lens-bar #stakeholder-pills .ui-control-label { font-size: 10.5px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block !important; }
+  .density-simple .visualizer-layout:has(> .insight-panel.is-open) #map-lens-bar { left: 12px !important; }
+}
