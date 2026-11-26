@@ -3400,6 +3400,7 @@ async function requestGeminiContent({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${(await initializeSupabase()?.auth.getSession())?.data?.session?.access_token || ""}`,
         },
         body: JSON.stringify(payload),
       });
@@ -7487,6 +7488,18 @@ function renderGraph() {
   hideNetworkTooltip();
   const activeCase = getCaseById(state.activeCaseId, getActiveCourse());
   dom.networkEmptyPreview.hidden = Boolean(activeCase);
+  const waitingForPublication = state.activeRole === "user" && Boolean(getActiveCourse()) && getVisibleCases().length === 0;
+  const emptyPreview = dom.networkEmptyPreview;
+  emptyPreview.classList.toggle("is-waiting", waitingForPublication);
+  emptyPreview.querySelector(".eyebrow").textContent = waitingForPublication ? t("publishedCase") : t("exampleView");
+  emptyPreview.querySelector("strong").textContent = waitingForPublication ? t("noPublishedCasesYet") : t("caseMapAppears");
+  emptyPreview.querySelector("p:not(.eyebrow)").textContent = waitingForPublication
+    ? (state.locale === "ko" ? "담당 교수가 아직 케이스를 공개하지 않았어요. 다음 수업 후에 다시 확인해 주세요." : "Your instructor hasn't published a case yet. Check back after your next class.")
+    : t("caseMapAppearsBody");
+  emptyPreview.querySelector(".network-empty-preview-row").hidden = waitingForPublication;
+  const emptyTutorial = document.getElementById("empty-case-tutorial");
+  emptyTutorial.hidden = !waitingForPublication;
+  emptyTutorial.textContent = state.locale === "ko" ? "튜토리얼 살펴보기" : "Peek at the tutorial";
   renderNodeList();
   const swarmRound = state.graph.swarmRound || 0;
   const cycleLabel = state.locale === "ko"
@@ -7512,7 +7525,7 @@ function renderGraph() {
 
   const scores = computeScores();
   const frame = buildRenderableGraph();
-  dom.networkMetaGrid.hidden = Boolean(activeCase);
+  dom.networkMetaGrid.hidden = Boolean(activeCase) || waitingForPublication;
   if (state.selectedGraphNodeId && !frame.nodes.find((node) => node.id === state.selectedGraphNodeId)) {
     state.selectedGraphNodeId = "";
   }
@@ -12187,6 +12200,9 @@ document.getElementById("student-onboarding-tour-button")?.addEventListener("cli
 });
 
 dom.startTutorialButton?.addEventListener("click", () => {
+  startTutorial(true);
+});
+document.getElementById("empty-case-tutorial")?.addEventListener("click", () => {
   startTutorial(true);
 });
 

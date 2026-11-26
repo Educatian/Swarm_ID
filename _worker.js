@@ -9,6 +9,8 @@ export default {
     const url = new URL(request.url);
     if (url.pathname === "/api/gemini" && request.method === "POST") {
       try {
+        const denied = await requireUser(request, env);
+        if (denied) return denied;
         if (!env.OPENROUTER_API_KEY) {
           return json({ error: "OPENROUTER_API_KEY is not configured." }, 500);
         }
@@ -20,6 +22,23 @@ export default {
     return env.ASSETS.fetch(request);
   },
 };
+
+async function requireUser(request, env) {
+  const authorization = request.headers.get("Authorization") || "";
+  if (!/^Bearer\s+\S+$/i.test(authorization)) return json({ error: "Sign in required." }, 401);
+  const url = env.SUPABASE_URL;
+  const key = env.SUPABASE_ANON_KEY;
+  if (!url || !key) return json({ error: "Session verification is not configured." }, 503);
+  try {
+    const response = await fetch(`${url.replace(/\/$/, "")}/auth/v1/user`, {
+      headers: { Authorization: authorization, apikey: key }, signal: AbortSignal.timeout(10000),
+    });
+    if (!response.ok || !(await response.json())?.id) return json({ error: "Sign in required." }, 401);
+  } catch {
+    return json({ error: "Session verification unavailable." }, 503);
+  }
+  return null;
+}
 
 // Primary + automatic fallbacks (OpenRouter tries the list in order, which
 // covers transient provider 429s like Google's).
