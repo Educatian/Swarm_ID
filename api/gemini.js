@@ -4,6 +4,18 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed." });
   }
 
+  const authorization = req.headers.authorization || "";
+  if (!/^Bearer\s+\S+$/i.test(authorization)) return res.status(401).json({ error: "Sign in required." });
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) return res.status(503).json({ error: "Session verification is not configured." });
+  try {
+    const verification = await fetch(`${process.env.SUPABASE_URL.replace(/\/$/, "")}/auth/v1/user`, {
+      headers: { Authorization: authorization, apikey: process.env.SUPABASE_ANON_KEY }, signal: AbortSignal.timeout(10000),
+    });
+    if (!verification.ok || !(await verification.json())?.id) return res.status(401).json({ error: "Sign in required." });
+  } catch {
+    return res.status(503).json({ error: "Session verification unavailable." });
+  }
+
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: "GEMINI_API_KEY is not configured." });

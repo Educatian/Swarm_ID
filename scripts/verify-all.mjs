@@ -18,6 +18,8 @@ const skip = new Set(arg("skip").split(",").filter(Boolean));
 
 const GATES = [
   { id: "build", label: "build freshness", script: "scripts/check-build.mjs", needsServer: false },
+  { id: "worker-auth", label: "verified AI session", script: "scripts/verify-worker-auth.mjs", needsServer: false },
+  { id: "empty-state", label: "unpublished case state", script: "scripts/verify-empty-state.mjs", needsServer: true },
   { id: "smoke", label: "usability smoke", script: "scripts/smoke-usability-upgrade.mjs", needsServer: true },
   { id: "contrast", label: "contrast (both themes)", script: "scripts/verify-contrast.mjs", needsServer: true },
   { id: "render", label: "render structure", script: "scripts/verify-render.mjs", needsServer: true },
